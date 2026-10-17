@@ -49,7 +49,7 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 ### EA3. Segunda lectura (sin IA)
 - **EA3.1** EL SISTEMA DEBERÁ extraer el texto (PDF, EML, TXT) y buscar con patrones de texto el beneficiario, el monto, la moneda y el vencimiento.
 - **EA3.2** EL SISTEMA DEBERÁ marcar la ficha con `segunda_lectura = coincide` solo si encontró los cuatro campos y todos coinciden con la lectura de la IA. En cualquier otro caso, `no_coincide`, y los campos que difieren pasan a la lista de dudosos.
-- **EA3.3** CUANDO el archivo sea una imagen (sin texto extraíble), EL SISTEMA DEBERÁ marcar `no_coincide`. Ante la duda se escala.
+- **EA3.3** CUANDO el archivo sea una imagen (sin texto extraíble), EL SISTEMA DEBERÁ marcar `segunda_lectura = no_disponible`, y lo mismo CUANDO el texto no contenga ninguno de los cuatro campos comparables. El motor escala (R2.2). Ante la duda se escala.
 
 ### EA4. Órdenes escondidas
 - **EA4.1** EL SISTEMA DEBERÁ buscar, con patrones de texto y sin IA, frases que intenten dar órdenes (por ejemplo «ya está aprobada», «págala», «ignora las reglas») en el texto de la factura y en los mensajes del proveedor, y marcar `orden_en_texto`.
@@ -64,7 +64,7 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 ### EA6. Ficha y llamada al motor
 - **EA6.1** UNA VEZ resueltos o agotados los turnos, EL SISTEMA DEBERÁ armar la ficha con código, validarla con el esquema de `engine.modelos.Ficha` y llamar a `registrar_decision`.
 - **EA6.2** EL SISTEMA NO DEBERÁ decidir ni sugerir pagos; solo entrega la ficha. SI la ficha no es válida, ENTONCES no se registra y se informa al proveedor que la factura quedó en revisión manual.
-- **EA6.4** SI un dato original no se pudo leer y el proveedor lo aclaró, ENTONCES EL SISTEMA DEBERÁ usar lo aclarado y marcar `lectura_ia = dudosa`, de modo que se escale. SI aun así falta algún dato obligatorio, ENTONCES la factura no se registra y queda en «revisión manual».
+- **EA6.4** SI un dato original no se pudo leer y el proveedor lo aclaró, ENTONCES EL SISTEMA DEBERÁ usar lo aclarado, marcar ese campo con `origen_campos = aclarado` (el motor lo trata según R2.5) y dejar `lectura_ia = dudosa`, de modo que se escale. SI aun así falta algún dato obligatorio, ENTONCES la factura no se registra y queda en «revisión manual».
 - **EA6.3** EL `preparador` DEBERÁ ser el código de la sala (separación de funciones, R8.2).
 
 ### EA7. Estado de entrada

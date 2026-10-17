@@ -25,8 +25,10 @@ class Ficha(Cerrado):
     cuenta_original: str | None = None
     cuenta_aclarada: str | None = None
     valores_aclarados: dict[str, Any] = {}
+    origen_campos: dict[Literal["beneficiario", "numero", "monto", "moneda", "vence"],
+                        Literal["factura", "aclarado"]] = {}
     lectura_ia: Literal["ok", "dudosa"]
-    segunda_lectura: Literal["coincide", "no_coincide"]
+    segunda_lectura: Literal["coincide", "no_coincide", "no_disponible"]
     orden_en_texto: bool = False
     preparador: str = Field(min_length=1)
 

@@ -72,8 +72,13 @@ def leer(texto: str | None) -> dict:
 
 
 def comparar(ia: dict, texto: str | None) -> tuple[str, list[str]]:
-    """(coincide | no_coincide, campos que difieren). Solo vale si la segunda lectura encontró todo (EA3.2)."""
+    """(coincide | no_coincide | no_disponible, campos que difieren).
+
+    «coincide» solo si la segunda lectura encontró los cuatro campos (EA3.2). Sin texto, o sin ningún campo
+    comparable, la segunda lectura no está disponible (EA3.3) y el motor escala (R2.2)."""
     patrones = leer(texto)
+    if not texto or all(patrones[c] is None for c in ("beneficiario", "monto", "moneda", "vence")):
+        return "no_disponible", []
     difieren = []
     for campo in ("beneficiario", "monto", "moneda", "vence"):
         a, b = ia.get(campo), patrones[campo]

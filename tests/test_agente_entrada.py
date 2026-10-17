@@ -118,13 +118,33 @@ def test_ea3_2_coincide_solo_si_todo_coincide():
     assert segunda_lectura.comparar(ia, "Total: 1.800.000 COP")[0] == "no_coincide"       # no encontró todo
 
 
-def test_ea3_3_imagen_siempre_no_coincide(almacen, sala):
+def test_ea3_3_imagen_sin_segunda_lectura_siempre_escala(almacen, sala):
     png = b"\x89PNG\r\n\x1a\n" + b"0" * 50
     c = ClienteFalso(dict(beneficiario="Imprenta Sol", numero="IS-1", monto="1800000", moneda="COP",
                           vence="2026-10-30", cuenta="Bancolombia ···2291", dudosos=[]))
     e = flujo.recibir(almacen, sala, "factura.png", png, cliente=c)
-    assert e["segunda"] == "no_coincide"
-    assert decision(almacen, sala, e["factura_id"])["decision"] == "ESCALAR"
+    assert e["segunda"] == "no_disponible"
+    d = decision(almacen, sala, e["factura_id"])
+    assert d["decision"] == "ESCALAR" and any(r["regla"] == "R2.2" and r["resultado"] == "FALLA" for r in d["revisiones"])
+
+
+def test_ea3_3_texto_sin_campos_comparables_no_disponible():
+    assert segunda_lectura.comparar(dict(beneficiario="X", monto="1", moneda="COP", vence="2026-10-30"),
+                                    "hola, adjunto mi factura") == ("no_disponible", [])
+    assert segunda_lectura.comparar({}, None) == ("no_disponible", [])
+
+
+def test_ea6_4_lo_aclarado_queda_marcado_y_el_motor_lo_trata_con_r2_5(almacen, sala):
+    c = ClienteFalso(dict(beneficiario="Imprenta Sol", numero="IS-9", monto=None, moneda="COP",
+                          vence="2026-10-30", cuenta="Bancolombia ···2291", dudosos=["monto"]))
+    e = flujo.recibir(almacen, sala, "f.txt", b"Proveedor: Imprenta Sol\nVence: 2026-10-30\nTotal: 1.800.000 COP",
+                      cliente=c)
+    e = flujo.responder(almacen, sala, e["factura_id"], "1800000")
+    d = decision(almacen, sala, e["factura_id"])
+    assert d["ficha"]["origen_campos"]["monto"] == "aclarado" and d["ficha"]["origen_campos"]["numero"] == "factura"
+    r25 = next(r for r in d["revisiones"] if r["regla"] == "R2.5")
+    assert r25["resultado"] == "OK"                              # 1.800.000 coincide con el calendario
+    assert d["decision"] == "ESCALAR"                            # pero la lectura sigue dudosa y sin coincidir
 
 
 # EA4

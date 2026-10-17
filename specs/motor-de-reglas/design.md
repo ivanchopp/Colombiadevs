@@ -49,12 +49,11 @@ class Ficha(BaseModel):
     cuenta_original: str | None
     cuenta_aclarada: str | None
     valores_aclarados: dict[str, Any]  # solo campos que el agente aclaró
-    origen_campos: dict[str, Literal["factura", "aclarado"]]   # de dónde salió cada campo
+    origen_campos: dict[str, Literal["factura", "aclarado"]] = {}   # vacío = todo viene de la factura (R2.5)
     lectura_ia: Literal["ok", "dudosa"]
     segunda_lectura: Literal["coincide", "no_coincide", "no_disponible"]
-    campos_diferentes: list[str] = []  # los que la segunda lectura vio distintos
-    alerta_inyeccion: bool = False     # solo informa; el motor no lee el texto libre
-    aclaraciones: list[dict] = []      # turnos con el proveedor, para el detalle y el acta
+    recibida: date                     # fecha de recepción: calendario (R6.1) y reglas vigentes (R9.2)
+    orden_en_texto: bool = False       # el agente vio una orden escondida; el motor no lee el texto libre
     preparador: str                  # quién subió el caso (R8.2)
 
 class Revision(BaseModel):
@@ -104,6 +103,7 @@ def evaluar(ficha, contexto, reglas):
 1. Esquema de la ficha (R2.1)
 2. Las dos lecturas coinciden (R2.2)
 3. Diferencias aclarado contra original (R2.3)
+3b. Datos que vienen solo de una aclaración (R2.5)
 4. Tipo de cambio (R5.1)
 5. Duplicado (R3.1)
 6. Beneficiario y cuenta (R4)
@@ -113,6 +113,12 @@ def evaluar(ficha, contexto, reglas):
 10. Límite por periodo (R5.4)
 
 ## Piezas con lógica propia
+
+**Datos aclarados (R2.5):** los cinco campos obligatorios son beneficiario, número, monto, moneda y vencimiento. Un campo con `origen_campos[campo] = "aclarado"` genera un `AVISO` (nivel `PERSONA`), **salvo** que su valor coincida con los registros de la empresa:
+- beneficiario: está en la lista permitida;
+- monto: dentro de `tolerancia_ok` del acuerdo o de alguna obligación del calendario del mismo beneficiario;
+- moneda: igual a la del acuerdo registrado;
+- número y vencimiento: no hay registro con qué contrastarlos, así que siempre generan el `AVISO`.
 
 **Huella de duplicado (R3.1):** `sha256(beneficiario | numero | monto | fecha)` sobre valores normalizados (mayúsculas, sin espacios extra, monto a dos decimales). Se compara con el historial.
 
@@ -196,7 +202,7 @@ flowchart LR
 
 Decisiones tomadas al programar, para que spec y código no se separen:
 
-1. **La ficha lleva dos campos más:** `recibida` (fecha de recepción; sirve para emparejar con el calendario, R6.1, y para elegir la versión de reglas, R9.2) y `orden_en_texto` (el agente de entrada avisa que el texto traía una orden; solo agrega un `AVISO`, nunca cambia una decisión a favor, R2.4).
+1. **La ficha del motor** (arriba) incluye `origen_campos` y `segunda_lectura = no_disponible` (R2.2, R2.5), más dos campos propios: `recibida` (fecha de recepción; sirve para emparejar con el calendario, R6.1, y para elegir la versión de reglas, R9.2) y `orden_en_texto`. **Diferencias deliberadas con el diseño del agente de entrada de otra sesión:** `orden_en_texto` hace el papel de `alerta_inyeccion`, pero además agrega un `AVISO` (R2.4: solo suma cautela, nunca autoriza nada); y `campos_diferentes` y `aclaraciones` **no** viajan en la ficha: el agente los guarda en su tabla `entrada` junto con el chat, y lo aclarado queda en `valores_aclarados`.
 2. **R5.3 es una revisión más:** `OK` si el nivel por monto es `NINGUNO`; si no, `AVISO` con ese nivel. Así `PAGAR` se reduce a «todas las revisiones `OK`».
 3. **`ESCALAR` nunca queda con nivel `NINGUNO`:** si ninguna revisión pide nivel, se asigna `PERSONA` (alguien debe revisar). `FRENAR` queda con nivel `NINGUNO`.
 4. **Sin tipo de cambio (R5.1) el nivel es `SENIOR`:** sin monto en moneda base no se puede medir nada, y las revisiones que dependen de él devuelven `FALLA` «no evaluable».

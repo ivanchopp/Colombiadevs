@@ -1,0 +1,45 @@
+{
+  "id": "VER-0007",
+  "fecha": "2026-10-17T13:20:07-05:00",
+  "cambio": "Cierra P25: implementa R2.5 y R2.2 con segunda lectura no disponible; ficha con origen_campos; spec del motor alineada con el codigo; AVANCES actualizado",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "engine/modelos.py",
+    "engine/revisiones/entrada.py",
+    "agents/segunda_lectura.py",
+    "agents/flujo.py",
+    "tests/test_motor.py",
+    "tests/test_agente_entrada.py",
+    "tests/test_propiedades.py",
+    "specs/motor-de-reglas/design.md",
+    "specs/extraccion-y-agente-de-entrada/requirements.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "data/casos.yaml",
+      "problema": "R2.5 y R2.2 con segunda lectura no disponible tienen pruebas unitarias y de propiedades pero no un caso en casos.yaml (T3 pide un caso por criterio de R2 a R5); anadirlos cambiaria el total de 20 casos",
+      "correccion": "Decidir si se amplia el set de casos (AVANCES P15)"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "convenciones",
+      "ubicacion": "specs/motor-de-reglas/design.md",
+      "problema": "La ficha difiere deliberadamente del diseno de otra sesion: orden_en_texto en lugar de alerta_inyeccion y sin campos_diferentes ni aclaraciones; documentado en Ajustes al construir",
+      "correccion": "Confirmar con el equipo (P23)"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "engine/revisiones/entrada.py",
+      "problema": "R2.5 solo agrega cautela: un dato aclarado que coincide con registros no avisa, pero R2.2, R4 y las demas revisiones siguen aplicando y segunda_lectura no puede cambiarse por chat",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "pytest: 143 passed (132 previas + 11 nuevas); python3 eval.py: 20/20, 0 pagos indebidos, 20/20 explicadas; 4 mutaciones del motor (R2.5 nunca avisa, beneficiario siempre respaldado, R2.2 ignora no_disponible, numero y vence respaldados) detectadas por las pruebas; Hypothesis con 4 violaciones nuevas sin PAGAR; sin cambios en dependencias ni secretos",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "be99999b281b47ee53c0174be28607a86ff72906",
+  "reemplaza": null
+}

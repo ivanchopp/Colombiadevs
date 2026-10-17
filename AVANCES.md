@@ -2,7 +2,7 @@
 
 > **Si eres un chat nuevo de Claude Code, empieza aquí.** Este archivo es la memoria del proyecto: qué se quiere hacer, qué ya se hizo, qué falta y qué sigue. Léelo completo antes de tocar nada y **actualízalo al terminar cada cambio** (ver «Cómo mantener este archivo»).
 
-**Última actualización:** sáb 17 oct 2026, 13:15 (hora Bogotá)
+**Última actualización:** sáb 17 oct 2026, 13:20 (hora Bogotá)
 **Entrega:** **dom 18 oct 2026, 8:00 a. m. (hora Bogotá).** Objetivo: enviar a las 7:00.
 **Repositorio:** https://github.com/ivanchopp/Colombiadevs · rama `main` (incluye el PR #2, commit `77a8763`). El trabajo nuevo se hace en ramas `claude/*` y entra por PR.
 
@@ -14,7 +14,7 @@
 - **De dónde viene:** el *Reto Blinka, «Agentes que pagan por la empresa»* (Hackathon 30X, HackRadar). Blinka es una fintech colombiana en EE. UU. con cuentas en USD y pagos a Latinoamérica.
 - **Idea central:** la IA solo **lee y redacta**. Un programa normal, el **motor de reglas**, **decide**. Ante la duda, el resultado es **escalar, nunca pagar**.
 - **Equipo:** 4 personas. Reparto sugerido: **A** motor y pruebas · **B** agentes con IA · **C** pantallas · **D** datos, evaluación y pitch.
-- **Estado del código (en `main`):** funciona de punta a punta el **motor de reglas**, el **acta** (SQLite), el **agente de entrada** y los **dos paneles** (Streamlit). **132 pruebas pasan** y `python3 eval.py` da **20 de 20, con 0 pagos indebidos**. La skill `verificador` aprobó la rama (VER-0005).
+- **Estado del código (en `main`):** funciona de punta a punta el **motor de reglas**, el **acta** (SQLite), el **agente de entrada** y los **dos paneles** (Streamlit). **143 pruebas pasan** y `python3 eval.py` da **20 de 20, con 0 pagos indebidos**. La skill `verificador` aprobó la rama (VER-0005).
 - **Lo que NO está probado:**
   1. **La lectura con IA real.** El agente lee con **Gemini o Claude** (intercambiables, ver `README.md`), pero solo se probó con clientes falsos, nunca con una clave. Sin clave corre en **modo demo**.
   2. **El despliegue en Railway.** Está preparado (`Dockerfile`, `railway.toml`) y se probó el arranque en local, pero la imagen de Docker y Railway no se han probado ni desplegado.
@@ -90,7 +90,7 @@
 | `app/` | Streamlit. `Panel_1_Proveedor.py`, `pages/` con el Panel 2 (Tablero, Cola de aprobación, Calendario, Acta), `comun.py`, `apoyo.py` |
 | `data/` | `reglas.yaml`, `techos.yaml`, `registros.yaml`, `tasas.yaml`, `canales.yaml`, `calendario.csv` y `casos.yaml` (20 facturas de prueba), todo «supuesto»; `demo_semilla.py`; `facturas_ejemplo/` |
 | `eval.py` | Mide autonomía, seguridad (pagos indebidos = 0) y explicabilidad con los 20 casos |
-| `tests/`, `pytest.ini` | 132 pruebas (`python3 -m pytest -q`), incluida la de propiedades con Hypothesis |
+| `tests/`, `pytest.ini` | 143 pruebas (`python3 -m pytest -q`), incluida la de propiedades con Hypothesis |
 | `Dockerfile`, `railway.toml`, `requirements-prod.txt`, `requirements.txt`, `.env.example`, `.streamlit/config.toml` | Despliegue y dependencias. La imagen corre como root a propósito (volúmenes de Railway) |
 
 ## 6. Registro de cambios
@@ -99,10 +99,11 @@ Lo más reciente va arriba.
 
 | Cuándo | Commit | Qué se hizo |
 |---|---|---|
-| 17 oct | *(este commit)* | **Actualización de este archivo** tras fusionar el PR #2: se quitaron filas y pendientes duplicados, se corrigió el estado real, se agregó la deriva entre la spec del motor y el código (P25) y las decisiones abiertas que quedaron sin spec. |
+| 17 oct | *(este commit)* | **P25 cerrado: R2.5 implementado.** Spec primero: `design.md` del motor alineado con el código (ficha con `origen_campos` y `segunda_lectura = no_disponible`; criterio R2.5 explicado campo por campo) y EA3.3 y EA6.4 ajustados. Código: R2.5 (un dato obligatorio que viene solo de una aclaración da `AVISO`, salvo que coincida con el acuerdo o el calendario; número y vencimiento siempre avisan), R2.2 con segunda lectura no disponible (imágenes y textos sin campos comparables) y el agente marca `origen_campos`. 11 pruebas nuevas, 4 violaciones nuevas en Hypothesis y 4 mutaciones del motor detectadas. 143 pruebas, `eval.py` 20/20. Diferencias deliberadas con el diseño de la otra sesión: `orden_en_texto` (agrega un `AVISO`) en lugar de `alerta_inyeccion`, y sin `campos_diferentes` ni `aclaraciones` en la ficha. |
+| 17 oct | `be99999` | **Actualización de este archivo** tras fusionar el PR #2: se quitaron filas y pendientes duplicados, se corrigió el estado real, se agregó la deriva entre la spec del motor y el código (P25) y las decisiones abiertas que quedaron sin spec. |
 | 17 oct | `77a8763` | **PR #2 fusionado en `main`:** motor de reglas, acta, agente de entrada, paneles y despliegue. |
 | 17 oct | `e6a1e72` | **Fusión de `main` en la rama.** Otra sesión había subido a `main` un esqueleto paralelo (`agents/entrada/`, `app/componentes/`, 45 pruebas) y specs propias de paneles y extracción: 37 archivos en conflicto. Por decisión del dueño **ganó esta rama** (más completa). Se conservó de `main`: skill `verificador`, `.verificaciones/`, `VERIFICACIONES.md`, `pytest.ini`, `.python-version`, `acta/esquema_postgres.sql` y los arreglos de D2. El esqueleto paralelo salió del árbol y sigue en el historial (`cda2588`). Verificado: VER-0005. |
-| 17 oct | `175774a` | **Proveedor de IA intercambiable (Gemini ahora, Claude después).** `PROVEEDOR_IA`, `GEMINI_API_KEY`/`GOOGLE_API_KEY`, `MODELO_GEMINI`; sin preferencia se usa Claude si hay clave, si no Gemini; si el elegido no tiene clave, modo demo. `python3 -m agents.probar` verifica la clave. 132 pruebas. |
+| 17 oct | `175774a` | **Proveedor de IA intercambiable (Gemini ahora, Claude después).** `PROVEEDOR_IA`, `GEMINI_API_KEY`/`GOOGLE_API_KEY`, `MODELO_GEMINI`; sin preferencia se usa Claude si hay clave, si no Gemini; si el elegido no tiene clave, modo demo. `python3 -m agents.probar` verifica la clave. 143 pruebas. |
 | 17 oct | `dbc3d74` | **Despliegue preparado.** `Dockerfile`, `railway.toml`, `requirements-prod.txt`, `.env.example`, `README.md`; acta en el volumen de Railway con modo WAL; `FECHA_DEMO`. Se corrigió un error de arranque (`No module named 'agents'`). Probado en local: arranque, salud, persistencia, 6 visitantes a la vez, salas separadas. |
 | 17 oct | `2e00975` | **Agente de entrada.** Valida el archivo por contenido real y tamaño; lectura con IA con esquema cerrado; segunda lectura sin IA; detección de órdenes escondidas; máx. 2 turnos; lo aclarado nunca reemplaza el original; arma la ficha y llama a `registrar_decision`. Modo demo sin clave. Panel 1 activo. |
 | 17 oct | `a81775b` | **Canales de Blinka.** `canales.yaml` con las rutas reales (SPEI, Pix / TED, SEPA, Bre-B, CBU/CVU, transferencias locales, rutas en USD, ACH y wire, SWIFT, USDC). **PSE sale de los pagos:** solo recibe depósitos. Tasas supuestas para EUR, ARS, CLP, PEN, BOB, CRC y ZAR. |
@@ -135,9 +136,8 @@ Cosas ya hechas que hay que **revisar, confirmar o corregir**. Los números no s
 |---|---|---|
 | P20 | **Falta hacer el despliegue en Railway.** Ya se puede desplegar desde `main`. Pasos en `README.md`: conectar el repositorio, agregar un volumen en `/data`, poner `GEMINI_API_KEY` (o `ANTHROPIC_API_KEY`) y `FECHA_DEMO=2026-10-17`, generar el dominio, una sola réplica | Quien tenga Railway |
 | P17 | **La lectura con IA no se probó con ninguna API real.** Claude: `messages.create` con `output_config.format`. Gemini: `generate_content` con `response_json_schema`. Los SDK aceptan la configuración, pero falta correr `python3 -m agents.probar` con una clave. **Los nombres de modelo por defecto no están verificados** (`gemini-2.5-flash`, `claude-sonnet-5-5`; se cambian con `MODELO_GEMINI` y `MODELO_ENTRADA`) | Quien tenga la clave (ET7) |
-| P25 | **Deriva entre la spec del motor y el código.** `specs/motor-de-reglas/` (editada por otra sesión en `8bb35bb`) pide **R2.5** (un campo que viene solo de una aclaración del proveedor da `AVISO`) y una ficha con `origen_campos`, `segunda_lectura = no_disponible`, `campos_diferentes`, `alerta_inyeccion` y `aclaraciones`. El código tiene otra ficha (`recibida`, `orden_en_texto`) y logra algo equivalente por otro camino: si el dato original falta y lo aclara el proveedor, `lectura_ia` queda `dudosa` y se escala; una imagen queda como `no_coincide`. **R2.5 no tiene prueba** (rompe R11.1) y `design.md` se contradice con su propia sección «Ajustes al construir». La skill `verificador` no lo detectó en VER-0005 | A: alinear código y spec (implementar R2.5 o reescribir el criterio) |
 | P23 | **Specs de `main` sustituidas.** Las de `paneles-y-despliegue` (PD1 a PD12, PT1 a PT14) y `extraccion-y-agente-de-entrada` (EX1 a EX9, ET1 a ET11) de otra sesión se reemplazaron por las de esta rama, que describen el código existente. Siguen en el historial (`dc04e18`, `8bb35bb`). **El equipo debe confirmar cuáles valen**; la numeración y la interfaz pública del agente de entrada difieren | El equipo |
-| P15 | **Calibración propia del motor** (D1 a D5 siguen abiertas): zona gris 5 % a 10 %, gasto cuenta solo lo pagado o aprobado, periodo = mes en Bogotá, y los ajustes de «Ajustes al construir». Las 20 facturas de `casos.yaml` se escribieron junto con el motor: **faltan casos trampa de otra mano** para que `eval.py` mida de verdad | D y el equipo |
+| P15 | **Calibración propia del motor** (D1 a D5 siguen abiertas): zona gris 5 % a 10 %, gasto cuenta solo lo pagado o aprobado, periodo = mes en Bogotá, y los ajustes de «Ajustes al construir». Las 20 facturas de `casos.yaml` se escribieron junto con el motor: **faltan casos trampa de otra mano** para que `eval.py` mida de verdad. R2.5 y R2.2 con segunda lectura no disponible tienen pruebas pero **no un caso en `casos.yaml`** (T3 pide uno por criterio) | D y el equipo |
 | P18 | Las facturas de ejemplo dependen de la **fecha de hoy** (el calendario es de octubre de 2026, ventana de ±5 días): la «normal» solo se paga sola entre el 9 y el 19 de octubre. `FECHA_DEMO` lo evita | Poner `FECHA_DEMO` en Railway |
 
 **Decisiones abiertas de las specs** (cada una tiene propuesta por defecto)
@@ -174,10 +174,9 @@ En orden. El detalle de cada tarea está en `tasks.md` de cada spec.
 
 1. **Desplegar en Railway desde `main`** (P20) y abrirlo desde otro computador.
 2. **Poner la clave de Gemini y correr `python3 -m agents.probar`** (P17). Si algo difiere, ajustar el modelo o la lectura.
-3. **Alinear la spec del motor con el código** (P25): implementar R2.5 con su prueba, o reescribir el criterio y la ficha del diseño. Registrar la verificación.
-4. **El equipo confirma las specs** que valen (P23) y resuelve las decisiones abiertas (P1, P9, P10, P11).
-5. **Que otra persona escriba casos trampa nuevos** (P15) y los pase por `eval.py`.
-6. **Control de las 18:00:** correr `eval.py`. El enrutador de canal ya está hecho; con tiempo, la capa 3 (agente de reglas, T11 simular, T12 vigencias, conciliación, páginas de reglas y resumen). Si los casos trampa no pasan, esas horas se usan para corregir el motor.
+3. **El equipo confirma las specs** que valen (P23) y resuelve las decisiones abiertas (P1, P9, P10, P11).
+4. **Que otra persona escriba casos trampa nuevos** (P15) y los pase por `eval.py`.
+5. **Control de las 18:00:** correr `eval.py`. El enrutador de canal ya está hecho; con tiempo, la capa 3 (agente de reglas, T11 simular, T12 vigencias, conciliación, páginas de reglas y resumen). Si los casos trampa no pasan, esas horas se usan para corregir el motor.
 
 **Plan por horas** (hora de Bogotá):
 
