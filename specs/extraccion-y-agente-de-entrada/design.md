@@ -52,6 +52,19 @@ flowchart TD
     K --> L[Ficha para el motor de reglas]
 ```
 
+## Interfaz pública
+
+Es lo que usan los paneles (spec `paneles-y-despliegue`) y el motor de reglas:
+
+```python
+def procesar(archivo, sala_id, preparador) -> Ficha          # recepción, lectura, extracción, segunda lectura y ficha
+def pregunta_pendiente(sala_id, factura_id) -> str | None    # la pregunta del agente, si espera una respuesta
+def responder(sala_id, factura_id, texto) -> Ficha           # aplica la respuesta del proveedor (EX4.7 a EX4.9)
+def etapa_de_lectura(sala_id, factura_id) -> Literal["recibida", "datos_confirmados"]   # alimenta el estado público
+```
+
+`procesar` nunca llama al motor de reglas ni escribe en el acta: devuelve la ficha y quien llama decide qué hacer con ella.
+
 ## Modelos
 
 Se usa el modelo `Ficha` del motor de reglas, con estos campos nuevos:

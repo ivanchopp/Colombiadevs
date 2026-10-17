@@ -2,7 +2,7 @@
 
 > **Si eres un chat nuevo de Claude Code, empieza aquí.** Este archivo es la memoria del proyecto: qué se quiere hacer, qué ya se hizo, qué falta y qué sigue. Léelo completo antes de tocar nada y **actualízalo al terminar cada cambio** (ver «Cómo mantener este archivo»).
 
-**Última actualización:** sáb 17 oct 2026, 11:45 (hora Bogotá)
+**Última actualización:** sáb 17 oct 2026, 12:00 (hora Bogotá)
 **Entrega:** **dom 18 oct 2026, 8:00 a. m. (hora Bogotá).** Objetivo: enviar a las 7:00.
 **Repositorio:** https://github.com/ivanchopp/Colombiadevs (rama `main`, no hay otras)
 
@@ -72,6 +72,8 @@
 | `docs/Ruta-de-una-factura.pdf` | **Diseño general:** actores, flujo, maquetas, herramientas, despliegue, a futuro. Se genera de una página en línea privada del equipo |
 | `docs/Guia-6-alternativas-actualizada.pdf` | Guía de las 6 alternativas de @Marcelo Linero, ajustada a la entrega de las 8:00, con plan por horas |
 | `specs/README.md` | Índice y reglas de las especificaciones |
+| `.claude/skills/verificador/` | Skill que revisa cada cambio, lo aprueba o rechaza y lo registra. **Úsala antes de commitear.** |
+| `VERIFICACIONES.md`, `.verificaciones/` | Historial de verificaciones (no se edita a mano) |
 | `specs/motor-de-reglas/` | `requirements.md` (53 criterios EARS), `design.md`, `tasks.md` (T1 a T15) |
 | `specs/paneles-y-despliegue/` | Los dos paneles de la demo, la sala, los roles, el refresco, el despliegue en Railway, las protecciones y la prueba de humo. `requirements.md` (criterios PD), `design.md`, `tasks.md` (PT1 a PT14) |
 | `specs/extraccion-y-agente-de-entrada/` | Agente de entrada con IA: recepción, extracción, segunda lectura, preguntas al proveedor, defensa contra órdenes escondidas y modo demo. `requirements.md` (criterios EX), `design.md`, `tasks.md` (ET1 a ET11) |
@@ -85,6 +87,7 @@ Lo más reciente va arriba.
 | Cuándo | Commit | Qué se hizo |
 |---|---|---|
 | 17 oct | *(este commit)* | Specs de `paneles-y-despliegue`: 12 bloques de requisitos (PD1 a PD12), diseño con la sala, los dos paneles, el refresco, Railway y la prueba de humo, y 14 tareas (PT1 a PT14). **Ya están las 4 specs.** |
+| 17 oct | `7392522` | Se fusionó el PR #1 de otra sesión de Claude Code: skill **`verificador`** (`3d9b7b3`), `monto_para_nivel` alineado con R5.2 (`0aecd8a`) y aclaración de D2 (`0b5e422`). Quedaron registradas VER-0001 y VER-0002. |
 | 17 oct | `8bb35bb` | Specs de `extraccion-y-agente-de-entrada`: 9 bloques de requisitos (EX1 a EX9), diseño con segunda lectura, plantillas de preguntas y defensa contra órdenes escondidas, y 11 tareas (ET1 a ET11). Se ajustó la spec del motor: R2.2, nuevo R2.5 y campos nuevos de la ficha. Falta 1 spec. |
 | 17 oct | `8d91175` | Specs de `acta-y-csv`: 9 bloques de requisitos (AC1 a AC9), diseño con tabla de solo añadir, huellas, CSV y salas, y 10 tareas (AT1 a AT10). Faltan 2 specs. |
 | 17 oct | `1d0a7d1` | Se crearon `AVANCES.md` y `CLAUDE.md`, para que cualquier chat nuevo de Claude Code conozca el proyecto, lo hecho, lo pendiente y lo que sigue. |
@@ -148,6 +151,7 @@ En orden. El detalle de cada tarea del motor está en `specs/motor-de-reglas/tas
 - **Nombres:** *motor de reglas* (nunca «jurado», que se confundía con los jurados del hackathon); *evaluadores* son quienes prueban la demo; *ficha*, *acta*, *sala*, *agente de entrada*, *agente de reglas*, *agente de conciliación*.
 - **Salidas:** `PAGAR`, `FRENAR`, `ESCALAR`. **Niveles:** `NINGUNO`, `PERSONA`, `SENIOR`. **Revisiones:** `OK`, `FALLA`, `AVISO`.
 - **Specs:** requisitos en notación EARS («CUANDO … EL SISTEMA DEBERÁ …»), cada criterio con número y al menos una prueba.
+- **Verificación:** antes de commitear o subir un cambio, pasarlo por la skill `verificador`. Deja un registro en `VERIFICACIONES.md`.
 - **Commits:** en español, un resumen corto y un párrafo que explique el porqué. Trailer `Co-Authored-By: Claude <noreply@anthropic.com>`, sin versión del modelo.
 - **Dinero:** `Decimal`, nunca `float`. Todo valor de ejemplo se marca como «supuesto».
 - **Un cambio de plan se escribe primero en la spec** y después en el código.

@@ -12,4 +12,4 @@
 
 ## Al terminar un cambio
 
-Actualiza `AVANCES.md` (última actualización, registro de cambios, pendientes y próximas tareas). Si cambia un plan, escribe primero la spec y después el código.
+Actualiza `AVANCES.md` (última actualización, registro de cambios, pendientes y próximas tareas). Si cambia un plan, escribe primero la spec y después el código. Antes de commitear, pasa el cambio por la skill `verificador` (`.claude/skills/verificador/`).
