@@ -1,0 +1,22 @@
+{
+  "id": "VER-0001",
+  "fecha": "2026-10-17T11:02:46-05:00",
+  "cambio": "design.md: alinear monto_para_nivel con R5.2 (incluir pendiente)",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "specs/motor-de-reglas/design.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "convenciones",
+      "ubicacion": "specs/motor-de-reglas/requirements.md:158",
+      "problema": "D2 dice que lo pendiente no cuenta para el presupuesto, mientras R5.2 sí lo cuenta para el nivel; la diferencia es intencional pero no está escrita",
+      "correccion": "aclarar en D2 que aplica solo a R3.6 (presupuesto), no a R5.2"
+    }
+  ],
+  "comprobaciones": "git diff revisado (1 línea); grep del identificador viejo sin ocurrencias; R5.2/R5.3 existen; sin pruebas ni build que ejecutar (repo solo con specs); sin secretos en el diff",
+  "rama": "claude/sweet-lamport-qcgutm",
+  "commit": "3d9b7b3ae868373f8d3db98d902fec873fba4093",
+  "reemplaza": null
+}

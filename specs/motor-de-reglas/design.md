@@ -114,7 +114,7 @@ def evaluar(ficha, contexto, reglas):
 
 **Nivel de aprobación (R5.2, R5.3):**
 ```
-monto_para_nivel = pagado_o_aprobado_del_periodo(beneficiario) + monto_base
+monto_para_nivel = pagado_aprobado_o_pendiente_del_periodo(beneficiario) + monto_base
 NINGUNO  si monto_para_nivel <= autopago_max
 PERSONA  si monto_para_nivel <= persona_max
 SENIOR   si no
