@@ -23,6 +23,11 @@ def formato_monto(valor, moneda: str) -> str:
     return f"{ent},{dec} {moneda}" if dec else f"{ent} {moneda}"
 
 
+def monto_legible(d: dict) -> str:
+    """Monto de una decisión para pantalla; «sin leer» si la ficha era inválida (PP4.2)."""
+    return "sin leer" if d.get("ficha_invalida") else formato_monto(d["monto"], d["moneda"])
+
+
 def quien_aprueba(f: Factura) -> str:
     if f.estado != "PENDIENTE":
         return ROLES.get((f.respuesta or {}).get("rol_clave", ""), "—")
@@ -54,11 +59,11 @@ def responder(almacen, sala_id, factura: Factura, rol: str, aprobar: bool, motiv
         techo = cargar_reglas(hoy_bogota())[0].techo_duro_pago
         validar_aprobacion(rol, factura.decision["nivel"], motivo, actor,
                            factura.decision.get("preparador"), factura.monto_base if aprobar else Decimal("0"),
-                           techo)
+                           techo, ficha_invalida=bool(factura.decision.get("ficha_invalida")), aprobar=aprobar)
         if aprobar and canal not in CANALES:
             raise AprobacionRechazada("Elige un canal de pago.")
     except AprobacionRechazada as e:
-        if _nivel_insuficiente(rol, factura) or "techo" in str(e):
+        if _nivel_insuficiente(rol, factura) or "techo" in str(e) or "no se puede aprobar" in str(e):
             escribir_evento(almacen, sala_id, "INTENTO_RECHAZADO", factura.factura_id,
                             {"intento": "APROBACION" if aprobar else "RECHAZO", "regla": str(e),
                              "motivo": (motivo or "")[:LARGO_MAX_MOTIVO]}, actor)

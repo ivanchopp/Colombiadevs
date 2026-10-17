@@ -40,7 +40,7 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 
 ### PP4. Tablero
 - **PP4.1** EL TABLERO DEBERÁ mostrar las cifras de AC6.1 (pagadas, frenadas, pendientes, esperadas atrasadas, gasto y porcentaje del presupuesto), tal como las entrega `acta/tablero.py`.
-- **PP4.2** CADA fila DEBERÁ mostrar factura, proveedor, monto, decisión, quién aprueba, motivo y canal sugerido (AC6.4).
+- **PP4.2** (Para una ficha inválida, el monto se muestra como «sin leer».) CADA fila DEBERÁ mostrar factura, proveedor, monto, decisión, quién aprueba, motivo y canal sugerido (AC6.4).
 - **PP4.3** EL TABLERO DEBERÁ refrescarse cada `segundos_refresco` y mostrar la hora de la última actualización (AC6.5).
 - **PP4.4** SI el tablero, el CSV y el acta no coinciden (AC6.3), ENTONCES EL TABLERO DEBERÁ mostrar un aviso visible.
 - **PP4.5** EL TABLERO DEBERÁ ofrecer la descarga de `facturas.csv` y `eventos.csv` (AC5).
@@ -53,6 +53,7 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 - **PP5.4** SI quien aprueba es el preparador del caso, ENTONCES EL SISTEMA DEBERÁ rechazar la acción (separación de funciones, R8.2).
 - **PP5.5** AL aprobar, EL SISTEMA DEBERÁ permitir elegir el canal de pago y registrarlo en el acta. La aprobación es un pago de práctica: no mueve dinero.
 - **PP5.6** LA interfaz NUNCA DEBERÁ mostrar un pago como hecho si la escritura en el acta falló (AC1.5).
+- **PP5.7** SI la factura tiene la ficha inválida (R8.6), ENTONCES la cola DEBERÁ mostrarla con su motivo, NO DEBERÁ ofrecer el botón de aprobar y EL SISTEMA DEBERÁ rechazar cualquier intento de aprobarla, registrando un `INTENTO_RECHAZADO`. Solo se podrá rechazar.
 
 ### PP6. Detalle, calendario y acta
 - **PP6.1** EL DETALLE de una factura DEBERÁ mostrar la ficha, la lista de revisiones (OK, FALLA, AVISO), el resultado, la versión de reglas y el número de fila del acta.

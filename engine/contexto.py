@@ -12,6 +12,8 @@ def contexto_desde_acta(base: Contexto, filas) -> Contexto:
     usadas: dict[str, str] = {}
     for f in facturas.values():
         d = f.decision
+        if d.get("ficha_invalida"):
+            continue                                  # sin monto ni fecha válidos: no cuenta (R8.6)
         historial.append(Movimiento(
             factura_id=f.factura_id, beneficiario=d["beneficiario"], numero=d["numero"],
             monto=Decimal(d["monto"]), moneda=d["moneda"], vence=d["vence"],

@@ -2,7 +2,7 @@
 import streamlit as st
 
 from acta.estado import facturas_por_estado
-from app.apoyo import CANALES, ROLES, AprobacionRechazada, cola_para_rol, formato_monto, responder
+from app.apoyo import CANALES, ROLES, AprobacionRechazada, cola_para_rol, formato_monto, monto_legible, responder
 from app.comun import almacen, barra_lateral, encabezado, exigir_rol, obtener_sala
 
 st.set_page_config(page_title="Panel 2 · Cola de aprobación", layout="wide")
@@ -24,9 +24,14 @@ for f in cola:
     d = f.decision
     with st.container(border=True):
         st.text(f"{f.factura_id} · {d['beneficiario']} · nivel {d['nivel'].lower()}")
-        st.text(f"Monto: {formato_monto(d['monto'], d['moneda'])}"
-                + (f" (≈ {formato_monto(d['monto_base'], 'COP')})" if d["moneda"] != "COP" else "")
-                + f" · vence {d['vence']}")
+        invalida = bool(d.get("ficha_invalida"))
+        st.text(f"Monto: {monto_legible(d)}"
+                + (f" (≈ {formato_monto(d['monto_base'], 'COP')})" if not invalida and d["moneda"] != "COP" else "")
+                + f" · vence {d['vence'] or 'sin fecha'}")
+        if invalida:
+            st.warning("La ficha no tiene los datos obligatorios (" + str(d.get("campos_con_problema", "")) +
+                       "). No se puede aprobar un pago sin esos datos: solo puedes rechazarla para que el "
+                       "proveedor la envíe de nuevo.")
         st.text(f"Motivo: {d['motivo']}")
         for r in d["revisiones"]:
             if r["resultado"] != "OK":
@@ -41,8 +46,10 @@ for f in cola:
                              index=CANALES.index(d["canal_sugerido"]) if d.get("canal_sugerido") in CANALES
                              else 0)
         b1, b2, _ = st.columns([1, 1, 4])
-        for boton, aprobar in ((b1.button("Aprobar", key=f"ap_{f.factura_id}", type="primary"), True),
-                               (b2.button("Rechazar", key=f"re_{f.factura_id}"), False)):
+        botones = [(b2.button("Rechazar", key=f"re_{f.factura_id}"), False)]
+        if not invalida:                                   # PP5.7: no se ofrece aprobar una ficha inválida
+            botones.insert(0, (b1.button("Aprobar", key=f"ap_{f.factura_id}", type="primary"), True))
+        for boton, aprobar in botones:
             if boton:
                 try:
                     fila = responder(almacen(), sala, f, rol, aprobar, motivo, canal)
