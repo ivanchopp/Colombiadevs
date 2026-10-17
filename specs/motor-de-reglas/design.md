@@ -140,7 +140,8 @@ def registrar_decision(resultado_propuesto, ficha, contexto, reglas, actor=None)
         raise DecisionRechazada("intento de pagar fuera de las reglas")   # R8.1
     if actor is not None:
         validar_aprobacion(actor, recalculado, ficha)                      # R8.2, R8.3, R8.5
-    return escribir_en_acta(resultado_propuesto)   # lo implementa la spec acta-y-csv
+    return escribir_evento(sala_id, "DECISION", ficha.factura_id, resultado_propuesto,
+                           actor, clave_idem)   # lo implementa la spec acta-y-csv
 ```
 `validar_aprobacion` comprueba: rol del actor mayor o igual al nivel exigido, motivo no vacío, actor distinto de `ficha.preparador`, y monto menor o igual a `techo_duro_pago`.
 

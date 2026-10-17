@@ -25,7 +25,7 @@ Cada criterio tiene un número (por ejemplo R3.1) y debe tener al menos una prue
 |---|---|
 | `motor-de-reglas` | Borrador para revisión |
 | `extraccion-y-agente-de-entrada` | Pendiente |
-| `acta-y-csv` | Pendiente |
+| `acta-y-csv` | Borrador para revisión |
 | `paneles-y-despliegue` | Pendiente |
 
 ## Reglas de trabajo
