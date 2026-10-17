@@ -16,3 +16,4 @@ Estado: **borrador**. Requisitos: `requirements.md` · Diseño: `design.md`. Due
 | PT10 | Despliegue en Railway: `Dockerfile`, `railway.toml`, volumen, variables, `README.md` | PD1 | **Preparado y probado en local; falta desplegar en Railway** (SQLite en volumen; PostgreSQL pendiente) |
 | PT11 | Página de reglas: ver, editar con formulario, vista previa, afloja/restringe y `CAMBIO_REGLA` en el acta | PP8, R9.4 a R9.6 | Hecho |
 | PT12 | Página de resumen de conciliación (capa 3) | AC8 | Pendiente |
+| PT13 | Panel 1: quitar los botones de ejemplo y ofrecer cuatro archivos de muestra descargables | PP2.4, PP2.5, EA8.4 | Hecho |

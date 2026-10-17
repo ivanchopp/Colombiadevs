@@ -45,7 +45,20 @@ Verifica que la clave funciona (hace unas pocas llamadas reales):
 GEMINI_API_KEY=... python3 -m agents.probar
 ```
 
-Sin ninguna clave la app corre en **modo demo**: las 4 facturas de ejemplo usan lecturas guardadas y los archivos propios se leen solo con patrones de texto, así que pasan a revisión de una persona. Los nombres de los modelos pueden cambiar: si la API dice que no existe, ajusta `MODELO_GEMINI` o `MODELO_ENTRADA`.
+Sin ninguna clave la app corre en **modo demo**: los archivos se leen solo con patrones de texto, así que **siempre pasan a revisión de una persona** (nunca se paga). Los nombres de los modelos pueden cambiar: si la API dice que no existe, ajusta `MODELO_GEMINI` o `MODELO_ENTRADA`.
+
+### Archivos de muestra
+
+El Panel 1 no tiene botones de ejemplo: el sistema lee el archivo que subes y el motor de reglas decide. Para probar los cuatro casos, abre «Archivos de muestra (ficticios)» en el Panel 1, descarga y vuelve a subir (con la IA activa, en una sala nueva):
+
+| Archivo | Qué debe pasar |
+|---|---|
+| Imprenta Sol · IS-2210 | Normal: se aprueba para pagar |
+| Taller Azteca · TA-0931 | Repetida: se frena (la sala nueva ya trae esa factura en el acta) |
+| Estudio Nube · EN-0077 | Beneficiario nuevo: se escala al senior |
+| Hosting Andes · HA-5531 | Trae una orden escondida en el texto: se escala a una persona |
+
+Las fechas dependen de `FECHA_DEMO` (ver AVANCES P18).
 
 > Usa solo facturas **ficticias**. Los planes gratuitos de Gemini pueden usar lo que se envía para mejorar el producto.
 

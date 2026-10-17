@@ -289,6 +289,29 @@ def test_ea9_2_las_cuatro_facturas_de_ejemplo(almacen, sala):
     assert decision(almacen, sala, "F-2004")["ficha"]["orden_en_texto"] is True
 
 
+def test_pp2_5_las_muestras_subidas_como_archivo_se_clasifican_solas(almacen, sala):
+    """Camino real del Panel 1: se sube el archivo descargado y la IA (falsa) lo lee; nada elige el caso."""
+    from agents import ejemplos
+    esperado = {"normal": ("PAGAR", "NINGUNO"), "repetida": ("FRENAR", "NINGUNO"),
+                "beneficiario_nuevo": ("ESCALAR", "SENIOR"), "orden_escondida": ("ESCALAR", "PERSONA")}
+    for clave, (dec, nivel) in esperado.items():
+        nombre, datos = ejemplos.leer_ejemplo(clave)
+        cliente = ClienteFalso(ejemplos.LECTURAS_GUARDADAS[clave])
+        e = flujo.recibir(almacen, sala, nombre, datos, cliente=cliente)
+        assert e["modo"] == "ia", clave
+        d = decision(almacen, sala, e["factura_id"])
+        assert (d["decision"], d["nivel"]) == (dec, nivel), clave
+
+
+def test_pp2_4_sin_ia_las_muestras_subidas_siempre_se_escalan(almacen, sala):
+    from agents import ejemplos
+    for clave in ejemplos.EJEMPLOS:
+        nombre, datos = ejemplos.leer_ejemplo(clave)
+        e = flujo.recibir(almacen, sala, nombre, datos)
+        assert e["modo"] == "regex", clave
+        assert decision(almacen, sala, e["factura_id"])["decision"] != "PAGAR", clave
+
+
 def test_ea6_3_el_preparador_es_la_sala(almacen, sala):
     e = flujo.recibir_ejemplo(almacen, sala, "normal")
     assert decision(almacen, sala, e["factura_id"])["preparador"] == f"proveedor-{sala}"
