@@ -1,0 +1,23 @@
+{
+  "id": "VER-0007",
+  "fecha": "2026-10-17T13:41:08-05:00",
+  "cambio": "Guion del pitch de 2 a 3 minutos (docs/pitch-guion.md) y actualización de AVANCES.md",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "docs/pitch-guion.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "docs/pitch-guion.md",
+      "problema": "El guion depende de FECHA_DEMO (P18) y del modo demo sin clave (P17)",
+      "correccion": "Lista de revisión previa en el propio guion"
+    }
+  ],
+  "comprobaciones": "python3 eval.py hoy: 20/20, 0 pagos indebidos, 20/20 explicaciones; montos y facturas cotejados con data/facturas_ejemplo; 383 palabras habladas; lo no construido marcado a futuro; sin clientes ni citas inventados; sin secretos; sin código modificado",
+  "rama": "claude/funny-goodall-s310jc",
+  "commit": "54ed1ee16466240a1bfd3d7089fe1668878d8844",
+  "reemplaza": null
+}

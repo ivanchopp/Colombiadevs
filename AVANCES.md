@@ -2,7 +2,7 @@
 
 > **Si eres un chat nuevo de Claude Code, empieza aquí.** Este archivo es la memoria del proyecto: qué se quiere hacer, qué ya se hizo, qué falta y qué sigue. Léelo completo antes de tocar nada y **actualízalo al terminar cada cambio** (ver «Cómo mantener este archivo»).
 
-**Última actualización:** sáb 17 oct 2026, 18:30 (hora Bogotá)
+**Última actualización:** sáb 17 oct 2026, 18:50 (hora Bogotá)
 **Entrega:** **dom 18 oct 2026, 8:00 a. m. (hora Bogotá).** Objetivo: enviar a las 7:00.
 **Repositorio:** https://github.com/ivanchopp/Colombiadevs (rama `main`, no hay otras)
 
@@ -70,6 +70,7 @@
 | `AVANCES.md` | Este archivo |
 | `CLAUDE.md` | Indicaciones cortas para Claude Code |
 | `docs/Ruta-de-una-factura.pdf` | **Diseño general:** actores, flujo, maquetas, herramientas, despliegue, a futuro. Se genera de una página en línea privada del equipo |
+| `docs/pitch-guion.md` | Guion hablado del pitch (2 a 3 min) con indicaciones para la demo |
 | `docs/Guia-6-alternativas-actualizada.pdf` | Guía de las 6 alternativas de @Marcelo Linero, ajustada a la entrega de las 8:00, con plan por horas |
 | `specs/README.md` | Índice y reglas de las especificaciones |
 | `.claude/skills/verificador/` | Skill que revisa cada cambio, lo aprueba o rechaza y lo registra. **Úsala antes de commitear.** |
@@ -100,7 +101,8 @@ Lo más reciente va arriba.
 
 | Cuándo | Commit | Qué se hizo |
 |---|---|---|
-| 17 oct | *(este commit)* | **Skills de pitch.** Se instalaron `sales-narrative` (guia-matthieu/clawfu-skills, MIT, narrativa de 8 pasos de April Dunford) y `storytelling` (gtmagents/gtm-agents, arco SCAR) y se revisaron: son solo Markdown, sin scripts. Se adaptaron en `.claude/skills/` (español, reglas del proyecto, escenas con las 4 facturas de ejemplo). Se quitó de `sales-narrative` el texto ajeno a ventas (secciones de producción de audio). Las cifras del pitch deben salir de `eval.py` del día; sin clientes ni citas inventadas. |
+| 17 oct | *(este commit)* | **Guion del pitch de 2 a 3 minutos** en `docs/pitch-guion.md`, con las skills de pitch: 8 pasos, demo con las 4 facturas de ejemplo, cifras de `eval.py` del día (20/20, 0 pagos indebidos) y respuestas a preguntas. Sin clientes ni cifras inventadas; lo no construido va como «a futuro». |
+| 17 oct | `54ed1ee` | **Skills de pitch.** Se instalaron `sales-narrative` (guia-matthieu/clawfu-skills, MIT, narrativa de 8 pasos de April Dunford) y `storytelling` (gtmagents/gtm-agents, arco SCAR) y se revisaron: son solo Markdown, sin scripts. Se adaptaron en `.claude/skills/` (español, reglas del proyecto, escenas con las 4 facturas de ejemplo). Se quitó de `sales-narrative` el texto ajeno a ventas (secciones de producción de audio). Las cifras del pitch deben salir de `eval.py` del día; sin clientes ni citas inventadas. |
 | 17 oct | *(este commit)* | **Fusión con `main`.** Otra sesión había subido a `main` un esqueleto paralelo (`agents/entrada/`, `app/componentes/`, 45 pruebas) y specs propias de paneles y extracción: 37 archivos en conflicto. Por decisión del dueño **gana esta rama** (más completa: motor 20 de 20, 132 pruebas, agente con Gemini/Claude, paneles, despliegue). Se conserva de `main`: la skill `verificador`, `.verificaciones/`, `VERIFICACIONES.md`, `pytest.ini`, `.python-version`, `acta/esquema_postgres.sql` y los arreglos de D2. Se sacó del árbol el esqueleto paralelo (sigue en el historial de `main`, commit `cda2588`). Verificado con la skill `verificador`. |
 | 17 oct | *(este commit)* | **Proveedor de IA intercambiable (Gemini ahora, Claude después).** Spec EA2b. `PROVEEDOR_IA`, `GEMINI_API_KEY`/`GOOGLE_API_KEY`, `MODELO_GEMINI`; sin preferencia se usa Claude si hay clave, si no Gemini; si el elegido no tiene clave, modo demo. Mismo esquema, mismas defensas y mismo motor. La pantalla muestra qué proveedor está activo. `python3 -m agents.probar` verifica la clave. Probado con clientes falsos de los dos proveedores y construyendo los clientes reales de los SDK sin red. 132 pruebas. |
 | 17 oct | *(commit anterior)* | **Despliegue preparado.** `Dockerfile`, `railway.toml` (salud en `/_stcore/health`), `requirements-prod.txt`, `.env.example` y `README.md`. El acta va al volumen de Railway (`RAILWAY_VOLUME_MOUNT_PATH`) con modo WAL; `FECHA_DEMO` fija «hoy». Se encontró y corrigió un error de arranque (`No module named 'agents'` con el comando de Railway) probando con solo las dependencias de producción. Probado en local: arranque, salud, persistencia tras reiniciar, 6 visitantes a la vez y salas separadas. **No se probó la imagen de Docker ni Railway** (no hay Docker ni acceso). |
@@ -160,7 +162,7 @@ En orden. El detalle de cada tarea del motor está en `specs/motor-de-reglas/tas
 3b. Las páginas de reglas y resumen (PT11, capa 3), solo si sobra tiempo.
 4. ~~**Ola 0 y Ola 1 del motor**~~ (T1 a T10, T13 a T15 hechas; ver registro). Pendiente del motor: T11 simular y T12 vigencias con conflictos y afloja/restringe (solo si se hace el agente de reglas).
 5. **Que otra persona escriba casos trampa nuevos** (P15) y los pase por `eval.py`.
-5b. **Escribir el pitch y el guion de la demo** con las skills `sales-narrative` y `storytelling` (aún no se ha escrito el pitch; solo están las skills).
+5b. ~~Escribir el guion del pitch~~ (hecho: `docs/pitch-guion.md`). Falta **ensayarlo con la demo** y, si se quiere, pasarlo a diapositivas con la skill `pptx`.
 6. **Control de las 18:00:** correr `eval.py`. Si los casos trampa pasan, el enrutador de canal (T7) ya está hecho; con tiempo, las piezas de la capa 3. Si no pasan, esas horas se usan para corregir el motor.
 
 **Plan por horas** (hora de Bogotá):
