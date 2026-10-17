@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0017 | 2026-10-17 16:37 | APROBADO | Patrones de respaldo para facturas electronicas colombianas (EA3.4 a EA3.8): TOTAL, Razon social, Nro. Doc., moneda del total en letras; spec, pruebas y AVANCES | 0 | 1 | 6d2d137 | — |
 | VER-0016 | 2026-10-17 16:23 | APROBADO | AVANCES.md: se registra el despliegue en Railway probado (salud, Gemini activo, FECHA_DEMO), se cierra P20, se acotan P17 y P18 y se actualizan próximas tareas | 0 | 1 | 014409d | — |
 | VER-0015 | 2026-10-17 16:11 | APROBADO | Arreglo: una factura con ficha invalida se registra escalada (R8.6) y aparece en el tablero; no se puede aprobar (PP5.7); errores de lectura con IA en los Logs sin claves (EA2b.9); specs y AVANCES | 0 | 2 | 014409d | — |
 | VER-0014 | 2026-10-17 16:02 | APROBADO | FACTURAS_MAX configurable (EA1.5), aviso del Panel 1 sin la palabra demo, diagnostico sin falsos positivos de otros servicios, y fusion de main con renumeracion de VER-0010 a VER-0012; specs y AVANCES al dia | 0 | 1 | 5fba303 | — |
@@ -20,6 +21,11 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0017 — APROBADO
+
+- **ADVERTENCIA** (alcance) `agents/segunda_lectura.py`: Los patrones se probaron con un solo formato real de factura electronica; otros formatos pueden seguir sin leerse. No se probo la lectura con Gemini sobre ese PDF (AVANCES P17) → Probar el PDF en Railway con la IA activa
+- **NOTA** (seguridad) `agents/segunda_lectura.py`: Una lectura por patrones sigue marcada dudosa (EA8.2) y la segunda lectura exige coincidencia con la IA: ninguna ampliacion puede llevar a PAGAR por si sola → Ninguna
 
 ## VER-0016 — APROBADO
 

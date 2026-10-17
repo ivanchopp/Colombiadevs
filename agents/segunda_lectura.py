@@ -6,13 +6,19 @@ from decimal import Decimal, InvalidOperation
 MONEDAS = "COP|USD|EUR|BRL|MXN|ARS|CLP|PEN|BOB|CRC|ZAR"
 NUM = r"\d[\d.,]*"
 RE_MONTO = [
-    re.compile(rf"(?:total|monto|valor|importe|amount)[^\n\d]{{0,30}}?(?P<m>{NUM})\s*(?P<c>{MONEDAS})\b", re.I),
-    re.compile(rf"(?:total|monto|valor|importe|amount)[^\n\dA-Z]{{0,30}}?(?P<c>{MONEDAS})\s*(?P<m>{NUM})", re.I),
+    re.compile(rf"(?<![A-Za-z])(?:total|monto|valor|importe|amount)(?:\s+(?:a\s+pagar|neto|de\s+la\s+factura))?[^\n\dA-Za-z]{{0,30}}?(?P<m>{NUM})\s*(?P<c>{MONEDAS})\b", re.I),
+    re.compile(rf"(?<![A-Za-z])(?:total|monto|valor|importe|amount)[^\n\dA-Z]{{0,30}}?(?P<c>{MONEDAS})\s*(?P<m>{NUM})", re.I),
 ]
+# Factura electrónica colombiana (EA3.4 a EA3.6): «TOTAL:» con el valor en la línea siguiente, sin moneda al lado.
+RE_TOTAL_SOLO = re.compile(rf"(?<![A-Za-z])total(?:\s+a\s+pagar|\s+factura)?[ \t]*:\s*\$?\s*(?P<m>{NUM})", re.I)
+RE_CODIGO_MONEDA = re.compile(rf"\b({MONEDAS})\b")
 RE_FECHA = re.compile(r"(?:vence|vencimiento|fecha de vencimiento|due(?: date)?)[^\n\d]{0,20}"
                       r"(?P<f>\d{4}-\d{2}-\d{2}|\d{1,2}/\d{1,2}/\d{4})", re.I)
 RE_BENEF = re.compile(r"^\s*(?:proveedor|emisor|de|from|vendor)\s*[:\-]\s*(?P<b>[^\n<]{2,80})", re.I | re.M)
-RE_NUMERO = re.compile(r"(?:factura|invoice)\s*(?:n[°ºo.]*|no\.?|#|num(?:ero)?)?\s*[:\-]?\s*(?P<n>[A-Z0-9][A-Z0-9\-]{2,24})", re.I)
+RE_RAZON = re.compile(r"raz[oó]n\s+social(?:\s*/\s*nombre)?\s*:\s*(?P<b>[^\n<]{2,80})", re.I)
+RE_NUMERO_DOC = re.compile(r"n(?:ro|[uú]mero|[°º])?\.?\s*(?:de\s+)?(?:doc(?:umento)?\.?|factura)\s*[:\-]?\s*"
+                           r"(?P<n>(?=[A-Z0-9\-]*\d)[A-Z0-9][A-Z0-9\-]{2,24})", re.I)
+RE_NUMERO = re.compile(r"(?:factura|invoice)\s*(?:n[°ºo.]*|no\.?|#|num(?:ero)?)?\s*[:\-]?\s*(?P<n>(?=[A-Z0-9\-]*\d)[A-Z0-9][A-Z0-9\-]{2,24})", re.I)
 
 
 def parsear_monto(texto: str) -> Decimal | None:
@@ -59,13 +65,25 @@ def leer(texto: str | None) -> dict:
         if m and parsear_monto(m.group("m")) is not None:
             r["monto"], r["moneda"] = parsear_monto(m.group("m")), m.group("c").upper()
             break
+    if r["monto"] is None:
+        totales = [parsear_monto(m.group("m")) for m in RE_TOTAL_SOLO.finditer(texto)]
+        totales = [x for x in totales if x is not None]
+        if totales:
+            r["monto"] = totales[-1]                                     # EA3.5: el último «TOTAL:»
+            codigos = set(RE_CODIGO_MONEDA.findall(texto.upper()))
+            if len(codigos) == 1:                                        # EA3.6: nunca se supone una moneda
+                r["moneda"] = codigos.pop()
     f = RE_FECHA.search(texto)
     if f:
         r["vence"] = parsear_fecha(f.group("f"))
     b = RE_BENEF.search(texto)
     if b:
         r["beneficiario"] = b.group("b").strip()
-    n = RE_NUMERO.search(texto)
+    if r["beneficiario"] is None:
+        b = RE_RAZON.search(texto)                                       # EA3.4: la primera es el emisor
+        if b:
+            r["beneficiario"] = b.group("b").strip()
+    n = RE_NUMERO_DOC.search(texto) or RE_NUMERO.search(texto)
     if n:
         r["numero"] = n.group("n").upper()
     return r

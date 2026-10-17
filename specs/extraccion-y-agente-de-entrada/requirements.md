@@ -55,6 +55,11 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 - **EA3.1** EL SISTEMA DEBERÁ extraer el texto (PDF, EML, TXT) y buscar con patrones de texto el beneficiario, el monto, la moneda y el vencimiento.
 - **EA3.2** EL SISTEMA DEBERÁ marcar la ficha con `segunda_lectura = coincide` solo si encontró los cuatro campos y todos coinciden con la lectura de la IA. En cualquier otro caso, `no_coincide`, y los campos que difieren pasan a la lista de dudosos.
 - **EA3.3** CUANDO el archivo sea una imagen (sin texto extraíble), EL SISTEMA DEBERÁ marcar `segunda_lectura = no_disponible`, y lo mismo CUANDO el texto no contenga ninguno de los cuatro campos comparables. El motor escala (R2.2). Ante la duda se escala.
+- **EA3.4** LOS PATRONES DEBERÁN reconocer el formato de una factura electrónica colombiana: el monto tras la etiqueta «TOTAL:» (con el valor en la línea siguiente, como lo entrega el PDF), el beneficiario tras «Razón social/Nombre:» (el primero del documento es el emisor) y el número tras «Nro. Doc.:» o «N° de documento:».
+- **EA3.5** EL monto NO DEBERÁ tomarse de etiquetas que solo contengan la palabra «total» dentro de otra («SUBTOTAL», «TOTAL Base Imponible», «TOTAL Descuento Global», «TOTAL en letras»). Si hay varios «TOTAL:», DEBERÁ usarse el último.
+- **EA3.6** CUANDO haya monto pero ningún símbolo de moneda junto a él, LA moneda DEBERÁ tomarse del texto solo si aparece exactamente un código de moneda distinto (por ejemplo «COP» en el total en letras). Si no hay ninguno o hay varios, la moneda queda sin leer. NO DEBERÁ suponerse una moneda.
+- **EA3.7** EL número de factura DEBERÁ contener al menos un dígito, para no confundir palabras como «Electrónica» con un número.
+- **EA3.8** Lo que los patrones no encuentren (por ejemplo, una factura de contado sin fecha de vencimiento) DEBERÁ quedar sin leer y dudoso; NO DEBERÁ inventarse. Estas ampliaciones NO cambian EA8.2: un archivo propio leído solo con patrones sigue marcado como dudoso y siempre se escala.
 
 ### EA4. Órdenes escondidas
 - **EA4.1** EL SISTEMA DEBERÁ buscar, con patrones de texto y sin IA, frases que intenten dar órdenes (por ejemplo «ya está aprobada», «págala», «ignora las reglas») en el texto de la factura y en los mensajes del proveedor, y marcar `orden_en_texto`.

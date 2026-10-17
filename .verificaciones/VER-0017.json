@@ -1,0 +1,32 @@
+{
+  "id": "VER-0017",
+  "fecha": "2026-10-17T16:37:01-05:00",
+  "cambio": "Patrones de respaldo para facturas electronicas colombianas (EA3.4 a EA3.8): TOTAL, Razon social, Nro. Doc., moneda del total en letras; spec, pruebas y AVANCES",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "agents/segunda_lectura.py",
+    "tests/test_agente_entrada.py",
+    "specs/extraccion-y-agente-de-entrada",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "agents/segunda_lectura.py",
+      "problema": "Los patrones se probaron con un solo formato real de factura electronica; otros formatos pueden seguir sin leerse. No se probo la lectura con Gemini sobre ese PDF (AVANCES P17)",
+      "correccion": "Probar el PDF en Railway con la IA activa"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "agents/segunda_lectura.py",
+      "problema": "Una lectura por patrones sigue marcada dudosa (EA8.2) y la segunda lectura exige coincidencia con la IA: ninguna ampliacion puede llevar a PAGAR por si sola",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "pytest: 212 passed (7 nuevas); python3 eval.py: 20/20 y 0 pagos indebidos; con la factura real el respaldo lee beneficiario, numero, monto y moneda, y pregunta solo el vencimiento; 3 mutaciones (primer en vez de ultimo TOTAL, moneda con varios codigos, sin proteccion contra SUBTOTAL) detectadas; las pruebas usan texto ficticio, no el PDF real; sin secretos ni datos reales en el diff",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "6d2d137bdbecdb584b04f8b31751621c0a669d14",
+  "reemplaza": null
+}

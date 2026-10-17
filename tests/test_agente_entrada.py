@@ -118,6 +118,67 @@ def test_ea3_2_coincide_solo_si_todo_coincide():
     assert segunda_lectura.comparar(ia, "Total: 1.800.000 COP")[0] == "no_coincide"       # no encontró todo
 
 
+# Texto ficticio con la forma que entrega el PDF de una factura electrónica colombiana (EA3.4 a EA3.8).
+FE_COLOMBIA = """Datos del Emisor
+Datos del Adquirente
+Razón social/Nombre: 
+ PAPELERIA LUNA S.A.S
+NIT: 
+ 800123456-7
+Razón social/Nombre: 
+CLIENTE DE PRUEBA
+Totales
+SUBTOTAL:
+100,000.00
+TOTAL Base Imponible:
+100,000.00
+TOTAL Descuento Global:
+0.00
+TOTAL Recargo Global:
+10,000.00
+TOTAL:
+119,000.00
+TOTAL en letras: Ciento Diecinueve Mil Con Cero COP
+Factura Electrónica de Venta
+Nro. Doc.: 
+FE000123
+Proveedor Tecnológico: Otra Empresa SAS - NIT: 900000000-1
+"""
+
+
+def test_ea3_4_a_3_7_factura_electronica_colombiana():
+    r = segunda_lectura.leer(FE_COLOMBIA)
+    assert r["beneficiario"] == "PAPELERIA LUNA S.A.S"                   # el primero es el emisor, no el adquirente
+    assert r["numero"] == "FE000123"                                      # no «ELECTR»
+    assert str(r["monto"]) == "119000.00"                                 # ni SUBTOTAL ni «TOTAL Base Imponible»
+    assert r["moneda"] == "COP"                                           # del total en letras
+    assert r["vence"] is None                                             # EA3.8: no se inventa
+
+
+def test_ea3_5_toma_el_ultimo_total_y_no_el_subtotal():
+    assert str(segunda_lectura.leer("SUBTOTAL: 100.00\nTOTAL:\n90.00\nTOTAL:\n119.00")["monto"]) == "119.00"
+    assert segunda_lectura.leer("SUBTOTAL: 100.00 COP\nTOTAL Base Imponible: 100.00 COP")["monto"] is None
+
+
+@pytest.mark.parametrize("texto", ["TOTAL:\n119,000.00", "TOTAL:\n119,000.00\nCOP y USD", "TOTAL: 119,000.00\nEn pesos"])
+def test_ea3_6_sin_moneda_unica_no_se_supone(texto):
+    r = segunda_lectura.leer(texto)
+    assert str(r["monto"]) == "119000.00" and r["moneda"] is None
+
+
+def test_ea3_7_el_numero_lleva_algun_digito():
+    assert segunda_lectura.leer("Factura Electrónica de Venta")["numero"] is None
+    assert segunda_lectura.leer("Factura No. FAC-2041")["numero"] == "FAC-2041"
+
+
+def test_ea3_8_factura_colombiana_sin_ia_pide_el_vencimiento_y_nunca_paga(almacen, sala):
+    e = flujo.recibir(almacen, sala, "factura.txt", FE_COLOMBIA.encode())
+    assert e["modo"] == "regex" and e["estado"] == "recibida" and e["pendientes"] == ["vence"]
+    assert e["lectura"]["monto"] == "119000.00" and e["lectura"]["moneda"] == "COP"
+    e = flujo.responder(almacen, sala, e["factura_id"], "2026-10-30")
+    assert decision(almacen, sala, e["factura_id"])["decision"] == "ESCALAR"       # EA8.2: lectura dudosa
+
+
 def test_ea3_3_imagen_sin_segunda_lectura_siempre_escala(almacen, sala):
     png = b"\x89PNG\r\n\x1a\n" + b"0" * 50
     c = ClienteFalso(dict(beneficiario="Imprenta Sol", numero="IS-1", monto="1800000", moneda="COP",
