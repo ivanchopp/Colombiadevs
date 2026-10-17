@@ -33,7 +33,7 @@ Esta spec también reemplaza la lista de beneficiarios de ejemplo por un **regis
 | OC abierta | Ninguna factura la ha consumido todavía |
 | OC facturada | Una factura ya la usó y fue pagada, aprobada o quedó pendiente |
 | Identificación tributaria | NIT (Colombia), RFC (México) o RUC (Perú, Ecuador) del proveedor |
-| Registro de proveedores | Lista permitida de quién puede cobrar (reemplaza la lista de `registros.yaml`) |
+| Registro de proveedores | Lista permitida de quién puede cobrar (`data/proveedores.yaml`; reemplazó la lista de beneficiarios de `registros.yaml`) |
 
 ## Parámetros por defecto (supuestos)
 
@@ -55,6 +55,7 @@ Notación EARS en español: «CUANDO <evento>, EL SISTEMA DEBERÁ <respuesta>».
 - **OC1.3** CUANDO dos o más proveedores compartan la misma `id_tributaria`, EL SISTEMA DEBERÁ marcarlos a todos como «identificación repetida».
 - **OC1.4** CUANDO una `id_tributaria` no tenga el formato de su `tipo_id` (NIT: 9 dígitos, guion y dígito; RFC: 12 o 13 caracteres alfanuméricos; RUC: 11 dígitos en Perú o 13 en Ecuador), EL SISTEMA DEBERÁ marcarla como «identificación inválida».
 - **OC1.5** SI el registro no se puede leer o no cumple el esquema, ENTONCES EL SISTEMA DEBERÁ conservar la última versión válida y reportar el error, como con las reglas (R9.1).
+- **OC1.6** EL registro de proveedores DEBERÁ ser la única lista permitida del motor (R4.1) y la fuente de la cuenta registrada (R4.2) y del país (R7). Los acuerdos y el historial siguen en `registros.yaml`, por nombre de proveedor. SI un acuerdo o un movimiento del historial nombra a un proveedor que no está en el registro, ENTONCES la carga DEBERÁ fallar con un error que lo diga.
 
 ### OC2. Registro de órdenes de compra
 **Historia:** como persona de finanzas, quiero cargar las compras ya autorizadas para que las facturas se comparen con ellas.
@@ -135,7 +136,7 @@ Notación EARS en español: «CUANDO <evento>, EL SISTEMA DEBERÁ <respuesta>».
 | OCD1 | Los archivos dicen «Pesos» para proveedores de México, Colombia, Perú y Ecuador. ¿Qué moneda es? | **COP** para todas, marcado «supuesto». Con COP, todos los totales (11.136 a 45.936) quedan bajo el pago automático de 3 M: una OC que cuadra se pagaría sola. Si eran miles de pesos o la moneda de cada país, hay que decirlo antes de cargar |
 | OCD2 | Todas las OC usan IVA del 16 %, aunque Colombia tiene 19 %, Perú 18 % (IGV) y Ecuador 15 %. ¿Se valida la tasa por país? | **No.** Se toman los valores como vienen y solo se comprueba que `subtotal + iva = total` |
 | OCD3 | El listado no trae cuenta bancaria, y R4.2 escala al senior toda factura sin cuenta registrada. ¿Qué cuenta usamos? | **Agregar una cuenta ficticia a cada proveedor** al cargar, marcada «supuesto». Sin eso, ninguna factura de estos proveedores se pagaría sola |
-| OCD4 | ¿Los 30 proveedores reemplazan a los 9 beneficiarios actuales o se suman? | **Se suman.** Los 20 casos actuales, el calendario y las 4 facturas de ejemplo dependen de los 9 |
+| OCD4 | ~~¿Los proveedores nuevos reemplazan a los 9 beneficiarios de ejemplo o se suman?~~ | **Resuelta (17 oct, 18:48): reemplazan.** La lista permitida (R4.1) y la cuenta registrada (R4.2) salen solo de `data/proveedores.yaml` (156 válidos). Los 9 beneficiarios de ejemplo se migraron a proveedores del listado del mismo país (o de uno con la misma moneda), con sus acuerdos, y se actualizaron casos de prueba, calendario, facturas de muestra, semilla de la demo y pruebas. Ver «Migración de los beneficiarios de ejemplo» en `design.md` |
 | OCD5 | ~~Proveedores que comparten la identificación `FALLA-999999-X`~~ | **Resuelta (17 oct, 18:42):** el equipo entregó el listado de proveedores válidos (156) sin esos proveedores. Una factura de cualquiera de ellos queda fuera de la lista permitida y se escala al senior (R4.1) |
 | OCD11 | ~~RUC cortos de Perú y Ecuador~~ | **Resuelta (17 oct, 18:42):** quedaron fuera del listado de válidos. El de 156 no tiene ninguna identificación repetida ni con formato inválido |
 | OCD12 | En el listado de 200, los proveedores de las órdenes tienen **otro ID** (por ejemplo, PO-2026-001 cita el ID 1, que ahora es otro proveedor; el suyo es el 103). Nombre e identificación tributaria sí coinciden en las 30 órdenes. ¿Cómo se enlazan? | **Por nombre** (único en el listado), comprobando que la identificación tributaria coincida. El `ID_Proveedor` del archivo de órdenes se ignora |

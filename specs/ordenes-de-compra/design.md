@@ -89,3 +89,28 @@ def revisar(ficha, ctx, reglas):
 | Una OC válida hace pasar un pago que otra regla frenaría | OC4.9: la OC solo reemplaza la falta de acuerdo; el resto de revisiones corre igual y el guardarraíl revalida |
 | El proveedor inventa un número de OC por chat | OC4.10 y OC3.3: el agente no sabe qué OC existen y un dato solo aclarado escala |
 | El archivo trae errores de datos (IDs repetidos) | Se marcan al cargar y escalan al senior; no se corrigen en silencio |
+
+## Migración de los beneficiarios de ejemplo (OCD4, OT2)
+
+`cargar_contexto_base` arma `ctx.registros` desde `proveedores.yaml` (país como código ISO: Colombia → CO, México → MX, Perú → PE, Ecuador → EC; cuenta ficticia) y le suma el acuerdo de `registros.yaml`, que ahora solo tiene `acuerdos` e `historial`. La lógica de las revisiones no cambia: siguen leyendo `ctx.registros`.
+
+Cada beneficiario de ejemplo pasó a un proveedor válido con el mismo papel en los casos:
+
+| Antes | Ahora | País | Moneda | Acuerdo |
+|---|---|---|---|---|
+| Pixel Norte Ltda. | Tecnología Cafetera S.A.S. | CO | COP | 2.400.000 |
+| Diseños Alba | Textiles Modernos Pereira S.A.S. | CO | COP | 4.100.000 |
+| Imprenta Sol | Alimentos del Valle S.A.S. | CO | COP | 6.000.000 |
+| Hosting Andes | Consultores Energéticos Magdalena S.A.S. | CO | COP | sin acuerdo |
+| Contador externo | Laboratorios Clínicos Cundinamarca S.A.S. | CO | COP | 1.500.000 |
+| Obras Cumbre SAS | Inversiones Metalmecánicos Cauca S.A.S. | CO | COP | 60.000.000 |
+| Taller Azteca | Papelería Corporativa Anáhuac S.A. de C.V. | MX | MXN | 12.500 |
+| Cloudwerk GmbH (Alemania) | Tecnología Quiteña S.A. | EC | USD | 540 |
+| Estúdio Verde (Brasil) | Importadora Químicos Rímac S.A.C. | PE | PEN | 2.420 (antes 3.520 BRL) |
+
+- **Brasil y Alemania no están en el listado de válidos.** Sus papeles pasan a Perú y Ecuador. En Ecuador la moneda sigue siendo USD, así que los montos no cambian. En Perú los montos se convirtieron de BRL a PEN con las tasas de ejemplo (750 y 1.090 COP): el acuerdo de 3.520 BRL pasa a 2.420 PEN y la factura de 3.800 BRL a 2.615 PEN, que sigue un 8 % sobre lo acordado (zona gris, escala a la persona).
+- **Canal sugerido:** Perú en PEN usa «Transferencia bancaria (Perú)»; Ecuador en USD, SWIFT o USDC (ya no hay SEPA ni Pix en los ejemplos).
+- **Cuentas:** las facturas de ejemplo traen la cuenta ficticia del proveedor (`Cuenta demo ···NNNN`), para que R4.2 las reconozca.
+- **Lo que no cambia:** los proveedores ficticios fuera de la lista («Nuevo Proveedor SAS», «Estudio Nube SAS», «Otros SAS») siguen fuera, a propósito, para los casos de beneficiario nuevo.
+- **Datos de salas ya creadas:** el acta es de solo añadir. Las salas que ya existían en la demo desplegada conservan sus decisiones con los nombres anteriores; las salas nuevas usan los proveedores válidos.
+- **Pendiente:** las maquetas del PDF `docs/Ruta-de-una-factura.pdf` muestran los nombres anteriores y se regeneran a mano (P6).
