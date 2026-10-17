@@ -1,0 +1,31 @@
+{
+  "id": "VER-0006",
+  "fecha": "2026-10-17T13:28:44-05:00",
+  "cambio": "Instala y adapta las skills sales-narrative y storytelling para el pitch de ventas; actualiza AVANCES.md",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    ".claude/skills/sales-narrative/SKILL.md",
+    ".claude/skills/storytelling/SKILL.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": ".claude/skills/storytelling/SKILL.md:44",
+      "problema": "El ejemplo citaba 8 M COP y la factura de ejemplo es de 7,2 M COP",
+      "correccion": "Corregido a 7,2 M COP antes de registrar"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": ".claude/skills/sales-narrative/SKILL.md",
+      "problema": "Contenido de terceros (MIT, guia-matthieu/clawfu-skills y gtmagents/gtm-agents); solo Markdown, sin scripts",
+      "correccion": "Se revisó completo y se quitó el texto ajeno (producción de audio); atribución en el encabezado de cada skill"
+    }
+  ],
+  "comprobaciones": "Leídos completos los SKILL.md originales; sin scripts ni instrucciones ocultas; búsqueda de secretos sin resultados; python3 eval.py 20/20 y 0 pagos indebidos; hechos citados cotejados con AVANCES.md, data/casos.yaml y data/facturas_ejemplo; sin código modificado, no hay pruebas que ejecutar",
+  "rama": "claude/funny-goodall-s310jc",
+  "commit": "77a8763765d9afcd5d702b6418bccbc225e6ed8c",
+  "reemplaza": null
+}
