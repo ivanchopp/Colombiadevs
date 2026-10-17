@@ -2,7 +2,7 @@
 
 > **Si eres un chat nuevo de Claude Code, empieza aquí.** Este archivo es la memoria del proyecto: qué se quiere hacer, qué ya se hizo, qué falta y qué sigue. Léelo completo antes de tocar nada y **actualízalo al terminar cada cambio** (ver «Cómo mantener este archivo»).
 
-**Última actualización:** sáb 17 oct 2026, 14:05 (hora Bogotá)
+**Última actualización:** sáb 17 oct 2026, 16:00 (hora Bogotá)
 **Entrega:** **dom 18 oct 2026, 8:00 a. m. (hora Bogotá).** Objetivo: enviar a las 7:00.
 **Repositorio:** https://github.com/ivanchopp/Colombiadevs · rama `main` (incluye el PR #2, commit `77a8763`). El trabajo nuevo se hace en ramas `claude/*` y entra por PR.
 
@@ -80,6 +80,7 @@
 | `specs/README.md` | Índice y reglas de las especificaciones |
 | `specs/motor-de-reglas/` | 53 criterios EARS (R1 a R11), `design.md` (con «Ajustes al construir»), tareas T1 a T15 |
 | `specs/acta-y-csv/` | 51 criterios (AC1 a AC9), diseño, tareas AT1 a AT10 |
+| `specs/ordenes-de-compra/` | **Alcance nuevo, sin código.** Órdenes de compra autorizadas antes de la factura y registro de proveedores con NIT/RFC/RUC. Criterios OC1 a OC8, diseño, tareas OT1 a OT7 |
 | `specs/paneles-y-despliegue/` | Criterios PP1 a PP8 y PD1 (despliegue), diseño, tareas PT1 a PT12 |
 | `specs/extraccion-y-agente-de-entrada/` | Criterios EA1 a EA9 y EA2b (proveedor intercambiable), diseño, tareas ET1 a ET8 |
 | `.claude/skills/verificador/` | Skill que revisa cada cambio, lo aprueba o rechaza y lo registra. **Úsala antes de commitear.** |
@@ -88,7 +89,7 @@
 | `acta/` | Acta en SQLite: huellas, escribir, verificar, estado, CSV, tablero, salas. `esquema_postgres.sql` viene de otra sesión y **no se usa** todavía |
 | `agents/` | Agente de entrada: `archivo`, `lectura_ia` (Gemini o Claude), `segunda_lectura` y `seguridad` (sin IA), `aclaraciones`, `estado`, `flujo`, `ejemplos`, `probar` |
 | `app/` | Streamlit. `Panel_1_Proveedor.py`, `pages/` con el Panel 2 (Tablero, Cola de aprobación, Calendario, Acta, Reglas), `comun.py`, `apoyo.py` |
-| `data/` | `reglas.yaml`, `techos.yaml`, `registros.yaml`, `tasas.yaml`, `canales.yaml`, `calendario.csv` y `casos.yaml` (20 facturas de prueba), todo «supuesto»; `demo_semilla.py`; `facturas_ejemplo/` |
+| `data/` | `reglas.yaml`, `techos.yaml`, `registros.yaml`, `tasas.yaml`, `canales.yaml`, `calendario.csv` y `casos.yaml` (20 facturas de prueba), todo «supuesto»; `demo_semilla.py`; `facturas_ejemplo/`; `proveedores.yaml` (200 proveedores de prueba, generado con `importar_compras.py`) |
 | `eval.py` | Mide autonomía, seguridad (pagos indebidos = 0) y explicabilidad con los 20 casos |
 | `tests/`, `pytest.ini` | 164 pruebas (`python3 -m pytest -q`), incluida la de propiedades con Hypothesis |
 | `Dockerfile`, `railway.toml`, `requirements-prod.txt`, `requirements.txt`, `.env.example`, `.streamlit/config.toml` | Despliegue y dependencias. La imagen corre como root a propósito (volúmenes de Railway) |
@@ -100,6 +101,8 @@ Lo más reciente va arriba.
 | Cuándo | Commit | Qué se hizo |
 |---|---|---|
 | 17 oct | *(este commit)* | **Línea de diagnóstico de la IA (EA2b.6 a EA2b.8, ET9).** Con `?diagnostico=1` en el enlace, el Panel 1 muestra por qué está o no activa la IA: qué proveedor se eligió, el motivo del modo demo, si cada clave está «definida», «vacía» o «no definida» (**nunca su valor**), nombres de variables con aspecto de clave mal escrita (por ejemplo `GEMINI_APY_KEY`) y los datos del despliegue que Railway inyecta (entorno, servicio y commit). No depende de ninguna variable de entorno, así que sirve justo cuando una variable no llega. Además, los espacios alrededor de una clave se ignoran. Nació de un caso real: la clave de Gemini estaba puesta en Railway y la app seguía en modo demo. 12 pruebas nuevas (incluida una que garantiza que ningún valor de clave aparece en pantalla). 164 pruebas. |
+| 17 oct | `948f7d7` | **Registro de proveedores (OT1, parte de proveedores).** El equipo entregó un listado de 200 proveedores. `data/importar_compras.py` lo convierte a `data/proveedores.yaml` sin dirección, teléfono ni correo, con una cuenta ficticia (OCD3) y las marcas calculadas: 20 comparten `FALLA-999999-X` y 30 tienen la identificación inválida. Los ID de los proveedores de las órdenes cambiaron: queda como OCD12 (enlazar por nombre). El motor **todavía no usa** este registro (OT2). 12 pruebas nuevas, 164 en total. |
+| 17 oct | `2f7c3df` | **Spec de órdenes de compra (alcance nuevo).** El equipo entregó 30 proveedores y 30 órdenes de compra de prueba en Excel (no se suben: el repositorio es público y traen datos de contacto). Spec `ordenes-de-compra`: registro de proveedores con identificación tributaria, registro de órdenes, lectura del número de OC en la factura, revisión nueva del motor (OC inexistente o ajena → senior; ya facturada o más de 10 % → frenar; de 5 % a 10 % → persona), consumo desde el acta, página en el Panel 2 y 8 casos de prueba. Al revisar los archivos se encontraron problemas de datos que quedan como decisiones abiertas (OCD1 a OCD11): moneda «Pesos» sin código, IVA del 16 % para todos los países, sin cuentas bancarias, 6 proveedores con la misma identificación falsa y 10 con el RUC corto. **Sin código todavía.** |
 | 17 oct | `f0e1093` | **Documentación al día.** `specs/acta-y-csv/tasks.md` gana una tabla de estado (AT1 a AT10: 6 hechas, 3 parciales, 1 pendiente) y su trazabilidad apunta a las pruebas reales (`tests/test_acta.py` y otras; los archivos que citaba no existían). **P23 cerrado:** las specs vigentes son las del árbol actual (`paneles-y-despliegue` con PP1 a PP8 y PD1; `extraccion-y-agente-de-entrada` con EA1 a EA9), que describen el código que existe; las de otra sesión (`dc04e18`, `8bb35bb`) quedan solo como historial. |
 | 17 oct | `00b7d23` | **Página de reglas (PT11, PP8).** El entregable del reto pide una pantalla donde la empresa define sus reglas, y no existía. Spec primero: PP8 (7 criterios), diseño y tarea. Panel 2 › Reglas muestra los parámetros vigentes y el techo duro (no editable), permite editarlos, muestra la vista previa (qué cambia, si afloja o restringe y qué facturas de la sala cambiarían de decisión) y pide motivo. Aflojar exige el rol senior; si lo intenta la persona, queda un `INTENTO_RECHAZADO`. El cambio se guarda como `CAMBIO_REGLA` en el acta de la sala, vale solo hacia adelante y solo en esa sala, y la versión pasa a `v12.s1`. El agente de entrada y los paneles deciden con las reglas de la sala. Cierra T11 y la parte de afloja/restringe y techo de T12. 9 pruebas nuevas, 152 en total, `eval.py` 20/20. |
 | 17 oct | `5f764ef` | **P25 cerrado: R2.5 implementado.** Spec primero: `design.md` del motor alineado con el código (ficha con `origen_campos` y `segunda_lectura = no_disponible`; criterio R2.5 explicado campo por campo) y EA3.3 y EA6.4 ajustados. Código: R2.5 (un dato obligatorio que viene solo de una aclaración da `AVISO`, salvo que coincida con el acuerdo o el calendario; número y vencimiento siempre avisan), R2.2 con segunda lectura no disponible (imágenes y textos sin campos comparables) y el agente marca `origen_campos`. 11 pruebas nuevas, 4 violaciones nuevas en Hypothesis y 4 mutaciones del motor detectadas. 143 pruebas, `eval.py` 20/20. Diferencias deliberadas con el diseño de la otra sesión: `orden_en_texto` (agrega un `AVISO`) en lugar de `alerta_inyeccion`, y sin `campos_diferentes` ni `aclaraciones` en la ficha. |
@@ -139,6 +142,7 @@ Cosas ya hechas que hay que **revisar, confirmar o corregir**. Los números no s
 |---|---|---|
 | P20 | **Falta hacer el despliegue en Railway.** Ya se puede desplegar desde `main`. Pasos en `README.md`: conectar el repositorio, agregar un volumen en `/data`, poner `GEMINI_API_KEY` (o `ANTHROPIC_API_KEY`) y `FECHA_DEMO=2026-10-17`, generar el dominio, una sola réplica | Quien tenga Railway |
 | P17 | **La lectura con IA no se probó con ninguna API real.** Claude: `messages.create` con `output_config.format`. Gemini: `generate_content` con `response_json_schema`. Si la app sigue en modo demo con la clave puesta, abre el enlace con `?diagnostico=1` (EA2b.6). Los SDK aceptan la configuración, pero falta correr `python3 -m agents.probar` con una clave. **Los nombres de modelo por defecto no están verificados** (`gemini-2.5-flash`, `claude-sonnet-5-5`; se cambian con `MODELO_GEMINI` y `MODELO_ENTRADA`) | Quien tenga la clave (ET7) |
+| P26 | **Decisiones OCD1 a OCD11** de `specs/ordenes-de-compra/requirements.md`. Antes de seguir hacen falta OCD1 (moneda), OCD4 (sumar o reemplazar proveedores), OCD5 y OCD11 (identificaciones repetidas o cortas) y OCD12 (enlazar las órdenes por nombre). OCD3 ya se aplicó (cuenta ficticia) | El equipo |
 | P15 | **Calibración propia del motor** (D1 a D5 siguen abiertas): zona gris 5 % a 10 %, gasto cuenta solo lo pagado o aprobado, periodo = mes en Bogotá, y los ajustes de «Ajustes al construir». Las 20 facturas de `casos.yaml` se escribieron junto con el motor: **faltan casos trampa de otra mano** para que `eval.py` mida de verdad. R2.5 y R2.2 con segunda lectura no disponible tienen pruebas pero **no un caso en `casos.yaml`** (T3 pide uno por criterio) | D y el equipo |
 | P18 | Las facturas de ejemplo dependen de la **fecha de hoy** (el calendario es de octubre de 2026, ventana de ±5 días): la «normal» solo se paga sola entre el 9 y el 19 de octubre. `FECHA_DEMO` lo evita | Poner `FECHA_DEMO` en Railway |
 
@@ -179,6 +183,7 @@ En orden. El detalle de cada tarea está en `tasks.md` de cada spec.
 3. **El equipo resuelve las decisiones abiertas** (P1, P9, P10, P11).
 4. **Que otra persona escriba casos trampa nuevos** (P15) y los pase por `eval.py`.
 4b. ~~Página de reglas~~ (hecha; ver registro).
+4c. **Órdenes de compra:** el equipo resuelve P26 y decide si entra antes de la entrega (unas 7 h; versión mínima de unas 4 h: OT1, OT2, OT3 y OT6).
 5. **Control de las 18:00:** correr `eval.py`. El enrutador de canal ya está hecho; con tiempo, la capa 3 (agente de reglas en lenguaje natural, T12 vigencias con conflictos, conciliación y página de resumen). Si los casos trampa no pasan, esas horas se usan para corregir el motor.
 
 **Plan por horas** (hora de Bogotá):
