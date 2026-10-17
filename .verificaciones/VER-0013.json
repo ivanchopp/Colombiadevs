@@ -1,47 +1,35 @@
 {
   "id": "VER-0013",
-  "fecha": "2026-10-17T16:02:26-05:00",
-  "cambio": "FACTURAS_MAX configurable (EA1.5), aviso del Panel 1 sin la palabra demo, diagnostico sin falsos positivos de otros servicios, y fusion de main con renumeracion de VER-0010 a VER-0012; specs y AVANCES al dia",
+  "fecha": "2026-10-17T14:02:14-05:00",
+  "cambio": "Linea de diagnostico de la IA en el Panel 1 (?diagnostico=1): proveedor, motivo del modo demo, estado de cada variable sin mostrar valores, nombres parecidos y datos del despliegue; espacios en claves ignorados; spec EA2b.6-8 y AVANCES",
   "veredicto": "APROBADO",
   "archivos": [
-    "agents/flujo.py",
     "agents/lectura_ia.py",
     "app/Panel_1_Proveedor.py",
     "tests/test_agente_entrada.py",
-    "tests/test_paneles.py",
     "specs/extraccion-y-agente-de-entrada/requirements.md",
-    "specs/paneles-y-despliegue/requirements.md",
-    "README.md",
-    ".env.example",
-    "AVANCES.md",
-    "VERIFICACIONES.md",
-    ".verificaciones"
+    "specs/extraccion-y-agente-de-entrada/design.md",
+    "specs/extraccion-y-agente-de-entrada/tasks.md",
+    "AVANCES.md"
   ],
   "hallazgos": [
     {
       "severidad": "ADVERTENCIA",
       "categoria": "seguridad",
-      "ubicacion": "agents/flujo.py",
-      "problema": "FACTURAS_MAX no es un tope de gasto: limita las facturas por sala, pero cada sala nueva recibe otras tantas, y subirlo aumenta las llamadas reales a la IA",
-      "correccion": "Poner una cuota en Google AI Studio o Google Cloud (AVANCES P27)"
+      "ubicacion": "app/Panel_1_Proveedor.py",
+      "problema": "El diagnostico es publico (Panel 1 es abierto) y revela cuales variables de IA estan definidas, el entorno, el servicio y 7 caracteres del commit; no muestra ningun valor de clave. Es informacion de baja sensibilidad pero conviene saberlo",
+      "correccion": "Si se quiere restringir, exigir una clave de demostracion o quitar el parametro antes de la entrega"
     },
     {
       "severidad": "NOTA",
       "categoria": "errores",
-      "ubicacion": ".verificaciones/VER-0010.json",
-      "problema": "La fusion con main encontro dos VER-0010 distintos; el de main conserva su ID y el de esta rama se renumero a VER-0012 antes de llegar a main; la tabla se regenero con el script del verificador",
-      "correccion": "Ninguna"
-    },
-    {
-      "severidad": "NOTA",
-      "categoria": "convenciones",
       "ubicacion": "agents/lectura_ia.py",
-      "problema": "El diagnostico ya no detecta nombres parecidos de claves genericas (API_KEY) ni de otros servicios; solo Gemini, Google y Anthropic",
-      "correccion": "Ampliar PARECE_DE_IA si hace falta"
+      "problema": "La deteccion de nombres parecidos es heuristica (regex) y puede no marcar un error de escritura raro o marcar una variable legitima inesperada",
+      "correccion": "Ajustar PARECE_DE_IA si aparece un falso positivo"
     }
   ],
-  "comprobaciones": "pytest: 191 passed; python3 eval.py: 20/20, 0 pagos indebidos; 2 mutaciones del limite (acepta 0 y 999999, nunca se aplica) detectadas por las pruebas; sin marcas de conflicto en AVANCES.md ni VERIFICACIONES.md; JSON de verificacion unicos y consecutivos hasta VER-0012; sin secretos en el diff; sin cambios en el motor ni en las reglas de decision",
+  "comprobaciones": "pytest: 164 passed; python3 eval.py: 20/20 y 0 pagos indebidos; mutacion que filtra el valor de la clave detectada por las pruebas; revisado en navegador local con ?diagnostico=1 (se corrigio un falso positivo con ANTHROPIC_BASE_URL); busqueda de secretos en el diff: ninguno; sin cambios en el motor ni en las reglas de decision",
   "rama": "claude/focused-dirac-iurhyp",
-  "commit": "5fba30381bb50ae7a68d1253bf7c449582622ac8",
+  "commit": "67eb3338a89eccece5f2bda96d46b16341bf227f",
   "reemplaza": null
 }
