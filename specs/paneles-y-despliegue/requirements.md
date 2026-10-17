@@ -11,7 +11,7 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 
 **Dentro:** Panel 1 (portal, estado público), Panel 2 (tablero, cola de aprobación, detalle, calendario, acta, descarga de CSV), sala por enlace, selector de rol, refresco automático.
 
-**Fuera (otras specs):** lectura de facturas y chat con el proveedor (`extraccion-y-agente-de-entrada`), chat de reglas y resumen con IA (capa 3), reglas de decisión (`motor-de-reglas`).
+**Fuera (otras specs):** lectura de facturas y chat con el proveedor (`extraccion-y-agente-de-entrada`), chat de reglas en lenguaje natural y resumen con IA (capa 3), reglas de decisión (`motor-de-reglas`).
 
 ## Parámetros por defecto (supuestos)
 
@@ -63,6 +63,17 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 - **PP7.1** Las pantallas NO DEBERÁN contener lógica de decisión ni cálculos de dinero: llaman a `acta/` y `engine/`.
 - **PP7.2** Cada criterio de PP1, PP2 y PP5 DEBERÁ tener una prueba automática sobre las funciones de apoyo (`app/apoyo.py`), y las páginas se prueban con `streamlit.testing.v1.AppTest`.
 - **PP7.3** EL texto escrito por personas (motivos, nombres) DEBERÁ mostrarse como texto plano, nunca como HTML.
+
+### PP8. Reglas (entregable del reto)
+**Historia:** como persona de finanzas, quiero ver y cambiar las reglas de pago desde una pantalla, sin pedirle ayuda a ingeniería.
+
+- **PP8.1** EL PANEL 2 DEBERÁ tener una página «Reglas» que muestre los parámetros vigentes de la sala, su versión y el techo duro (de solo lectura, R9.5).
+- **PP8.2** LA página DEBERÁ permitir editar con un formulario: `autopago_max`, `persona_max`, `limite_periodo_beneficiario`, `presupuesto_periodo`, `tolerancia_ok`, `tolerancia_frenar` y `ventana_dias`.
+- **PP8.3** ANTES de confirmar, LA página DEBERÁ mostrar qué cambia, si el cambio afloja o restringe, y qué facturas de la sala cambiarían de decisión (vista previa, R9.6), sin escribir nada.
+- **PP8.4** SI el cambio afloja una regla (R9.4), ENTONCES solo el rol `SENIOR` podrá confirmarlo. SI lo intenta `PERSONA`, ENTONCES EL SISTEMA DEBERÁ rechazarlo y registrar un `INTENTO_RECHAZADO`.
+- **PP8.5** SI un umbral de monto supera el techo duro, o los valores no son coherentes (`autopago_max` ≤ `persona_max`, `tolerancia_ok` ≤ `tolerancia_frenar`, valores positivos), ENTONCES EL SISTEMA DEBERÁ rechazar el cambio con una explicación (R9.5).
+- **PP8.6** PARA confirmar, EL SISTEMA DEBERÁ exigir un motivo y registrar un evento `CAMBIO_REGLA` con los valores antes y después, si afloja, quién lo pidió, quién lo firmó y la versión nueva (AC3.3).
+- **PP8.7** UN cambio confirmado DEBERÁ aplicarse solo a las facturas que se decidan después, y solo en esa sala. Las decisiones ya registradas no cambian.
 
 ## Decisiones abiertas
 

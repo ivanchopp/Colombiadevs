@@ -154,7 +154,7 @@ flowchart TD
 | R8.* | T9 | `tests/test_guardarrail.py` |
 | R9.1, R9.3 | T10 | `tests/test_reglas_io.py` |
 | R9.2, R9.4, R9.5 | T12 | `tests/test_reglas_io.py` |
-| R9.6 | T11 | `tests/test_simular.py` |
+| R9.6 | T11 | `tests/test_reglas_pagina.py` |
 | R10.* | T8 | `tests/test_decision.py` |
 | R11.1 | Todas | Una prueba por criterio |
 | R11.2 | T13 | `tests/test_propiedades.py` |
@@ -184,5 +184,5 @@ flowchart TD
 | T13 | Hecho |
 | T14 | Hecho |
 | T15 | Hecho |
-| T11 | Pendiente |
-| T12 | Pendiente (solo vigencias y techos) |
+| T11 | Hecho: `engine/simular.py`, vista previa de la página de reglas (PP8.3) |
+| T12 | Parcial: afloja/restringe y techo duro hechos (`reglas_io.cambios_que_aflojan`, `validar_cambio`); faltan conflictos por especificidad |

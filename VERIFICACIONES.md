@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0008 | 2026-10-17 13:29 | APROBADO | Página de reglas (PT11, PP8): ver y editar reglas por sala, vista previa (T11), afloja/restringe y techo duro (T12 parcial), CAMBIO_REGLA en el acta | 0 | 1 | 0d0424a | — |
 | VER-0007 | 2026-10-17 13:20 | APROBADO | Cierra P25: implementa R2.5 y R2.2 con segunda lectura no disponible; ficha con origen_campos; spec del motor alineada con el codigo; AVANCES actualizado | 0 | 1 | be99999 | — |
 | VER-0006 | 2026-10-17 13:14 | APROBADO | AVANCES.md reescrito tras fusionar el PR #2: sin filas ni pendientes duplicados, estado real, registro con commits, y deriva spec-codigo del motor (P25) | 0 | 1 | 77a8763 | — |
 | VER-0005 | 2026-10-17 13:02 | APROBADO | Rama claude/focused-dirac-iurhyp: motor de reglas, acta, agente de entrada (Gemini o Claude), paneles y despliegue en Railway; fusion con main (gana la rama en conflictos) | 0 | 3 | 175774a | — |
@@ -11,6 +12,12 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0008 — APROBADO
+
+- **ADVERTENCIA** (alcance) `app/apoyo.py:cambiar_reglas`: Quien pide y quien firma un cambio que afloja es el mismo rol de demostración: no hay separación de funciones real entre solicitante y firmante (R8.2 la exige para aprobaciones, R9.4 solo pide la firma del senior) → Si se quiere, exigir que el senior firme un cambio pedido por otra persona en un segundo paso
+- **NOTA** (alcance) `engine/reglas_io.py:reglas_de_sala`: El cambio se aplica desde que se confirma, no según la fecha de recepción de la factura (R9.2); es lo esperado para la demo y está documentado como shortcut en design.md → Revisar si se implementan vigencias con conflictos (T12)
+- **NOTA** (seguridad) `engine/reglas_io.py:validar_cambio`: El senior puede subir tolerancia_frenar hasta 100 %; lo permite la spec. Los umbrales de monto siguen acotados por el techo duro y R8.3 no cambia → Ninguna
 
 ## VER-0007 — APROBADO
 

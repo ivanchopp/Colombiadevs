@@ -5,7 +5,8 @@ from acta.escribir import LARGO_MAX_MOTIVO, escribir_evento
 from acta.estado import Factura, facturas_por_estado
 from engine.guardarrail import AprobacionRechazada, validar_aprobacion
 from engine.revisiones.calendario import estado_obligaciones
-from engine.reglas_io import cargar_contexto_base, cargar_reglas, hoy_bogota
+from engine.reglas_io import (EDITABLES, ErrorDeReglas, cambios_que_aflojan, cargar_contexto_base,
+                              cargar_reglas, hoy_bogota, validar_cambio)
 
 ROLES = {"PERSONA": "Persona de finanzas", "SENIOR": "Senior de finanzas"}
 RANGO = {"NINGUNO": 0, "PERSONA": 1, "SENIOR": 2}
@@ -82,3 +83,28 @@ def estados_calendario(ctx, reglas):
 def inesperadas(facturas: dict[str, Factura]) -> list[Factura]:
     return [f for f in facturas.values()
             if any(r["regla"] == "R6.2" for r in f.decision.get("revisiones", []))]
+
+
+def cambiar_reglas(almacen, sala_id, actuales, valores: dict, rol: str, motivo: str):
+    """Confirma un cambio de reglas en la sala (PP8.4 a PP8.6). Lanza ErrorDeReglas si no procede.
+
+    Solo el senior firma lo que afloja; si lo intenta la persona, queda un INTENTO_RECHAZADO."""
+    nuevas = validar_cambio(actuales, valores)
+    aflojan = cambios_que_aflojan(actuales, nuevas)
+    if not any(getattr(nuevas, k) != getattr(actuales, k) for k in EDITABLES):
+        raise ErrorDeReglas("No hay cambios.")
+    if not (motivo or "").strip():
+        raise ErrorDeReglas("Escribe un motivo: es obligatorio.")
+    if len(motivo) > LARGO_MAX_MOTIVO:
+        raise ErrorDeReglas(f"El motivo supera {LARGO_MAX_MOTIVO} caracteres.")
+    if aflojan and rol != "SENIOR":
+        escribir_evento(almacen, sala_id, "INTENTO_RECHAZADO", None,
+                        {"intento": "CAMBIO_REGLA", "regla": "R9.4: aflojar exige la firma del senior",
+                         "aflojan": aflojan, "motivo": motivo.strip()}, ROLES[rol])
+        raise ErrorDeReglas("Este cambio afloja una regla: solo el senior de finanzas puede firmarlo.")
+    payload = {"antes": {k: str(getattr(actuales, k)) for k in EDITABLES},
+               "despues": {k: str(getattr(nuevas, k)) for k in EDITABLES},
+               "version_anterior": actuales.version, "afloja": bool(aflojan), "aflojan": aflojan,
+               "pedido_por": ROLES[rol], "firmado_por": ROLES[rol] if aflojan else None,
+               "vigente_desde": hoy_bogota().isoformat(), "motivo": motivo.strip()}
+    return escribir_evento(almacen, sala_id, "CAMBIO_REGLA", None, payload, ROLES[rol])
