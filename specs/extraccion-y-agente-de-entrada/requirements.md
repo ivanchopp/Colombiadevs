@@ -82,7 +82,8 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 - **EA7.2** UNA VEZ registrada la decisión, EL ESTADO PÚBLICO DEBERÁ salir del acta («en revisión» o «resuelta», AC4.3) y NO DEBERÁ incluir motivos ni reglas.
 
 ### EA8. Modo demo
-- **EA8.1** SI no hay clave de la API, o la llamada falla, o `ENTRADA_MODO=demo`, ENTONCES EL SISTEMA DEBERÁ usar lecturas guardadas para las cuatro facturas de ejemplo.
+- **EA8.1** SI no hay clave de la API, o la llamada falla, o `ENTRADA_MODO=demo`, ENTONCES EL SISTEMA DEBERÁ leer con patrones de texto (EA8.2). Las lecturas guardadas de las cuatro facturas de ejemplo solo se usan en pruebas y evaluación (EA8.4).
+- **EA8.4** LAS lecturas guardadas de las cuatro facturas de ejemplo (EA8.1) DEBERÁN quedar solo para las pruebas automáticas y la evaluación; el Panel 1 NO DEBERÁ tener ningún camino que las use (PP2.4). En la app, un archivo se lee con la IA o, sin ella, con los patrones de texto (EA8.2).
 - **EA8.2** CUANDO se suba un archivo propio en modo demo, EL SISTEMA DEBERÁ leerlo solo con los patrones de texto y marcar `lectura_ia = dudosa`, de modo que **siempre se escale**.
 - **EA8.3** EL SISTEMA DEBERÁ avisar en pantalla cuando esté en modo demo.
 

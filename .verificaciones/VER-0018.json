@@ -1,0 +1,36 @@
+{
+  "id": "VER-0018",
+  "fecha": "2026-10-17T17:08:10-05:00",
+  "cambio": "Panel 1 sin botones de ejemplo: solo se sube archivo, 4 archivos de muestra descargables con rotulos neutros (PP2.4, PP2.5, EA8.4); spec, pruebas, README y AVANCES",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "app/Panel_1_Proveedor.py",
+    "agents/ejemplos.py",
+    "tests/test_paneles.py",
+    "tests/test_agente_entrada.py",
+    "specs/paneles-y-despliegue",
+    "specs/extraccion-y-agente-de-entrada",
+    "README.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "app/Panel_1_Proveedor.py",
+      "problema": "Sin IA los archivos de muestra se leen con patrones y siempre se escalan (EA8.2): el caso normal solo llega a PAGAR con la IA activa, y esa lectura real no esta probada (AVANCES P17)",
+      "correccion": "Probar los 4 archivos en Railway con Gemini activo"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "app/Panel_1_Proveedor.py",
+      "problema": "Ningun camino de la app usa ya las lecturas guardadas; los rotulos de descarga no revelan el caso ni la regla (PP2.1)",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "pytest: 216 passed (4 nuevas); python3 eval.py: 20/20 y 0 pagos indebidos; las 4 muestras subidas como archivo con IA falsa dan PAGAR, FRENAR, ESCALAR/SENIOR y ESCALAR/PERSONA; sin IA ninguna llega a PAGAR; el Panel 1 no contiene recibir_ejemplo ni LECTURAS_GUARDADAS; sin secretos ni datos reales en el diff",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "bb0f49726cc23df192415602e799b80584f68b58",
+  "reemplaza": null
+}

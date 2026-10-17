@@ -104,6 +104,24 @@ def test_pp1_1_panel_1_crea_sala_y_no_muestra_reglas(entorno):
         assert prohibido not in texto
 
 
+def test_pp2_4_panel_1_no_tiene_botones_de_ejemplo(entorno):
+    at = abrir("app/Panel_1_Proveedor.py")
+    assert not at.exception
+    botones = " ".join(b.label for b in at.button)
+    for prohibido in ("ejemplo", "Normal", "Repetida", "Beneficiario nuevo", "orden escondida"):
+        assert prohibido.lower() not in botones.lower()
+    fuente = (RAIZ / "app/Panel_1_Proveedor.py").read_text(encoding="utf-8")
+    assert "recibir_ejemplo" not in fuente and "LECTURAS_GUARDADAS" not in fuente
+
+
+def test_pp2_5_los_rotulos_de_muestra_no_dicen_el_caso():
+    from agents import ejemplos
+    assert set(ejemplos.ROTULOS) == set(ejemplos.EJEMPLOS)
+    for rotulo in ejemplos.ROTULOS.values():
+        for caso in ("normal", "repetida", "nuevo", "orden", "escondida"):
+            assert caso not in rotulo.lower()
+
+
 @pytest.mark.parametrize("pagina", ["Tablero", "Cola_de_aprobacion", "Calendario", "Acta"])
 def test_pp3_1_panel_2_pide_rol_antes_de_mostrar_datos(entorno, pagina):
     ruta = {"Tablero": "1_Tablero", "Cola_de_aprobacion": "2_Cola_de_aprobacion",

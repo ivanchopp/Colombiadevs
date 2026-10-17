@@ -19,9 +19,8 @@ st.info(f"Datos ficticios, solo para práctica. Has usado {len(facturas)} de {fl
 if not flujo.modo_demo():
     st.caption(f"Lectura de facturas con IA: {flujo.lectura_ia.descripcion_proveedor()}.")
 else:
-    st.caption("Modo demo: sin conexión a la IA. Las facturas de ejemplo usan lecturas guardadas y los archivos "
-               "propios se leen solo con patrones de texto, por lo que pasan a revisión de una persona. "
-               "Para ver por qué, agrega ?diagnostico=1 al enlace.")
+    st.caption("Modo demo: sin conexión a la IA. Los archivos se leen solo con patrones de texto, por lo que "
+               "pasan a revisión de una persona. Para ver por qué, agrega ?diagnostico=1 al enlace.")
 
 if st.query_params.get("diagnostico"):
     d = flujo.lectura_ia.diagnostico()
@@ -57,10 +56,12 @@ with izq:
     st.caption("PDF, JPG, PNG o EML · máx. 5 MB")
     if archivo is not None and st.button("Enviar esta factura", type="primary"):
         intentar(flujo.recibir, almacen(), sala, archivo.name, archivo.getvalue())
-    st.markdown("**Probar con una factura de ejemplo**")
-    for col, (clave, nombre) in zip(st.columns(4), ejemplos.EJEMPLOS.items()):
-        if col.button(nombre, key=f"ej_{clave}", use_container_width=True):
-            intentar(flujo.recibir_ejemplo, almacen(), sala, clave)
+    with st.expander("Archivos de muestra (ficticios)"):
+        st.caption("Descarga uno y súbelo arriba. El sistema lo lee y decide solo.")
+        for clave in ejemplos.EJEMPLOS:
+            nombre, datos = ejemplos.leer_ejemplo(clave)
+            st.download_button(ejemplos.ROTULOS[clave], datos, file_name=nombre, mime="text/plain",
+                               key=f"muestra_{clave}", use_container_width=True)
 
 with der:
     st.subheader("Estado de tus facturas")

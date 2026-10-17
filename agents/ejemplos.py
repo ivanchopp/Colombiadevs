@@ -1,4 +1,4 @@
-"""Cuatro facturas de ejemplo y lo que la IA leería de ellas (modo demo, EA8.1)."""
+"""Cuatro facturas de ejemplo y lo que la IA leería de ellas. Solo para pruebas y evaluación (EA8.4)."""
 from pathlib import Path
 
 DIRECTORIO = Path(__file__).resolve().parent.parent / "data" / "facturas_ejemplo"
@@ -8,6 +8,14 @@ EJEMPLOS = {
     "repetida": "Repetida",
     "beneficiario_nuevo": "Beneficiario nuevo",
     "orden_escondida": "Con orden escondida",
+}
+
+# Nombre neutro para descargar: solo el proveedor y la factura, sin decir qué caso es (PP2.5).
+ROTULOS = {
+    "normal": "Imprenta Sol · IS-2210",
+    "repetida": "Taller Azteca · TA-0931",
+    "beneficiario_nuevo": "Estudio Nube · EN-0077",
+    "orden_escondida": "Hosting Andes · HA-5531",
 }
 
 # Lo que devolvería la lectura con IA (supuesto), para correr la demo sin clave.

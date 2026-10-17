@@ -1,8 +1,8 @@
 # Colombiadevs · Agente que paga por la empresa
 
-Reto Blinka, «Agentes que pagan por la empresa» (Hackathon 30X). Un agente revisa las facturas de una empresa y decide si **pagar, frenar o escalar** cada una, siguiendo las reglas de la empresa y explicando cada decisión.
+Reto Blinka, «Agentes que pagan por la empresa» (Hackathon 30X). Es un agente para las **empresas clientes de Blinka**: revisa las facturas de sus proveedores y decide si **pagar, frenar o escalar** cada una, siguiendo las reglas de la empresa y explicando cada decisión. Al final entrega a Blinka un **archivo con las facturas aprobadas** (automática o manualmente) para que Blinka haga los pagos desde la cuenta del cliente. Nosotros somos la capa de control antes del pago (aclarado por el CEO de Blinka el 17 oct; ver `AVANCES.md`, secciones 1b y 8b).
 
-> **No mueve dinero real y solo usa datos ficticios.** «Pagar» es un pago de práctica que queda en el acta.
+> **No mueve dinero real y solo usa datos ficticios.** «Pagar» es una aprobación de práctica que queda en el acta. El archivo de salida con los pagos aprobados está especificado (`specs/archivo-de-salida/`) pero **aún no está programado**.
 
 ## Idea central
 
@@ -45,7 +45,20 @@ Verifica que la clave funciona (hace unas pocas llamadas reales):
 GEMINI_API_KEY=... python3 -m agents.probar
 ```
 
-Sin ninguna clave la app corre en **modo demo**: las 4 facturas de ejemplo usan lecturas guardadas y los archivos propios se leen solo con patrones de texto, así que pasan a revisión de una persona. Los nombres de los modelos pueden cambiar: si la API dice que no existe, ajusta `MODELO_GEMINI` o `MODELO_ENTRADA`.
+Sin ninguna clave la app corre en **modo demo**: los archivos se leen solo con patrones de texto, así que **siempre pasan a revisión de una persona** (nunca se paga). Los nombres de los modelos pueden cambiar: si la API dice que no existe, ajusta `MODELO_GEMINI` o `MODELO_ENTRADA`.
+
+### Archivos de muestra
+
+El Panel 1 no tiene botones de ejemplo: el sistema lee el archivo que subes y el motor de reglas decide. Para probar los cuatro casos, abre «Archivos de muestra (ficticios)» en el Panel 1, descarga y vuelve a subir (con la IA activa, en una sala nueva):
+
+| Archivo | Qué debe pasar |
+|---|---|
+| Imprenta Sol · IS-2210 | Normal: se aprueba para pagar |
+| Taller Azteca · TA-0931 | Repetida: se frena (la sala nueva ya trae esa factura en el acta) |
+| Estudio Nube · EN-0077 | Beneficiario nuevo: se escala al senior |
+| Hosting Andes · HA-5531 | Trae una orden escondida en el texto: se escala a una persona |
+
+Las fechas dependen de `FECHA_DEMO` (ver AVANCES P18).
 
 > Usa solo facturas **ficticias**. Los planes gratuitos de Gemini pueden usar lo que se envía para mejorar el producto.
 

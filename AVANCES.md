@@ -2,7 +2,7 @@
 
 > **Si eres un chat nuevo de Claude Code, empieza aquí.** Este archivo es la memoria del proyecto: qué se quiere hacer, qué ya se hizo, qué falta y qué sigue. Léelo completo antes de tocar nada y **actualízalo al terminar cada cambio** (ver «Cómo mantener este archivo»).
 
-**Última actualización:** sáb 17 oct 2026, 17:00 (hora Bogotá)
+**Última actualización:** sáb 17 oct 2026, 18:30 (hora Bogotá)
 **Entrega:** **dom 18 oct 2026, 8:00 a. m. (hora Bogotá).** Objetivo: enviar a las 7:00.
 **Repositorio:** https://github.com/ivanchopp/Colombiadevs · rama `main` (último: PR #7, commit `7527f07`). El trabajo nuevo se hace en una rama y entra por PR, después de pasar por el `verificador`.
 
@@ -10,11 +10,11 @@
 
 ## 1. En 30 segundos
 
-- **Qué es:** un agente que revisa las facturas de una empresa y decide, para cada una, si **pagar, frenar o escalar a una persona**, siguiendo reglas que la empresa define. Explica cada decisión. **No mueve dinero real.**
+- **Qué es:** un agente para las **empresas clientes de Blinka**. Revisa las facturas de sus proveedores y decide, para cada una, si **pagar, frenar o escalar a una persona**, siguiendo las reglas que la empresa define. Explica cada decisión y, al final, entrega a Blinka un **archivo con las facturas aprobadas** para que Blinka haga los pagos desde la cuenta del cliente. **Nosotros no movemos dinero real:** somos la capa de control antes del pago. (Enfoque aclarado por el CEO de Blinka el 17 oct; ver la sección 1b.)
 - **De dónde viene:** el *Reto Blinka, «Agentes que pagan por la empresa»* (Hackathon 30X, HackRadar). Blinka es una fintech colombiana en EE. UU. con cuentas en USD y pagos a Latinoamérica.
 - **Idea central:** la IA solo **lee y redacta**. Un programa normal, el **motor de reglas**, **decide**. Ante la duda, el resultado es **escalar, nunca pagar**.
 - **Equipo:** 4 personas. Reparto sugerido: **A** motor y pruebas · **B** agentes con IA · **C** pantallas · **D** datos, evaluación y pitch.
-- **Estado del código (en `main`):** funciona de punta a punta el **motor de reglas**, el **acta** (SQLite), el **agente de entrada** y los **dos paneles** (Streamlit). **212 pruebas pasan** y `python3 eval.py` da **20 de 20, con 0 pagos indebidos**. Cada cambio pasa por la skill `verificador` (última: VER-0017).
+- **Estado del código (en `main`):** funciona de punta a punta el **motor de reglas**, el **acta** (SQLite), el **agente de entrada** y los **dos paneles** (Streamlit). **216 pruebas pasan** y `python3 eval.py` da **20 de 20, con 0 pagos indebidos**. Cada cambio pasa por la skill `verificador` (última: VER-0018).
 - **Desplegado:** https://colombiadevs-production.up.railway.app/ (commit `014409d`). El 17 oct se comprobó desde fuera: `/_stcore/health` responde `ok`, `?diagnostico=1` muestra Gemini activo (`gemini-2.5-flash`), `GEMINI_API_KEY` definida y `FECHA_DEMO=2026-10-17`. Con los botones de ejemplo, el Panel 1 devolvió «Resuelta» para la normal y la repetida, y «En revisión» para la de orden escondida; el acta de esa sala verificó 10 de 10 filas.
 - **Lo que NO está probado:**
   1. **La lectura con IA sobre un archivo propio.** Gemini lee los textos de ejemplo en Railway, pero falta subir un PDF o una foto y revisar que la ficha salga bien (P17). Claude como proveedor tampoco se probó.
@@ -22,6 +22,46 @@
 - **No existen todavía:** el agente de reglas en lenguaje natural, el agente de conciliación y la página de resumen (capa 3), PostgreSQL con permisos, y las vigencias con conflictos (T12).
 - **Alcance nuevo en curso:** órdenes de compra (`specs/ordenes-de-compra/`). Hay spec y el registro de 200 proveedores (`data/proveedores.yaml`), pero el motor **todavía no los usa**: faltan las decisiones de P26 y las tareas OT1 (órdenes) a OT7.
 - **Para verlo:** `pip install -r requirements.txt` y `streamlit run app/Panel_1_Proveedor.py`. **Control de las 18:00:** `python3 eval.py`.
+
+## 1b. Reunión con el CEO de Blinka (sáb 17 oct 2026, 17:02)
+
+El CEO de Blinka habló con el equipo. **Lo que dijo es la fuente de verdad del producto.**
+
+**Decisiones y aclaraciones**
+
+1. **El usuario es el cliente de Blinka**, no el equipo interno de Blinka. Corrigió la premisa con la que el equipo había empezado. El producto automatiza y optimiza las compras de empresas que tienen su cuenta en Blinka y le pagan a sus proveedores.
+2. **Arquitectura de salida (decisión acordada):** el sistema genera un **archivo de salida con las facturas aprobadas**, automática o manualmente; **Blinka hace los pagos** a los proveedores desde la cuenta del cliente. Él lo confirmó.
+3. **Entrada:** facturas electrónicas válidas de varios países (en XML, PDF o foto), verificadas con la autoridad tributaria (DIAN en Colombia, SUNAT en Perú) y revisadas con las reglas de finanzas. Cada proveedor tiene su propio formato.
+4. **Órdenes de compra:** validar la factura contra la orden de compra y los datos del cliente o proveedor en el ERP, por archivo o por API. En Colombia aplican normas de cumplimiento como Sarlaft.
+5. **Contratos:** los clientes tienen estructuras de pago complejas basadas en contratos. Sugirió **subir el contrato con la estructura y la cadencia de pagos** para agendarlos solos.
+6. **MCP:** Blinka lanzó la semana pasada un servidor MCP para conectarse a sistemas de IA como GPT y **programar pagos con un comando de texto**. En la reunión se dijo que el equipo ya trabajaba en **ajustar reglas de pago con lenguaje natural**.
+7. **Moneda y contabilidad:** los clientes operan hoy **en dólares** y llevan la contabilidad en Blinka o la conectan a sistemas como QuickBooks.
+8. **Criptomonedas:** los pagos internacionales y los de Bre-B se ejecutan con cripto por debajo, pero el CEO dijo que eso **«se sale un poco del alcance principal»**. Marcelo añadió que otros medios de pago son un extra de innovación y que primero se resuelve la necesidad principal.
+9. **Idea para el pitch:** productizar y «agentizar» un **equipo de compras de unas 10 personas** que analiza proveedores y centros de costos.
+
+**Cómo encaja lo que ya existe**
+
+| Lo que dijo | Lo que tenemos |
+|---|---|
+| Reglas de finanzas sobre cada factura; aprobación automática o manual | Motor de reglas con dos niveles de aprobación y acta verificable |
+| La IA no decide | Es nuestra regla central |
+| Leer PDF y foto; cada proveedor con su formato | Lectura con IA (Gemini o Claude), segunda lectura sin IA y respaldo por patrones (ampliado el 17 oct para facturas electrónicas colombianas) |
+| Validar contra órdenes de compra | Spec completa (`specs/ordenes-de-compra/`); el motor aún no la usa |
+| Ajustar reglas en lenguaje natural | Página de reglas por formulario, con vista previa y afloja/restringe; falta la capa de lenguaje natural |
+| Rutas de pago de Blinka | Recomendación de canal (Bre-B, SPEI, Pix, USDC…), solo sugerencia |
+| Presupuesto | `presupuesto_periodo`; falta por centro de costos |
+
+**Dónde fallamos hoy** (todo está en el roadmap de la sección 8b)
+
+- No existe el **archivo de salida con las facturas aprobadas**, que es lo que cierra el flujo. Hoy solo hay `facturas.csv` y `eventos.csv`, que son de auditoría y no traen la cuenta de destino.
+- Nuestros textos hablaban de «una empresa» y del equipo de finanzas; hay que contar el producto como la capa de control de los clientes de Blinka. **Panel 1 (proveedor) es solo una entrada de demostración**; en el producto real las facturas llegan al cliente.
+- Las **órdenes de compra** no entran aún al motor.
+- La **moneda base es COP** y los clientes operan en USD.
+- No leemos **XML**, ni validamos el NIT ni consultamos a la DIAN.
+- No hay nada de **contratos**, ni de **Sarlaft**, ni de **centros de costos**.
+- **Compromiso hecho en la reunión que no está cumplido:** se dijo que ya se trabajaba en cambiar las reglas con lenguaje natural, y **no existe** (P29).
+
+**Fuera de alcance, por decisión del CEO:** mover dinero y las criptomonedas como foco. La ruta USDC queda como una sugerencia más, sin trabajo extra.
 
 ## 2. Lo que no se negocia
 
@@ -45,6 +85,8 @@
 | **Capa 3** | Calendario de facturas esperadas, agente de reglas en lenguaje natural (con vigencias y detección de afloja/restringe), simular cambios, chat con el proveedor, agente de conciliación | Solo si sobra tiempo | Calendario y chat con el proveedor: **hechos**. Simular (T11) y afloja/restringe (parte de T12): **hechos** en la página de reglas. Agente de reglas en lenguaje natural, vigencias con conflictos y conciliación: **no** |
 | **A futuro** | Sello público del registro (raíz Merkle por lote anclada en testnet); billetera on-chain (Opción 5 de la guía), solo como visión en el pitch | No se construye | — |
 
+**Alcance nuevo de la reunión con Blinka (17 oct 17:02):** archivo de salida, órdenes de compra, USD, XML, contratos, lenguaje natural, Sarlaft, centros de costos y ERP. Está en el roadmap de la sección 8b, por fases.
+
 **Orden para recortar** si algo se atrasa: agente de conciliación → chat con el proveedor → calendario → agente de reglas (dejar edición por formulario o YAML) → enrutador de canal. La Opción 1 sola ya cumple el entregable y los tres criterios.
 
 ## 4. Cómo funciona (resumen)
@@ -65,7 +107,7 @@
 - **Presupuesto del periodo:** **100 M** COP. Moneda base: COP. Tolerancia normal: 5 %.
 
 **Demo con dos paneles** que comparten una *sala* (un código por visitante en el enlace):
-- **Panel 1, proveedor (abierto):** chat con el agente de entrada, subir PDF/foto/correo/TXT, botones de facturas de ejemplo (normal, repetida, beneficiario nuevo, con orden escondida) y estado de la factura. **Nunca muestra reglas ni límites.**
+- **Panel 1, proveedor (abierto):** chat con el agente de entrada, subir PDF/foto/correo/TXT, cuatro archivos de muestra descargables (sin botones que elijan el caso: el sistema lee y decide) y estado de la factura. **Nunca muestra reglas ni límites.**
 - **Panel 2, finanzas (con rol):** tablero con detalle de cada factura, cola de aprobación, calendario, acta y **reglas** (ver, editar, vista previa y firma del senior para aflojar). *(El chat de reglas y el resumen de conciliación no están construidos.)*
 
 **Tecnología real:** Python 3.12 (`.python-version`, `Dockerfile`), **Gemini (`google-genai`) o Claude (`anthropic`)** para leer facturas, Pydantic, Streamlit (varias páginas), **SQLite** (en un volumen de Railway; PostgreSQL pendiente), pandas para el CSV, pytest y Hypothesis, imagen de Docker desplegada en **Railway**. Sin frameworks de agentes pesados.
@@ -82,6 +124,7 @@
 | `specs/README.md` | Índice y reglas de las especificaciones |
 | `specs/motor-de-reglas/` | 53 criterios EARS (R1 a R11), `design.md` (con «Ajustes al construir»), tareas T1 a T15 |
 | `specs/acta-y-csv/` | 51 criterios (AC1 a AC9), diseño, tareas AT1 a AT10 |
+| `specs/archivo-de-salida/` | **Alcance nuevo de la reunión con Blinka.** Archivo de salida con las facturas aprobadas que Blinka paga. Criterios AS1 a AS4, diseño y tareas AST1 a AST4 (sin programar) |
 | `specs/ordenes-de-compra/` | **Alcance nuevo.** Órdenes de compra autorizadas antes de la factura y registro de proveedores con NIT/RFC/RUC. Criterios OC1 a OC8, diseño, tareas OT1 a OT7 (OT1 parcial: proveedores cargados), 12 decisiones abiertas |
 | `specs/paneles-y-despliegue/` | Criterios PP1 a PP8 y PD1 (despliegue), diseño, tareas PT1 a PT12 |
 | `specs/extraccion-y-agente-de-entrada/` | Criterios EA1 a EA9 y EA2b (proveedor intercambiable), diseño, tareas ET1 a ET8 |
@@ -93,7 +136,7 @@
 | `app/` | Streamlit. `Panel_1_Proveedor.py`, `pages/` con el Panel 2 (Tablero, Cola de aprobación, Calendario, Acta, Reglas), `comun.py`, `apoyo.py` |
 | `data/` | `reglas.yaml`, `techos.yaml`, `registros.yaml`, `tasas.yaml`, `canales.yaml`, `calendario.csv` y `casos.yaml` (20 facturas de prueba), todo «supuesto»; `demo_semilla.py`; `facturas_ejemplo/`; `proveedores.yaml` (200 proveedores de prueba, generado con `importar_compras.py`) |
 | `eval.py` | Mide autonomía, seguridad (pagos indebidos = 0) y explicabilidad con los 20 casos |
-| `tests/`, `pytest.ini` | 212 pruebas (`python3 -m pytest -q`), incluida la de propiedades con Hypothesis |
+| `tests/`, `pytest.ini` | 216 pruebas (`python3 -m pytest -q`), incluida la de propiedades con Hypothesis |
 | `Dockerfile`, `railway.toml`, `requirements-prod.txt`, `requirements.txt`, `.env.example`, `.streamlit/config.toml` | Despliegue y dependencias. La imagen corre como root a propósito (volúmenes de Railway) |
 
 ## 6. Registro de cambios
@@ -102,7 +145,9 @@ Lo más reciente va arriba.
 
 | Cuándo | Commit | Qué se hizo |
 |---|---|---|
-| 17 oct | *(este commit)* | **Patrones de respaldo para facturas electrónicas colombianas (EA3.4 a EA3.8).** Se probó con una factura electrónica colombiana real (restaurante) en modo demo: los patrones sacaron «ELECTR» como número y nada más, así que la factura quedó en revisión manual con todo sin leer. Ahora reconocen «TOTAL:» (valor en la línea siguiente, el último, sin confundir SUBTOTAL ni «TOTAL Base Imponible»), «Razón social/Nombre:» (el primero es el emisor), «Nro. Doc.:» y la moneda cuando solo aparece un código (el «COP» del total en letras; nunca se supone). El número exige algún dígito. Lo que no se encuentra, como el vencimiento de una factura de contado, sigue sin leer y se le pregunta al proveedor. Con la factura de prueba: beneficiario, número, monto y moneda bien leídos, falta solo el vencimiento. Sigue marcada como lectura dudosa, así que siempre se escala (EA8.2). 7 pruebas nuevas (212) y 2 mutaciones detectadas. Importante: esto mejora solo el respaldo y la segunda lectura; **no prueba la lectura con Gemini sobre ese PDF**. |
+| 17 oct | *(este commit)* | **Documentación puesta al día con la reunión con el CEO de Blinka (17:02).** Se registró en `AVANCES.md` (secciones 1, 1b y 3) lo que dijo el CEO de Blinka, cómo encaja con lo que ya existe y dónde fallamos; se reescribió el enfoque a «clientes de Blinka» (en `AVANCES.md` y `README.md`); se agregó el **roadmap** (sección 8b, R1 a R14, por fases) y los pendientes P29 a P31. **Spec nueva** `specs/archivo-de-salida/` (requisitos AS1 a AS4, diseño y tareas AST1 a AST4) para el archivo de salida de pagos aprobados, sin programar. Después se quitaron las notas de Gemini y el nombre del CEO, y el **agente de reglas en lenguaje natural pasó a la fase 1** (R7; contratos quedó R8). Sin cambios de código. |
+| 17 oct | `07b4849` | **Panel 1 sin botones de ejemplo (PP2.4, PP2.5, EA8.4).** Se quitaron los 4 botones que registraban una factura con lecturas guardadas: ahora la única entrada es subir un archivo, el sistema lo lee y el motor decide si es normal, repetida, de beneficiario nuevo o con orden escondida. Se agregó «Archivos de muestra (ficticios)» con los 4 archivos descargables y rótulos neutros (proveedor y número, sin decir el caso; la guía está en el `README.md`). Las lecturas guardadas quedan solo para pruebas y `eval.py`. **Consecuencia:** sin IA los archivos se leen con patrones y siempre se escalan, así que el caso «normal» solo llega a `PAGAR` con la IA activa (Gemini en Railway), y eso sigue sin probarse con un archivo real (P17). 4 pruebas nuevas (216). |
+| 17 oct | `bb0f497` | **Patrones de respaldo para facturas electrónicas colombianas (EA3.4 a EA3.8).** Se probó con una factura electrónica colombiana real (restaurante) en modo demo: los patrones sacaron «ELECTR» como número y nada más, así que la factura quedó en revisión manual con todo sin leer. Ahora reconocen «TOTAL:» (valor en la línea siguiente, el último, sin confundir SUBTOTAL ni «TOTAL Base Imponible»), «Razón social/Nombre:» (el primero es el emisor), «Nro. Doc.:» y la moneda cuando solo aparece un código (el «COP» del total en letras; nunca se supone). El número exige algún dígito. Lo que no se encuentra, como el vencimiento de una factura de contado, sigue sin leer y se le pregunta al proveedor. Con la factura de prueba: beneficiario, número, monto y moneda bien leídos, falta solo el vencimiento. Sigue marcada como lectura dudosa, así que siempre se escala (EA8.2). 7 pruebas nuevas (212) y 2 mutaciones detectadas. Importante: esto mejora solo el respaldo y la segunda lectura; **no prueba la lectura con Gemini sobre ese PDF**. |
 | 17 oct | *(este commit)* | **Prueba del despliegue en Railway.** El equipo desplegó la app y puso `GEMINI_API_KEY` y `FECHA_DEMO`. Se probó desde fuera (la red de la sesión tuvo que permitir el host): salud `ok`, diagnóstico con Gemini activo, tres botones de ejemplo (normal, repetida, orden escondida) leídos con la IA real y vistos en el Panel 1 sin errores, acta con cadena verificada (otra sala usó también «Beneficiario nuevo», sin revisar su resultado). Cierra P20 y la parte de P18 que dependía de `FECHA_DEMO`; P17 queda abierto solo para archivos propios. Se gastaron unas 7 lecturas de Gemini en dos salas de prueba. Sin cambios de código. |
 | 17 oct | `28863cb` | **Arreglo: una factura «en revisión manual» ya aparece en el tablero (R8.6, PP5.7, EA6.2, EA2b.9).** Fallo real que reportó el equipo: si el agente no lograba armar una ficha completa (la IA falló o no leyó el monto y el proveedor no lo aclaró), el proveedor veía «en revisión manual» pero la factura **no se registraba en el acta**, así que finanzas no la veía. Ahora se registra como `ESCALAR` / `SENIOR` con su motivo (`ficha_invalida`), aparece en el tablero con el monto «sin leer» y en la cola del senior, **no entra al historial del motor y no se puede aprobar**: la cola solo ofrece rechazar y cualquier intento de aprobar se rechaza y queda como `INTENTO_RECHAZADO`. Además, si la lectura con IA falla y el sistema degrada a patrones de texto, el error queda en los **Logs** del servidor (sin ningún valor de clave), porque la pantalla seguía diciendo «Gemini» aunque la IA no estuviera respondiendo. Spec primero; 14 pruebas nuevas y 4 mutaciones detectadas. 205 pruebas. |
 | 17 oct | `cd01b5f` | **Diagnóstico de la IA, límite de facturas configurable y aviso aclarado (un solo PR).** (1) **`FACTURAS_MAX`** (EA1.5): el límite de facturas por sala se cambia con una variable de Railway, de 1 a 100; un valor inválido vuelve a 5. (2) El cuadro azul del Panel 1 dice ahora «Datos ficticios, solo para práctica» en lugar de «Demo con datos ficticios», para no confundirlo con el modo demo de la IA. (3) El diagnóstico ya no marca como «parecidas» las claves de otros servicios (`MAPBOX_API_KEY`) y lista `FACTURAS_MAX`. (4) Al fusionar `main` dos veces, los IDs de verificación chocaron (VER-0010 y VER-0012): los de `main` conservan su ID y los de esta rama pasaron a **VER-0013** (diagnóstico) y **VER-0014** (este cambio). Lo siguiente es el cambio original: **Línea de diagnóstico de la IA (EA2b.6 a EA2b.8, ET9).** Con `?diagnostico=1` en el enlace, el Panel 1 muestra por qué está o no activa la IA: qué proveedor se eligió, el motivo del modo demo, si cada clave está «definida», «vacía» o «no definida» (**nunca su valor**), nombres de variables con aspecto de clave mal escrita (por ejemplo `GEMINI_APY_KEY`) y los datos del despliegue que Railway inyecta (entorno, servicio y commit). No depende de ninguna variable de entorno, así que sirve justo cuando una variable no llega. Además, los espacios alrededor de una clave se ignoran. Nació de un caso real: la clave de Gemini estaba puesta en Railway y la app seguía en modo demo. 12 pruebas nuevas (incluida una que garantiza que ningún valor de clave aparece en pantalla). 191 pruebas. |
@@ -147,6 +192,9 @@ Cosas ya hechas que hay que **revisar, confirmar o corregir**. Los números no s
 | # | Pendiente | Quién / cómo |
 |---|---|---|
 | P17 | **Falta probar la lectura con IA sobre un archivo propio.** (El respaldo por patrones ya lee una factura electrónica colombiana: ET10.) En Railway, Gemini ya lee los textos de ejemplo (17 oct, diagnóstico en `?diagnostico=1`). Falta subir un PDF y una foto y revisar la ficha, y probar Claude si se quiere. Los nombres de modelo por defecto no se han fijado con `MODELO_GEMINI` (`gemini-2.5-flash` funcionó; `claude-sonnet-5-5` no se probó) | Quien tenga la clave (ET7) |
+| P29 | **Compromiso de la reunión con Blinka sin cumplir:** se dijo que ya se trabajaba en ajustar reglas con lenguaje natural y no existe. Entra en la **fase 1** del roadmap (R7) | El equipo lo construye antes de la entrega |
+| P30 | **No se conoce el formato del archivo de salida de Blinka** (columnas, tipo de archivo). Se parte de columnas supuestas (AS-D1) | Preguntarle a Blinka |
+| P31 | **La moneda base es COP y Blinka opera en USD.** Los límites y el presupuesto están en pesos (R4) | El equipo decide el ajuste |
 | P28 | **Una factura con la ficha inválida solo se puede rechazar:** no hay un botón de «pedir los datos de nuevo» ni un canal para avisar al proveedor; quien la rechaza debe pedirle por fuera que la envíe otra vez. Si muchas facturas propias terminan así, casi seguro la IA no está leyendo (modelo inexistente, cuota o clave): mirar los **Logs** de Railway buscando «La lectura con IA falló». El Panel 1 puede decir «Gemini» aunque la lectura haya degradado a patrones | El equipo, si quiere un flujo de reenvío |
 | P27 | **`FACTURAS_MAX` no es un tope de gasto.** Limita las facturas por sala, pero quien abra una sala nueva recibe otras tantas. El freno real es la cuota que se ponga en Google AI Studio o Google Cloud. Al subir el límite para pruebas, cada factura o botón de ejemplo con la IA activa gasta una llamada | Quien administre la clave |
 | P26 | **Decisiones OCD1 a OCD11** de `specs/ordenes-de-compra/requirements.md`. Antes de seguir hacen falta OCD1 (moneda), OCD4 (sumar o reemplazar proveedores), OCD5 y OCD11 (identificaciones repetidas o cortas) y OCD12 (enlazar las órdenes por nombre). OCD3 ya se aplicó (cuenta ficticia) | El equipo |
@@ -183,10 +231,10 @@ Cosas ya hechas que hay que **revisar, confirmar o corregir**. Los números no s
 
 ## 8. Próximas tareas
 
-En orden. El detalle de cada tarea está en `tasks.md` de cada spec.
+En orden. El detalle de cada tarea está en `tasks.md` de cada spec. **Lo que sigue después de la reunión con Blinka está en el roadmap de la sección 8b** (R1 a R14); lo de abajo es el plan anterior.
 
 1. ~~Desplegar en Railway~~ (hecho el 17 oct). Falta abrirlo desde otro computador y reiniciar el servicio para comprobar que el acta persiste.
-2. **Subir un PDF y una foto propios en el Panel 1** y revisar la ficha (P17). Confirmar en el tablero las decisiones de las facturas de ejemplo.
+2. **Subir un PDF y una foto propios en el Panel 1** y revisar la ficha (P17). Confirmar en el tablero las decisiones de los cuatro archivos de muestra (descargados y vueltos a subir).
 3. **El equipo resuelve las decisiones abiertas** (P1, P9, P10, P11).
 4. **Que otra persona escriba casos trampa nuevos** (P15) y los pase por `eval.py`.
 4b. ~~Página de reglas~~ (hecha; ver registro).
@@ -207,6 +255,45 @@ En orden. El detalle de cada tarea está en `tasks.md` de cada spec.
 | Descanso | 00:00 a 05:00 |
 | README, video y envío | dom 05:00 a 07:00 |
 | Colchón. **Entrega a las 8:00** | dom 07:00 a 08:00 |
+
+## 8b. Roadmap (derivado de la reunión con Blinka)
+
+Todos los puntos de mejora que salen de la reunión del 17 oct. Las horas son **estimaciones mías**. Estados: **Pendiente**, **En curso**, **Hecho**. «Spec» dice si ya está escrita (primero la spec, después el código).
+
+### Fase 1 · hasta la entrega (dom 18 oct 2026, 8:00 a. m.)
+
+| # | Mejora | Por qué (qué dijo Blinka) | Spec | Estimado | Estado |
+|---|---|---|---|---|---|
+| R1 | **Archivo de salida `pagos_aprobados.csv`** con las facturas aprobadas (cuenta del registro, canal, monto, moneda, aprobación automática o manual) y botón en el Panel 2 | Decisión acordada: Blinka paga con ese archivo | `specs/archivo-de-salida/` | 3 h (mínima: 2 h) | Pendiente |
+| R2 | **Contar el producto como capa de control de los clientes de Blinka** en el pitch, el guion y la demo (Panel 1 como entrada de demostración) | El usuario es el cliente de Blinka | Docs hechos el 17 oct; falta el guion | 0,5 h | **Docs hechos**; pitch pendiente |
+| R3 | **Órdenes de compra en el motor**, versión mínima: OT1, OT2, OT3 y OT6 | Validar la factura contra la orden de compra | `specs/ordenes-de-compra/` (12 decisiones abiertas, P26) | 4 h | Pendiente |
+| R4 | **Moneda base configurable y demo en USD** (límites, presupuesto y tasas en dólares; COP como una moneda más) | Los clientes operan en dólares | Falta: cambio en `motor-de-reglas` | 1,5 h | Pendiente |
+| R5 | **Leer XML de factura electrónica** (UBL) sin IA, más validar el dígito de verificación del NIT en local | Facturas en XML, PDF o foto; validez fiscal | Falta: cambio en `extraccion-y-agente-de-entrada` | 2 h | Pendiente |
+| R6 | **Probar la lectura con IA real** con facturas de distintos formatos (PDF, foto, XML) y fijar el modelo (P17) | Cada proveedor tiene su formato | Ya cubierto por EA2 | 1 h | Pendiente |
+| R7 | **Agente de reglas en lenguaje natural:** el usuario escribe el cambio en texto (por ejemplo «sube el límite de autopago a 5.000 USD»), la IA lo traduce a un cambio de reglas, se ve la vista previa (afloja/restringe) y una persona lo confirma. **La IA nunca aplica el cambio** | Compromiso dicho en la reunión (P29) | Falta la spec (primero la spec). Sobre la página de reglas actual; las vigencias con conflictos (T12) pueden quedar para después | 5 h | Pendiente |
+
+### Fase 2 · después de la entrega
+
+| # | Mejora | Por qué | Notas | Estimado | Estado |
+|---|---|---|---|---|---|
+| R8 | **Contratos:** subir un contrato, extraer cuotas y fechas y proponer un calendario de pagos que una persona confirma | «Subir el contrato con la estructura y cadencia de pagos para agendarlos» | La IA solo propone; el motor y las personas deciden. Parte de la base del calendario de facturas esperadas | 6 h | Pendiente |
+| R9 | **Revisión de cumplimiento tipo Sarlaft:** escalar al proveedor sin verificación de cumplimiento (dato marcado «supuesto») | Normas de cumplimiento en Colombia | No se afirma que cumplimos la norma; es una señal de riesgo | 2 h | Pendiente |
+| R10 | **Verificación real con la autoridad tributaria** (DIAN, SUNAT) | Facturas electrónicas válidas | Necesita acceso a servicios externos; hoy solo se valida el NIT en local (R5) | 6 h o más | Pendiente |
+| R11 | **Presupuesto y análisis por centro de costos y por proveedor** | «Equipo de compras de 10 personas» que analiza proveedores y centros de costos | Hoy el presupuesto es uno por periodo | 4 h | Pendiente |
+| R12 | **Integración con ERP y contabilidad** (importar órdenes y proveedores por API; exportar a QuickBooks) | Datos estandarizados en los ERP; clientes con QuickBooks | Hoy solo por archivo | 8 h o más | Pendiente |
+| R13 | **Servidor MCP propio** (solo consultas y propuestas, nunca decisiones ni pagos) | Blinka ya conecta GPT por MCP | Abre otra puerta hacia el motor: se hace después del agente de reglas (R7) y con el guardarraíl intacto | 6 h | Pendiente |
+| R14 | **Constancia de cada descarga del archivo de salida en el acta** (lote, cantidad, huella del archivo) para no enviar dos veces una factura | AS-D3 de la spec del archivo de salida | Requiere cambiar el esquema del acta | 2 h | Pendiente |
+
+### Fuera de alcance (por decisión del CEO)
+
+- Mover dinero real o llamar a una cuenta bancaria.
+- Criptomonedas como foco del producto (la ruta USDC sigue como sugerencia).
+
+### Preguntas para Blinka
+
+1. ¿Qué **columnas y formato** espera en el archivo de salida? (AS-D1)
+2. ¿Cómo se identifica a los **clientes** y su cuenta en Blinka?
+3. ¿Qué **moneda** se usa para los límites de aprobación de cada cliente?
 
 ## 9. Convenciones y vocabulario
 
