@@ -44,7 +44,7 @@ class OrdenCompra(Cerrado):
     marcas: list[Literal["no_coincide_con_proveedor"]] = []
 ```
 
-Las marcas se calculan al cargar, no se escriben a mano. `Contexto` gana `proveedores: dict[str, Proveedor]` (por nombre normalizado) y `ordenes: dict[str, OrdenCompra]` (por número), y `contexto_desde_acta` agrega `oc_facturadas: dict[str, str]` (número → factura).
+Las marcas se calculan al cargar, no se escriben a mano. Al importar las órdenes, `proveedor_id` se toma del registro de proveedores buscando por nombre y comprobando la identificación tributaria; el `ID_Proveedor` del archivo de órdenes no se usa, porque el listado de 200 renumeró los ID (OCD12). `Contexto` gana `proveedores: dict[str, Proveedor]` (por nombre normalizado) y `ordenes: dict[str, OrdenCompra]` (por número), y `contexto_desde_acta` agrega `oc_facturadas: dict[str, str]` (número → factura).
 
 `Ficha` gana `orden_compra: str | None = None` e `id_tributaria: str | None = None`; `origen_campos` admite la clave `orden_compra`.
 

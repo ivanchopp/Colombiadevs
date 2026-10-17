@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0011 | 2026-10-17 15:40 | APROBADO | Registro de proveedores (OT1, parte de proveedores): importar_compras.py, data/proveedores.yaml con 200 proveedores y pruebas; spec con OCD12 | 0 | 2 | 2f7c3df | — |
 | VER-0010 | 2026-10-17 14:24 | APROBADO | Spec nueva ordenes-de-compra (OC1 a OC8, diseño, OT1 a OT7, decisiones OCD1 a OCD11) y enlaces en specs/README, motor-de-reglas y AVANCES | 0 | 1 | 67eb333 | — |
 | VER-0009 | 2026-10-17 13:54 | APROBADO | Documentación: estado de AT1 a AT10 en specs/acta-y-csv/tasks.md, trazabilidad apuntando a las pruebas reales y P23 cerrado en AVANCES.md | 0 | 0 | b6e1beb | — |
 | VER-0008 | 2026-10-17 13:29 | APROBADO | Página de reglas (PT11, PP8): ver y editar reglas por sala, vista previa (T11), afloja/restringe y techo duro (T12 parcial), CAMBIO_REGLA en el acta | 0 | 1 | 0d0424a | — |
@@ -14,6 +15,12 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0011 — APROBADO
+
+- **ADVERTENCIA** (alcance) `data/proveedores.yaml`: El motor todavía no usa este registro: R4.1 sigue leyendo los 9 beneficiarios de registros.yaml, así que ningún proveedor nuevo se paga solo hasta OT2 → Implementar OT2 tras resolver OCD4
+- **ADVERTENCIA** (errores) `specs/ordenes-de-compra/requirements.md:OCD12`: Los ID de proveedor del archivo de órdenes ya no coinciden con el listado de 200 → Enlazar por nombre al importar las órdenes
+- **NOTA** (seguridad) `data/proveedores.yaml`: Sin dirección, teléfono ni correo (prueba automática); el .xlsx no se sube; cuentas ficticias marcadas → Ninguna
 
 ## VER-0010 — APROBADO
 
