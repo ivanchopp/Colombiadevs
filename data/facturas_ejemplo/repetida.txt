@@ -1,0 +1,7 @@
+FACTURA N°: TA-0931
+Proveedor: Taller Azteca
+Emitida: 2026-09-10
+Vence: 2026-09-25
+Concepto: Servicio de diseño gráfico
+Total: 12,500.00 MXN
+Cuenta: BBVA ···3304

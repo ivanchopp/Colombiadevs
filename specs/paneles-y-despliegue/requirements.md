@@ -70,4 +70,4 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 |---|---|---|
 | DP1 | ¿Panel 1 y Panel 2 en una sola app o en dos? | Una sola app Streamlit con `pages/` (menos despliegue) |
 | DP2 | ¿La cola del senior incluye los casos de persona? | Sí, puede verlos pero la persona no ve los del senior |
-| DP3 | ¿Qué hace el Panel 1 mientras no exista el agente de entrada? | Muestra el estado público de las facturas de la sala y los botones de ejemplo desactivados |
+| DP3 | ¿Qué hace el Panel 1 mientras no exista el agente de entrada? | Resuelta: el agente de entrada ya existe (modo demo sin clave) |

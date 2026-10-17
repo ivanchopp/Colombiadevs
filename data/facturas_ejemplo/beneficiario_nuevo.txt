@@ -1,0 +1,7 @@
+FACTURA N°: EN-0077
+Proveedor: Estudio Nube SAS
+Emitida: 2026-10-15
+Vence: 2026-11-05
+Concepto: Producción audiovisual
+Total: 7.200.000 COP
+Cuenta: Banco Lago ···4821

@@ -1,0 +1,7 @@
+FACTURA N°: IS-2210
+Proveedor: Imprenta Sol
+Emitida: 2026-10-14
+Vence: 2026-10-30
+Concepto: Impresión de material institucional
+Total: 1.800.000 COP
+Cuenta: Bancolombia ···2291

@@ -2,7 +2,7 @@
 
 > **Si eres un chat nuevo de Claude Code, empieza aquí.** Este archivo es la memoria del proyecto: qué se quiere hacer, qué ya se hizo, qué falta y qué sigue. Léelo completo antes de tocar nada y **actualízalo al terminar cada cambio** (ver «Cómo mantener este archivo»).
 
-**Última actualización:** sáb 17 oct 2026, 12:50 (hora Bogotá)
+**Última actualización:** sáb 17 oct 2026, 13:40 (hora Bogotá)
 **Entrega:** **dom 18 oct 2026, 8:00 a. m. (hora Bogotá).** Objetivo: enviar a las 7:00.
 **Repositorio:** https://github.com/ivanchopp/Colombiadevs (rama `main`, no hay otras)
 
@@ -14,7 +14,7 @@
 - **De dónde viene:** el *Reto Blinka, «Agentes que pagan por la empresa»* (Hackathon 30X, HackRadar). Blinka es una fintech colombiana en EE. UU. con cuentas en USD y pagos a Latinoamérica.
 - **Idea central:** la IA solo **lee y redacta**. Un programa normal, el **motor de reglas**, **decide**. Ante la duda, el resultado es **escalar, nunca pagar**.
 - **Equipo:** 4 personas. Reparto sugerido: **A** motor y pruebas · **B** agentes con IA · **C** pantallas · **D** datos, evaluación y pitch.
-- **Estado del código:** hay **el motor de reglas, el acta (SQLite) y los dos paneles (Streamlit)**, con 70 pruebas y `eval.py` en 20 de 20. **Falta el agente de entrada (IA), el agente de reglas y de conciliación, y el despliegue.** Las facturas de la demo (`data/demo_semilla.py`) pasan por el motor y el guardarraíl. Para verlo: `pip install -r requirements.txt` y `streamlit run app/Panel_1_Proveedor.py`. Control de las 18:00: `python3 eval.py`.
+- **Estado del código:** hay **el motor de reglas, el acta (SQLite), el agente de entrada y los dos paneles (Streamlit)**, con 110 pruebas y `eval.py` en 20 de 20. **El agente de entrada nunca se ha probado contra la API real** (falta clave): sin ella corre en **modo demo**. Faltan el agente de reglas y el de conciliación (capa 3) y el despliegue. Para verlo: `pip install -r requirements.txt` y `streamlit run app/Panel_1_Proveedor.py`. Control de las 18:00: `python3 eval.py`.
 
 ## 2. Lo que no se negocia
 
@@ -80,8 +80,11 @@
 | `engine/` | Motor de reglas (sin IA): `modelos`, `evaluar`, `revisiones/` (entrada, frenar, beneficiario, montos, calendario), `canales`, `guardarrail`, `contexto` (desde el acta), `reglas_io` |
 | `data/*.yaml`, `calendario.csv`, `casos.yaml` | Reglas, techos, registros, tasas, canales (todo «supuesto»), calendario y las 20 facturas de prueba |
 | `data/demo_semilla.py` | 6 facturas de ejemplo de las maquetas; cada una pasa por el motor |
+| `agents/` | Agente de entrada: `archivo` (tipo real, 5 MB), `lectura_ia` (Claude, esquema cerrado, cliente inyectable), `segunda_lectura` y `seguridad` (sin IA), `aclaraciones` (máx. 2 turnos), `estado`, `flujo` (arma la ficha y llama al motor), `ejemplos` |
+| `specs/extraccion-y-agente-de-entrada/` | Requisitos (EA1 a EA9), diseño y tareas (ET1 a ET7) |
+| `data/facturas_ejemplo/` | Las 4 facturas de ejemplo como texto (normal, repetida, beneficiario nuevo, orden escondida) |
 | `eval.py` | Mide autonomía, seguridad (pagos indebidos = 0) y explicabilidad con los 20 casos |
-| `tests/` | 70 pruebas (`python3 -m pytest -q`), incluida la de propiedades con Hypothesis |
+| `tests/` | 110 pruebas (`python3 -m pytest -q`), incluida la de propiedades con Hypothesis |
 | *(aún no existe)* `agents/`, `init_db.py` | Estructura de código prevista |
 
 ## 6. Registro de cambios
@@ -90,7 +93,8 @@ Lo más reciente va arriba.
 
 | Cuándo | Commit | Qué se hizo |
 |---|---|---|
-| 17 oct | *(este commit)* | **Canales de Blinka.** Con la captura del sitio de Blinka que aportó el equipo, `canales.yaml` pasa a las rutas reales (SPEI, Pix / TED, SEPA, Bre-B, CBU/CVU, transferencias locales, rutas locales en USD, ACH y wire, SWIFT, USDC). **PSE se quita de los pagos:** solo recibe depósitos. Se agregaron tasas supuestas para EUR, ARS, CLP, PEN, BOB, CRC y ZAR. El caso C15 usa ahora JPY como moneda sin tasa. 72 pruebas, 20 de 20. |
+| 17 oct | *(este commit)* | **Agente de entrada.** Spec `extraccion-y-agente-de-entrada` y código. Valida el archivo por contenido real y tamaño; lee con Claude (un solo llamado, esquema cerrado, factura marcada como dato no confiable, sin reglas ni registros); segunda lectura con patrones de texto; detección de órdenes escondidas sin IA; máx. 2 turnos con preguntas de plantilla; lo aclarado nunca reemplaza el original; arma la ficha y llama a `registrar_decision`. Modo demo sin clave: lecturas guardadas para los 4 ejemplos y archivos propios siempre escalados. Panel 1 activo (subida, ejemplos, chat). Las 4 facturas de ejemplo dan normal → PAGAR, repetida → FRENAR, nuevo → SENIOR, orden escondida → ESCALAR. |
+| 17 oct | *(commit anterior)* | **Canales de Blinka.** Con la captura del sitio de Blinka que aportó el equipo, `canales.yaml` pasa a las rutas reales (SPEI, Pix / TED, SEPA, Bre-B, CBU/CVU, transferencias locales, rutas locales en USD, ACH y wire, SWIFT, USDC). **PSE se quita de los pagos:** solo recibe depósitos. Se agregaron tasas supuestas para EUR, ARS, CLP, PEN, BOB, CRC y ZAR. El caso C15 usa ahora JPY como moneda sin tasa. 72 pruebas, 20 de 20. |
 | 17 oct | *(commit anterior)* | **Motor de reglas.** T1 a T10, T13 a T15 (falta T11 simular y T12 vigencias con conflictos). Revisiones R2 a R6, niveles, sugerencia de canal, guardarraíl (`registrar_decision` revalida y rechaza pagos fuera de reglas; `validar_aprobacion` con rol, motivo, separación de funciones y techo duro), reglas cargadas de YAML con techo duro aparte, contexto armado desde el acta. 20 casos con decisión esperada: **20/20, 0 pagos indebidos**. Hypothesis sin pagos indebidos. Los paneles ya usan decisiones reales del motor, no la semilla escrita a mano. Ajustes de diseño en `specs/motor-de-reglas/design.md` («Ajustes al construir»). |
 | 17 oct | *(commit anterior)* | **Primeros tableros.** Spec `paneles-y-despliegue` (PP1 a PP7). Código: Panel 1 (estado público, sin reglas ni motivos) y Panel 2 con selector de rol, tablero con refresco cada 5 s y descarga de CSV, cola de aprobación (motivo obligatorio, nivel por rol, separación de funciones, intento rechazado al acta, una sola respuesta por decisión), calendario, acta con verificación de cadena y detalle de factura. Núcleo mínimo del acta en SQLite (AC1 a AC7). Revisado a mano en el navegador. |
 | 17 oct | *(commit anterior)* | Specs de `acta-y-csv`: 9 bloques de requisitos (AC1 a AC9), diseño con tabla de solo añadir, huellas, CSV y salas, y 10 tareas (AT1 a AT10). Faltan 2 specs. |
@@ -122,8 +126,10 @@ Cosas ya hechas que hay que **revisar, confirmar o corregir**:
 | P11 | Falta un chequeo atómico entre validar y escribir una aprobación (hoy la clave de idempotencia evita la doble respuesta). Al pasar a PostgreSQL, validar dentro de la transacción | A, al desplegar |
 | P12 | El menú lateral de Streamlit muestra «Cola de aprobacion» sin tilde (sale del nombre del archivo). Cosmético | Opcional: `st.navigation` |
 | P13 | El acta usa **SQLite**. Falta PostgreSQL con roles y permisos (AC1.2) para Railway, y no hay purga de salas (AC7.4) | Al desplegar (PT10) |
-| P14 | Panel 1 sin agente de entrada: subir archivo y botones de ejemplo están **desactivados** (DP3) | Spec `extraccion-y-agente-de-entrada` |
 | P15 | **Calibración propia del motor** (D1 a D5 siguen abiertas): zona gris 5 % a 10 %, gasto cuenta solo lo pagado o aprobado, periodo = mes en Bogotá, y los ajustes de «Ajustes al construir». Las 20 facturas de `casos.yaml` se escribieron junto con el motor: **faltan casos trampa de otra mano** (D) para que `eval.py` mida de verdad | D y el equipo |
+| P17 | **La lectura con IA no se probó con la API real.** El código usa `messages.create` con `output_config.format` (JSON schema) y `effort: low`, y el SDK 1.15 lo acepta, pero falta correrlo con una clave. Modelo por defecto `claude-sonnet-5-5` (cambia con `MODELO_ENTRADA`); variables: `ANTHROPIC_API_KEY`, `ENTRADA_MODO=demo` para forzar el modo demo | Quien tenga la clave (ET7) |
+| P18 | Las facturas de ejemplo dependen de la **fecha de hoy** (el calendario es de octubre de 2026 y la ventana es de ±5 días): la «normal» solo se paga sola entre el 9 y el 19 de octubre. Después saldrá «inesperada» y se escalará | Fijar la fecha de la demo si hace falta |
+| P19 | El agente no pregunta por la cuenta bancaria (DE2): solo se compara con los registros. Las imágenes siempre se escalan por no tener segunda lectura (EA3.3) | El equipo decide si basta |
 | P9 | **Decisiones abiertas DA1 a DA5** de `specs/acta-y-csv/requirements.md` (una fila por evento, cadena por sala, separador del CSV, reinicio de sala, sello público) | El equipo las confirma. Hay propuesta por defecto |
 
 ## 8. Próximas tareas
@@ -131,9 +137,9 @@ Cosas ya hechas que hay que **revisar, confirmar o corregir**:
 En orden. El detalle de cada tarea del motor está en `specs/motor-de-reglas/tasks.md`.
 
 1. **Revisar y aprobar** las specs `motor-de-reglas` (resolver D1 a D5) y `acta-y-csv` (resolver DA1 a DA5).
-2. **Escribir las specs que faltan** (máx. 90 min en total, sin repetir el diseño): ~~`acta-y-csv`~~ (borrador hecho), `extraccion-y-agente-de-entrada`, ~~`paneles-y-despliegue`~~ (borrador hecho; revisar DP1 a DP3).
+2. ~~**Escribir las specs que faltan**~~: las 4 están en borrador. Falta que el equipo las **revise** (D1 a D5, DA1 a DA5, DP1 a DP3, DE1 a DE3).
 3. **Despliegue de prueba en Railway:** app mínima que lea la clave, llame al modelo una vez y guarde una fila. Abrirla desde otro computador.
-3b. **Paneles pendientes** (PT9 a PT11): conectar con el motor y el agente de entrada, despliegue, y las páginas de reglas y resumen (capa 3).
+3b. **Probar el agente de entrada con la clave real** (ET7) y **desplegar** (PT10). Después, las páginas de reglas y resumen (PT11, capa 3).
 4. ~~**Ola 0 y Ola 1 del motor**~~ (T1 a T10, T13 a T15 hechas; ver registro). Pendiente del motor: T11 simular y T12 vigencias con conflictos y afloja/restringe (solo si se hace el agente de reglas).
 5. **Que otra persona escriba casos trampa nuevos** (P15) y los pase por `eval.py`.
 6. **Control de las 18:00:** correr `eval.py`. Si los casos trampa pasan, el enrutador de canal (T7) ya está hecho; con tiempo, las piezas de la capa 3. Si no pasan, esas horas se usan para corregir el motor.
