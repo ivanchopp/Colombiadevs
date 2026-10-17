@@ -1,0 +1,23 @@
+{
+  "id": "VER-0009",
+  "fecha": "2026-10-17T13:54:40-05:00",
+  "cambio": "Documentación: estado de AT1 a AT10 en specs/acta-y-csv/tasks.md, trazabilidad apuntando a las pruebas reales y P23 cerrado en AVANCES.md",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "specs/acta-y-csv/tasks.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "specs/acta-y-csv/tasks.md:Trazabilidad",
+      "problema": "AC7.3, AC7.4, AC8 y AC9.9 quedan sin prueba porque no están implementados; se dejó explícito en la tabla",
+      "correccion": "Agregar pruebas si se implementan"
+    }
+  ],
+  "comprobaciones": "git diff revisado; las 20 funciones de prueba citadas en la nueva trazabilidad existen (grep en tests/); estados de AT1 a AT10 contrastados con el código de acta/ (sin eventos.py, sin reiniciar ni purgar, esquema_postgres.sql sin uso); tabla de pendientes de AVANCES.md sin filas rotas; pytest: 152 passed; solo documentación, sin cambios de código",
+  "rama": "main",
+  "commit": "b6e1beb67a2bf6a2e7a976aeb3443a5985f2d7da",
+  "reemplaza": null
+}
