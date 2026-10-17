@@ -18,6 +18,7 @@ Regla de oro: **ante la duda, el resultado es escalar, nunca pagar.** Pagar exig
 - Validar la aprobación humana y proteger la escritura en el acta (guardarraíl).
 - Cargar reglas versionadas con vigencia y detectar si un cambio afloja o restringe.
 - Simular un cambio de reglas sobre las facturas recientes.
+- Revisar la orden de compra que cita la factura: criterios OC4 en `specs/ordenes-de-compra/` (alcance nuevo, sin implementar).
 
 **Fuera (otras specs o fuera del reto):**
 - Leer facturas y chatear con el proveedor (agente de entrada).
