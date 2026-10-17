@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0010 | 2026-10-17 14:24 | APROBADO | Spec nueva ordenes-de-compra (OC1 a OC8, diseño, OT1 a OT7, decisiones OCD1 a OCD11) y enlaces en specs/README, motor-de-reglas y AVANCES | 0 | 1 | 67eb333 | — |
 | VER-0009 | 2026-10-17 13:54 | APROBADO | Documentación: estado de AT1 a AT10 en specs/acta-y-csv/tasks.md, trazabilidad apuntando a las pruebas reales y P23 cerrado en AVANCES.md | 0 | 0 | b6e1beb | — |
 | VER-0008 | 2026-10-17 13:29 | APROBADO | Página de reglas (PT11, PP8): ver y editar reglas por sala, vista previa (T11), afloja/restringe y techo duro (T12 parcial), CAMBIO_REGLA en el acta | 0 | 1 | 0d0424a | — |
 | VER-0007 | 2026-10-17 13:20 | APROBADO | Cierra P25: implementa R2.5 y R2.2 con segunda lectura no disponible; ficha con origen_campos; spec del motor alineada con el codigo; AVANCES actualizado | 0 | 1 | be99999 | — |
@@ -13,6 +14,12 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0010 — APROBADO
+
+- **ADVERTENCIA** (alcance) `specs/ordenes-de-compra/requirements.md:Decisiones abiertas`: Los datos entregados tienen inconsistencias (moneda sin código, IVA 16 % para todos, sin cuentas, 16 de 30 identificaciones repetidas o con formato inválido) que cambian los resultados esperados → Resolver OCD1, OCD3, OCD4, OCD5 y OCD11 antes de OT1
+- **NOTA** (seguridad) `data/fuentes`: Los Excel originales no se suben: el repositorio es público y traen dirección, teléfono y correo; OC1.2 lo deja escrito → Ninguna
+- **NOTA** (alcance) `specs/ordenes-de-compra/tasks.md`: Unas 7 h de trabajo frente a la entrega de las 8:00; hay versión mínima de unas 4 h → El equipo decide si entra
 
 ## VER-0009 — APROBADO
 
