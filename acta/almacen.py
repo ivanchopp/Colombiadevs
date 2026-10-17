@@ -10,6 +10,14 @@ RUTA_ESQUEMA = Path(__file__).with_name("esquema_sqlite.sql")
 RUTA_POR_DEFECTO = Path(__file__).resolve().parent.parent / "data" / "acta_local.db"
 
 
+def ruta_de_la_base() -> str:
+    """ACTA_DB, o el volumen de Railway si existe, o data/ (se pierde al reiniciar)."""
+    if os.environ.get("ACTA_DB"):
+        return os.environ["ACTA_DB"]
+    volumen = os.environ.get("RAILWAY_VOLUME_MOUNT_PATH")
+    return str(Path(volumen) / "acta.db") if volumen else str(RUTA_POR_DEFECTO)
+
+
 @dataclass
 class Fila:
     sala_id: str
@@ -31,10 +39,14 @@ def _a_fila(r) -> Fila:
 
 class AlmacenSqlite:
     def __init__(self, ruta=None):
-        self.ruta = str(ruta or os.environ.get("ACTA_DB") or RUTA_POR_DEFECTO)
+        self.ruta = str(ruta or ruta_de_la_base())
         Path(self.ruta).parent.mkdir(parents=True, exist_ok=True)
-        with self._conectar() as c:
+        c = self._conectar()
+        try:
+            c.execute("PRAGMA journal_mode=WAL")           # lecturas y escrituras de varios visitantes (PD1.6)
             c.executescript(RUTA_ESQUEMA.read_text(encoding="utf-8"))
+        finally:
+            c.close()
 
     def _conectar(self):
         c = sqlite3.connect(self.ruta, timeout=10, isolation_level=None)

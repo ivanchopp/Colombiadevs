@@ -71,3 +71,17 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 | DP1 | ¿Panel 1 y Panel 2 en una sola app o en dos? | Una sola app Streamlit con `pages/` (menos despliegue) |
 | DP2 | ¿La cola del senior incluye los casos de persona? | Sí, puede verlos pero la persona no ve los del senior |
 | DP3 | ¿Qué hace el Panel 1 mientras no exista el agente de entrada? | Resuelta: el agente de entrada ya existe (modo demo sin clave) |
+
+## Despliegue (PD)
+
+### PD1. Railway
+- **PD1.1** EL SISTEMA DEBERÁ arrancar con un solo comando, escuchando en `0.0.0.0` y en el puerto de la variable `PORT`.
+- **PD1.2** EL SISTEMA DEBERÁ responder a una comprobación de salud en `/_stcore/health`.
+- **PD1.3** LA base del acta DEBERÁ guardarse en el volumen de Railway cuando exista (`RAILWAY_VOLUME_MOUNT_PATH`), y en `ACTA_DB` si se define; si no hay ninguno, en `data/` (se pierde al reiniciar).
+- **PD1.4** LAS claves (`ANTHROPIC_API_KEY`) NO DEBERÁN estar en el repositorio: solo nombres en `.env.example`.
+- **PD1.5** SI la variable `FECHA_DEMO` existe, ENTONCES EL SISTEMA DEBERÁ usarla como «hoy» para el calendario y las reglas, para que la demo no dependa del día en que se pruebe.
+- **PD1.6** EL SISTEMA NO DEBERÁ fallar si dos visitantes escriben a la vez: la base usa modo WAL y espera por el bloqueo.
+
+## Decisión de despliegue (17 oct)
+
+Para la entrega se usa **SQLite sobre un volumen de Railway**, con una sola réplica. Es lo más simple y lo que se puede probar hoy. **PostgreSQL con roles y permisos (AC1.2) queda pendiente** (P13): hasta entonces la inmutabilidad del acta la garantizan los triggers y la cadena de huellas, no los permisos del usuario de la base.

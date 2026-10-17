@@ -79,3 +79,42 @@ def test_ac7_1_una_sala_no_lee_a_otra(almacen):
 def test_codigo_de_sala():
     assert salas.codigo_valido("7TCMN7RB")
     assert not salas.codigo_valido("../etc") and not salas.codigo_valido(None)
+
+
+def test_pd1_3_la_base_va_al_volumen_de_railway(monkeypatch, tmp_path):
+    from acta.almacen import AlmacenSqlite, ruta_de_la_base
+    monkeypatch.delenv("ACTA_DB", raising=False)
+    monkeypatch.setenv("RAILWAY_VOLUME_MOUNT_PATH", str(tmp_path))
+    assert ruta_de_la_base() == str(tmp_path / "acta.db")
+    assert AlmacenSqlite().ruta == str(tmp_path / "acta.db")
+    monkeypatch.setenv("ACTA_DB", str(tmp_path / "otra.db"))                  # ACTA_DB manda
+    assert ruta_de_la_base() == str(tmp_path / "otra.db")
+
+
+def test_pd1_5_fecha_demo_fija_el_hoy(monkeypatch):
+    from datetime import date
+    from engine.reglas_io import hoy_bogota
+    monkeypatch.setenv("FECHA_DEMO", "2026-10-17")
+    assert hoy_bogota() == date(2026, 10, 17)
+    monkeypatch.setenv("FECHA_DEMO", "no es fecha")                           # inválida: usa la real
+    assert isinstance(hoy_bogota(), date)
+
+
+def test_pd1_6_varios_visitantes_a_la_vez(almacen):
+    import threading
+    from acta import salas
+    from acta.verificar import verificar_cadena
+    from agents import flujo
+    errores, creadas = [], []
+
+    def visitante():
+        try:
+            s = salas.crear(almacen)
+            flujo.recibir_ejemplo(almacen, s, "normal")
+            creadas.append(s)
+        except Exception as e:
+            errores.append(e)
+    hilos = [threading.Thread(target=visitante) for _ in range(6)]
+    [h.start() for h in hilos]
+    [h.join() for h in hilos]
+    assert errores == [] and all(verificar_cadena(almacen, s).correcta for s in creadas)

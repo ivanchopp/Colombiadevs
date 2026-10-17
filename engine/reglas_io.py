@@ -1,5 +1,6 @@
 """Carga de reglas, techos y datos base desde data/ (R9.1, R9.3)."""
 import csv
+import os
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
@@ -61,4 +62,11 @@ def cargar_contexto_base(hoy: date, carpeta=None) -> Contexto:
 
 
 def hoy_bogota() -> date:
+    """«Hoy» en Bogotá. FECHA_DEMO (AAAA-MM-DD) lo fija para que la demo no dependa del día (PD1.5)."""
+    fija = os.environ.get("FECHA_DEMO")
+    if fija:
+        try:
+            return date.fromisoformat(fija)
+        except ValueError:
+            pass
     return datetime.now(ZoneInfo("America/Bogota")).date()

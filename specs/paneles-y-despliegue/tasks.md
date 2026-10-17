@@ -13,5 +13,5 @@ Estado: **borrador**. Requisitos: `requirements.md` · Diseño: `design.md`. Due
 | PT7 | Panel 1: estado público y facturas de ejemplo | PP2 | Hecho (sin agente de entrada) |
 | PT8 | Detalle de una factura con ficha y revisiones (en el tablero) | PP6.1 | Hecho |
 | PT9 | Conectar con el motor (`registrar_decision`) y el agente de entrada | PP5, PP2 | Hecho |
-| PT10 | Despliegue en Railway (PostgreSQL, variables, `Procfile`) | — | Pendiente |
+| PT10 | Despliegue en Railway: `Dockerfile`, `railway.toml`, volumen, variables, `README.md` | PD1 | **Preparado y probado en local; falta desplegar en Railway** (SQLite en volumen; PostgreSQL pendiente) |
 | PT11 | Páginas de reglas y resumen (capa 3) | — | Pendiente |
