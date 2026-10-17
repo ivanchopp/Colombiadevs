@@ -14,7 +14,7 @@ Estado: **borrador para revisión del equipo**. Requisitos: `requirements.md`.
 ```
 agents/
 ├─ archivo.py          # validar tipo, tamaño y firma de bytes; extraer texto
-├─ lectura_ia.py       # llamada a Claude (esquema cerrado) y cliente inyectable
+├─ lectura_ia.py       # elige proveedor (Gemini o Claude), esquema cerrado, limpieza común
 ├─ segunda_lectura.py  # patrones de texto: monto, fecha, moneda, beneficiario
 ├─ seguridad.py        # detectar órdenes escondidas
 ├─ aclaraciones.py     # plantillas de preguntas y validación de respuestas
@@ -45,6 +45,8 @@ flowchart LR
 **Órdenes escondidas.** Lista cerrada de expresiones regulares en español e inglés. Es una señal que solo suma cautela: nunca autoriza nada.
 
 **Modo demo.** Las facturas de ejemplo son archivos de texto reales, así que la segunda lectura y la detección corren de verdad; solo la lectura de IA viene de `lecturas_guardadas`.
+
+**Proveedores.** `lectura_ia.py` tiene una función por proveedor que devuelve el JSON en bruto, y una limpieza común. Claude usa `messages.create` con `output_config.format`; Gemini usa `models.generate_content` con `response_mime_type="application/json"` y `response_json_schema` (el mismo esquema). Los dos reciben las mismas instrucciones de sistema y el contenido de la factura marcado como dato. Selección: `PROVEEDOR_IA`, o automática por las claves disponibles (Claude primero).
 
 **Esquema de salida de la IA.** Objeto con `beneficiario`, `numero`, `monto`, `moneda`, `vence`, `cuenta` (texto o nulo) y `dudosos` (lista), con `additionalProperties: false`.
 

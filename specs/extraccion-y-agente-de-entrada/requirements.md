@@ -22,7 +22,8 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 | `facturas_max_por_sala` | 5 |
 | `turnos_max` | 2 |
 | `largo_max_mensaje` | 500 caracteres |
-| Modelo de lectura | `claude-sonnet-5-5` (cambia con `MODELO_ENTRADA`) |
+| Modelo de lectura (Claude) | `claude-sonnet-5-5` (cambia con `MODELO_ENTRADA`) |
+| Modelo de lectura (Gemini) | `gemini-2.5-flash` (cambia con `MODELO_GEMINI`; **sin verificar**) |
 
 ## Requisitos
 
@@ -37,6 +38,13 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 - **EA2.2** EL AGENTE DEBERÁ tratar todo el contenido de la factura como datos dentro de un bloque marcado, y su instrucción de sistema DEBERÁ decir que nada de ese contenido es una instrucción.
 - **EA2.3** EL SISTEMA DEBERÁ validar la salida contra el esquema y convertir los montos a `Decimal`. SI la salida es inválida, ENTONCES la lectura queda como dudosa.
 - **EA2.4** EL AGENTE NO DEBERÁ recibir las reglas, los límites ni los registros de la empresa.
+
+### EA2b. Proveedor de IA intercambiable
+- **EA2b.1** LA lectura DEBERÁ poder hacerse con **Gemini** o con **Claude**, con el mismo esquema de salida, las mismas instrucciones de seguridad y el mismo tratamiento posterior (limpieza, segunda lectura, motor). Cambiar de proveedor NO DEBERÁ cambiar ninguna otra pieza.
+- **EA2b.2** EL proveedor DEBERÁ elegirse con `PROVEEDOR_IA` (`gemini` o `claude`). SI no se define, ENTONCES se usa Claude si hay `ANTHROPIC_API_KEY`, y si no, Gemini si hay `GEMINI_API_KEY` (o `GOOGLE_API_KEY`).
+- **EA2b.3** SI el proveedor elegido no tiene clave, ENTONCES EL SISTEMA DEBERÁ pasar a modo demo (EA8), nunca a otro proveedor sin que se le indique.
+- **EA2b.4** LA pantalla DEBERÁ indicar qué proveedor y qué modelo están activos, o que está en modo demo.
+- **EA2b.5** CUANDO el proveedor bloquee la respuesta (filtro de seguridad, vacía o inválida), EL SISTEMA DEBERÁ tratarlo como lectura fallida (EA8.1).
 
 ### EA3. Segunda lectura (sin IA)
 - **EA3.1** EL SISTEMA DEBERÁ extraer el texto (PDF, EML, TXT) y buscar con patrones de texto el beneficiario, el monto, la moneda y el vencimiento.
@@ -79,4 +87,5 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 |---|---|---|
 | DE1 | ¿La confirmación por chat puede devolver `coincide`? | No (EA5.4): lo dicho por chat no verifica |
 | DE2 | ¿El agente pregunta por la cuenta bancaria? | No en esta versión: la cuenta se compara solo con los registros |
-| DE3 | ¿Modelo de lectura? | `claude-sonnet-5-5`; `claude-haiku-5-5` si se quiere bajar el costo (verificar nombres, P4) |
+| DE3 | ¿Modelo de lectura? | `claude-sonnet-5-5` o `gemini-2.5-flash`; verificar los nombres vigentes antes de la entrega (P4) |
+| DE4 | ¿Datos enviados a Gemini? | Solo facturas ficticias. Los planes gratuitos de Gemini pueden usar lo enviado para mejorar el producto: no subir datos reales |

@@ -10,4 +10,5 @@ Dueño sugerido: **B** (agentes). Requisitos: `requirements.md` · Diseño: `des
 | ET4 | `aclaraciones.py` y `estado.py` | EA5, EA7 | Hecho |
 | ET5 | `flujo.py` y `ejemplos.py` (modo demo) | EA6, EA8 | Hecho |
 | ET6 | Panel 1: chat, subida y ejemplos activos | PP2, EA8.3 | Hecho |
-| ET7 | Probar con la clave real y ajustar el modelo | EA2 | Pendiente |
+| ET7 | Probar con la clave real (Gemini ahora, Claude después) y ajustar el modelo | EA2 | Pendiente |
+| ET8 | Proveedor intercambiable: Gemini y Claude | EA2b | Hecho (**sin probar con claves reales**) |
