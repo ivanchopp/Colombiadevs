@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0010 | 2026-10-17 14:02 | APROBADO | Linea de diagnostico de la IA en el Panel 1 (?diagnostico=1): proveedor, motivo del modo demo, estado de cada variable sin mostrar valores, nombres parecidos y datos del despliegue; espacios en claves ignorados; spec EA2b.6-8 y AVANCES | 0 | 1 | 67eb333 | — |
 | VER-0009 | 2026-10-17 13:54 | APROBADO | Documentación: estado de AT1 a AT10 en specs/acta-y-csv/tasks.md, trazabilidad apuntando a las pruebas reales y P23 cerrado en AVANCES.md | 0 | 0 | b6e1beb | — |
 | VER-0008 | 2026-10-17 13:29 | APROBADO | Página de reglas (PT11, PP8): ver y editar reglas por sala, vista previa (T11), afloja/restringe y techo duro (T12 parcial), CAMBIO_REGLA en el acta | 0 | 1 | 0d0424a | — |
 | VER-0007 | 2026-10-17 13:20 | APROBADO | Cierra P25: implementa R2.5 y R2.2 con segunda lectura no disponible; ficha con origen_campos; spec del motor alineada con el codigo; AVANCES actualizado | 0 | 1 | be99999 | — |
@@ -13,6 +14,11 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0010 — APROBADO
+
+- **ADVERTENCIA** (seguridad) `app/Panel_1_Proveedor.py`: El diagnostico es publico (Panel 1 es abierto) y revela cuales variables de IA estan definidas, el entorno, el servicio y 7 caracteres del commit; no muestra ningun valor de clave. Es informacion de baja sensibilidad pero conviene saberlo → Si se quiere restringir, exigir una clave de demostracion o quitar el parametro antes de la entrega
+- **NOTA** (errores) `agents/lectura_ia.py`: La deteccion de nombres parecidos es heuristica (regex) y puede no marcar un error de escritura raro o marcar una variable legitima inesperada → Ajustar PARECE_DE_IA si aparece un falso positivo
 
 ## VER-0009 — APROBADO
 

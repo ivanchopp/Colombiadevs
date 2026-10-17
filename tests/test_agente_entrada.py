@@ -406,3 +406,86 @@ def test_ea2b_los_sdk_reales_construyen_sus_clientes_sin_red(monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "clave-falsa")
     assert hasattr(lectura_ia.crear_cliente("gemini").models, "generate_content")
     assert hasattr(lectura_ia.crear_cliente("claude").messages, "create")
+
+
+# EA2b.6 a EA2b.8: diagnóstico del proveedor
+SECRETO = "AIzaSECRETO-no-debe-verse-0123456789"
+
+
+def test_ea2b_6_el_diagnostico_nunca_muestra_el_valor_de_una_clave():
+    from agents.lectura_ia import diagnostico
+    env = {"GEMINI_API_KEY": SECRETO, "ANTHROPIC_API_KEY": "sk-ant-OTRO-SECRETO", "GOOGLE_API_KEY": "otro-secreto",
+           "GEMINI_APY_KEY": "typo-secreto", "RAILWAY_GIT_COMMIT_SHA": "b6e1beb1234567890"}
+    d = diagnostico(env)
+    texto = str(d)
+    for secreto in (SECRETO, "sk-ant-OTRO-SECRETO", "otro-secreto", "typo-secreto"):
+        assert secreto not in texto
+    assert d["claves"] == {"GEMINI_API_KEY": "definida", "GOOGLE_API_KEY": "definida",
+                           "ANTHROPIC_API_KEY": "definida"}
+    assert d["despliegue"]["commit"] == "b6e1beb"                      # solo 7 caracteres
+
+
+@pytest.mark.parametrize("env,proveedor,pista", [
+    ({}, None, "no ve ninguna clave"),
+    ({"GEMINI_API_KEY": SECRETO}, "gemini", "Activo: gemini"),
+    ({"GEMINI_API_KEY": SECRETO, "ENTRADA_MODO": "demo"}, None, "ENTRADA_MODO=demo"),
+    ({"GEMINI_API_KEY": SECRETO, "PROVEEDOR_IA": "claude"}, None, "falta ANTHROPIC_API_KEY"),
+    ({"ANTHROPIC_API_KEY": "x", "PROVEEDOR_IA": "gemini"}, None, "falta GEMINI_API_KEY"),
+    ({"GEMINI_API_KEY": SECRETO, "PROVEEDOR_IA": "otro"}, "gemini", "no reconocido"),
+    ({"GEMINI_API_KEY": "   "}, None, "no ve ninguna clave"),
+])
+def test_ea2b_6_la_razon_explica_el_modo_demo(env, proveedor, pista):
+    from agents.lectura_ia import diagnostico
+    d = diagnostico(env)
+    assert d["proveedor"] == proveedor and pista in d["razon"]
+
+
+def test_ea2b_7_detecta_nombres_parecidos_pero_distintos():
+    from agents.lectura_ia import diagnostico
+    env = {"GEMINI_APY_KEY": "x", "GOOGLE_KEY": "y", "RAILWAY_SERVICE_NAME": "app", "PATH": "/usr/bin",
+           "GEMINI_API_KEY": "bien", "ANTHROPIC_BASE_URL": "https://legitima", "CLAUDE_CONFIG_DIR": "/x",
+           "API_KEY": "z"}
+    d = diagnostico(env)
+    assert d["parecidas"] == ["API_KEY", "GEMINI_APY_KEY", "GOOGLE_KEY"]      # no marca la correcta, RAILWAY_, PATH ni URL/DIR legítimas
+    assert diagnostico({"GEMINI_API_KEY": "   "})["claves"]["GEMINI_API_KEY"] == "vacía (solo espacios)"
+    assert diagnostico({})["claves"]["GEMINI_API_KEY"] == "no definida"
+
+
+def test_ea2b_8_los_espacios_alrededor_de_la_clave_se_ignoran(monkeypatch):
+    from agents import lectura_ia
+    monkeypatch.setenv("GEMINI_API_KEY", "  clave-con-espacios \n")
+    assert lectura_ia.proveedor_activo() == "gemini" and lectura_ia._clave_gemini() == "clave-con-espacios"
+    monkeypatch.setenv("GEMINI_API_KEY", "   ")
+    assert lectura_ia.proveedor_activo() is None
+    monkeypatch.setenv("ENTRADA_MODO", " demo ")
+    monkeypatch.setenv("GEMINI_API_KEY", "ok")
+    assert lectura_ia.proveedor_activo() is None
+
+
+def test_ea2b_6_el_panel_muestra_el_diagnostico_solo_con_el_parametro(tmp_path, monkeypatch):
+    from pathlib import Path
+    from streamlit.testing.v1 import AppTest
+    monkeypatch.setenv("ACTA_DB", str(tmp_path / "p.db"))
+    monkeypatch.setenv("GEMINI_API_KEY", SECRETO)
+    monkeypatch.setenv("GEMINI_APY_KEY", "typo")
+    ruta = str(Path(__file__).resolve().parent.parent / "app" / "Panel_1_Proveedor.py")
+
+    def texto(at):
+        return " ".join(x.value for x in at.text) + " ".join(x.value for x in at.markdown)
+    sin = AppTest.from_file(ruta, default_timeout=30).run()
+    assert not sin.exception and "Diagnóstico de la IA" not in texto(sin)
+    con = AppTest.from_file(ruta, default_timeout=30)
+    con.query_params["diagnostico"] = "1"
+    con.run()
+    t = texto(con)
+    assert not con.exception and "Diagnóstico de la IA" in t and "GEMINI_API_KEY: definida" in t
+    assert "GEMINI_APY_KEY" in t and SECRETO not in t and "Proveedor activo: gemini" in t
+
+
+def test_ea2b_6_el_aviso_de_demo_explica_como_ver_el_motivo(tmp_path, monkeypatch):
+    from pathlib import Path
+    from streamlit.testing.v1 import AppTest
+    monkeypatch.setenv("ACTA_DB", str(tmp_path / "p.db"))
+    at = AppTest.from_file(str(Path(__file__).resolve().parent.parent / "app" / "Panel_1_Proveedor.py"),
+                           default_timeout=30).run()
+    assert any("?diagnostico=1" in c.value for c in at.caption)

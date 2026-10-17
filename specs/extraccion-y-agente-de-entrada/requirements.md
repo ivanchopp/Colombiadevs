@@ -45,6 +45,9 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 - **EA2b.3** SI el proveedor elegido no tiene clave, ENTONCES EL SISTEMA DEBERÁ pasar a modo demo (EA8), nunca a otro proveedor sin que se le indique.
 - **EA2b.4** LA pantalla DEBERÁ indicar qué proveedor y qué modelo están activos, o que está en modo demo.
 - **EA2b.5** CUANDO el proveedor bloquee la respuesta (filtro de seguridad, vacía o inválida), EL SISTEMA DEBERÁ tratarlo como lectura fallida (EA8.1).
+- **EA2b.6** CUANDO el enlace traiga `?diagnostico=1`, EL PANEL 1 DEBERÁ mostrar, para cada variable relacionada con la IA, solo si está «definida», «vacía» o «no definida», el proveedor resultante, la razón por la que está en modo demo y, si existen, el entorno, el servicio y el commit del despliegue. NUNCA DEBERÁ mostrar el valor de una clave.
+- **EA2b.7** EL diagnóstico DEBERÁ listar, solo por nombre, las variables del entorno que parezcan de IA (por ejemplo `GEMINI_APY_KEY`) pero no sean las esperadas, para detectar errores de escritura.
+- **EA2b.8** EL SISTEMA DEBERÁ ignorar los espacios al inicio y al final de una clave, y tratar una clave de solo espacios como vacía.
 
 ### EA3. Segunda lectura (sin IA)
 - **EA3.1** EL SISTEMA DEBERÁ extraer el texto (PDF, EML, TXT) y buscar con patrones de texto el beneficiario, el monto, la moneda y el vencimiento.
