@@ -5,11 +5,11 @@ from acta.escribir import LARGO_MAX_MOTIVO, escribir_evento
 from acta.estado import Factura, facturas_por_estado
 from engine.guardarrail import AprobacionRechazada, validar_aprobacion
 from engine.revisiones.calendario import estado_obligaciones
-from engine.reglas_io import cargar_reglas, hoy_bogota
+from engine.reglas_io import cargar_contexto_base, cargar_reglas, hoy_bogota
 
 ROLES = {"PERSONA": "Persona de finanzas", "SENIOR": "Senior de finanzas"}
 RANGO = {"NINGUNO": 0, "PERSONA": 1, "SENIOR": 2}
-CANALES = ["Bre-B", "PSE", "USDC", "ACH en USD", "Wire en USD"]   # supuesto
+CANALES = [c.nombre for c in cargar_contexto_base(hoy_bogota()).canales]   # de data/canales.yaml
 DECISIONES = {"PAGAR": "Pagar", "FRENAR": "Frenar", "ESCALAR": "Escalar"}
 
 

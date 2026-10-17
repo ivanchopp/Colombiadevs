@@ -161,7 +161,7 @@ def test_r5_1_conversion_y_sin_tasa(ctx, reglas):
     r = evaluar(ficha(beneficiario="Cloudwerk GmbH", monto="540", moneda="USD", recibida="2026-10-15",
                       cuenta_original="Deutsche ···7712"), ctx, reglas)
     assert r.tasa_usada == Decimal("4085") and r.monto_base == Decimal("2205900.00")
-    sin = evaluar(ficha(moneda="EUR"), ctx, reglas)
+    sin = evaluar(ficha(moneda="JPY"), ctx, reglas)
     assert sin.decision == "ESCALAR" and "tipo de cambio" in sin.motivo
 
 
@@ -205,14 +205,28 @@ def test_r6_4_estados_de_obligacion(ctx, reglas):
 
 # R7
 def test_r7_canales(ctx, reglas):
-    f = Ficha.model_validate(ficha())
+    def canal(**c):
+        return sugerir_canal(Ficha.model_validate(ficha(**c)), ctx, reglas)
+    co = canal()
+    assert co.sugerido == "Bre-B" and all(x.supuesto for x in co.evaluados)
+    assert "PSE" not in {x.nombre for x in co.evaluados}               # PSE solo recibe depósitos
+    usd = canal(beneficiario="Cloudwerk GmbH", moneda="USD", monto="540")
+    etiquetas = {x.nombre: x.etiqueta for x in usd.evaluados}
+    assert usd.sugerido == "SWIFT" and etiquetas["USDC"] == "Revisar" and etiquetas["ACH y wire (EE. UU.)"] == "No sugerido"
+    assert canal(beneficiario="Estúdio Verde", moneda="BRL", monto="3500").sugerido == "Pix / TED"
+    assert canal(beneficiario="Taller Azteca", moneda="MXN", monto="12500").sugerido == "SPEI"
+
+
+def test_r7_3_sin_canal_compatible(ctx, reglas):
+    f = Ficha.model_validate(ficha(moneda="JPY"))
     c = sugerir_canal(f, ctx, reglas)
-    assert c.sugerido == "Bre-B" and {x.nombre: x.etiqueta for x in c.evaluados}["PSE"] == "Alternativa"
-    assert all(x.supuesto for x in c.evaluados)
-    usd = sugerir_canal(Ficha.model_validate(ficha(beneficiario="Cloudwerk GmbH", moneda="USD", monto="540")), ctx, reglas)
-    assert usd.sugerido == "Wire en USD" and {x.nombre: x.etiqueta for x in usd.evaluados}["USDC"] == "Revisar"
-    brl = sugerir_canal(Ficha.model_validate(ficha(beneficiario="Estúdio Verde", moneda="BRL", monto="3500")), ctx, reglas)
-    assert brl.sugerido is None and "Sin canal compatible" in brl.aviso
+    assert c.sugerido is None and "Sin canal compatible" in c.aviso
+
+
+def test_r7_4_sin_dato_no_se_inventa(ctx, reglas):
+    spei = next(x for x in sugerir_canal(Ficha.model_validate(ficha(moneda="MXN")), ctx, reglas).evaluados
+                if x.nombre == "SPEI")
+    assert spei.costo == "sin dato" and spei.tiempo_horas is None
 
 
 def test_r7_5_el_canal_no_cambia_la_decision(ctx, reglas):

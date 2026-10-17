@@ -336,7 +336,7 @@ casos:
     beneficiario: Cloudwerk GmbH
     numero: N-15
     monto: '500'
-    moneda: EUR
+    moneda: JPY
     vence: '2026-10-28'
     recibida: '2026-10-15'
     cuenta_original: Deutsche ···7712

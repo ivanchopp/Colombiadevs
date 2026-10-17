@@ -2,7 +2,7 @@
 
 > **Si eres un chat nuevo de Claude Code, empieza aquí.** Este archivo es la memoria del proyecto: qué se quiere hacer, qué ya se hizo, qué falta y qué sigue. Léelo completo antes de tocar nada y **actualízalo al terminar cada cambio** (ver «Cómo mantener este archivo»).
 
-**Última actualización:** sáb 17 oct 2026, 12:30 (hora Bogotá)
+**Última actualización:** sáb 17 oct 2026, 12:50 (hora Bogotá)
 **Entrega:** **dom 18 oct 2026, 8:00 a. m. (hora Bogotá).** Objetivo: enviar a las 7:00.
 **Repositorio:** https://github.com/ivanchopp/Colombiadevs (rama `main`, no hay otras)
 
@@ -90,7 +90,8 @@ Lo más reciente va arriba.
 
 | Cuándo | Commit | Qué se hizo |
 |---|---|---|
-| 17 oct | *(este commit)* | **Motor de reglas.** T1 a T10, T13 a T15 (falta T11 simular y T12 vigencias con conflictos). Revisiones R2 a R6, niveles, sugerencia de canal, guardarraíl (`registrar_decision` revalida y rechaza pagos fuera de reglas; `validar_aprobacion` con rol, motivo, separación de funciones y techo duro), reglas cargadas de YAML con techo duro aparte, contexto armado desde el acta. 20 casos con decisión esperada: **20/20, 0 pagos indebidos**. Hypothesis sin pagos indebidos. Los paneles ya usan decisiones reales del motor, no la semilla escrita a mano. Ajustes de diseño en `specs/motor-de-reglas/design.md` («Ajustes al construir»). |
+| 17 oct | *(este commit)* | **Canales de Blinka.** Con la captura del sitio de Blinka que aportó el equipo, `canales.yaml` pasa a las rutas reales (SPEI, Pix / TED, SEPA, Bre-B, CBU/CVU, transferencias locales, rutas locales en USD, ACH y wire, SWIFT, USDC). **PSE se quita de los pagos:** solo recibe depósitos. Se agregaron tasas supuestas para EUR, ARS, CLP, PEN, BOB, CRC y ZAR. El caso C15 usa ahora JPY como moneda sin tasa. 72 pruebas, 20 de 20. |
+| 17 oct | *(commit anterior)* | **Motor de reglas.** T1 a T10, T13 a T15 (falta T11 simular y T12 vigencias con conflictos). Revisiones R2 a R6, niveles, sugerencia de canal, guardarraíl (`registrar_decision` revalida y rechaza pagos fuera de reglas; `validar_aprobacion` con rol, motivo, separación de funciones y techo duro), reglas cargadas de YAML con techo duro aparte, contexto armado desde el acta. 20 casos con decisión esperada: **20/20, 0 pagos indebidos**. Hypothesis sin pagos indebidos. Los paneles ya usan decisiones reales del motor, no la semilla escrita a mano. Ajustes de diseño en `specs/motor-de-reglas/design.md` («Ajustes al construir»). |
 | 17 oct | *(commit anterior)* | **Primeros tableros.** Spec `paneles-y-despliegue` (PP1 a PP7). Código: Panel 1 (estado público, sin reglas ni motivos) y Panel 2 con selector de rol, tablero con refresco cada 5 s y descarga de CSV, cola de aprobación (motivo obligatorio, nivel por rol, separación de funciones, intento rechazado al acta, una sola respuesta por decisión), calendario, acta con verificación de cadena y detalle de factura. Núcleo mínimo del acta en SQLite (AC1 a AC7). Revisado a mano en el navegador. |
 | 17 oct | *(commit anterior)* | Specs de `acta-y-csv`: 9 bloques de requisitos (AC1 a AC9), diseño con tabla de solo añadir, huellas, CSV y salas, y 10 tareas (AT1 a AT10). Faltan 2 specs. |
 | 17 oct | `1d0a7d1` | Se crearon `AVANCES.md` y `CLAUDE.md`, para que cualquier chat nuevo de Claude Code conozca el proyecto, lo hecho, lo pendiente y lo que sigue. |
@@ -112,7 +113,7 @@ Cosas ya hechas que hay que **revisar, confirmar o corregir**:
 |---|---|---|
 | P1 | **Decisiones abiertas D1 a D5** de `specs/motor-de-reglas/requirements.md` (zona gris de 5 % a 10 %, qué cuenta en el gasto, periodo, preparador, valores por defecto) | El equipo las confirma. Hay propuesta por defecto |
 | P2 | Se interpretó «aumenta el presupuesto 100M» como **fijarlo en 100 M**, no sumar 100 M (125 M) | Confirmar con el usuario |
-| P3 | **Datos de Blinka sin verificar.** El sitio `blinka.co` y el reto en `hackradar.30x.com` no se pudieron abrir desde el entorno de Claude. Los canales (USDC en varias redes, Bre-B, PSE) vienen de la guía. Otras fuentes hablaban de SPEI y Pix | Verificar en el sitio oficial |
+| P3 | **Datos de Blinka:** los canales y monedas ya salen del sitio oficial (captura del 17 oct). Siguen sin verificar los **costos, tiempos y límites** de cada ruta (están como «sin dato» o «supuesto»), y las redes de USDC no se usan todavía | Verificar con Blinka si se quiere mostrar costos |
 | P4 | **Nombres por verificar** antes de fijar dependencias: modelos (Haiku 5.5, Sonnet 5.5) y funciones de Streamlit (`st.query_params`, `st.fragment` con `run_every`) | Quien monte el entorno |
 | P5 | «Ruta de una factura» **no tiene** una sección «Plan hasta la entrega». Solo está en la guía | Opcional: agregarla |
 | P6 | **El PDF se genera a mano** desde la página en línea (Chromium, A3 horizontal). Si la página cambia, hay que regenerar y subir el PDF | Quien edite el diseño |
@@ -123,7 +124,6 @@ Cosas ya hechas que hay que **revisar, confirmar o corregir**:
 | P13 | El acta usa **SQLite**. Falta PostgreSQL con roles y permisos (AC1.2) para Railway, y no hay purga de salas (AC7.4) | Al desplegar (PT10) |
 | P14 | Panel 1 sin agente de entrada: subir archivo y botones de ejemplo están **desactivados** (DP3) | Spec `extraccion-y-agente-de-entrada` |
 | P15 | **Calibración propia del motor** (D1 a D5 siguen abiertas): zona gris 5 % a 10 %, gasto cuenta solo lo pagado o aprobado, periodo = mes en Bogotá, y los ajustes de «Ajustes al construir». Las 20 facturas de `casos.yaml` se escribieron junto con el motor: **faltan casos trampa de otra mano** (D) para que `eval.py` mida de verdad | D y el equipo |
-| P16 | Sin canal compatible para MXN y BRL (solo hay Bre-B, PSE, USDC, ACH y wire). Es honesto con la guía, pero revisar con P3 (SPEI, Pix) | Quien verifique Blinka |
 | P9 | **Decisiones abiertas DA1 a DA5** de `specs/acta-y-csv/requirements.md` (una fila por evento, cadena por sala, separador del CSV, reinicio de sala, sello público) | El equipo las confirma. Hay propuesta por defecto |
 
 ## 8. Próximas tareas

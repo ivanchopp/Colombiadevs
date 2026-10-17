@@ -1,7 +1,15 @@
-# Tipos de cambio de ejemplo a COP (supuesto). Una moneda sin tasa se escala (R5.1).
+# Tipos de cambio de ejemplo a COP: SUPUESTO y aproximados, solo para la demo. Verificar antes de usar.
+# Una moneda sin tasa se escala (R5.1).
 supuesto: true
 tasas:
   COP: "1"
   USD: "4085"
+  EUR: "4700"
   BRL: "750"
   MXN: "230"
+  ARS: "3"
+  CLP: "4.3"
+  PEN: "1090"
+  BOB: "590"
+  CRC: "8"
+  ZAR: "230"

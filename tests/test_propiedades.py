@@ -20,7 +20,7 @@ VIOLACIONES = {
     "lectura_dudosa": dict(lectura_ia="dudosa"),
     "orden_en_texto": dict(orden_en_texto=True),
     "monto_aclarado": dict(valores_aclarados={"monto": "1"}),
-    "sin_tasa": dict(moneda="EUR"),
+    "sin_tasa": dict(moneda="JPY"),
     "supera_acuerdo": dict(monto="3000000"),
     "supera_techo": dict(beneficiario="Obras Cumbre SAS", monto="70000000", cuenta_original="Bancolombia ···9921"),
     "inesperada": dict(recibida="2026-10-12"),
