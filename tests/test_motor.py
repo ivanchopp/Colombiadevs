@@ -25,8 +25,8 @@ def ctx():
 
 
 def ficha(**cambios):
-    base = dict(factura_id="T1", beneficiario="Pixel Norte Ltda.", numero="PN-T1", monto="2400000",
-                moneda="COP", vence="2026-10-22", recibida="2026-10-02", cuenta_original="Bancolombia ···1180",
+    base = dict(factura_id="T1", beneficiario="Tecnología Cafetera S.A.S.", numero="PN-T1", monto="2400000",
+                moneda="COP", vence="2026-10-22", recibida="2026-10-02", cuenta_original="Cuenta demo ···0028",
                 lectura_ia="ok", segunda_lectura="coincide", preparador="proveedor-demo")
     base.update(cambios)
     return base
@@ -64,8 +64,8 @@ def test_r1_3_excepcion_escala(ctx, reglas, monkeypatch):
 
 
 def test_r1_4_la_mas_severa_gana(ctx, reglas):
-    r = evaluar(ficha(numero="TA-0931", beneficiario="Taller Azteca", monto="12500", moneda="MXN",
-                      vence="2026-09-25", cuenta_original="BBVA ···3304", segunda_lectura="no_coincide"),
+    r = evaluar(ficha(numero="TA-0931", beneficiario="Papelería Corporativa Anáhuac S.A. de C.V.", monto="12500", moneda="MXN",
+                      vence="2026-09-25", cuenta_original="Cuenta demo ···0029", segunda_lectura="no_coincide"),
                 ctx, reglas)
     assert r.decision == "FRENAR"            # repetida (FRENAR) pesa más que lecturas (ESCALAR)
 
@@ -124,7 +124,7 @@ def test_r2_5_numero_y_vencimiento_aclarados_siempre_avisan(ctx, reglas, campo):
 
 
 def test_r2_5_monto_aclarado_coincide_con_el_acuerdo_no_avisa(ctx, reglas):
-    r = evaluar(ficha(origen_campos={"monto": "aclarado"}), ctx, reglas)       # 2.400.000 = acuerdo de Pixel Norte
+    r = evaluar(ficha(origen_campos={"monto": "aclarado"}), ctx, reglas)       # 2.400.000 = acuerdo de Tecnología Cafetera
     assert regla(r, "R2.5").resultado == "OK" and r.decision == "PAGAR"
 
 
@@ -136,9 +136,9 @@ def test_r2_5_monto_aclarado_que_no_coincide_avisa(ctx, reglas):
 
 
 def test_r2_5_monto_aclarado_puede_respaldarse_con_el_calendario(ctx, reglas):
-    # Hosting Andes no tiene acuerdo, pero el calendario espera 950.000.
-    base = dict(beneficiario="Hosting Andes", monto="950000", recibida="2026-10-21",
-                cuenta_original="Bancolombia ···7745")
+    # Consultores Energéticos Magdalena S.A.S. no tiene acuerdo, pero el calendario espera 950.000.
+    base = dict(beneficiario="Consultores Energéticos Magdalena S.A.S.", monto="950000", recibida="2026-10-21",
+                cuenta_original="Cuenta demo ···0009")
     assert regla(evaluar(ficha(**base, origen_campos={"monto": "aclarado"}), ctx, reglas), "R2.5").resultado == "OK"
     otro = dict(base, monto="1300000")
     assert regla(evaluar(ficha(**otro, origen_campos={"monto": "aclarado"}), ctx, reglas), "R2.5").resultado == "AVISO"
@@ -160,8 +160,8 @@ def test_r2_5_la_ficha_rechaza_origenes_raros(ctx, reglas):
 
 # R3
 def test_r3_1_repetida_frena(ctx, reglas):
-    r = evaluar(ficha(beneficiario="Taller Azteca", numero="TA-0931", monto="12500", moneda="MXN",
-                      vence="2026-09-25", cuenta_original="BBVA ···3304"), ctx, reglas)
+    r = evaluar(ficha(beneficiario="Papelería Corporativa Anáhuac S.A. de C.V.", numero="TA-0931", monto="12500", moneda="MXN",
+                      vence="2026-09-25", cuenta_original="Cuenta demo ···0029"), ctx, reglas)
     assert r.decision == "FRENAR" and "Repetida" in r.motivo
 
 
@@ -173,8 +173,8 @@ def test_r3_2_a_r3_4_zona_gris(ctx, reglas):
 
 
 def test_r3_5_sin_acuerdo_avisa(ctx, reglas):
-    r = evaluar(ficha(beneficiario="Hosting Andes", monto="950000", recibida="2026-10-21",
-                      cuenta_original="Bancolombia ···7745"), ctx, reglas)
+    r = evaluar(ficha(beneficiario="Consultores Energéticos Magdalena S.A.S.", monto="950000", recibida="2026-10-21",
+                      cuenta_original="Cuenta demo ···0009"), ctx, reglas)
     assert regla(r, "R3.5").resultado == "AVISO" and r.decision == "ESCALAR"
 
 
@@ -186,7 +186,7 @@ def test_r3_6_sin_presupuesto_frena_y_pendiente_no_cuenta(ctx, reglas):
 
 
 def test_r3_7_techo_duro_frena(ctx, reglas):
-    r = evaluar(ficha(beneficiario="Obras Cumbre SAS", monto="60000000", cuenta_original="Bancolombia ···9921"),
+    r = evaluar(ficha(beneficiario="Inversiones Metalmecánicos Cauca S.A.S.", monto="60000000", cuenta_original="Cuenta demo ···0053"),
                 ctx, reglas)
     assert r.decision == "FRENAR" and regla(r, "R3.7").resultado == "FALLA"
 
@@ -211,8 +211,8 @@ def test_r4_3_lo_dicho_por_chat_no_verifica(ctx, reglas):
 
 # R5
 def test_r5_1_conversion_y_sin_tasa(ctx, reglas):
-    r = evaluar(ficha(beneficiario="Cloudwerk GmbH", monto="540", moneda="USD", recibida="2026-10-15",
-                      cuenta_original="Deutsche ···7712"), ctx, reglas)
+    r = evaluar(ficha(beneficiario="Tecnología Quiteña S.A.", monto="540", moneda="USD", recibida="2026-10-15",
+                      cuenta_original="Cuenta demo ···0005"), ctx, reglas)
     assert r.tasa_usada == Decimal("4085") and r.monto_base == Decimal("2205900.00")
     sin = evaluar(ficha(moneda="JPY"), ctx, reglas)
     assert sin.decision == "ESCALAR" and "tipo de cambio" in sin.motivo
@@ -220,16 +220,16 @@ def test_r5_1_conversion_y_sin_tasa(ctx, reglas):
 
 def test_r5_2_y_r5_3_niveles_acumulan_el_periodo(ctx, reglas):
     assert evaluar(ficha(), ctx, reglas).nivel == "NINGUNO"
-    solo = con_historial(ctx, mov("Pixel Norte Ltda.", 1000000))
+    solo = con_historial(ctx, mov("Tecnología Cafetera S.A.S.", 1000000))
     assert evaluar(ficha(), solo, reglas).nivel == "PERSONA"                               # 3,4 M > 3 M
-    otro_mes = con_historial(ctx, mov("Pixel Norte Ltda.", 1000000, periodo="2026-09"))
+    otro_mes = con_historial(ctx, mov("Tecnología Cafetera S.A.S.", 1000000, periodo="2026-09"))
     assert evaluar(ficha(), otro_mes, reglas).nivel == "NINGUNO"
-    alto = con_historial(ctx, mov("Pixel Norte Ltda.", 8000000, estado="PENDIENTE"))
+    alto = con_historial(ctx, mov("Tecnología Cafetera S.A.S.", 8000000, estado="PENDIENTE"))
     assert evaluar(ficha(), alto, reglas).nivel == "SENIOR"                                # 10,4 M
 
 
 def test_r5_4_limite_por_periodo(ctx, reglas):
-    r = evaluar(ficha(), con_historial(ctx, mov("Pixel Norte Ltda.", 13000000)), reglas)
+    r = evaluar(ficha(), con_historial(ctx, mov("Tecnología Cafetera S.A.S.", 13000000)), reglas)
     assert regla(r, "R5.4").resultado == "FALLA" and r.nivel == "SENIOR"
 
 
@@ -263,11 +263,11 @@ def test_r7_canales(ctx, reglas):
     co = canal()
     assert co.sugerido == "Bre-B" and all(x.supuesto for x in co.evaluados)
     assert "PSE" not in {x.nombre for x in co.evaluados}               # PSE solo recibe depósitos
-    usd = canal(beneficiario="Cloudwerk GmbH", moneda="USD", monto="540")
+    usd = canal(beneficiario="Tecnología Quiteña S.A.", moneda="USD", monto="540")
     etiquetas = {x.nombre: x.etiqueta for x in usd.evaluados}
     assert usd.sugerido == "SWIFT" and etiquetas["USDC"] == "Revisar" and etiquetas["ACH y wire (EE. UU.)"] == "No sugerido"
-    assert canal(beneficiario="Estúdio Verde", moneda="BRL", monto="3500").sugerido == "Pix / TED"
-    assert canal(beneficiario="Taller Azteca", moneda="MXN", monto="12500").sugerido == "SPEI"
+    assert canal(beneficiario="Importadora Químicos Rímac S.A.C.", moneda="PEN", monto="2420").sugerido == "Transferencia bancaria (Perú)"
+    assert canal(beneficiario="Papelería Corporativa Anáhuac S.A. de C.V.", moneda="MXN", monto="12500").sugerido == "SPEI"
 
 
 def test_r7_3_sin_canal_compatible(ctx, reglas):

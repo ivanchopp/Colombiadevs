@@ -1,7 +1,7 @@
 FACTURA N°: IS-2210
-Proveedor: Imprenta Sol
+Proveedor: Alimentos del Valle S.A.S.
 Emitida: 2026-10-14
 Vence: 2026-10-30
-Concepto: Impresión de material institucional
+Concepto: Refrigerios para eventos institucionales
 Total: 1.800.000 COP
-Cuenta: Bancolombia ···2291
+Cuenta: Cuenta demo ···0026

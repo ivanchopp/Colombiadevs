@@ -53,10 +53,10 @@ El Panel 1 no tiene botones de ejemplo: el sistema lee el archivo que subes y el
 
 | Archivo | Qué debe pasar |
 |---|---|
-| Imprenta Sol · IS-2210 | Normal: se aprueba para pagar |
-| Taller Azteca · TA-0931 | Repetida: se frena (la sala nueva ya trae esa factura en el acta) |
+| Alimentos del Valle S.A.S. · IS-2210 | Normal: se aprueba para pagar |
+| Papelería Corporativa Anáhuac S.A. de C.V. · TA-0931 | Repetida: se frena (la sala nueva ya trae esa factura en el acta) |
 | Estudio Nube · EN-0077 | Beneficiario nuevo: se escala al senior |
-| Hosting Andes · HA-5531 | Trae una orden escondida en el texto: se escala a una persona |
+| Consultores Energéticos Magdalena S.A.S. · HA-5531 | Trae una orden escondida en el texto: se escala a una persona |
 
 Las fechas dependen de `FECHA_DEMO` (ver AVANCES P18).
 

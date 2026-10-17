@@ -30,7 +30,8 @@ engine/
 └─ simular.py        # qué cambiaría con un cambio de reglas (R9.6)
 data/
 ├─ reglas.yaml       # parámetros, vigencias y versión
-├─ registros.yaml    # beneficiarios permitidos, cuentas, acuerdos, historial, presupuesto
+├─ proveedores.yaml  # lista permitida, cuentas y país (156 proveedores válidos; spec ordenes-de-compra, OC1.6)
+├─ registros.yaml    # acuerdos e historial, por nombre de proveedor
 ├─ calendario.csv    # obligaciones esperadas del mes
 ├─ canales.yaml      # canales, países, monedas, costo y tiempo (todo «supuesto»)
 └─ tasas.yaml        # tipos de cambio de ejemplo

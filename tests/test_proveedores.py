@@ -47,3 +47,21 @@ def test_oc1_3_repetida_y_numero_leido_como_texto():
 def test_id_o_nombre_repetido_se_rechaza():
     with pytest.raises(ValueError):
         proveedores_desde_filas([(1, "A", "Perú", "1", "RUC"), (1, "B", "Perú", "2", "RUC")])
+
+
+def test_oc1_6_la_lista_permitida_del_motor_es_el_registro_de_proveedores():
+    from datetime import date
+    from engine.reglas_io import cargar_contexto_base
+    ctx = cargar_contexto_base(date(2026, 10, 17))
+    assert set(ctx.registros) == {x["nombre"] for x in PROVS["proveedores"]}
+    rimac = ctx.registros["Importadora Químicos Rímac S.A.C."]
+    assert (rimac.pais, rimac.cuenta, rimac.acuerdo_moneda) == ("PE", "Cuenta demo ···0017", "PEN")
+
+
+def test_oc1_6_acuerdo_de_un_proveedor_que_no_existe_falla():
+    from engine.reglas_io import ErrorDeReglas, registros_de_proveedores
+    provs = {"proveedores": [{"nombre": "A", "pais": "Perú", "cuenta": "c"}]}
+    with pytest.raises(ErrorDeReglas):
+        registros_de_proveedores(provs, {"B": {"monto": "1", "moneda": "PEN"}}, [])
+    with pytest.raises(ErrorDeReglas):
+        registros_de_proveedores(provs, {}, [{"beneficiario": "B"}])

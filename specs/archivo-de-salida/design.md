@@ -12,7 +12,7 @@ Requisitos: `requirements.md`. El diseño general (acta, estado, CSV) está en `
 1. Se verifican las huellas del acta (`acta/verificar.py`). Si fallan, se muestra el error y no se sigue (AS3.2).
 2. `facturas_por_estado(filas)` entrega el estado final de cada factura; se filtra `estado == "PAGADA"` (AS1.1).
 3. `tipo_aprobacion`: `MANUAL` si la factura tiene `respuesta` (una `APROBACION`), `AUTOMATICA` si no.
-4. `cuenta_destino` sale del registro de proveedores (`data/proveedores.yaml`, o `registros.yaml` mientras OT2 no esté), con la clave del beneficiario. Sin cuenta, la factura queda fuera y se cuenta aparte (AS2.4).
+4. `cuenta_destino` sale del registro de proveedores (`data/proveedores.yaml`, que el motor ya usa: OC1.6), con la clave del beneficiario. Sin cuenta, la factura queda fuera y se cuenta aparte (AS2.4).
 5. Montos con `Decimal`; el resumen suma por moneda.
 6. Una factura sin `canal_elegido` usa `canal_sugerido` del payload de la decisión, o queda vacía (AS2.3).
 

@@ -19,13 +19,13 @@ casos:
     valores_aclarados: &id001 {}
     cuenta_aclarada: null
     factura_id: C01
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-01
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C02
   nombre: Normal en USD
   criterios:
@@ -42,13 +42,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C02
-    beneficiario: Cloudwerk GmbH
+    beneficiario: Tecnología Quiteña S.A.
     numero: N-02
     monto: '540'
     moneda: USD
     vence: '2026-10-28'
     recibida: '2026-10-15'
-    cuenta_original: Deutsche ···7712
+    cuenta_original: Cuenta demo ···0005
 - id: C03
   nombre: Normal en MXN
   criterios:
@@ -65,13 +65,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C03
-    beneficiario: Taller Azteca
+    beneficiario: Papelería Corporativa Anáhuac S.A. de C.V.
     numero: TA-1044
     monto: '12500'
     moneda: MXN
     vence: '2026-10-25'
     recibida: '2026-10-06'
-    cuenta_original: BBVA ···3304
+    cuenta_original: Cuenta demo ···0029
 - id: C04
   nombre: Repetida
   criterios:
@@ -87,13 +87,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C04
-    beneficiario: Taller Azteca
+    beneficiario: Papelería Corporativa Anáhuac S.A. de C.V.
     numero: TA-0931
     monto: '12500'
     moneda: MXN
     vence: '2026-09-25'
     recibida: '2026-10-06'
-    cuenta_original: BBVA ···3304
+    cuenta_original: Cuenta demo ···0029
 - id: C05
   nombre: 8 % sobre lo acordado
   criterios:
@@ -109,13 +109,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C05
-    beneficiario: Estúdio Verde
+    beneficiario: Importadora Químicos Rímac S.A.C.
     numero: N-05
-    monto: '3800'
-    moneda: BRL
+    monto: '2615'
+    moneda: PEN
     vence: '2026-10-27'
     recibida: '2026-10-14'
-    cuenta_original: Itaú ···5521
+    cuenta_original: Cuenta demo ···0017
 - id: C06
   nombre: 12,5 % sobre lo acordado
   criterios:
@@ -131,13 +131,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C06
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-06
     monto: '2700000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C07
   nombre: 4 % sobre lo acordado (tolerancia)
   criterios:
@@ -153,13 +153,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C07
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-07
     monto: '2500000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C08
   nombre: Beneficiario nuevo
   criterios:
@@ -198,13 +198,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: Banco Lago ···4821
     factura_id: C09
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-09
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C10
   nombre: Inesperada
   criterios:
@@ -221,13 +221,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C10
-    beneficiario: Diseños Alba
+    beneficiario: Textiles Modernos Pereira S.A.S.
     numero: N-10
     monto: '4100000'
     moneda: COP
     vence: '2026-10-29'
     recibida: '2026-10-16'
-    cuenta_original: Davivienda ···6403
+    cuenta_original: Cuenta demo ···0010
 - id: C11
   nombre: Orden escondida en el texto
   criterios:
@@ -243,13 +243,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C11
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-11
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C12
   nombre: Las lecturas no coinciden
   criterios:
@@ -265,13 +265,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C12
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-12
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C13
   nombre: Lectura dudosa
   criterios:
@@ -287,13 +287,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C13
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-13
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C14
   nombre: Aclarado cambia el monto
   criterios:
@@ -310,13 +310,13 @@ casos:
       monto: '2500000'
     cuenta_aclarada: null
     factura_id: C14
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-14
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C15
   nombre: Sin tipo de cambio
   criterios:
@@ -333,13 +333,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C15
-    beneficiario: Cloudwerk GmbH
+    beneficiario: Tecnología Quiteña S.A.
     numero: N-15
     monto: '500'
     moneda: JPY
     vence: '2026-10-28'
     recibida: '2026-10-15'
-    cuenta_original: Deutsche ···7712
+    cuenta_original: Cuenta demo ···0005
 - id: C16
   nombre: Sin presupuesto
   criterios:
@@ -355,13 +355,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C16
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-16
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
   historial_extra:
   - factura_id: H1
     beneficiario: Otros SAS
@@ -396,13 +396,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C17
-    beneficiario: Obras Cumbre SAS
+    beneficiario: Inversiones Metalmecánicos Cauca S.A.S.
     numero: N-17
     monto: '60000000'
     moneda: COP
     vence: '2026-10-30'
     recibida: '2026-10-16'
-    cuenta_original: Bancolombia ···9921
+    cuenta_original: Cuenta demo ···0053
 - id: C18
   nombre: Límite por periodo del beneficiario
   criterios:
@@ -418,16 +418,16 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C18
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-18
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
   historial_extra:
   - factura_id: H3
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: H-3
     monto: '13000000'
     moneda: COP
@@ -450,13 +450,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C19
-    beneficiario: Imprenta Sol
+    beneficiario: Alimentos del Valle S.A.S.
     numero: N-19
     monto: '6000000'
     moneda: COP
     vence: '2026-10-30'
     recibida: '2026-10-14'
-    cuenta_original: Bancolombia ···2291
+    cuenta_original: Cuenta demo ···0026
 - id: C20
   nombre: Sin acuerdo registrado
   criterios:
@@ -472,10 +472,10 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C20
-    beneficiario: Hosting Andes
+    beneficiario: Consultores Energéticos Magdalena S.A.S.
     numero: N-20
     monto: '950000'
     moneda: COP
     vence: '2026-11-05'
     recibida: '2026-10-21'
-    cuenta_original: Bancolombia ···7745
+    cuenta_original: Cuenta demo ···0009

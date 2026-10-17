@@ -1,0 +1,48 @@
+{
+  "id": "VER-0022",
+  "fecha": "2026-10-17T18:54:31-05:00",
+  "cambio": "El motor usa los 156 proveedores válidos (OCD4, OT2 parcial, OC1.6): lista permitida desde proveedores.yaml y migración de casos, calendario, muestras, semilla de la demo, README y pruebas",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "engine/reglas_io.py",
+    "data/registros.yaml",
+    "data/casos.yaml",
+    "data/calendario.csv",
+    "data/demo_semilla.py",
+    "data/facturas_ejemplo",
+    "agents/ejemplos.py",
+    "README.md",
+    "tests",
+    "specs/ordenes-de-compra",
+    "specs/motor-de-reglas/design.md",
+    "specs/archivo-de-salida/design.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "docs/Ruta-de-una-factura.pdf",
+      "problema": "Las maquetas del PDF muestran los beneficiarios de ejemplo anteriores",
+      "correccion": "Regenerar el PDF (P6)"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "data/demo_semilla.py",
+      "problema": "Brasil y Alemania no están en el listado de válidos: sus papeles pasaron a Perú (montos convertidos de BRL a PEN) y Ecuador (USD); el canal sugerido cambia de Pix y SEPA a transferencia en Perú y SWIFT",
+      "correccion": "Ninguna"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "engine/reglas_io.py:registros_de_proveedores",
+      "problema": "Un acuerdo o un movimiento de un proveedor que no está en el registro hace fallar la carga en vez de quedar como beneficiario permitido",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "Spec primero (OC1.6, OCD4, tabla de migración en design.md); búsqueda de nombres y cuentas anteriores en todo el código y los datos (solo quedan en la tabla de migración y el PDF); pytest 218 passed; eval.py 20/20, 0 pagos indebidos, 20/20 explicadas; semilla de la demo y las 4 facturas de muestra dan las mismas decisiones y niveles que antes (comprobado en una sala nueva); lista permitida = 156 nombres de proveedores.yaml",
+  "rama": "main",
+  "commit": "f65ca8f222a35adb6f40a3bdebf49313c5645617",
+  "reemplaza": null
+}
