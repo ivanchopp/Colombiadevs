@@ -99,7 +99,7 @@ def test_pp1_1_panel_1_crea_sala_y_no_muestra_reglas(entorno):
     assert not at.exception
     sala = at.query_params["sala"][0]
     texto = " ".join(x.value for x in at.text) + " ".join(x.value for x in at.info)
-    assert sala and "Has usado 0 de 5" in texto
+    assert sala and "Has usado 0 de 5" in texto and "Datos ficticios, solo para práctica" in texto
     for prohibido in ("3.000.000", "Beneficiario nuevo y cuenta", "umbral", "SENIOR"):
         assert prohibido not in texto
 

@@ -18,7 +18,7 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 | Parámetro | Valor |
 |---|---|
 | `segundos_refresco` | 5 |
-| `facturas_max_por_sala` | 5 |
+| `facturas_max_por_sala` | 5 (se cambia con la variable `FACTURAS_MAX`) |
 | Roles de demostración | `PERSONA`, `SENIOR` |
 
 ## Requisitos
@@ -32,7 +32,7 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 ### PP2. Panel 1 (proveedor)
 - **PP2.1** EL PANEL 1 NO DEBERÁ mostrar reglas, umbrales, motivos internos, nombres de personas ni montos de límites (AC4.3).
 - **PP2.2** EL PANEL 1 DEBERÁ mostrar por factura solo el estado público: «recibida», «datos confirmados», «en revisión» o «resuelta».
-- **PP2.3** EL PANEL 1 DEBERÁ indicar que los datos son ficticios y cuántas facturas se han usado de `facturas_max_por_sala`.
+- **PP2.3** EL PANEL 1 DEBERÁ indicar que los datos son ficticios y cuántas facturas se han usado de `facturas_max_por_sala`. EL aviso NO DEBERÁ llamar «demo» a los datos ficticios, para no confundirse con el modo demo de la IA (EA8.3): dice «Datos ficticios, solo para práctica».
 
 ### PP3. Roles (Panel 2)
 - **PP3.1** EL PANEL 2 DEBERÁ pedir elegir un rol (`PERSONA` o `SENIOR`) antes de mostrar datos. Es un selector de demostración, no un inicio de sesión.

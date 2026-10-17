@@ -48,6 +48,8 @@ flowchart LR
 
 **Proveedores.** `lectura_ia.py` tiene una función por proveedor que devuelve el JSON en bruto, y una limpieza común. Claude usa `messages.create` con `output_config.format`; Gemini usa `models.generate_content` con `response_mime_type="application/json"` y `response_json_schema` (el mismo esquema). Los dos reciben las mismas instrucciones de sistema y el contenido de la factura marcado como dato. Selección: `PROVEEDOR_IA`, o automática por las claves disponibles (Claude primero).
 
+**Diagnóstico (EA2b.6 a EA2b.8).** `lectura_ia.diagnostico()` devuelve el proveedor activo, el estado de cada variable (definida, vacía o no definida; los valores de modelo y modo sí se muestran, los de clave nunca), la razón del modo demo, los nombres de variables parecidas pero distintas y los datos del despliegue que Railway inyecta (`RAILWAY_ENVIRONMENT_NAME`, `RAILWAY_SERVICE_NAME`, `RAILWAY_GIT_COMMIT_SHA`). El Panel 1 lo muestra solo con `?diagnostico=1`, porque no depende de ninguna variable de entorno: si el problema fuera justamente que una variable no llega, el diagnóstico seguiría disponible.
+
 **Esquema de salida de la IA.** Objeto con `beneficiario`, `numero`, `monto`, `moneda`, `vence`, `cuenta` (texto o nulo) y `dudosos` (lista), con `additionalProperties: false`.
 
 ## Pruebas

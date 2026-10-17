@@ -15,12 +15,26 @@ encabezado("Panel 1 · Portal del proveedor", sala)
 
 estados = EstadoEntrada(almacen())
 facturas = estados.listar(sala)
-st.info(f"Demo con datos ficticios. Has usado {len(facturas)} de {flujo.FACTURAS_MAX} facturas permitidas.")
+st.info(f"Datos ficticios, solo para práctica. Has usado {len(facturas)} de {flujo.facturas_max()} facturas permitidas.")
 if not flujo.modo_demo():
     st.caption(f"Lectura de facturas con IA: {flujo.lectura_ia.descripcion_proveedor()}.")
 else:
     st.caption("Modo demo: sin conexión a la IA. Las facturas de ejemplo usan lecturas guardadas y los archivos "
-               "propios se leen solo con patrones de texto, por lo que pasan a revisión de una persona.")
+               "propios se leen solo con patrones de texto, por lo que pasan a revisión de una persona. "
+               "Para ver por qué, agrega ?diagnostico=1 al enlace.")
+
+if st.query_params.get("diagnostico"):
+    d = flujo.lectura_ia.diagnostico()
+    with st.container(border=True):
+        st.markdown("**Diagnóstico de la IA** (solo estados y nombres; nunca el valor de una clave)")
+        lineas = [f"Proveedor activo: {d['proveedor'] or 'ninguno (modo demo)'}", f"Motivo: {d['razon']}", ""]
+        lineas += [f"{n}: {e}" for n, e in d["claves"].items()]
+        lineas += [f"{n}: {v}" for n, v in d["ajustes"].items()]
+        if d["parecidas"]:
+            lineas += ["", "Variables con nombre parecido pero distinto (¿error de escritura?): "
+                       + ", ".join(d["parecidas"])]
+        lineas += ["", *[f"Despliegue · {k}: {v}" for k, v in d["despliegue"].items()]]
+        st.text("\n".join(lineas))
 
 if aviso := st.session_state.pop("aviso_panel1", None):
     st.error(aviso)

@@ -19,7 +19,7 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 |---|---|
 | `tamano_max_bytes` | 5 MB |
 | `tipos_permitidos` | PDF, JPG, PNG, EML, TXT |
-| `facturas_max_por_sala` | 5 |
+| `facturas_max_por_sala` | 5 (se cambia con la variable `FACTURAS_MAX`, EA1.5) |
 | `turnos_max` | 2 |
 | `largo_max_mensaje` | 500 caracteres |
 | Modelo de lectura (Claude) | `claude-sonnet-5-5` (cambia con `MODELO_ENTRADA`) |
@@ -32,6 +32,7 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 - **EA1.2** SI la extensión no coincide con el contenido, ENTONCES EL SISTEMA DEBERÁ rechazarlo con un mensaje claro y no guardarlo.
 - **EA1.3** CUANDO una sala ya tenga `facturas_max_por_sala` facturas subidas, EL SISTEMA DEBERÁ rechazar la siguiente. Las facturas de la semilla no cuentan.
 - **EA1.4** EL SISTEMA DEBERÁ guardar el texto libre de la factura aparte de la ficha, de modo que el motor nunca lo reciba (R2.4).
+- **EA1.5** EL límite `facturas_max_por_sala` DEBERÁ poder cambiarse con la variable de entorno `FACTURAS_MAX`, sin tocar el código. SI el valor no es un entero entre 1 y 100, ENTONCES EL SISTEMA DEBERÁ ignorarlo y usar 5. El límite protege el saldo de la IA y la demo pública; no es un tope de gasto real, que se pone en el proveedor de IA.
 
 ### EA2. Lectura con IA
 - **EA2.1** EL AGENTE DEBERÁ devolver, con un esquema cerrado, estos campos: beneficiario, número, monto, moneda, vencimiento y cuenta, más la lista de campos dudosos.
@@ -45,6 +46,9 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 - **EA2b.3** SI el proveedor elegido no tiene clave, ENTONCES EL SISTEMA DEBERÁ pasar a modo demo (EA8), nunca a otro proveedor sin que se le indique.
 - **EA2b.4** LA pantalla DEBERÁ indicar qué proveedor y qué modelo están activos, o que está en modo demo.
 - **EA2b.5** CUANDO el proveedor bloquee la respuesta (filtro de seguridad, vacía o inválida), EL SISTEMA DEBERÁ tratarlo como lectura fallida (EA8.1).
+- **EA2b.6** CUANDO el enlace traiga `?diagnostico=1`, EL PANEL 1 DEBERÁ mostrar, para cada variable relacionada con la IA, solo si está «definida», «vacía» o «no definida», el proveedor resultante, la razón por la que está en modo demo y, si existen, el entorno, el servicio y el commit del despliegue. NUNCA DEBERÁ mostrar el valor de una clave.
+- **EA2b.7** EL diagnóstico DEBERÁ listar, solo por nombre, las variables del entorno que parezcan una clave de Gemini, Google o Anthropic (por ejemplo `GEMINI_APY_KEY`) pero no sean las esperadas, para detectar errores de escritura. NO DEBERÁ marcar claves de otros servicios (por ejemplo `MAPBOX_API_KEY`).
+- **EA2b.8** EL SISTEMA DEBERÁ ignorar los espacios al inicio y al final de una clave, y tratar una clave de solo espacios como vacía.
 
 ### EA3. Segunda lectura (sin IA)
 - **EA3.1** EL SISTEMA DEBERÁ extraer el texto (PDF, EML, TXT) y buscar con patrones de texto el beneficiario, el monto, la moneda y el vencimiento.

@@ -12,3 +12,4 @@ Dueño sugerido: **B** (agentes). Requisitos: `requirements.md` · Diseño: `des
 | ET6 | Panel 1: chat, subida y ejemplos activos | PP2, EA8.3 | Hecho |
 | ET7 | Probar con la clave real (Gemini ahora, Claude después) y ajustar el modelo | EA2 | Pendiente |
 | ET8 | Proveedor intercambiable: Gemini y Claude | EA2b | Hecho (**sin probar con claves reales**) |
+| ET9 | Línea de diagnóstico del proveedor (`?diagnostico=1`) | EA2b.6 a EA2b.8 | Hecho |
