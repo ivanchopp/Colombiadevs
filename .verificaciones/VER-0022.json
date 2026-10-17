@@ -1,0 +1,53 @@
+{
+  "id": "VER-0022",
+  "fecha": "2026-10-17T18:29:58-05:00",
+  "cambio": "R3: órdenes de compra en el motor (versión mínima): modelos, carga, revisión OC4, 10 casos, 25 pruebas y documentación",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "engine/compras.py",
+    "engine/revisiones/orden_compra.py",
+    "engine/modelos.py",
+    "engine/evaluar.py",
+    "engine/contexto.py",
+    "engine/reglas_io.py",
+    "engine/revisiones/frenar.py",
+    "data/ordenes_compra.yaml",
+    "data/casos.yaml",
+    "eval.py",
+    "tests/test_ordenes_compra.py",
+    "tests/test_casos.py",
+    "specs/ordenes-de-compra/design.md",
+    "specs/ordenes-de-compra/requirements.md",
+    "specs/ordenes-de-compra/tasks.md",
+    "specs/README.md",
+    "README.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "data/ordenes_compra.yaml:1",
+      "problema": "Las órdenes son sintéticas: el archivo real del equipo no está en el repositorio. La spec y AVANCES lo declaran; los resultados con las órdenes reales pueden diferir",
+      "correccion": "Importar el .xlsx real (OT1) y volver a correr eval.py"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "engine/revisiones/orden_compra.py:1",
+      "problema": "El agente de entrada aún no lee el número de OC (OT5): una factura subida al Panel 1 no cita OC, por lo que la revisión nueva solo actúa con fichas de prueba",
+      "correccion": "Hacer OT5"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "engine/reglas_io.py:50",
+      "problema": "Los 200 proveedores pasan a la lista permitida sin acuerdo: sin OC ni acuerdo siguen escalando a PERSONA (R3.5) y los marcados van al senior; ningún camino nuevo paga sin todas las revisiones OK (R1.2)",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "python3 -m pytest -q: 241 pasan; python3 eval.py: 30/30, 0 pagos indebidos; 4 mutaciones de la revisión OC4 (no frenar facturada, ignorar identificación distinta, ignorar marcas, no frenar +10%) detectadas por las pruebas; spec escrita antes del código; sin claves ni datos reales en el diff",
+  "rama": "claude/friendly-cerf-aygx2r",
+  "commit": "ea0e355ed8b8d856a34fea437f9cf075106e2309",
+  "reemplaza": null
+}

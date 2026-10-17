@@ -24,7 +24,7 @@ Más contexto: `AVANCES.md` (estado y pendientes), `specs/` (requisitos de cada 
 pip install -r requirements.txt
 streamlit run app/Panel_1_Proveedor.py      # abre el Panel 1; el Panel 2 está en el menú lateral
 python3 -m pytest -q                         # pruebas
-python3 eval.py                              # autonomía, seguridad y explicabilidad con 20 facturas
+python3 eval.py                              # autonomía, seguridad y explicabilidad con 30 facturas
 ```
 
 ### IA para leer facturas: Gemini o Claude

@@ -8,6 +8,7 @@ from pathlib import Path
 import yaml
 from pydantic import ValidationError
 
+from .compras import cargar_compras, registros_de_proveedores
 from .modelos import CanalDef, Contexto, Movimiento, Obligacion, Registro, Reglas
 
 from zoneinfo import ZoneInfo
@@ -52,9 +53,14 @@ def cargar_contexto_base(hoy: date, carpeta=None) -> Contexto:
         calendario = [Obligacion(id=r["id"], beneficiario=r["beneficiario"],
                                  fecha=date.fromisoformat(r["fecha"]), monto_base=Decimal(r["monto_base"]))
                       for r in csv.DictReader(f)]
+    registros = {k: Registro.model_validate(v) for k, v in reg["beneficiarios"].items()}
+    proveedores, ordenes = cargar_compras(carpeta)
+    registros.update(registros_de_proveedores(proveedores, registros))       # OCD4: se suman a los actuales
     return Contexto(
         hoy=hoy,
-        registros={k: Registro.model_validate(v) for k, v in reg["beneficiarios"].items()},
+        registros=registros,
+        proveedores=proveedores,
+        ordenes=ordenes,
         tasas={k: Decimal(str(v)) for k, v in tasas.items()},
         historial=[Movimiento.model_validate(m) for m in reg.get("historial", [])],
         calendario=calendario,

@@ -27,7 +27,7 @@ Cada criterio tiene un número (por ejemplo R3.1) y debe tener al menos una prue
 | `extraccion-y-agente-de-entrada` | Borrador para revisión (implementado en modo demo; falta probar con la API real) |
 | `acta-y-csv` | Borrador para revisión |
 | `paneles-y-despliegue` | Borrador para revisión (paneles y página de reglas programados; despliegue pendiente) |
-| `ordenes-de-compra` | Borrador para revisión (alcance nuevo del 17 oct; registro de proveedores cargado, el motor aún no lo usa; 12 decisiones abiertas) |
+| `ordenes-de-compra` | Versión mínima construida el 17 oct (R3): proveedores y revisión OC4 en el motor, con órdenes sintéticas; faltan OT5, OT7 y el importador de las órdenes reales |
 | `archivo-de-salida` | Borrador para revisión (alcance nuevo de la reunión con Blinka del 17 oct, 17:02; sin programar; 4 decisiones abiertas) |
 
 ## Reglas de trabajo

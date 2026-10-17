@@ -130,6 +130,8 @@ Notación EARS en español: «CUANDO <evento>, EL SISTEMA DEBERÁ <respuesta>».
 
 ## Decisiones abiertas
 
+**17 oct, versión mínima:** el dueño aceptó las propuestas por defecto de OCD1 (COP), OCD4 (se suman), OCD5 y OCD11 (escalan al senior, sin corregir el archivo) y OCD12 (enlazar por nombre). Siguen marcadas «supuesto» y son datos, no código: si el equipo decide otra cosa, se cambian en los YAML. El archivo real de órdenes aún no está en el repositorio; mientras tanto se usan **órdenes sintéticas** (`data/ordenes_compra.yaml`).
+
 | # | Pregunta | Propuesta por defecto |
 |---|---|---|
 | OCD1 | Los archivos dicen «Pesos» para proveedores de México, Colombia, Perú y Ecuador. ¿Qué moneda es? | **COP** para todas, marcado «supuesto». Con COP, todos los totales (11.136 a 45.936) quedan bajo el pago automático de 3 M: una OC que cuadra se pagaría sola. Si eran miles de pesos o la moneda de cada país, hay que decirlo antes de cargar |

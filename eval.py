@@ -7,7 +7,8 @@ from pathlib import Path
 import yaml
 
 from engine.evaluar import evaluar
-from engine.modelos import Movimiento
+from engine.compras import normalizar_oc
+from engine.modelos import Movimiento, Obligacion
 from engine.reglas_io import DATA, cargar_contexto_base, cargar_reglas
 
 
@@ -19,7 +20,9 @@ def correr(ruta=DATA / "casos.yaml"):
     filas = []
     for caso in datos["casos"]:
         ctx = base.model_copy(update={"historial": base.historial + [
-            Movimiento.model_validate(m) for m in caso.get("historial_extra", [])]})
+            Movimiento.model_validate(m) for m in caso.get("historial_extra", [])],
+            "calendario": base.calendario + [Obligacion.model_validate(o) for o in caso.get("calendario_extra", [])],
+            "oc_facturadas": {normalizar_oc(k): v for k, v in caso.get("oc_facturadas", {}).items()}})
         t0 = time.perf_counter()
         r = evaluar(caso["ficha"], ctx, reglas)
         ms = (time.perf_counter() - t0) * 1000

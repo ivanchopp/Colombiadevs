@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from acta.estado import facturas_por_estado
 
+from .compras import ocs_facturadas
 from .modelos import Contexto, Movimiento
 
 
@@ -22,4 +23,5 @@ def contexto_desde_acta(base: Contexto, filas) -> Contexto:
             usadas[d["obligacion_id"]] = f.factura_id
     calendario = [o.model_copy(update={"factura_id": usadas.get(o.id, o.factura_id)})
                   for o in base.calendario]
-    return base.model_copy(update={"historial": historial, "calendario": calendario})
+    return base.model_copy(update={"historial": historial, "calendario": calendario,
+                                   "oc_facturadas": {**base.oc_facturadas, **ocs_facturadas(facturas.values())}})

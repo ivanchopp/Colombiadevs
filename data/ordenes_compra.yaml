@@ -1,0 +1,16 @@
+# Órdenes de compra SINTÉTICAS (FICTICIAS, supuesto). NO son el archivo del equipo (Ordenes_Compra_PO_Prueba.xlsx),
+# que no está en el repositorio: se reemplaza cuando se importe. Escritas a mano para probar la revisión OC4
+# (spec ordenes-de-compra, OT6). Moneda COP (OCD1, supuesto). Se validan al cargar (OC2.2).
+supuesto: true
+sintetico: true
+ordenes:
+  - {numero: PO-2026-001, proveedor_id: 5,  id_tributaria: "999016272-1", articulo: "Papelería de oficina",   cantidad: 10, precio_unitario: "100000", subtotal: "1000000", iva: "160000", total: "1160000", moneda: COP}
+  - {numero: PO-2026-002, proveedor_id: 8,  id_tributaria: "966177115-3", articulo: "Insumos de laboratorio", cantidad: 20, precio_unitario: "50000",  subtotal: "1000000", iva: "160000", total: "1160000", moneda: COP}
+  - {numero: PO-2026-004, proveedor_id: 9,  id_tributaria: "980746390-5", articulo: "Alimentos para eventos", cantidad: 5,  precio_unitario: "200000", subtotal: "1000000", iva: "160000", total: "1160000", moneda: COP}
+  - {numero: PO-2026-005, proveedor_id: 12, id_tributaria: "929610444-4", articulo: "Consultoría energética", cantidad: 1,  precio_unitario: "1000000", subtotal: "1000000", iva: "160000", total: "1160000", moneda: COP}
+  - {numero: PO-2026-010, proveedor_id: 13, id_tributaria: "978961183-0", articulo: "Uniformes",              cantidad: 2,  precio_unitario: "500000", subtotal: "1000000", iva: "160000", total: "1160000", moneda: COP}
+  - {numero: PO-2026-015, proveedor_id: 19, id_tributaria: "900123456-7", articulo: "Licencias de software",  cantidad: 4,  precio_unitario: "250000", subtotal: "1000000", iva: "160000", total: "1160000", moneda: COP}
+  # Proveedor con identificación inválida (marca del registro): siempre al senior (OC4.4).
+  - {numero: PO-2026-020, proveedor_id: 2,  id_tributaria: "179100019001", articulo: "Importaciones",         cantidad: 1,  precio_unitario: "1000000", subtotal: "1000000", iva: "160000", total: "1160000", moneda: COP}
+  # La identificación de la orden difiere de la del proveedor (OC2.3): se marca al cargar.
+  - {numero: PO-2026-021, proveedor_id: 23, id_tributaria: "951552286-9", articulo: "Alimentos",              cantidad: 1,  precio_unitario: "1000000", subtotal: "1000000", iva: "160000", total: "1160000", moneda: COP}

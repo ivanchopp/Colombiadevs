@@ -2,7 +2,7 @@
 from decimal import Decimal
 
 from ..modelos import Revision
-from . import NoEvaluable
+from . import NoEvaluable, orden_compra
 from .comun import a_base, huella_factura, moneda_texto, monto_base, porcentaje
 
 
@@ -18,6 +18,9 @@ def duplicado(ficha, ctx, reglas):
 
 def acuerdo(ficha, ctx, reglas):
     reg = ctx.registros.get(ficha.beneficiario)
+    if (reg is None or reg.acuerdo_monto is None) and orden_compra.respalda_acuerdo(ficha, ctx, reglas):
+        return [Revision(regla="R3.5", resultado="OK", observado="orden de compra",
+                         mensaje="La orden de compra hace las veces de acuerdo.")]            # OC4.1
     if reg is None or reg.acuerdo_monto is None:
         return [Revision(regla="R3.5", resultado="AVISO", efecto="ESCALAR", nivel="PERSONA",
                          observado="sin acuerdo", umbral="acuerdo registrado",

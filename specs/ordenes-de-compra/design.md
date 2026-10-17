@@ -89,3 +89,13 @@ def revisar(ficha, ctx, reglas):
 | Una OC válida hace pasar un pago que otra regla frenaría | OC4.9: la OC solo reemplaza la falta de acuerdo; el resto de revisiones corre igual y el guardarraíl revalida |
 | El proveedor inventa un número de OC por chat | OC4.10 y OC3.3: el agente no sabe qué OC existen y un dato solo aclarado escala |
 | El archivo trae errores de datos (IDs repetidos) | Se marcan al cargar y escalan al senior; no se corrigen en silencio |
+
+## Ajustes al construir (versión mínima, 17 oct)
+
+- **Los proveedores entran a `ctx.registros`.** Al cargar el contexto, cada proveedor de `proveedores.yaml` que no esté ya en `registros.yaml` se agrega como `Registro` (país en código ISO, cuenta ficticia, **sin acuerdo**). Así R4, el canal sugerido y el payload funcionan sin cambios y OCD4 («se suman») se cumple. Sin OC ni acuerdo, la factura de un proveedor nuevo sigue escalando a `PERSONA` (R3.5).
+- **Las marcas escalan aunque la factura no cite OC.** Un proveedor con «identificación repetida» o «inválida» va al senior siempre (OC4.4), no solo cuando hay OC: si no, citar o no una OC cambiaría la decisión.
+- **Revisión sin OC:** si la factura no cita OC, la revisión OC4 da `OK` y no cambia nada más (OC4.8, `oc_obligatoria` queda fuera de esta versión).
+- **La OC hace las veces de acuerdo (OC4.1) solo en R3.5:** si el proveedor tiene acuerdo registrado, R3.2 sigue como siempre. **No reemplaza el calendario:** una factura con OC que no estaba en el calendario sigue dando `AVISO` de R6.2 y escala a `PERSONA`. Para pagar sola, la OC debe cuadrar **y** la obligación estar en el calendario (OC4.9).
+- **Estado «facturada»:** `contexto_desde_acta` lo calcula con las facturas en estado `PAGADA` o `PENDIENTE` cuyo `ficha.orden_compra` coincide (OC5.2). No hay estado guardado aparte.
+- **Datos:** `data/ordenes_compra.yaml` es **sintético** y está marcado como tal. Se valida al cargar (OC2.2): número repetido, proveedor inexistente o cuentas que no cuadran lo rechazan. Si el archivo falla, el registro queda vacío y toda OC citada da «inexistente» (senior): falla seguro (OC1.5).
+- **Fuera de esta versión:** lectura de la OC por el agente de entrada (OT5), página de órdenes (OT7), columna en `facturas.csv` y el importador del `.xlsx`.
