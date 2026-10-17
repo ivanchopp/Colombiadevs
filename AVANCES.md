@@ -2,7 +2,7 @@
 
 > **Si eres un chat nuevo de Claude Code, empieza aquí.** Este archivo es la memoria del proyecto: qué se quiere hacer, qué ya se hizo, qué falta y qué sigue. Léelo completo antes de tocar nada y **actualízalo al terminar cada cambio** (ver «Cómo mantener este archivo»).
 
-**Última actualización:** sáb 17 oct 2026, 11:00 (hora Bogotá)
+**Última actualización:** sáb 17 oct 2026, 11:10 (hora Bogotá)
 **Entrega:** **dom 18 oct 2026, 8:00 a. m. (hora Bogotá).** Objetivo: enviar a las 7:00.
 **Repositorio:** https://github.com/ivanchopp/Colombiadevs (rama `main`, no hay otras)
 
@@ -14,7 +14,7 @@
 - **De dónde viene:** el *Reto Blinka, «Agentes que pagan por la empresa»* (Hackathon 30X, HackRadar). Blinka es una fintech colombiana en EE. UU. con cuentas en USD y pagos a Latinoamérica.
 - **Idea central:** la IA solo **lee y redacta**. Un programa normal, el **motor de reglas**, **decide**. Ante la duda, el resultado es **escalar, nunca pagar**.
 - **Equipo:** 4 personas. Reparto sugerido: **A** motor y pruebas · **B** agentes con IA · **C** pantallas · **D** datos, evaluación y pitch.
-- **Estado del código:** **todavía no hay código.** Hay documentos de diseño, una guía de plan y las specs del motor de reglas.
+- **Estado del código:** **todavía no hay código.** Hay documentos de diseño, una guía de plan y tres specs (motor de reglas, pagos parciales y anticipos, proveedores y prioridad).
 
 ## 2. Lo que no se negocia
 
@@ -73,6 +73,8 @@
 | `docs/Guia-6-alternativas-actualizada.pdf` | Guía de las 6 alternativas de @Marcelo Linero, ajustada a la entrega de las 8:00, con plan por horas |
 | `specs/README.md` | Índice y reglas de las especificaciones |
 | `specs/motor-de-reglas/` | `requirements.md` (52 criterios EARS), `design.md`, `tasks.md` (T1 a T15) |
+| `specs/pagos-parciales-y-anticipos/` | Pagos que no son el total de una factura: criterios RP1 a RP5, diseño y tareas PP1 a PP6 |
+| `specs/proveedores-y-prioridad/` | Tabla de proveedores y prioridad A/B/C que solo ordena: criterios RV1 a RV4, diseño y tareas PV1 a PV6 |
 | *(aún no existe)* `engine/`, `agents/`, `app/`, `data/`, `tests/`, `eval.py`, `init_db.py` | Estructura de código prevista |
 
 ## 6. Registro de cambios
@@ -81,7 +83,8 @@ Lo más reciente va arriba.
 
 | Cuándo | Commit | Qué se hizo |
 |---|---|---|
-| 17 oct | *(este commit)* | Se crearon `AVANCES.md` y `CLAUDE.md`, para que cualquier chat nuevo de Claude Code conozca el proyecto, lo hecho, lo pendiente y lo que sigue. |
+| 17 oct | *(este commit)* | **Dos specs nuevas.** `pagos-parciales-y-anticipos`: parciales y anticipos **siempre escalan** en la entrega (anticipo siempre `SENIOR`, sobrepago frena, fraccionar no baja el nivel). `proveedores-y-prioridad`: tabla de proveedores con estado y prioridad A/B/C; **la prioridad solo ordena y no entra al motor**. Se ajustaron R3.1 (huella con número de pago) y R8.5 del motor y se agregó la sección «Specs relacionadas». |
+| 17 oct | `1d0a7d1` | Se crearon `AVANCES.md` y `CLAUDE.md`, para que cualquier chat nuevo de Claude Code conozca el proyecto, lo hecho, lo pendiente y lo que sigue. |
 | 17 oct | `4ad15b4` | Se corrigieron las maquetas de «Ruta de una factura»: umbral de pago automático (3 M), motivo de la F-1045 y nivel de la F-1047 (persona, no senior). Presupuesto del periodo en **100 M**. PDF actualizado. |
 | 17 oct | `77c9522` | Specs del motor de reglas: 11 bloques de requisitos, diseño y 15 tareas. Índice en `specs/README.md`. |
 | 17 oct | *(análisis)* | Se estudió la documentación de feature specs de Kiro. Se decidió adoptar el **método** (requisitos EARS, diseño y tareas) en `specs/`, sin instalar Kiro. |
@@ -106,16 +109,19 @@ Cosas ya hechas que hay que **revisar, confirmar o corregir**:
 | P6 | **El PDF se genera a mano** desde la página en línea (Chromium, A3 horizontal). Si la página cambia, hay que regenerar y subir el PDF | Quien edite el diseño |
 | P7 | Si se construye el sello público: confirmar con los organizadores que una **testnet no cuenta como mover dinero** | Solo si se retoma |
 | P8 | Las fichas de la guía describen la **Opción 6 completa** a propósito. El alcance real es solo el enrutador | Ninguno, solo saberlo |
+| P9 | **Prioridad = urgencia de pago**, no confianza del proveedor (DV1). Confianza sería otro campo que solo endurece controles | Confirmar con el equipo |
+| P10 | **Parciales y anticipos:** DP1 a DP3 de `pagos-parciales-y-anticipos` (parcial con plan de cuotas como autopago, anticipo cuenta al salir, quién registra planes) | El equipo las confirma. Hay propuesta por defecto |
+| P11 | **Ideas sin spec todavía:** historias de usuario de proveedor, auditor y ERP; costo-beneficio; reflejo en un ERP (columnas del CSV para ERP, adaptador de mentira, CUFE de la factura electrónica como llave, **sin verificar**) | Escribir en `acta-y-csv` y en el pitch |
 
 ## 8. Próximas tareas
 
 En orden. El detalle de cada tarea del motor está en `specs/motor-de-reglas/tasks.md`.
 
 1. **Revisar y aprobar** la spec `motor-de-reglas` (resolver D1 a D5).
-2. **Escribir las specs que faltan** (máx. 90 min en total, sin repetir el diseño): `acta-y-csv`, `extraccion-y-agente-de-entrada`, `paneles-y-despliegue`.
+2. **Escribir las specs que faltan** (las columnas del CSV deben incluir `tipo_pago`, `monto_a_pagar`, `numero_pago`, `saldo_despues`, `proveedor_id`, `estado_erp`) (máx. 90 min en total, sin repetir el diseño): `acta-y-csv`, `extraccion-y-agente-de-entrada`, `paneles-y-despliegue`.
 3. **Despliegue de prueba en Railway:** app mínima que lea la clave, llame al modelo una vez y guarde una fila. Abrirla desde otro computador.
-4. **Ola 0 del motor:** T1 modelos y esquemas (A), T2 datos semilla (D), T3 20 casos de prueba con decisión esperada (D).
-5. **Ola 1:** T4 entrada y frenar, T5 beneficiario, montos y niveles, T10 cargar reglas. Luego T8 orquestador, T9 guardarraíl, T13 pruebas de propiedades, T14 `eval.py`, T15 conexión con el acta.
+4. **Ola 0 del motor:** T1 modelos y esquemas (A), T2 datos semilla (D), T3 20 casos de prueba con decisión esperada (D). Se suman PV1 (proveedores y datos semilla) y PP1 (campos de pago y huella).
+5. **Ola 1:** T4 entrada y frenar, T5 beneficiario, montos y niveles, T10 cargar reglas. Luego T8 orquestador, T9 guardarraíl, T13 pruebas de propiedades, T14 `eval.py`, T15 conexión con el acta. Se suman PP2 a PP4 (revisiones de pagos y propiedades), PV2 (estado del proveedor) y PV3 y PV4 (orden por prioridad y prueba de que no relaja).
 6. **Control de las 18:00:** correr `eval.py`. Si los casos trampa pasan, se suma el enrutador de canal (T7) y, con tiempo, las piezas de la capa 3. Si no pasan, esas horas se usan para corregir el motor.
 
 **Plan por horas** (hora de Bogotá):

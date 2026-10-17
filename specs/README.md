@@ -24,6 +24,8 @@ Cada criterio tiene un número (por ejemplo R3.1) y debe tener al menos una prue
 | Spec | Estado |
 |---|---|
 | `motor-de-reglas` | Borrador para revisión |
+| `pagos-parciales-y-anticipos` | Borrador para revisión |
+| `proveedores-y-prioridad` | Borrador para revisión |
 | `extraccion-y-agente-de-entrada` | Pendiente |
 | `acta-y-csv` | Pendiente |
 | `paneles-y-despliegue` | Pendiente |

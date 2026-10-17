@@ -110,7 +110,7 @@ def evaluar(ficha, contexto, reglas):
 
 ## Piezas con lógica propia
 
-**Huella de duplicado (R3.1):** `sha256(beneficiario | numero | monto | fecha)` sobre valores normalizados (mayúsculas, sin espacios extra, monto a dos decimales). Se compara con el historial.
+**Huella de duplicado (R3.1):** `sha256(beneficiario | numero | fecha | numero_pago)` sobre valores normalizados (mayúsculas, sin espacios extra). El número de pago es 1 para un pago total (ver `specs/pagos-parciales-y-anticipos/`). Se compara con el historial.
 
 **Nivel de aprobación (R5.2, R5.3):**
 ```

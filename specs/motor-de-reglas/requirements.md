@@ -81,7 +81,7 @@ Notación EARS en español: «CUANDO <evento>, EL MOTOR DE REGLAS DEBERÁ <respu
 ### R3. Frenar
 **Historia:** como persona de finanzas, quiero que lo repetido o lo que no cuadra se frene solo, para no revisarlo a mano.
 
-- **R3.1** CUANDO la huella de la ficha (beneficiario, número de factura, monto y fecha) coincida con una ya registrada, EL MOTOR DE REGLAS DEBERÁ devolver `FRENAR` con el motivo «repetida».
+- **R3.1** CUANDO la huella de la ficha (beneficiario, número de factura, fecha y número de pago; ver `pagos-parciales-y-anticipos` RP2.2) coincida con una ya registrada, EL MOTOR DE REGLAS DEBERÁ devolver `FRENAR` con el motivo «repetida».
 - **R3.2** CUANDO el monto no supere lo acordado más `tolerancia_ok`, EL MOTOR DE REGLAS DEBERÁ marcar la revisión `OK`.
 - **R3.3** CUANDO el monto supere lo acordado más `tolerancia_ok` y no pase de `tolerancia_frenar`, EL MOTOR DE REGLAS DEBERÁ marcar `AVISO` y devolver `ESCALAR` con nivel `PERSONA`.
 - **R3.4** CUANDO el monto supere lo acordado más `tolerancia_frenar`, EL MOTOR DE REGLAS DEBERÁ devolver `FRENAR` con el motivo «no cuadra con lo acordado».
@@ -129,7 +129,7 @@ Notación EARS en español: «CUANDO <evento>, EL MOTOR DE REGLAS DEBERÁ <respu
 - **R8.2** CUANDO una persona apruebe un caso escalado, EL MOTOR DE REGLAS DEBERÁ verificar tres cosas: que su rol sea igual o mayor al nivel exigido, que haya escrito un motivo, y que no sea quien preparó el caso. SI alguna falla, ENTONCES DEBERÁ rechazar la aprobación.
 - **R8.3** SI el monto supera `techo_duro_pago`, ENTONCES ninguna aprobación humana podrá convertirlo en `PAGAR`.
 - **R8.4** CUANDO una persona rechace un caso escalado, EL MOTOR DE REGLAS DEBERÁ registrarlo como `RECHAZADA` con su motivo.
-- **R8.5** Una aprobación humana NO podrá cambiar el monto ni el beneficiario de la ficha.
+- **R8.5** Una aprobación humana NO podrá cambiar el monto, el beneficiario, el tipo de pago ni el monto a pagar de la ficha.
 
 ### R9. Reglas versionadas
 **Historia:** como persona de finanzas, quiero cambiar las reglas por fecha sin pedirle ayuda a ingeniería.
@@ -152,6 +152,13 @@ Notación EARS en español: «CUANDO <evento>, EL MOTOR DE REGLAS DEBERÁ <respu
 - **R11.2** PARA cualquier ficha generada que incumpla una regla bloqueante, la decisión NO DEBERÁ ser `PAGAR` (prueba de propiedades, «cero pagos indebidos»).
 - **R11.3** Las 20 facturas de prueba DEBERÁN dar la decisión esperada (mide la autonomía).
 - **R11.4** Una evaluación NO DEBERÍA tardar más de 200 ms, sin red.
+
+## Specs relacionadas
+
+| Spec | Qué amplía |
+|---|---|
+| `pagos-parciales-y-anticipos` | Pagos que no son el total de una factura. Cambia la huella (R3.1) y el estado de las obligaciones (R6). |
+| `proveedores-y-prioridad` | Tabla de proveedores que reemplaza las listas sueltas de R3.5, R4.1 y R4.2, y orden por prioridad que **no** entra al motor. |
 
 ## Decisiones abiertas
 
