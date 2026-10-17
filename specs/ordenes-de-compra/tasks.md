@@ -1,11 +1,11 @@
 # Tareas: órdenes de compra y proveedores
 
 Estado: **borrador**. Requisitos: `requirements.md` · Diseño: `design.md`.
-Antes de empezar, el equipo confirma **OCD1, OCD4, OCD5, OCD11 y OCD12**: cambian los datos y los resultados esperados.
+Antes de empezar, el equipo confirma **OCD1, OCD4, OCD12 y OCD13** (OCD5 y OCD11 se resolvieron con el listado de válidos): cambian los datos y los resultados esperados.
 
 | # | Tarea | Cubre | Estimación | Estado |
 |---|---|---|---|---|
-| OT1 | Escribir `importar_compras.py` (lee los .xlsx desde una ruta local; no se suben al repositorio público): genera `proveedores.yaml` y `ordenes_compra.yaml`, valida (OC2.2) y calcula las marcas (OC1.3, OC1.4, OC2.3) | OC1, OC2 | 1 h | **Parcial:** proveedores hechos (`data/proveedores.yaml`, 200 filas, 30 marcados; `tests/test_proveedores.py`). Faltan las órdenes (OCD1, OCD12) |
+| OT1 | Escribir `importar_compras.py` (lee los .xlsx desde una ruta local; no se suben al repositorio público): genera `proveedores.yaml` y `ordenes_compra.yaml`, valida (OC2.2) y calcula las marcas (OC1.3, OC1.4, OC2.3) | OC1, OC2 | 1 h | **Parcial:** proveedores hechos (`data/proveedores.yaml`: listado de válidos, 156 filas, ninguna marcada; `tests/test_proveedores.py`). Faltan las órdenes (OCD1, OCD12, OCD13) |
 | OT2 | `engine/compras.py` y modelos: cargar, conservar la última versión válida, contexto con proveedores y órdenes; `Ficha` con `orden_compra` e `id_tributaria` | OC1.5, OC2.1 | 0,75 h | Pendiente |
 | OT3 | `engine/revisiones/orden_compra.py` y su lugar en `REVISIONES`; ajustar `frenar.acuerdo` para OC4.1 | OC4 | 1,5 h | Pendiente |
 | OT4 | Estado de la OC desde el acta y `orden_compra` en el payload de `DECISION` y en `facturas.csv` | OC5 | 0,75 h | Pendiente |
@@ -17,7 +17,7 @@ Antes de empezar, el equipo confirma **OCD1, OCD4, OCD5, OCD11 y OCD12**: cambia
 
 ## Orden sugerido
 
-1. El equipo resuelve OCD1, OCD4, OCD5, OCD11 y OCD12 (OCD3 ya se aplicó con la propuesta por defecto: cuenta ficticia).
+1. El equipo resuelve OCD1, OCD4, OCD12 y OCD13 (OCD3 ya se aplicó con la propuesta por defecto: cuenta ficticia; OCD5 y OCD11 quedaron resueltas con el listado de válidos).
 2. OT1 → OT2 → OT3 → OT6 (núcleo del motor, con `eval.py` en verde).
 3. OT4 → OT5 → OT7.
 
