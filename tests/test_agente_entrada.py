@@ -255,14 +255,14 @@ def test_ea8_1_si_la_ia_falla_se_degrada_y_escala(almacen, sala):
     assert e["modo"] == "regex" and decision(almacen, sala, e["factura_id"])["decision"] == "ESCALAR"
 
 
-def test_ea6_2_ficha_irreparable_no_se_registra(almacen, sala):
+def test_ea6_2_una_ficha_irreparable_se_registra_escalada_y_finanzas_la_ve(almacen, sala):
     e = flujo.recibir(almacen, sala, "vacia.txt", b"hola, adjunto mi factura")
     e = flujo.responder(almacen, sala, e["factura_id"], "no")
     e = flujo.responder(almacen, sala, e["factura_id"], "no")
     assert e["estado"] == "datos confirmados" and "revisión manual" in e["chat"][-1][1]
-    assert e["factura_id"] not in facturas_por_estado(almacen.filas(sala))
+    d = decision(almacen, sala, e["factura_id"])                       # ya no se pierde: aparece en el acta
+    assert d["decision"] == "ESCALAR" and d["nivel"] == "SENIOR" and d["ficha_invalida"] is True
     assert flujo.estado_para_proveedor(almacen, sala, e) == "en revisión"
-
 
 # EA9.3: ningún texto, por más que ordene aprobar, produce PAGAR
 @pytest.mark.parametrize("orden", [
@@ -534,3 +534,50 @@ def test_ea1_5_el_panel_muestra_el_limite_configurado_y_el_diagnostico_lo_lista(
     texto = " ".join(x.value for x in at.text)
     assert "Has usado 0 de 12 facturas permitidas" in info and "demo" not in info.lower()
     assert "FACTURAS_MAX: 12" in texto
+
+
+# Tu caso real: nada de lo que el proveedor ve «en revisión» puede quedar fuera del Panel 2
+def test_una_factura_de_proveedor_nuevo_leida_con_ia_aparece_en_el_tablero(almacen, sala):
+    ok = dict(beneficiario="Proveedor Nuevo SAS", numero="PN-1", monto="500000", moneda="COP",
+              vence="2026-10-30", cuenta="X", dudosos=[])
+    e = flujo.recibir(almacen, sala, "f.txt", b"FACTURA N: PN-1\nProveedor: Proveedor Nuevo SAS\n"
+                      b"Vence: 2026-10-30\nTotal: 500.000 COP", cliente=GeminiFalso(ok))
+    f = facturas_por_estado(almacen.filas(sala))[e["factura_id"]]
+    assert f.estado == "PENDIENTE" and f.decision["nivel"] == "SENIOR" and not f.decision.get("ficha_invalida")
+
+
+@pytest.mark.parametrize("nombre,archivo_,cliente,respuestas", [
+    ("la IA falla y el texto no sigue el formato", b"Hola, adjunto mi cuenta de cobro. Gracias.", "falla", ["no se", "tampoco"]),
+    ("la IA no lee el monto y el proveedor no lo aclara", b"FACTURA N: PN-1\nProveedor: Nuevo SAS\nVence: 2026-10-30\nTotal: 500.000 COP",
+     "sin_monto", ["no tengo", "no se"]),
+])
+def test_ninguna_factura_queda_en_revision_sin_que_finanzas_la_vea(almacen, sala, nombre, archivo_, cliente, respuestas):
+    ok = dict(beneficiario="Nuevo SAS", numero="PN-1", monto="500000", moneda="COP", vence="2026-10-30",
+              cuenta="X", dudosos=[])
+    g = GeminiFalso(ok, falla=True) if cliente == "falla" else GeminiFalso(dict(ok, monto=None, dudosos=["monto"]))
+    e = flujo.recibir(almacen, sala, "f.txt", archivo_, cliente=g)
+    for r in respuestas:
+        e = flujo.responder(almacen, sala, e["factura_id"], r)
+    f = facturas_por_estado(almacen.filas(sala)).get(e["factura_id"])
+    assert f is not None, nombre
+    assert f.estado == "PENDIENTE" and f.decision["decision"] == "ESCALAR"
+    assert flujo.estado_para_proveedor(almacen, sala, e) == "en revisión"
+
+
+def test_ea2b_9_si_la_ia_falla_queda_en_los_logs_sin_la_clave(almacen, sala, monkeypatch, caplog):
+    import logging
+    clave = "AIzaSECRETO-que-no-debe-salir-9876543210"
+    monkeypatch.setenv("GEMINI_API_KEY", clave)
+    g = GeminiFalso(LEIDO, falla=True)
+    g.models.generate_content = lambda **kw: (_ for _ in ()).throw(RuntimeError(f"404 modelo no existe, clave={clave}"))
+    with caplog.at_level(logging.WARNING, logger="entrada"):
+        flujo.recibir(almacen, sala, "f.txt", TEXTO, cliente=g)
+    registro = " ".join(r.getMessage() for r in caplog.records)
+    assert "La lectura con IA falló" in registro and "404 modelo no existe" in registro
+    assert clave not in registro and "***" in registro
+
+
+def test_sin_secretos_quita_las_claves_de_un_texto():
+    from agents.lectura_ia import sin_secretos
+    env = {"GEMINI_API_KEY": "AIzaCLAVE-LARGA-123", "ANTHROPIC_API_KEY": "corta"}
+    assert sin_secretos("error con AIzaCLAVE-LARGA-123 y corta", env) == "error con *** y corta"   # <8: no se toca

@@ -5,7 +5,7 @@ import streamlit as st
 from acta.estado import facturas_por_estado
 from acta.exportar_csv import exportar_eventos, exportar_facturas
 from acta.tablero import cifras, comprobar_consistencia
-from app.apoyo import DECISIONES, estados_calendario, formato_monto, quien_aprueba
+from app.apoyo import DECISIONES, estados_calendario, formato_monto, monto_legible, quien_aprueba
 from app.comun import (SEGUNDOS_REFRESCO, almacen, barra_lateral, contexto_y_reglas, encabezado,
                        exigir_rol, obtener_sala)
 
@@ -43,7 +43,7 @@ def tablero():
     datos = [{
         "Factura": f.factura_id,
         "Proveedor": f.decision["beneficiario"],
-        "Monto": formato_monto(f.decision["monto"], f.decision["moneda"]),
+        "Monto": monto_legible(f.decision),
         "Decisión": ICONO[f.estado],
         "Aprueba": quien_aprueba(f),
         "Motivo": f.decision["motivo"],

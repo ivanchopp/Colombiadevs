@@ -112,3 +112,63 @@ def test_pp3_1_panel_2_pide_rol_antes_de_mostrar_datos(entorno, pagina):
     assert not at.exception
     assert any("Elige un rol" in i.value for i in at.info)
     assert len(at.dataframe) == 0
+
+
+# R8.6 y PP5.7: la ficha inválida se ve, y solo se puede rechazar
+@pytest.fixture
+def invalida(almacen, sala):
+    from agents import flujo
+    e = flujo.recibir(almacen, sala, "vacia.txt", b"hola, adjunto mi factura")
+    e = flujo.responder(almacen, sala, e["factura_id"], "no")
+    e = flujo.responder(almacen, sala, e["factura_id"], "no")
+    return e["factura_id"]
+
+
+def test_pp5_7_no_se_puede_aprobar_una_ficha_invalida_y_queda_el_intento(almacen, sala, invalida):
+    f = facturas(almacen, sala)[invalida]
+    with pytest.raises(AprobacionRechazada, match="no se puede aprobar"):
+        apoyo.responder(almacen, sala, f, "SENIOR", True, "lo apruebo igual", "Bre-B")
+    actual = facturas(almacen, sala)[invalida]
+    assert actual.estado == "PENDIENTE" and len(actual.intentos) == 1
+
+
+def test_pp5_7_una_ficha_invalida_si_se_puede_rechazar(almacen, sala, invalida):
+    f = facturas(almacen, sala)[invalida]
+    apoyo.responder(almacen, sala, f, "SENIOR", False, "Faltan datos: que la envíe de nuevo")
+    assert facturas(almacen, sala)[invalida].estado == "RECHAZADA"
+
+
+def test_pp5_1_la_ficha_invalida_es_de_nivel_senior(almacen, sala, invalida):
+    assert invalida in {f.factura_id for f in apoyo.cola_para_rol(facturas(almacen, sala), "SENIOR")}
+    assert invalida not in {f.factura_id for f in apoyo.cola_para_rol(facturas(almacen, sala), "PERSONA")}
+
+
+def test_pp4_2_el_tablero_cuenta_y_muestra_la_ficha_invalida(almacen, sala, invalida):
+    from acta import exportar_csv, tablero
+    filas = almacen.filas(sala)
+    assert tablero.cifras(filas).pendientes == 4 and tablero.comprobar_consistencia(filas)
+    assert apoyo.monto_legible(facturas(almacen, sala)[invalida].decision) == "sin leer"
+    csv_texto = exportar_csv.exportar_facturas(filas).decode("utf-8-sig")
+    fila = next(l for l in csv_texto.splitlines() if l.startswith(invalida + ","))
+    assert fila.split(",")[2:4] == ["", ""]                            # monto y moneda vacíos, no inventados
+
+
+def _cola(tmp_path, monkeypatch, almacen, sala, rol):
+    import streamlit as st
+    from streamlit.testing.v1 import AppTest
+    st.cache_resource.clear()                     # la conexión a la base se guarda en caché entre pruebas
+    monkeypatch.setenv("ACTA_DB", almacen.ruta)
+    at = AppTest.from_file(str(RAIZ / "app/pages/2_Cola_de_aprobacion.py"), default_timeout=30)
+    at.query_params["sala"] = sala
+    at.session_state["rol"] = rol
+    at.run()
+    return at
+
+
+def test_pp5_7_la_cola_no_ofrece_aprobar_una_ficha_invalida(tmp_path, monkeypatch, almacen, sala, invalida):
+    at = _cola(tmp_path, monkeypatch, almacen, sala, "SENIOR")
+    assert not at.exception
+    botones = {b.key for b in at.button}
+    assert f"re_{invalida}" in botones and f"ap_{invalida}" not in botones      # solo rechazar
+    assert any("No se puede aprobar un pago sin esos datos" in w.value for w in at.warning)
+    assert "ap_F-1045" in botones                                               # las válidas sí se aprueban

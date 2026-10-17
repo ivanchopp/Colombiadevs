@@ -106,7 +106,7 @@ flowchart TD
 ### T9. Guardarraíl y aprobaciones
 - **Dueño:** A · **Estimación:** 1 h · **Capa:** núcleo
 - `guardarrail.py`: `registrar_decision` que revalida, y `validar_aprobacion` (rol, motivo, separación de funciones, techo duro, sin cambiar monto ni beneficiario).
-- **Cubre:** R8.1 a R8.5
+- **Cubre:** R8.1 a R8.6
 - **Listo cuando:** `tests/test_guardarrail.py` pasa, y un intento de pagar fuera de las reglas se rechaza.
 
 ### T13. Pruebas de propiedades

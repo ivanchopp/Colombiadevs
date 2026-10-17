@@ -1,6 +1,7 @@
 """Flujo del agente de entrada: recibir, preguntar, armar la ficha y llamar al motor.
 
 El agente NO decide: entrega la ficha a engine.guardarrail.registrar_decision (EA6)."""
+import logging
 import os
 from decimal import Decimal
 
@@ -14,6 +15,8 @@ from engine.reglas_io import cargar_contexto_base, cargar_reglas, hoy_bogota, re
 from . import aclaraciones, archivo, ejemplos, lectura_ia, segunda_lectura
 from .estado import EstadoEntrada
 from .seguridad import detectar_orden
+
+log = logging.getLogger("entrada")
 
 FACTURAS_MAX_DEFECTO = 5
 FACTURAS_MAX_TOPE = 100
@@ -42,8 +45,10 @@ def _leer(tipo, datos, texto, clave_ejemplo, cliente):
     if cliente is not None or lectura_ia.hay_clave():
         try:
             return lectura_ia.leer_con_ia(tipo, datos, texto, cliente), "ia"
-        except lectura_ia.LecturaFallida:
-            pass
+        except lectura_ia.LecturaFallida as e:
+            # Queda en los Logs del servidor (EA2b.9), sin ningún valor de clave.
+            log.warning("La lectura con IA falló (%s): %s", lectura_ia.proveedor_activo(),
+                        lectura_ia.sin_secretos(str(e))[:300])
     if clave_ejemplo in ejemplos.LECTURAS_GUARDADAS:
         return lectura_ia._limpiar(ejemplos.LECTURAS_GUARDADAS[clave_ejemplo]), "guardada"
     # Sin IA: solo patrones de texto, y la lectura queda dudosa (EA8.2).
@@ -154,11 +159,17 @@ def finalizar(almacen, sala_id, factura_id) -> dict:
         reglas = reglas_de_sala(cargar_reglas(hoy)[0], filas)          # con los cambios de la sala (PP8.7)
         ctx = contexto_desde_acta(cargar_contexto_base(hoy), filas)
         registrar_decision(almacen, sala_id, ficha, ctx, reglas)
-        publico = estado_publico(facturas_por_estado(almacen.filas(sala_id))[factura_id])
-        cierre = ("Gracias. Tu factura quedó resuelta." if publico == "resuelta"
-                  else "Gracias. Tu factura quedó en revisión. Te avisaremos cuando haya una respuesta.")
+        registrada = facturas_por_estado(almacen.filas(sala_id))[factura_id]
+        publico = estado_publico(registrada)
+        if registrada.decision.get("ficha_invalida"):          # queda escalada y visible para finanzas (EA6.2)
+            cierre = ("Gracias. No pude leer todos los datos de tu factura, así que quedó en revisión "
+                      "manual de finanzas. Te avisaremos cuando haya una respuesta.")
+        else:
+            cierre = ("Gracias. Tu factura quedó resuelta." if publico == "resuelta"
+                      else "Gracias. Tu factura quedó en revisión. Te avisaremos cuando haya una respuesta.")
     except (ValidationError, TypeError, ValueError):
-        cierre = "Gracias. No pude leer todos los datos, así que tu factura quedó en revisión manual."
+        log.exception("No se pudo registrar la factura %s de la sala %s", factura_id, sala_id)
+        cierre = "Hubo un problema al registrar tu factura. Por favor envíala de nuevo."
     estados.actualizar(sala_id, factura_id, estado="datos confirmados", pendientes=[],
                        chat=_agregar(e["chat"], "agente", cierre))
     return estados.obtener(sala_id, factura_id)
