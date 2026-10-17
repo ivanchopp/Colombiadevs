@@ -14,7 +14,7 @@ La IA **solo lee y pregunta**. Quien **decide** es el **motor de reglas**, códi
 | Motor de reglas (sin IA) | Decide `PAGAR`, `FRENAR` o `ESCALAR`, el nivel de aprobación y sugiere un canal | `engine/` |
 | Acta | Registro de solo añadir con cadena de huellas; de ahí salen el CSV y el tablero | `acta/` |
 | Panel 1 (proveedor) | Sube facturas, chatea con el agente, ve solo el estado de su factura | `app/Panel_1_Proveedor.py` |
-| Panel 2 (finanzas) | Tablero, cola de aprobación, calendario, acta y descarga de CSV | `app/pages/` |
+| Panel 2 (finanzas) | Tablero, cola de aprobación, calendario, acta, reglas (ver, cambiar y firmar) y descarga de CSV | `app/pages/` |
 
 Más contexto: `AVANCES.md` (estado y pendientes), `specs/` (requisitos de cada parte) y `docs/`.
 

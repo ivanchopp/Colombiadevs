@@ -2,9 +2,9 @@
 
 > **Si eres un chat nuevo de Claude Code, empieza aquí.** Este archivo es la memoria del proyecto: qué se quiere hacer, qué ya se hizo, qué falta y qué sigue. Léelo completo antes de tocar nada y **actualízalo al terminar cada cambio** (ver «Cómo mantener este archivo»).
 
-**Última actualización:** sáb 17 oct 2026, 15:50 (hora Bogotá)
+**Última actualización:** sáb 17 oct 2026, 16:05 (hora Bogotá)
 **Entrega:** **dom 18 oct 2026, 8:00 a. m. (hora Bogotá).** Objetivo: enviar a las 7:00.
-**Repositorio:** https://github.com/ivanchopp/Colombiadevs · rama `main` (incluye el PR #2, commit `77a8763`). El trabajo nuevo se hace en ramas `claude/*` y entra por PR.
+**Repositorio:** https://github.com/ivanchopp/Colombiadevs · rama `main` (último: PR #7, commit `7527f07`). El trabajo nuevo se hace en una rama y entra por PR, después de pasar por el `verificador`.
 
 ---
 
@@ -14,11 +14,12 @@
 - **De dónde viene:** el *Reto Blinka, «Agentes que pagan por la empresa»* (Hackathon 30X, HackRadar). Blinka es una fintech colombiana en EE. UU. con cuentas en USD y pagos a Latinoamérica.
 - **Idea central:** la IA solo **lee y redacta**. Un programa normal, el **motor de reglas**, **decide**. Ante la duda, el resultado es **escalar, nunca pagar**.
 - **Equipo:** 4 personas. Reparto sugerido: **A** motor y pruebas · **B** agentes con IA · **C** pantallas · **D** datos, evaluación y pitch.
-- **Estado del código (en `main`):** funciona de punta a punta el **motor de reglas**, el **acta** (SQLite), el **agente de entrada** y los **dos paneles** (Streamlit). **152 pruebas pasan** y `python3 eval.py` da **20 de 20, con 0 pagos indebidos**. La skill `verificador` aprobó la rama (VER-0005).
+- **Estado del código (en `main`):** funciona de punta a punta el **motor de reglas**, el **acta** (SQLite), el **agente de entrada** y los **dos paneles** (Streamlit). **164 pruebas pasan** y `python3 eval.py` da **20 de 20, con 0 pagos indebidos**. Cada cambio pasa por la skill `verificador` (última: VER-0011).
 - **Lo que NO está probado:**
   1. **La lectura con IA real.** El agente lee con **Gemini o Claude** (intercambiables, ver `README.md`), pero solo se probó con clientes falsos, nunca con una clave. Sin clave corre en **modo demo**.
   2. **El despliegue en Railway.** Está preparado (`Dockerfile`, `railway.toml`) y se probó el arranque en local, pero la imagen de Docker y Railway no se han probado ni desplegado.
 - **No existen todavía:** el agente de reglas en lenguaje natural, el agente de conciliación y la página de resumen (capa 3), PostgreSQL con permisos, y las vigencias con conflictos (T12).
+- **Alcance nuevo en curso:** órdenes de compra (`specs/ordenes-de-compra/`). Hay spec y el registro de 200 proveedores (`data/proveedores.yaml`), pero el motor **todavía no los usa**: faltan las decisiones de P26 y las tareas OT1 (órdenes) a OT7.
 - **Para verlo:** `pip install -r requirements.txt` y `streamlit run app/Panel_1_Proveedor.py`. **Control de las 18:00:** `python3 eval.py`.
 
 ## 2. Lo que no se negocia
@@ -80,7 +81,7 @@
 | `specs/README.md` | Índice y reglas de las especificaciones |
 | `specs/motor-de-reglas/` | 53 criterios EARS (R1 a R11), `design.md` (con «Ajustes al construir»), tareas T1 a T15 |
 | `specs/acta-y-csv/` | 51 criterios (AC1 a AC9), diseño, tareas AT1 a AT10 |
-| `specs/ordenes-de-compra/` | **Alcance nuevo, sin código.** Órdenes de compra autorizadas antes de la factura y registro de proveedores con NIT/RFC/RUC. Criterios OC1 a OC8, diseño, tareas OT1 a OT7 |
+| `specs/ordenes-de-compra/` | **Alcance nuevo.** Órdenes de compra autorizadas antes de la factura y registro de proveedores con NIT/RFC/RUC. Criterios OC1 a OC8, diseño, tareas OT1 a OT7 (OT1 parcial: proveedores cargados), 12 decisiones abiertas |
 | `specs/paneles-y-despliegue/` | Criterios PP1 a PP8 y PD1 (despliegue), diseño, tareas PT1 a PT12 |
 | `specs/extraccion-y-agente-de-entrada/` | Criterios EA1 a EA9 y EA2b (proveedor intercambiable), diseño, tareas ET1 a ET8 |
 | `.claude/skills/verificador/` | Skill que revisa cada cambio, lo aprueba o rechaza y lo registra. **Úsala antes de commitear.** |
@@ -91,7 +92,7 @@
 | `app/` | Streamlit. `Panel_1_Proveedor.py`, `pages/` con el Panel 2 (Tablero, Cola de aprobación, Calendario, Acta, Reglas), `comun.py`, `apoyo.py` |
 | `data/` | `reglas.yaml`, `techos.yaml`, `registros.yaml`, `tasas.yaml`, `canales.yaml`, `calendario.csv` y `casos.yaml` (20 facturas de prueba), todo «supuesto»; `demo_semilla.py`; `facturas_ejemplo/`; `proveedores.yaml` (200 proveedores de prueba, generado con `importar_compras.py`) |
 | `eval.py` | Mide autonomía, seguridad (pagos indebidos = 0) y explicabilidad con los 20 casos |
-| `tests/`, `pytest.ini` | 143 pruebas (`python3 -m pytest -q`), incluida la de propiedades con Hypothesis |
+| `tests/`, `pytest.ini` | 164 pruebas (`python3 -m pytest -q`), incluida la de propiedades con Hypothesis |
 | `Dockerfile`, `railway.toml`, `requirements-prod.txt`, `requirements.txt`, `.env.example`, `.streamlit/config.toml` | Despliegue y dependencias. La imagen corre como root a propósito (volúmenes de Railway) |
 
 ## 6. Registro de cambios
@@ -100,7 +101,8 @@ Lo más reciente va arriba.
 
 | Cuándo | Commit | Qué se hizo |
 |---|---|---|
-| 17 oct | *(este commit)* | **Registro de proveedores (OT1, parte de proveedores).** El equipo entregó un listado de 200 proveedores. `data/importar_compras.py` lo convierte a `data/proveedores.yaml` sin dirección, teléfono ni correo, con una cuenta ficticia (OCD3) y las marcas calculadas: 20 comparten `FALLA-999999-X` y 30 tienen la identificación inválida. Los ID de los proveedores de las órdenes cambiaron: queda como OCD12 (enlazar por nombre). El motor **todavía no usa** este registro (OT2). 12 pruebas nuevas, 164 en total. |
+| 17 oct | *(este commit)* | **Revisión de la documentación.** Se pusieron al día el estado (164 pruebas, PR #7), el mapa del repositorio, el estado del alcance de órdenes de compra, el README (página de reglas) y el índice de specs (12 decisiones). Sin cambios de código. |
+| 17 oct | `948f7d7` | **Registro de proveedores (OT1, parte de proveedores).** El equipo entregó un listado de 200 proveedores. `data/importar_compras.py` lo convierte a `data/proveedores.yaml` sin dirección, teléfono ni correo, con una cuenta ficticia (OCD3) y las marcas calculadas: 20 comparten `FALLA-999999-X` y 30 tienen la identificación inválida. Los ID de los proveedores de las órdenes cambiaron: queda como OCD12 (enlazar por nombre). El motor **todavía no usa** este registro (OT2). 12 pruebas nuevas, 164 en total. |
 | 17 oct | `2f7c3df` | **Spec de órdenes de compra (alcance nuevo).** El equipo entregó 30 proveedores y 30 órdenes de compra de prueba en Excel (no se suben: el repositorio es público y traen datos de contacto). Spec `ordenes-de-compra`: registro de proveedores con identificación tributaria, registro de órdenes, lectura del número de OC en la factura, revisión nueva del motor (OC inexistente o ajena → senior; ya facturada o más de 10 % → frenar; de 5 % a 10 % → persona), consumo desde el acta, página en el Panel 2 y 8 casos de prueba. Al revisar los archivos se encontraron problemas de datos que quedan como decisiones abiertas (OCD1 a OCD11): moneda «Pesos» sin código, IVA del 16 % para todos los países, sin cuentas bancarias, 6 proveedores con la misma identificación falsa y 10 con el RUC corto. **Sin código todavía.** |
 | 17 oct | `f0e1093` | **Documentación al día.** `specs/acta-y-csv/tasks.md` gana una tabla de estado (AT1 a AT10: 6 hechas, 3 parciales, 1 pendiente) y su trazabilidad apunta a las pruebas reales (`tests/test_acta.py` y otras; los archivos que citaba no existían). **P23 cerrado:** las specs vigentes son las del árbol actual (`paneles-y-despliegue` con PP1 a PP8 y PD1; `extraccion-y-agente-de-entrada` con EA1 a EA9), que describen el código que existe; las de otra sesión (`dc04e18`, `8bb35bb`) quedan solo como historial. |
 | 17 oct | `00b7d23` | **Página de reglas (PT11, PP8).** El entregable del reto pide una pantalla donde la empresa define sus reglas, y no existía. Spec primero: PP8 (7 criterios), diseño y tarea. Panel 2 › Reglas muestra los parámetros vigentes y el techo duro (no editable), permite editarlos, muestra la vista previa (qué cambia, si afloja o restringe y qué facturas de la sala cambiarían de decisión) y pide motivo. Aflojar exige el rol senior; si lo intenta la persona, queda un `INTENTO_RECHAZADO`. El cambio se guarda como `CAMBIO_REGLA` en el acta de la sala, vale solo hacia adelante y solo en esa sala, y la versión pasa a `v12.s1`. El agente de entrada y los paneles deciden con las reglas de la sala. Cierra T11 y la parte de afloja/restringe y techo de T12. 9 pruebas nuevas, 152 en total, `eval.py` 20/20. |

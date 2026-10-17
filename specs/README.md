@@ -27,7 +27,7 @@ Cada criterio tiene un número (por ejemplo R3.1) y debe tener al menos una prue
 | `extraccion-y-agente-de-entrada` | Borrador para revisión (implementado en modo demo; falta probar con la API real) |
 | `acta-y-csv` | Borrador para revisión |
 | `paneles-y-despliegue` | Borrador para revisión (paneles y página de reglas programados; despliegue pendiente) |
-| `ordenes-de-compra` | Borrador para revisión (alcance nuevo del 17 oct; sin código; 11 decisiones abiertas) |
+| `ordenes-de-compra` | Borrador para revisión (alcance nuevo del 17 oct; registro de proveedores cargado, el motor aún no lo usa; 12 decisiones abiertas) |
 
 ## Reglas de trabajo
 
