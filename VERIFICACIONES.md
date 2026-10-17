@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0012 | 2026-10-17 16:00 | APROBADO | Revisión de la documentación: estado (164 pruebas, PR #7), mapa del repositorio, alcance de órdenes de compra, README (página de reglas) e índice de specs | 0 | 0 | 7527f07 | — |
 | VER-0011 | 2026-10-17 15:40 | APROBADO | Registro de proveedores (OT1, parte de proveedores): importar_compras.py, data/proveedores.yaml con 200 proveedores y pruebas; spec con OCD12 | 0 | 2 | 2f7c3df | — |
 | VER-0010 | 2026-10-17 14:24 | APROBADO | Spec nueva ordenes-de-compra (OC1 a OC8, diseño, OT1 a OT7, decisiones OCD1 a OCD11) y enlaces en specs/README, motor-de-reglas y AVANCES | 0 | 1 | 67eb333 | — |
 | VER-0009 | 2026-10-17 13:54 | APROBADO | Documentación: estado de AT1 a AT10 en specs/acta-y-csv/tasks.md, trazabilidad apuntando a las pruebas reales y P23 cerrado en AVANCES.md | 0 | 0 | b6e1beb | — |
@@ -15,6 +16,10 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0012 — APROBADO
+
+- **NOTA** (errores) `AVANCES.md`: Se corrigieron datos desactualizados: 152 y 143 pruebas (son 164), repositorio en PR #2 (va en PR #7), un commit sin número y el estado del alcance de órdenes de compra → Ninguna
 
 ## VER-0011 — APROBADO
 
