@@ -2,7 +2,7 @@
 
 > **Si eres un chat nuevo de Claude Code, empieza aquí.** Este archivo es la memoria del proyecto: qué se quiere hacer, qué ya se hizo, qué falta y qué sigue. Léelo completo antes de tocar nada y **actualízalo al terminar cada cambio** (ver «Cómo mantener este archivo»).
 
-**Última actualización:** sáb 17 oct 2026, 15:00 (hora Bogotá)
+**Última actualización:** sáb 17 oct 2026, 16:10 (hora Bogotá)
 **Entrega:** **dom 18 oct 2026, 8:00 a. m. (hora Bogotá).** Objetivo: enviar a las 7:00.
 **Repositorio:** https://github.com/ivanchopp/Colombiadevs (rama `main`, no hay otras)
 
@@ -72,7 +72,11 @@
 | `docs/Ruta-de-una-factura.pdf` | **Diseño general:** actores, flujo, maquetas, herramientas, despliegue, a futuro. Se genera de una página en línea privada del equipo |
 | `docs/Guia-6-alternativas-actualizada.pdf` | Guía de las 6 alternativas de @Marcelo Linero, ajustada a la entrega de las 8:00, con plan por horas |
 | `specs/README.md` | Índice y reglas de las especificaciones |
-| `specs/motor-de-reglas/` | `requirements.md` (52 criterios EARS), `design.md`, `tasks.md` (T1 a T15) |
+| `.claude/skills/verificador/` | Skill que revisa cada cambio, lo aprueba o rechaza y lo registra. **Úsala antes de commitear.** |
+| `VERIFICACIONES.md`, `.verificaciones/` | Historial de verificaciones (no se edita a mano) |
+| `specs/motor-de-reglas/` | `requirements.md` (53 criterios EARS), `design.md`, `tasks.md` (T1 a T15) |
+| `specs/paneles-y-despliegue/` | Los dos paneles de la demo, la sala, los roles, el refresco, el despliegue en Railway, las protecciones y la prueba de humo. `requirements.md` (criterios PD), `design.md`, `tasks.md` (PT1 a PT14) |
+| `specs/extraccion-y-agente-de-entrada/` | Agente de entrada con IA: recepción, extracción, segunda lectura, preguntas al proveedor, defensa contra órdenes escondidas y modo demo. `requirements.md` (criterios EX), `design.md`, `tasks.md` (ET1 a ET11) |
 | `specs/acta-y-csv/` | Acta de solo añadir con huellas, CSV, tablero, salas y agente de conciliación. `requirements.md` (criterios AC), `design.md`, `tasks.md` (AT1 a AT10) |
 | `specs/paneles-y-despliegue/` | Requisitos (PP1 a PP7), diseño y tareas (PT1 a PT11) de los dos paneles |
 | `app/` | Streamlit. `Panel_1_Proveedor.py` (portal abierto), `pages/` con el Panel 2 (Tablero, Cola de aprobación, Calendario, Acta), `comun.py` (sala, rol) y `apoyo.py` (funciones puras) |
@@ -95,6 +99,7 @@ Lo más reciente va arriba.
 
 | Cuándo | Commit | Qué se hizo |
 |---|---|---|
+| 17 oct | *(este commit)* | **Fusión con `main`.** Otra sesión había subido a `main` un esqueleto paralelo (`agents/entrada/`, `app/componentes/`, 45 pruebas) y specs propias de paneles y extracción: 37 archivos en conflicto. Por decisión del dueño **gana esta rama** (más completa: motor 20 de 20, 132 pruebas, agente con Gemini/Claude, paneles, despliegue). Se conserva de `main`: la skill `verificador`, `.verificaciones/`, `VERIFICACIONES.md`, `pytest.ini`, `.python-version`, `acta/esquema_postgres.sql` y los arreglos de D2. Se sacó del árbol el esqueleto paralelo (sigue en el historial de `main`, commit `cda2588`). Verificado con la skill `verificador`. |
 | 17 oct | *(este commit)* | **Proveedor de IA intercambiable (Gemini ahora, Claude después).** Spec EA2b. `PROVEEDOR_IA`, `GEMINI_API_KEY`/`GOOGLE_API_KEY`, `MODELO_GEMINI`; sin preferencia se usa Claude si hay clave, si no Gemini; si el elegido no tiene clave, modo demo. Mismo esquema, mismas defensas y mismo motor. La pantalla muestra qué proveedor está activo. `python3 -m agents.probar` verifica la clave. Probado con clientes falsos de los dos proveedores y construyendo los clientes reales de los SDK sin red. 132 pruebas. |
 | 17 oct | *(commit anterior)* | **Despliegue preparado.** `Dockerfile`, `railway.toml` (salud en `/_stcore/health`), `requirements-prod.txt`, `.env.example` y `README.md`. El acta va al volumen de Railway (`RAILWAY_VOLUME_MOUNT_PATH`) con modo WAL; `FECHA_DEMO` fija «hoy». Se encontró y corrigió un error de arranque (`No module named 'agents'` con el comando de Railway) probando con solo las dependencias de producción. Probado en local: arranque, salud, persistencia tras reiniciar, 6 visitantes a la vez y salas separadas. **No se probó la imagen de Docker ni Railway** (no hay Docker ni acceso). |
 | 17 oct | *(commit anterior)* | **Agente de entrada.** Spec `extraccion-y-agente-de-entrada` y código. Valida el archivo por contenido real y tamaño; lee con Claude (un solo llamado, esquema cerrado, factura marcada como dato no confiable, sin reglas ni registros); segunda lectura con patrones de texto; detección de órdenes escondidas sin IA; máx. 2 turnos con preguntas de plantilla; lo aclarado nunca reemplaza el original; arma la ficha y llama a `registrar_decision`. Modo demo sin clave: lecturas guardadas para los 4 ejemplos y archivos propios siempre escalados. Panel 1 activo (subida, ejemplos, chat). Las 4 facturas de ejemplo dan normal → PAGAR, repetida → FRENAR, nuevo → SENIOR, orden escondida → ESCALAR. |
@@ -137,7 +142,11 @@ Cosas ya hechas que hay que **revisar, confirmar o corregir**:
 | P21 | Con una sola réplica y SQLite no hay alta disponibilidad: un reinicio corta la demo unos segundos. Las salas viejas no se purgan (AC7.4) | Aceptado para la entrega |
 | P18 | Las facturas de ejemplo dependen de la **fecha de hoy** (el calendario es de octubre de 2026 y la ventana es de ±5 días): la «normal» solo se paga sola entre el 9 y el 19 de octubre. Después saldrá «inesperada» y se escalará | Fijar la fecha de la demo si hace falta |
 | P19 | El agente no pregunta por la cuenta bancaria (DE2): solo se compara con los registros. Las imágenes siempre se escalan por no tener segunda lectura (EA3.3) | El equipo decide si basta |
+| P23 | **Specs de `main` sustituidas.** Las specs de `paneles-y-despliegue` (PD1 a PD12, PT1 a PT14) y de `extraccion-y-agente-de-entrada` que otra sesión subió a `main` (VER-0003) se reemplazaron por las de esta rama, que describen el código que existe. Siguen en el historial (`dc04e18`, `8bb35bb`). **El equipo debe confirmar cuáles specs valen**; la numeración y la interfaz pública del agente de entrada difieren | El equipo |
+| P24 | Los commits anteriores de esta rama no pasaron por el `verificador` (la regla llegó a `main` después); se verificó la rama completa de una vez | Saberlo |
 | P9 | **Decisiones abiertas DA1 a DA5** de `specs/acta-y-csv/requirements.md` (una fila por evento, cadena por sala, separador del CSV, reinicio de sala, sello público) | El equipo las confirma. Hay propuesta por defecto |
+| P10 | **Decisiones abiertas EXD1 a EXD6** de `specs/extraccion-y-agente-de-entrada/requirements.md` (OCR o segunda llamada para imágenes, si la alerta de órdenes cambia la decisión, idiomas, varias facturas por archivo, modelo, reformular preguntas con IA) | El equipo las confirma. Hay propuesta por defecto |
+| P11 | **Decisiones abiertas PDD1 a PDD6** de `specs/paneles-y-despliegue/requirements.md` (página de inicio, clave de demostración, refresco, rol administrador, OCR en Railway, idioma) | El equipo las confirma. Hay propuesta por defecto |
 
 ## 8. Próximas tareas
 
@@ -172,6 +181,7 @@ En orden. El detalle de cada tarea del motor está en `specs/motor-de-reglas/tas
 - **Nombres:** *motor de reglas* (nunca «jurado», que se confundía con los jurados del hackathon); *evaluadores* son quienes prueban la demo; *ficha*, *acta*, *sala*, *agente de entrada*, *agente de reglas*, *agente de conciliación*.
 - **Salidas:** `PAGAR`, `FRENAR`, `ESCALAR`. **Niveles:** `NINGUNO`, `PERSONA`, `SENIOR`. **Revisiones:** `OK`, `FALLA`, `AVISO`.
 - **Specs:** requisitos en notación EARS («CUANDO … EL SISTEMA DEBERÁ …»), cada criterio con número y al menos una prueba.
+- **Verificación:** antes de commitear o subir un cambio, pasarlo por la skill `verificador`. Deja un registro en `VERIFICACIONES.md`.
 - **Commits:** en español, un resumen corto y un párrafo que explique el porqué. Trailer `Co-Authored-By: Claude <noreply@anthropic.com>`, sin versión del modelo.
 - **Dinero:** `Decimal`, nunca `float`. Todo valor de ejemplo se marca como «supuesto».
 - **Un cambio de plan se escribe primero en la spec** y después en el código.

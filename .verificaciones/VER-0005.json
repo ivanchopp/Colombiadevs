@@ -1,0 +1,60 @@
+{
+  "id": "VER-0005",
+  "fecha": "2026-10-17T13:02:41-05:00",
+  "cambio": "Rama claude/focused-dirac-iurhyp: motor de reglas, acta, agente de entrada (Gemini o Claude), paneles y despliegue en Railway; fusion con main (gana la rama en conflictos)",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "engine",
+    "acta",
+    "agents",
+    "app",
+    "data",
+    "tests",
+    "specs",
+    "AVANCES.md",
+    "README.md",
+    "Dockerfile",
+    "railway.toml"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "specs/paneles-y-despliegue y specs/extraccion-y-agente-de-entrada",
+      "problema": "En la fusion se sustituyeron por las de esta rama las specs que otra sesion subio a main (PD1-PD12, PT1-PT14, interfaz publica del agente de entrada); siguen en el historial",
+      "correccion": "El equipo debe confirmar que specs valen (AVANCES P23)"
+    },
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "errores",
+      "ubicacion": "agents/lectura_ia.py",
+      "problema": "La lectura con IA real (Gemini y Claude) y la imagen de Docker/Railway no se han probado: solo clientes falsos y construccion de los clientes de los SDK sin red",
+      "correccion": "Correr python3 -m agents.probar con una clave y desplegar en Railway"
+    },
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "convenciones",
+      "ubicacion": "specs/extraccion-y-agente-de-entrada/requirements.md",
+      "problema": "Numeracion EA2b no consecutiva (la regla pide no saltarse ni reutilizar numeros)",
+      "correccion": "Renumerar si el equipo lo exige"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "acta/esquema_postgres.sql",
+      "problema": "Esquema PostgreSQL de main conservado pero sin conectar ni probar; el almacen es solo SQLite",
+      "correccion": "Pendiente P13"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "historial de la rama",
+      "problema": "Los commits previos no pasaron por el verificador porque la regla llego a main despues; se verifica la rama completa",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "pytest: 132 passed; python3 eval.py: 20/20, 0 pagos indebidos, 20/20 explicadas; busqueda de claves/tokens/.env/.db versionados: ninguno; float( en engine/acta/agents: solo el validador que lo rechaza; engine/evaluar, revisiones, canales y niveles sin red, IA, disco ni sqlite; todos los R-numeros citados existen en requirements.md; parametros autopago 3000000, techo 50000000 y presupuesto 100000000 coherentes entre reglas.yaml y techos.yaml; sin marcas de conflicto; arranque en entorno limpio con dependencias de produccion probado antes de la fusion",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "175774a71621e0d1ea96279568b0bc379aff43d2",
+  "reemplaza": null
+}

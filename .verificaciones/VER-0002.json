@@ -1,0 +1,14 @@
+{
+  "id": "VER-0002",
+  "fecha": "2026-10-17T11:10:28-05:00",
+  "cambio": "requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2)",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "specs/motor-de-reglas/requirements.md"
+  ],
+  "hallazgos": [],
+  "comprobaciones": "git diff revisado (1 línea, solo la fila D2); R3.6 y R5.2 existen y dicen lo que D2 afirma; coherente con design.md:117 (VER-0001); D2 sigue abierta, no se borra porque el equipo no la ha resuelto (regla 3 de specs/README.md); grep de secretos sin coincidencias; sin pruebas ni build que ejecutar. Cierra la advertencia de VER-0001.",
+  "rama": "claude/sweet-lamport-qcgutm",
+  "commit": "0aecd8ab0535d0766e0d6fd832daacb2df4ddd47",
+  "reemplaza": null
+}

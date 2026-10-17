@@ -74,9 +74,10 @@ Notación EARS en español: «CUANDO <evento>, EL MOTOR DE REGLAS DEBERÁ <respu
 **Historia:** como equipo, queremos que un error de lectura o un texto engañoso nunca produzca un pago.
 
 - **R2.1** SI la ficha no cumple el esquema cerrado, ENTONCES EL MOTOR DE REGLAS DEBERÁ devolver `ESCALAR` con la revisión `FALLA` «ficha inválida».
-- **R2.2** CUANDO la lectura de la IA y la segunda lectura no coincidan en beneficiario, monto, moneda o fecha de vencimiento, EL MOTOR DE REGLAS DEBERÁ devolver `ESCALAR`.
+- **R2.2** CUANDO la lectura de la IA y la segunda lectura no coincidan en beneficiario, monto, moneda o fecha de vencimiento, o la segunda lectura no esté disponible, EL MOTOR DE REGLAS DEBERÁ devolver `ESCALAR`.
 - **R2.3** CUANDO el valor aclarado de un campo difiera del original en monto o beneficiario, EL MOTOR DE REGLAS DEBERÁ marcar una diferencia y devolver `ESCALAR` con nivel `SENIOR`. Nunca reemplazará el valor original.
 - **R2.4** EL MOTOR DE REGLAS DEBERÁ decidir solo con los campos estructurados de la ficha. El texto libre de la factura o del chat no cambiará ninguna decisión.
+- **R2.5** CUANDO un campo obligatorio provenga solo de una aclaración del proveedor (`origen = aclarado`), EL MOTOR DE REGLAS DEBERÁ marcar `AVISO`, salvo que el valor coincida con los registros de la empresa (acuerdo o calendario).
 
 ### R3. Frenar
 **Historia:** como persona de finanzas, quiero que lo repetido o lo que no cuadra se frene solo, para no revisarlo a mano.
@@ -158,7 +159,7 @@ Notación EARS en español: «CUANDO <evento>, EL MOTOR DE REGLAS DEBERÁ <respu
 | # | Pregunta | Propuesta por defecto |
 |---|---|---|
 | D1 | ¿«No cuadra con lo acordado» frena o escala? | Zona gris: hasta 5 % pasa; de 5 % a 10 % escala a la persona; más de 10 % frena. |
-| D2 | ¿El gasto del periodo cuenta lo pendiente de aprobación? | Cuenta lo pagado y lo aprobado. Lo pendiente no, hasta que se apruebe. |
+| D2 | ¿El gasto del periodo cuenta lo pendiente de aprobación? | Cuenta lo pagado y lo aprobado. Lo pendiente no, hasta que se apruebe. Aplica solo al presupuesto (R3.6); el nivel de aprobación (R5.2) sí cuenta lo pendiente. |
 | D3 | ¿Qué es «periodo»? | Mes calendario en `America/Bogota`. |
 | D4 | ¿Quién es el «preparador» para separar funciones? | Quien subió o cargó el caso en la demo, o el rol que cambió la regla. |
 | D5 | ¿Los valores por defecto de la tabla anterior? | Son de demostración. Se pueden cambiar sin tocar el código. |
