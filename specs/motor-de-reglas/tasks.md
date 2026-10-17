@@ -68,7 +68,7 @@ flowchart TD
 ### T4. Entrada y frenar
 - **Dueño:** A · **Estimación:** 1,5 h · **Capa:** núcleo
 - `engine/revisiones/entrada.py` y `frenar.py`: esquema, lecturas que coinciden, diferencias, duplicado, acuerdo con tolerancias, presupuesto y techo duro.
-- **Cubre:** R2.1 a R2.4, R3.1 a R3.7
+- **Cubre:** R2.1 a R2.5, R3.1 a R3.7
 - **Listo cuando:** `tests/test_entrada.py` y `tests/test_frenar.py` pasan.
 
 ### T5. Beneficiario, montos y niveles

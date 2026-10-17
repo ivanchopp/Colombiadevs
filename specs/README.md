@@ -24,7 +24,7 @@ Cada criterio tiene un número (por ejemplo R3.1) y debe tener al menos una prue
 | Spec | Estado |
 |---|---|
 | `motor-de-reglas` | Borrador para revisión |
-| `extraccion-y-agente-de-entrada` | Pendiente |
+| `extraccion-y-agente-de-entrada` | Borrador para revisión |
 | `acta-y-csv` | Borrador para revisión |
 | `paneles-y-despliegue` | Pendiente |
 

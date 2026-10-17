@@ -49,8 +49,12 @@ class Ficha(BaseModel):
     cuenta_original: str | None
     cuenta_aclarada: str | None
     valores_aclarados: dict[str, Any]  # solo campos que el agente aclaró
+    origen_campos: dict[str, Literal["factura", "aclarado"]]   # de dónde salió cada campo
     lectura_ia: Literal["ok", "dudosa"]
-    segunda_lectura: Literal["coincide", "no_coincide"]
+    segunda_lectura: Literal["coincide", "no_coincide", "no_disponible"]
+    campos_diferentes: list[str] = []  # los que la segunda lectura vio distintos
+    alerta_inyeccion: bool = False     # solo informa; el motor no lee el texto libre
+    aclaraciones: list[dict] = []      # turnos con el proveedor, para el detalle y el acta
     preparador: str                  # quién subió el caso (R8.2)
 
 class Revision(BaseModel):

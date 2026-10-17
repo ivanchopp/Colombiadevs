@@ -74,9 +74,10 @@ Notación EARS en español: «CUANDO <evento>, EL MOTOR DE REGLAS DEBERÁ <respu
 **Historia:** como equipo, queremos que un error de lectura o un texto engañoso nunca produzca un pago.
 
 - **R2.1** SI la ficha no cumple el esquema cerrado, ENTONCES EL MOTOR DE REGLAS DEBERÁ devolver `ESCALAR` con la revisión `FALLA` «ficha inválida».
-- **R2.2** CUANDO la lectura de la IA y la segunda lectura no coincidan en beneficiario, monto, moneda o fecha de vencimiento, EL MOTOR DE REGLAS DEBERÁ devolver `ESCALAR`.
+- **R2.2** CUANDO la lectura de la IA y la segunda lectura no coincidan en beneficiario, monto, moneda o fecha de vencimiento, o la segunda lectura no esté disponible, EL MOTOR DE REGLAS DEBERÁ devolver `ESCALAR`.
 - **R2.3** CUANDO el valor aclarado de un campo difiera del original en monto o beneficiario, EL MOTOR DE REGLAS DEBERÁ marcar una diferencia y devolver `ESCALAR` con nivel `SENIOR`. Nunca reemplazará el valor original.
 - **R2.4** EL MOTOR DE REGLAS DEBERÁ decidir solo con los campos estructurados de la ficha. El texto libre de la factura o del chat no cambiará ninguna decisión.
+- **R2.5** CUANDO un campo obligatorio provenga solo de una aclaración del proveedor (`origen = aclarado`), EL MOTOR DE REGLAS DEBERÁ marcar `AVISO`, salvo que el valor coincida con los registros de la empresa (acuerdo o calendario).
 
 ### R3. Frenar
 **Historia:** como persona de finanzas, quiero que lo repetido o lo que no cuadra se frene solo, para no revisarlo a mano.
