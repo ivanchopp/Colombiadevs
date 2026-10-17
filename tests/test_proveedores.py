@@ -12,10 +12,10 @@ PROVS = yaml.safe_load((Path(__file__).resolve().parent.parent / "data" / "prove
 
 def test_oc1_1_campos_y_cuenta_ficticia():
     p = PROVS["proveedores"]
-    assert PROVS["supuesto"] is True and len(p) == 200
+    assert PROVS["supuesto"] is True and len(p) == 156
     assert all(set(x) == {"id", "nombre", "pais", "id_tributaria", "tipo_id", "cuenta", "marcas"} for x in p)
     assert all(x["cuenta"].startswith("Cuenta demo") for x in p)
-    assert len({x["id"] for x in p}) == 200 and len({x["nombre"] for x in p}) == 200
+    assert len({x["id"] for x in p}) == 156 and len({x["nombre"] for x in p}) == 156
 
 
 def test_oc1_2_sin_datos_de_contacto():
@@ -23,9 +23,10 @@ def test_oc1_2_sin_datos_de_contacto():
     assert "@" not in texto and "+57" not in texto and "+52" not in texto
 
 
-def test_oc1_3_y_oc1_4_marcas_del_listado():
+def test_oc1_3_y_oc1_4_listado_de_validos_sin_marcas():
+    # El listado del 17 oct, 18:42, trae solo proveedores válidos: ninguna identificación repetida ni inválida.
     marcas = Counter(m for x in PROVS["proveedores"] for m in x["marcas"])
-    assert marcas == {"identificacion_repetida": 20, "identificacion_invalida": 30}
+    assert marcas == {}
 
 
 @pytest.mark.parametrize("tipo, pais, valor, esperado", [
