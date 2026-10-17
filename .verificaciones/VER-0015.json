@@ -1,0 +1,29 @@
+{
+  "id": "VER-0015",
+  "fecha": "2026-10-17T16:23:14-05:00",
+  "cambio": "AVANCES.md: se registra el despliegue en Railway probado (salud, Gemini activo, FECHA_DEMO), se cierra P20, se acotan P17 y P18 y se actualizan próximas tareas",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "convenciones",
+      "ubicacion": "AVANCES.md:14",
+      "problema": "La sección 1 dice que la última verificación es VER-0011, pero ya existen VER-0013 y VER-0014 (deuda previa, no de este cambio)",
+      "correccion": "Actualizar la cifra al registrar la siguiente verificación"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "AVANCES.md:6",
+      "problema": "La línea del repositorio sigue diciendo PR #7 como último; ya entró el PR #9 (deuda previa)",
+      "correccion": "Actualizar en la próxima revisión de documentación"
+    }
+  ],
+  "comprobaciones": "git diff revisado completo; solo cambia AVANCES.md, sin código; búsqueda de claves/tokens en el archivo sin coincidencias; afirmaciones del despliegue contrastadas con lo observado en la prueba (se corrigió una que sobrestimaba: cuatro botones leídos sin errores); no hay pruebas ejecutables en este entorno (pytest no instalado), eval.py da 20/20 y 0 pagos indebidos",
+  "rama": "claude/friendly-cerf-aygx2r",
+  "commit": "014409d8b6e7a85c35f8ff33f7b1fe29f66d8ed7",
+  "reemplaza": null
+}

@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0015 | 2026-10-17 16:23 | APROBADO | AVANCES.md: se registra el despliegue en Railway probado (salud, Gemini activo, FECHA_DEMO), se cierra P20, se acotan P17 y P18 y se actualizan próximas tareas | 0 | 1 | 014409d | — |
 | VER-0014 | 2026-10-17 16:02 | APROBADO | FACTURAS_MAX configurable (EA1.5), aviso del Panel 1 sin la palabra demo, diagnostico sin falsos positivos de otros servicios, y fusion de main con renumeracion de VER-0010 a VER-0012; specs y AVANCES al dia | 0 | 1 | 5fba303 | — |
 | VER-0013 | 2026-10-17 14:02 | APROBADO | Linea de diagnostico de la IA en el Panel 1 (?diagnostico=1): proveedor, motivo del modo demo, estado de cada variable sin mostrar valores, nombres parecidos y datos del despliegue; espacios en claves ignorados; spec EA2b.6-8 y AVANCES | 0 | 1 | 67eb333 | — |
 | VER-0012 | 2026-10-17 16:00 | APROBADO | Revisión de la documentación: estado (164 pruebas, PR #7), mapa del repositorio, alcance de órdenes de compra, README (página de reglas) e índice de specs | 0 | 0 | 7527f07 | — |
@@ -18,6 +19,11 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0015 — APROBADO
+
+- **ADVERTENCIA** (convenciones) `AVANCES.md:14`: La sección 1 dice que la última verificación es VER-0011, pero ya existen VER-0013 y VER-0014 (deuda previa, no de este cambio) → Actualizar la cifra al registrar la siguiente verificación
+- **NOTA** (errores) `AVANCES.md:6`: La línea del repositorio sigue diciendo PR #7 como último; ya entró el PR #9 (deuda previa) → Actualizar en la próxima revisión de documentación
 
 ## VER-0014 — APROBADO
 
