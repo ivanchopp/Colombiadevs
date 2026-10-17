@@ -1,0 +1,35 @@
+{
+  "id": "VER-0003",
+  "fecha": "2026-10-17T11:20:00-05:00",
+  "cambio": "Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "specs/paneles-y-despliegue/requirements.md",
+    "specs/paneles-y-despliegue/design.md",
+    "specs/paneles-y-despliegue/tasks.md",
+    "specs/extraccion-y-agente-de-entrada/design.md",
+    "specs/README.md",
+    "AVANCES.md",
+    "CLAUDE.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "errores",
+      "ubicacion": "specs/paneles-y-despliegue/design.md",
+      "problema": "Los nombres de opciones de Streamlit y Railway (run_every, query_params, healthcheckPath, startCommand) no se pudieron comprobar contra la documentación desde este entorno",
+      "correccion": "Confirmarlos en la documentación y la versión instalada antes de fijarlos; la spec ya lo indica"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "convenciones",
+      "ubicacion": "specs/paneles-y-despliegue/requirements.md",
+      "problema": "Los valores de la tabla de parámetros son de demostración y están marcados así",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "Numeración continua sin huecos en las 4 specs (53, 51, 56 y 74 criterios); referencias R, AC, EX, PD y tareas T, AT, ET, PT existen; cada criterio PD tiene tarea; búsqueda de claves, contraseñas y cadenas de conexión sin coincidencias; no hay código ni pruebas que ejecutar; PDFs de docs/ sin cambios en este commit",
+  "rama": "main",
+  "commit": "24f10395a2795c0a51cf42135885685c33d8b479",
+  "reemplaza": null
+}
