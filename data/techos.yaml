@@ -1,0 +1,4 @@
+# Techos duros: no se cambian por chat ni se aprueban desde el sistema (R3.7, R8.3, R9.5).
+# Solo ingeniería los edita. Valor de demostración («supuesto»).
+supuesto: true
+techo_duro_pago: 50000000

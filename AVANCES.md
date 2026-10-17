@@ -2,7 +2,7 @@
 
 > **Si eres un chat nuevo de Claude Code, empieza aquí.** Este archivo es la memoria del proyecto: qué se quiere hacer, qué ya se hizo, qué falta y qué sigue. Léelo completo antes de tocar nada y **actualízalo al terminar cada cambio** (ver «Cómo mantener este archivo»).
 
-**Última actualización:** sáb 17 oct 2026, 12:00 (hora Bogotá)
+**Última actualización:** sáb 17 oct 2026, 12:45 (hora Bogotá)
 **Entrega:** **dom 18 oct 2026, 8:00 a. m. (hora Bogotá).** Objetivo: enviar a las 7:00.
 **Repositorio:** https://github.com/ivanchopp/Colombiadevs (rama `main`, no hay otras)
 
@@ -14,7 +14,7 @@
 - **De dónde viene:** el *Reto Blinka, «Agentes que pagan por la empresa»* (Hackathon 30X, HackRadar). Blinka es una fintech colombiana en EE. UU. con cuentas en USD y pagos a Latinoamérica.
 - **Idea central:** la IA solo **lee y redacta**. Un programa normal, el **motor de reglas**, **decide**. Ante la duda, el resultado es **escalar, nunca pagar**.
 - **Equipo:** 4 personas. Reparto sugerido: **A** motor y pruebas · **B** agentes con IA · **C** pantallas · **D** datos, evaluación y pitch.
-- **Estado del código:** **todavía no hay código.** Hay documentos de diseño, una guía de plan y las specs del motor de reglas.
+- **Estado del código:** **hay un esqueleto** (`engine/`, `acta/`, `agents/entrada/`, `app/`, `tests/`, 45 pruebas pasan). Lo implementado: modelos, `evaluar` fail-safe, niveles, carga de reglas, huellas, esquema del acta, salas, CSV seguro, defensa de entrada, plantillas y un Panel 1/2 mínimos. Todo lo demás son stubs que levantan `NotImplementedError("Tarea X")`. PostgreSQL y Railway **sin probar**.
 
 ## 2. Lo que no se negocia
 
@@ -86,6 +86,7 @@ Lo más reciente va arriba.
 
 | Cuándo | Commit | Qué se hizo |
 |---|---|---|
+| 17 oct | *(este commit)* | **Esqueleto del código**: configuración, datos semilla, paquetes `engine`, `acta`, `agents/entrada`, `app`, `init_db.py`, `prueba_humo.py`, README y 45 pruebas. Corregido en el camino: una revisión OK que exige nivel ahora también cuenta para el nivel (`evaluar`). Stubs nombran la tarea que los completa. |
 | 17 oct | *(este commit)* | Specs de `paneles-y-despliegue`: 12 bloques de requisitos (PD1 a PD12), diseño con la sala, los dos paneles, el refresco, Railway y la prueba de humo, y 14 tareas (PT1 a PT14). **Ya están las 4 specs.** |
 | 17 oct | `7392522` | Se fusionó el PR #1 de otra sesión de Claude Code: skill **`verificador`** (`3d9b7b3`), `monto_para_nivel` alineado con R5.2 (`0aecd8a`) y aclaración de D2 (`0b5e422`). Quedaron registradas VER-0001 y VER-0002. |
 | 17 oct | `8bb35bb` | Specs de `extraccion-y-agente-de-entrada`: 9 bloques de requisitos (EX1 a EX9), diseño con segunda lectura, plantillas de preguntas y defensa contra órdenes escondidas, y 11 tareas (ET1 a ET11). Se ajustó la spec del motor: R2.2, nuevo R2.5 y campos nuevos de la ficha. Falta 1 spec. |
@@ -125,7 +126,7 @@ En orden. El detalle de cada tarea del motor está en `specs/motor-de-reglas/tas
 
 1. **Revisar y aprobar** las specs `motor-de-reglas` (resolver D1 a D5) `acta-y-csv` (resolver DA1 a DA5) y `extraccion-y-agente-de-entrada` (resolver EXD1 a EXD6) y `paneles-y-despliegue` (resolver PDD1 a PDD6).
 2. **Escribir las specs que faltan** (máx. 90 min en total, sin repetir el diseño): ~~`acta-y-csv`~~, ~~`extraccion-y-agente-de-entrada`~~ y ~~`paneles-y-despliegue`~~ (**las 4 specs ya tienen borrador**).
-3. **Despliegue de prueba en Railway (tarea PT1, antes que cualquier pantalla):** app mínima que lea la clave, llame al modelo una vez y guarde una fila. Abrirla desde otro computador.
+3. **Despliegue de prueba en Railway (PT1; el esqueleto ya existe, falta desplegarlo y probar PostgreSQL) (tarea PT1, antes que cualquier pantalla):** app mínima que lea la clave, llame al modelo una vez y guarde una fila. Abrirla desde otro computador.
 4. **Ola 0 del motor:** T1 modelos y esquemas (A), T2 datos semilla (D), T3 20 casos de prueba con decisión esperada (D).
 5. **Ola 1:** T4 entrada y frenar, T5 beneficiario, montos y niveles, T10 cargar reglas. Luego T8 orquestador, T9 guardarraíl, T13 pruebas de propiedades, T14 `eval.py`, T15 conexión con el acta.
 6. **Control de las 18:00:** correr `eval.py`. Si los casos trampa pasan, se suma el enrutador de canal (T7) y, con tiempo, las piezas de la capa 3. Si no pasan, esas horas se usan para corregir el motor.

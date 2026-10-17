@@ -1,0 +1,16 @@
+# Reglas vigentes. TODOS los valores son de demostración («supuesto») y se pueden cambiar sin tocar el código.
+# Spec: specs/motor-de-reglas/requirements.md, «Parámetros por defecto».
+version: "v1"
+vigente_desde: 2026-10-01
+vigente_hasta: null
+supuesto: true
+
+moneda_base: COP
+autopago_max: 3000000                # hasta aquí se paga solo si todo está OK
+persona_max: 10000000                # hasta aquí aprueba la persona de finanzas; más, el senior
+limite_periodo_beneficiario: 15000000
+presupuesto_periodo: 100000000
+tolerancia_ok: 0.05                  # diferencia con lo acordado que se acepta
+tolerancia_frenar: 0.10              # por encima de esto se frena
+ventana_dias: 5                      # margen de fecha para emparejar con el calendario
+dias_gracia: 2                       # días después de lo esperado para marcar «atrasada»
