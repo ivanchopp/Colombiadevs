@@ -49,7 +49,7 @@ Son **valores de demostración**, editables en `reglas.yaml`. Ninguno es un dato
 | `persona_max` | 10.000.000 | Hasta aquí aprueba la persona de finanzas; más, el senior |
 | `techo_duro_pago` | 50.000.000 | Por encima no se paga desde el sistema |
 | `limite_periodo_beneficiario` | 15.000.000 | Suma máxima por beneficiario y periodo sin senior |
-| `presupuesto_periodo` | 40.000.000 | Gasto máximo del periodo |
+| `presupuesto_periodo` | 100.000.000 | Gasto máximo del periodo |
 | `tolerancia_ok` | 5 % | Diferencia con lo acordado que se acepta |
 | `tolerancia_frenar` | 10 % | Por encima de esto, la factura se frena |
 | `ventana_dias` | ±5 | Margen de fecha para emparejar con el calendario |
@@ -162,11 +162,3 @@ Notación EARS en español: «CUANDO <evento>, EL MOTOR DE REGLAS DEBERÁ <respu
 | D3 | ¿Qué es «periodo»? | Mes calendario en `America/Bogota`. |
 | D4 | ¿Quién es el «preparador» para separar funciones? | Quien subió o cargó el caso en la demo, o el rol que cambió la regla. |
 | D5 | ¿Los valores por defecto de la tabla anterior? | Son de demostración. Se pueden cambiar sin tocar el código. |
-
-## Ajustes pendientes en «Ruta de una factura»
-
-Al escribir esta spec salieron tres inconsistencias en las maquetas del documento. Hay que corregirlas para que los ejemplos coincidan con las reglas:
-
-1. **Umbrales:** la cola de aprobación y el acta hablan de un «umbral de la persona de finanzas» de 3 M. Con esta spec, 3 M es el **umbral de pago automático** y el de la persona es 10 M. El motivo de la F-1045 debería decir «beneficiario nuevo» y no solo «el monto supera el umbral».
-2. **Presupuesto:** con un presupuesto de 25 M y un gasto de 18,4 M, la F-1045 (9,6 M) se pasaría y se frenaría por falta de presupuesto. En el ejemplo conviene subir el presupuesto, por ejemplo a 40 M.
-3. **Cambio de umbral en el acta:** la fila «Umbral de la persona: 3 M → 5 M» debería leerse «Umbral de pago automático: 3 M → 5 M». Es un cambio que afloja, por eso lleva la firma del senior.
