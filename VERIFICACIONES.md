@@ -4,22 +4,11 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
-| VER-0007 | 2026-10-17 13:41 | APROBADO | Guion del pitch de 2 a 3 minutos (docs/pitch-guion.md) y actualización de AVANCES.md | 0 | 0 | 54ed1ee | — |
-| VER-0006 | 2026-10-17 13:28 | APROBADO | Instala y adapta las skills sales-narrative y storytelling para el pitch de ventas; actualiza AVANCES.md | 0 | 0 | 77a8763 | — |
 | VER-0005 | 2026-10-17 13:02 | APROBADO | Rama claude/focused-dirac-iurhyp: motor de reglas, acta, agente de entrada (Gemini o Claude), paneles y despliegue en Railway; fusion con main (gana la rama en conflictos) | 0 | 3 | 175774a | — |
 | VER-0004 | 2026-10-17 11:29 | APROBADO | Esqueleto del código (engine, acta, agents/entrada, app, tests) | 0 | 0 | 682827e | — |
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
-
-## VER-0007 — APROBADO
-
-- **NOTA** (alcance) `docs/pitch-guion.md`: El guion depende de FECHA_DEMO (P18) y del modo demo sin clave (P17) → Lista de revisión previa en el propio guion
-
-## VER-0006 — APROBADO
-
-- **NOTA** (errores) `.claude/skills/storytelling/SKILL.md:44`: El ejemplo citaba 8 M COP y la factura de ejemplo es de 7,2 M COP → Corregido a 7,2 M COP antes de registrar
-- **NOTA** (alcance) `.claude/skills/sales-narrative/SKILL.md`: Contenido de terceros (MIT, guia-matthieu/clawfu-skills y gtmagents/gtm-agents); solo Markdown, sin scripts → Se revisó completo y se quitó el texto ajeno (producción de audio); atribución en el encabezado de cada skill
 
 ## VER-0005 — APROBADO
 
