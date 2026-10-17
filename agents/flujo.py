@@ -1,6 +1,7 @@
 """Flujo del agente de entrada: recibir, preguntar, armar la ficha y llamar al motor.
 
 El agente NO decide: entrega la ficha a engine.guardarrail.registrar_decision (EA6)."""
+import os
 from decimal import Decimal
 
 from pydantic import ValidationError
@@ -14,7 +15,17 @@ from . import aclaraciones, archivo, ejemplos, lectura_ia, segunda_lectura
 from .estado import EstadoEntrada
 from .seguridad import detectar_orden
 
-FACTURAS_MAX = 5
+FACTURAS_MAX_DEFECTO = 5
+FACTURAS_MAX_TOPE = 100
+
+
+def facturas_max() -> int:
+    """Facturas permitidas por sala. `FACTURAS_MAX` lo cambia; un valor inválido se ignora (EA1.5)."""
+    try:
+        valor = int(os.environ.get("FACTURAS_MAX", "").strip())
+    except ValueError:
+        return FACTURAS_MAX_DEFECTO
+    return valor if 1 <= valor <= FACTURAS_MAX_TOPE else FACTURAS_MAX_DEFECTO
 ORDEN_CAMPOS = ["monto", "beneficiario", "moneda", "vence", "numero"]
 
 
@@ -50,8 +61,9 @@ def modo_demo() -> bool:
 def recibir(almacen, sala_id, nombre, datos, cliente=None, clave_ejemplo=None) -> dict:
     estados = EstadoEntrada(almacen)
     existentes = estados.listar(sala_id)
-    if len(existentes) >= FACTURAS_MAX:
-        raise EntradaRechazada(f"Ya usaste las {FACTURAS_MAX} facturas permitidas en esta demo.")
+    limite = facturas_max()
+    if len(existentes) >= limite:
+        raise EntradaRechazada(f"Ya usaste las {limite} facturas permitidas en esta sala.")
     try:
         tipo = archivo.validar(nombre, datos)
     except archivo.ArchivoRechazado as e:

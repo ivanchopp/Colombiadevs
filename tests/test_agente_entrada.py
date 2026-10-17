@@ -58,7 +58,7 @@ def test_ea1_2_extension_distinta_del_contenido():
 
 
 def test_ea1_3_limite_por_sala(almacen, sala):
-    for _ in range(flujo.FACTURAS_MAX):
+    for _ in range(flujo.facturas_max()):
         flujo.recibir_ejemplo(almacen, sala, "normal")
     with pytest.raises(flujo.EntradaRechazada, match="permitidas"):
         flujo.recibir_ejemplo(almacen, sala, "normal")
@@ -444,9 +444,9 @@ def test_ea2b_7_detecta_nombres_parecidos_pero_distintos():
     from agents.lectura_ia import diagnostico
     env = {"GEMINI_APY_KEY": "x", "GOOGLE_KEY": "y", "RAILWAY_SERVICE_NAME": "app", "PATH": "/usr/bin",
            "GEMINI_API_KEY": "bien", "ANTHROPIC_BASE_URL": "https://legitima", "CLAUDE_CONFIG_DIR": "/x",
-           "API_KEY": "z"}
+           "API_KEY": "z", "MAPBOX_API_KEY": "otro-servicio", "OPENAI_API_KEY": "otro"}
     d = diagnostico(env)
-    assert d["parecidas"] == ["API_KEY", "GEMINI_APY_KEY", "GOOGLE_KEY"]      # no marca la correcta, RAILWAY_, PATH ni URL/DIR legítimas
+    assert d["parecidas"] == ["GEMINI_APY_KEY", "GOOGLE_KEY"]          # ni la correcta, ni RAILWAY_, PATH, URL/DIR legítimas, ni claves de otros servicios (EA2b.7)
     assert diagnostico({"GEMINI_API_KEY": "   "})["claves"]["GEMINI_API_KEY"] == "vacía (solo espacios)"
     assert diagnostico({})["claves"]["GEMINI_API_KEY"] == "no definida"
 
@@ -489,3 +489,48 @@ def test_ea2b_6_el_aviso_de_demo_explica_como_ver_el_motivo(tmp_path, monkeypatc
     at = AppTest.from_file(str(Path(__file__).resolve().parent.parent / "app" / "Panel_1_Proveedor.py"),
                            default_timeout=30).run()
     assert any("?diagnostico=1" in c.value for c in at.caption)
+
+
+# EA1.5: límite de facturas configurable
+@pytest.mark.parametrize("valor,esperado", [
+    (None, 5), ("", 5), ("12", 12), (" 7 ", 7), ("1", 1), ("100", 100),
+    ("0", 5), ("-3", 5), ("101", 5), ("abc", 5), ("2.5", 5), ("1e3", 5)])
+def test_ea1_5_el_limite_se_cambia_con_la_variable(monkeypatch, valor, esperado):
+    if valor is None:
+        monkeypatch.delenv("FACTURAS_MAX", raising=False)
+    else:
+        monkeypatch.setenv("FACTURAS_MAX", valor)
+    assert flujo.facturas_max() == esperado
+
+
+def test_ea1_5_el_limite_configurado_se_aplica_y_el_mensaje_lo_dice(almacen, sala, monkeypatch):
+    monkeypatch.setenv("FACTURAS_MAX", "2")
+    flujo.recibir_ejemplo(almacen, sala, "normal")
+    flujo.recibir_ejemplo(almacen, sala, "repetida")
+    with pytest.raises(flujo.EntradaRechazada, match="2 facturas permitidas"):
+        flujo.recibir_ejemplo(almacen, sala, "beneficiario_nuevo")
+    monkeypatch.setenv("FACTURAS_MAX", "3")                      # subir el límite deja seguir
+    assert flujo.recibir_ejemplo(almacen, sala, "beneficiario_nuevo")["factura_id"] == "F-2003"
+
+
+def test_ea1_5_un_valor_invalido_no_abre_la_compuerta(almacen, sala, monkeypatch):
+    monkeypatch.setenv("FACTURAS_MAX", "999999")                  # fuera de rango: vuelve a 5
+    for clave in ["normal", "repetida", "beneficiario_nuevo", "orden_escondida", "normal"]:
+        flujo.recibir_ejemplo(almacen, sala, clave)
+    with pytest.raises(flujo.EntradaRechazada):
+        flujo.recibir_ejemplo(almacen, sala, "normal")
+
+
+def test_ea1_5_el_panel_muestra_el_limite_configurado_y_el_diagnostico_lo_lista(tmp_path, monkeypatch):
+    from pathlib import Path
+    from streamlit.testing.v1 import AppTest
+    monkeypatch.setenv("ACTA_DB", str(tmp_path / "p.db"))
+    monkeypatch.setenv("FACTURAS_MAX", "12")
+    at = AppTest.from_file(str(Path(__file__).resolve().parent.parent / "app" / "Panel_1_Proveedor.py"),
+                           default_timeout=30)
+    at.query_params["diagnostico"] = "1"
+    at.run()
+    info = " ".join(i.value for i in at.info)
+    texto = " ".join(x.value for x in at.text)
+    assert "Has usado 0 de 12 facturas permitidas" in info and "demo" not in info.lower()
+    assert "FACTURAS_MAX: 12" in texto

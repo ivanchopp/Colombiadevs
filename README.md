@@ -57,6 +57,7 @@ La app se despliega con el `Dockerfile` y `railway.toml` de este repositorio. Pa
 2. **Agrega un volumen** al servicio (Service → Volumes) montado en `/data`. Ahí se guarda el acta. Railway define solo `RAILWAY_VOLUME_MOUNT_PATH`. **Sin volumen, los datos se pierden en cada reinicio.**
 3. **Variables** (Service → Variables). Los nombres están en `.env.example`:
    - `GEMINI_API_KEY` (ahora) o `ANTHROPIC_API_KEY` (después): para leer facturas con la IA real. Sin clave, modo demo. Ver «IA para leer facturas».
+   - `FACTURAS_MAX` (opcional): facturas que cada sala puede subir, de 1 a 100 (por defecto 5). Cada una gasta una llamada de IA, así que súbelo con cuidado. No es un tope de gasto real: ese se pone en Google AI Studio o Google Cloud.
    - `FECHA_DEMO=2026-10-17`: recomendado. Fija «hoy» para que el calendario y las reglas no dependan del día en que se pruebe.
 4. **Settings → Networking → Generate Domain** para tener el enlace público.
 5. Déjalo en **una sola réplica** (el acta usa SQLite sobre el volumen).

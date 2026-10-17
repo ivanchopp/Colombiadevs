@@ -77,10 +77,10 @@ def descripcion_proveedor() -> str:
 
 
 CLAVES = ("GEMINI_API_KEY", "GOOGLE_API_KEY", "ANTHROPIC_API_KEY")        # su valor NUNCA se muestra
-AJUSTES = ("PROVEEDOR_IA", "ENTRADA_MODO", "MODELO_GEMINI", "MODELO_ENTRADA", "FECHA_DEMO")   # no son secretos
+AJUSTES = ("PROVEEDOR_IA", "ENTRADA_MODO", "MODELO_GEMINI", "MODELO_ENTRADA", "FECHA_DEMO", "FACTURAS_MAX")   # no son secretos
 DESPLIEGUE = (("entorno", "RAILWAY_ENVIRONMENT_NAME"), ("servicio", "RAILWAY_SERVICE_NAME"),
               ("commit", "RAILWAY_GIT_COMMIT_SHA"))
-PARECE_DE_IA = re.compile(r"GEMINI|GENAI|(GOOGLE|ANTHROPIC|CLAUDE|API).*KEY|KEY.*(GOOGLE|ANTHROPIC|CLAUDE|API)", re.I)
+PARECE_DE_IA = re.compile(r"GEMINI|GENAI|(GOOGLE|ANTHROPIC|CLAUDE).*KEY|KEY.*(GOOGLE|ANTHROPIC|CLAUDE)", re.I)
 
 
 def diagnostico(env=None) -> dict:

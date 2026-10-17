@@ -15,7 +15,7 @@ encabezado("Panel 1 · Portal del proveedor", sala)
 
 estados = EstadoEntrada(almacen())
 facturas = estados.listar(sala)
-st.info(f"Demo con datos ficticios. Has usado {len(facturas)} de {flujo.FACTURAS_MAX} facturas permitidas.")
+st.info(f"Datos ficticios, solo para práctica. Has usado {len(facturas)} de {flujo.facturas_max()} facturas permitidas.")
 if not flujo.modo_demo():
     st.caption(f"Lectura de facturas con IA: {flujo.lectura_ia.descripcion_proveedor()}.")
 else:

@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0013 | 2026-10-17 16:02 | APROBADO | FACTURAS_MAX configurable (EA1.5), aviso del Panel 1 sin la palabra demo, diagnostico sin falsos positivos de otros servicios, y fusion de main con renumeracion de VER-0010 a VER-0012; specs y AVANCES al dia | 0 | 1 | 5fba303 | — |
 | VER-0012 | 2026-10-17 14:02 | APROBADO | Linea de diagnostico de la IA en el Panel 1 (?diagnostico=1): proveedor, motivo del modo demo, estado de cada variable sin mostrar valores, nombres parecidos y datos del despliegue; espacios en claves ignorados; spec EA2b.6-8 y AVANCES | 0 | 1 | 67eb333 | — |
 | VER-0011 | 2026-10-17 15:40 | APROBADO | Registro de proveedores (OT1, parte de proveedores): importar_compras.py, data/proveedores.yaml con 200 proveedores y pruebas; spec con OCD12 | 0 | 2 | 2f7c3df | — |
 | VER-0010 | 2026-10-17 14:24 | APROBADO | Spec nueva ordenes-de-compra (OC1 a OC8, diseño, OT1 a OT7, decisiones OCD1 a OCD11) y enlaces en specs/README, motor-de-reglas y AVANCES | 0 | 1 | 67eb333 | — |
@@ -16,6 +17,12 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0013 — APROBADO
+
+- **ADVERTENCIA** (seguridad) `agents/flujo.py`: FACTURAS_MAX no es un tope de gasto: limita las facturas por sala, pero cada sala nueva recibe otras tantas, y subirlo aumenta las llamadas reales a la IA → Poner una cuota en Google AI Studio o Google Cloud (AVANCES P27)
+- **NOTA** (errores) `.verificaciones/VER-0010.json`: La fusion con main encontro dos VER-0010 distintos; el de main conserva su ID y el de esta rama se renumero a VER-0012 antes de llegar a main; la tabla se regenero con el script del verificador → Ninguna
+- **NOTA** (convenciones) `agents/lectura_ia.py`: El diagnostico ya no detecta nombres parecidos de claves genericas (API_KEY) ni de otros servicios; solo Gemini, Google y Anthropic → Ampliar PARECE_DE_IA si hace falta
 
 ## VER-0012 — APROBADO
 
