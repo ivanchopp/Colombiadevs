@@ -186,3 +186,4 @@ flowchart TD
 | T15 | Hecho |
 | T11 | Hecho: `engine/simular.py`, vista previa de la página de reglas (PP8.3) |
 | T12 | Parcial: afloja/restringe y techo duro hechos (`reglas_io.cambios_que_aflojan`, `validar_cambio`); faltan conflictos por especificidad |
+| T16 | Hecho: moneda base USD y configurable (R5.6 a R5.8); `tests/test_moneda_base.py` |

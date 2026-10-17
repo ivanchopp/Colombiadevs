@@ -24,7 +24,7 @@ def tablero():
     facturas = facturas_por_estado(filas)
     ctx, reglas = contexto_y_reglas(filas)
     atrasadas = sum(e["estado"] == "atrasada" for e in estados_calendario(ctx, reglas))
-    c = cifras(filas, atrasadas)
+    c = cifras(filas, atrasadas, reglas.presupuesto_periodo)
 
     if not comprobar_consistencia(filas):
         st.error("Aviso: el tablero y el CSV no coinciden con el acta. No confíes en estas cifras.")
@@ -35,9 +35,9 @@ def tablero():
     m[2].metric("Pendientes de aprobación", c.pendientes)
     m[3].metric("Esperadas atrasadas", c.atrasadas)
     st.progress(min(float(c.porcentaje) / 100, 1.0),
-                text=f"Gasto del periodo frente al límite: {formato_monto(c.gasto, 'COP')} de "
-                     f"{formato_monto(c.presupuesto, 'COP')} · {c.porcentaje} %")
-    st.caption(f"Todo en pesos colombianos como moneda base · tasas de cambio, canales y costos de ejemplo "
+                text=f"Gasto del periodo frente al límite: {formato_monto(c.gasto, reglas.moneda_base)} de "
+                     f"{formato_monto(c.presupuesto, reglas.moneda_base)} · {c.porcentaje} %")
+    st.caption(f"Todo en {reglas.moneda_base} como moneda base · tasas de cambio, canales y costos de ejemplo "
                f"(supuestos) · actualizado {c.actualizado[11:19]} UTC")
 
     datos = [{

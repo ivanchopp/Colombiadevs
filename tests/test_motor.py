@@ -37,7 +37,7 @@ def con_historial(ctx, *movs):
 
 
 def mov(benef, monto, estado="PAGADA", periodo="2026-10", fid="H1", numero="H-1", vence="2026-10-01"):
-    return dict(factura_id=fid, beneficiario=benef, numero=numero, monto=str(monto), moneda="COP",
+    return dict(factura_id=fid, beneficiario=benef, numero=numero, monto=str(monto), moneda="USD",
                 vence=vence, monto_base=f"{monto}.00", estado=estado, periodo=periodo)
 
 
@@ -95,7 +95,7 @@ def test_r2_2_lecturas_distintas_escalan(ctx, reglas):
 def test_r2_3_aclarado_distinto_va_al_senior_y_no_reemplaza(ctx, reglas):
     r = evaluar(ficha(valores_aclarados={"monto": "999"}), ctx, reglas)
     assert r.decision == "ESCALAR" and r.nivel == "SENIOR"
-    assert r.monto_base == Decimal("2400000.00")           # sigue usando el original
+    assert r.monto_base == Decimal("600.00")               # sigue usando el original (2.400.000 COP a 1/4.000)
 
 
 def test_r2_4_el_texto_no_cambia_la_decision_a_favor(ctx, reglas):
@@ -169,7 +169,7 @@ def test_r3_2_a_r3_4_zona_gris(ctx, reglas):
     assert regla(evaluar(ficha(monto="2520000"), ctx, reglas), "R3.2").resultado == "OK"    # 5 % exacto
     r = evaluar(ficha(monto="2640000"), ctx, reglas)                                         # 10 %: persona
     assert r.decision == "ESCALAR" and regla(r, "R3.3").nivel == "PERSONA"
-    assert evaluar(ficha(monto="2640001"), ctx, reglas).decision == "FRENAR"                 # >10 %
+    assert evaluar(ficha(monto="2640400"), ctx, reglas).decision == "FRENAR"                 # >10 % (a centavos de USD)
 
 
 def test_r3_5_sin_acuerdo_avisa(ctx, reglas):
@@ -213,23 +213,23 @@ def test_r4_3_lo_dicho_por_chat_no_verifica(ctx, reglas):
 def test_r5_1_conversion_y_sin_tasa(ctx, reglas):
     r = evaluar(ficha(beneficiario="Cloudwerk GmbH", monto="540", moneda="USD", recibida="2026-10-15",
                       cuenta_original="Deutsche ···7712"), ctx, reglas)
-    assert r.tasa_usada == Decimal("4085") and r.monto_base == Decimal("2205900.00")
+    assert r.tasa_usada == Decimal("1") and r.monto_base == Decimal("540.00")          # USD es la base
     sin = evaluar(ficha(moneda="JPY"), ctx, reglas)
     assert sin.decision == "ESCALAR" and "tipo de cambio" in sin.motivo
 
 
 def test_r5_2_y_r5_3_niveles_acumulan_el_periodo(ctx, reglas):
     assert evaluar(ficha(), ctx, reglas).nivel == "NINGUNO"
-    solo = con_historial(ctx, mov("Pixel Norte Ltda.", 1000000))
-    assert evaluar(ficha(), solo, reglas).nivel == "PERSONA"                               # 3,4 M > 3 M
-    otro_mes = con_historial(ctx, mov("Pixel Norte Ltda.", 1000000, periodo="2026-09"))
+    solo = con_historial(ctx, mov("Pixel Norte Ltda.", 250))
+    assert evaluar(ficha(), solo, reglas).nivel == "PERSONA"                               # 850 > 750 USD
+    otro_mes = con_historial(ctx, mov("Pixel Norte Ltda.", 250, periodo="2026-09"))
     assert evaluar(ficha(), otro_mes, reglas).nivel == "NINGUNO"
-    alto = con_historial(ctx, mov("Pixel Norte Ltda.", 8000000, estado="PENDIENTE"))
-    assert evaluar(ficha(), alto, reglas).nivel == "SENIOR"                                # 10,4 M
+    alto = con_historial(ctx, mov("Pixel Norte Ltda.", 2000, estado="PENDIENTE"))
+    assert evaluar(ficha(), alto, reglas).nivel == "SENIOR"                                # 2.600 > 2.500 USD
 
 
 def test_r5_4_limite_por_periodo(ctx, reglas):
-    r = evaluar(ficha(), con_historial(ctx, mov("Pixel Norte Ltda.", 13000000)), reglas)
+    r = evaluar(ficha(), con_historial(ctx, mov("Pixel Norte Ltda.", 3250)), reglas)
     assert regla(r, "R5.4").resultado == "FALLA" and r.nivel == "SENIOR"
 
 

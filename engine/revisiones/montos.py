@@ -2,7 +2,7 @@
 from decimal import Decimal
 
 from ..modelos import Revision
-from .comun import a_base, moneda_texto
+from .comun import a_base, en_base, moneda_texto
 
 
 def monto_para_nivel(ficha, ctx) -> Decimal:
@@ -21,25 +21,29 @@ def nivel_por_monto(valor: Decimal, reglas) -> str:
 
 
 def revisar(ficha, ctx, reglas):
+    if ctx.tasas.get(reglas.moneda_base) != 1:                          # R5.7: la tabla debe estar en la base
+        return [Revision(regla="R5.7", resultado="FALLA", efecto="ESCALAR", nivel="SENIOR",
+                         observado=f"tasa de {reglas.moneda_base}: {ctx.tasas.get(reglas.moneda_base, 'sin dato')}",
+                         umbral="1", mensaje="La tabla de cambio no coincide con la moneda base.")]
     base, tasa = a_base(ficha.monto, ficha.moneda, ctx)
     rs = [Revision(regla="R5.1", resultado="OK", observado=f"tasa {tasa}",
-                   mensaje=f"Monto en {reglas.moneda_base}: {moneda_texto(base, reglas.moneda_base)}.")]
+                   mensaje=f"Monto en {reglas.moneda_base}: {en_base(base, reglas)}.")]
     total = monto_para_nivel(ficha, ctx)
     nivel = nivel_por_monto(total, reglas)
     if nivel == "NINGUNO":
-        rs.append(Revision(regla="R5.3", resultado="OK", observado=moneda_texto(total),
-                           umbral=moneda_texto(reglas.autopago_max),
+        rs.append(Revision(regla="R5.3", resultado="OK", observado=en_base(total, reglas),
+                           umbral=en_base(reglas.autopago_max, reglas),
                            mensaje="El monto del periodo permite el pago automático."))
     else:
         rs.append(Revision(regla="R5.3", resultado="AVISO", efecto="ESCALAR", nivel=nivel,
-                           observado=moneda_texto(total), umbral=moneda_texto(reglas.autopago_max),
-                           mensaje=f"El monto del periodo ({moneda_texto(total)}) supera el pago automático."))
+                           observado=en_base(total, reglas), umbral=en_base(reglas.autopago_max, reglas),
+                           mensaje=f"El monto del periodo ({en_base(total, reglas)}) supera el pago automático."))
     if total > reglas.limite_periodo_beneficiario:
         rs.append(Revision(regla="R5.4", resultado="FALLA", efecto="ESCALAR", nivel="SENIOR",
-                           observado=moneda_texto(total), umbral=moneda_texto(reglas.limite_periodo_beneficiario),
+                           observado=en_base(total, reglas), umbral=en_base(reglas.limite_periodo_beneficiario, reglas),
                            mensaje="Supera el límite del periodo para este beneficiario."))
     else:
-        rs.append(Revision(regla="R5.4", resultado="OK", observado=moneda_texto(total),
-                           umbral=moneda_texto(reglas.limite_periodo_beneficiario),
+        rs.append(Revision(regla="R5.4", resultado="OK", observado=en_base(total, reglas),
+                           umbral=en_base(reglas.limite_periodo_beneficiario, reglas),
                            mensaje="Dentro del límite del periodo para el beneficiario."))
     return rs

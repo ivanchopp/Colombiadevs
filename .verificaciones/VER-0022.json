@@ -1,0 +1,43 @@
+{
+  "id": "VER-0022",
+  "fecha": "2026-10-17T18:28:40-05:00",
+  "cambio": "R4: moneda base USD y configurable (R5.6-R5.8): datos a USD con escala uniforme 1 USD = 4000 COP, sin COP fijo en motor ni pantallas, regla R5.7; spec, pruebas y AVANCES",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "data",
+    "engine",
+    "acta/tablero.py",
+    "app/pages",
+    "tests",
+    "specs/motor-de-reglas",
+    "specs/paneles-y-despliegue",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "data/reglas.yaml",
+      "problema": "Los limites en USD son un supuesto (equivalen a los de pesos con 1 USD = 4000 COP); no se sabe en que moneda fija Blinka los limites de cada cliente (AVANCES P31)",
+      "correccion": "Preguntarle a Blinka"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "data/tasas.yaml",
+      "problema": "Con la base en USD el redondeo es a centavos de USD: una diferencia de 1 COP en el limite del 10 por ciento ya no se distingue; la prueba de zona gris usa 400 COP de margen",
+      "correccion": "Documentado en el diseno del motor"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "engine/revisiones/montos.py",
+      "problema": "R5.7 escala al senior si la tabla de cambio no da 1 para la base; ninguna regla se afloja y las 20 decisiones de prueba no cambian",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "pytest: 238 passed (5 nuevas, ajustadas las que tenian montos en pesos); python3 eval.py: 20/20 y 0 pagos indebidos; 2 mutaciones detectadas (sin R5.7, COP fijo en en_base); una prueba revisa que ni engine, app ni acta escriban COP o USD como base; las paginas se probaron con AppTest, no en navegador; escala 1/4000 exacta en todos los datos de base",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "3990ea38a99901027753231e7eba7bd51b9b10c2",
+  "reemplaza": null
+}

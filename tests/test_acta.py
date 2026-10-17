@@ -62,7 +62,7 @@ def test_ac5_4_csv_con_bom_y_ac5_7_determinista(almacen, sala):
 def test_ac6_1_cifras_con_decimal(almacen, sala):
     c = tablero.cifras(almacen.filas(sala))
     assert (c.pagadas, c.frenadas, c.pendientes) == (2, 1, 3)
-    assert c.gasto == Decimal("4605900.00")          # 2.400.000 + 540 USD a 4.085 (supuesto)
+    assert c.gasto == Decimal("1140.00")             # 600 (2.400.000 COP a 1/4.000) + 540 USD, en USD (supuesto)
 
 
 def test_ac6_3_tablero_csv_y_acta_coinciden(almacen, sala):

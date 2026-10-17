@@ -8,7 +8,7 @@ from decimal import Decimal
 from .estado import facturas_por_estado
 from .exportar_csv import exportar_facturas
 
-PRESUPUESTO_PERIODO = Decimal("100000000")   # supuesto: 100 M COP
+PRESUPUESTO_PERIODO = Decimal("25000")   # supuesto, en la moneda base; las pantallas pasan el de las reglas (R5.6)
 
 
 @dataclass

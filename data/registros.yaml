@@ -11,4 +11,4 @@ beneficiarios:
   "Obras Cumbre SAS":    {pais: CO, cuenta: "Bancolombia ···9921", acuerdo_monto: "60000000", acuerdo_moneda: COP}
 historial:
   - {factura_id: F-1031, beneficiario: "Taller Azteca", numero: "TA-0931", monto: "12500", moneda: MXN,
-     vence: 2026-09-25, monto_base: "2875000.00", estado: PAGADA, periodo: "2026-09"}
+     vence: 2026-09-25, monto_base: "718.75", estado: PAGADA, periodo: "2026-09"}

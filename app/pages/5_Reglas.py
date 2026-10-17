@@ -26,7 +26,7 @@ def mostrar(reglas, k) -> str:
     return formato_valor(k, getattr(reglas, k), reglas.moneda_base)
 
 
-def formato_valor(k, v, moneda="COP") -> str:
+def formato_valor(k, v, moneda) -> str:
     v = Decimal(str(v))
     if k in MONTOS:
         return formato_monto(v, moneda)
@@ -61,7 +61,7 @@ valores: dict = {}
 c1, c2 = st.columns(2)
 for i, (k, etiqueta) in enumerate(MONTOS.items()):
     valores[k] = Decimal((c1 if i % 2 == 0 else c2).number_input(
-        f"{etiqueta} ({actuales.moneda_base})", min_value=0, step=100_000, value=int(getattr(actuales, k)),
+        f"{etiqueta} ({actuales.moneda_base})", min_value=0, step=50, value=int(getattr(actuales, k)),
         key=f"regla_{k}"))
 for i, (k, etiqueta) in enumerate(PORCENTAJES.items()):
     # Porcentajes enteros: así el dinero nunca pasa por float.
@@ -117,7 +117,7 @@ if historial:
     st.subheader("Cambios de reglas en esta sala")
     for f in reversed(historial):
         p = f.payload
-        cambios = "; ".join(f"{NOMBRES[k]}: {formato_valor(k, p['antes'][k])} → {formato_valor(k, p['despues'][k])}"
+        cambios = "; ".join(f"{NOMBRES[k]}: {formato_valor(k, p['antes'][k], actuales.moneda_base)} → {formato_valor(k, p['despues'][k], actuales.moneda_base)}"
                             for k in EDITABLES if Decimal(p["antes"][k]) != Decimal(p["despues"][k]))
         st.text(f"Fila #{f.num} · {f.creado_en[:16].replace('T', ' ')} UTC · {f.actor} · {'afloja' if p['afloja'] else 'restringe'}\n"
                 f"{cambios}\nMotivo: {p['motivo']}")

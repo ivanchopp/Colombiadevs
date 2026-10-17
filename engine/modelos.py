@@ -93,7 +93,7 @@ class Contexto(Cerrado):
 class Reglas(Cerrado):
     version: str
     vigente_desde: date | None = None
-    moneda_base: str = "COP"
+    moneda_base: str = "USD"
     autopago_max: Decimal
     persona_max: Decimal
     techo_duro_pago: Decimal

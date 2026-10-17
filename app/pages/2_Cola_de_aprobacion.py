@@ -3,7 +3,7 @@ import streamlit as st
 
 from acta.estado import facturas_por_estado
 from app.apoyo import CANALES, ROLES, AprobacionRechazada, cola_para_rol, formato_monto, monto_legible, responder
-from app.comun import almacen, barra_lateral, encabezado, exigir_rol, obtener_sala
+from app.comun import almacen, barra_lateral, contexto_y_reglas, encabezado, exigir_rol, obtener_sala
 
 st.set_page_config(page_title="Panel 2 · Cola de aprobación", layout="wide")
 sala = obtener_sala()
@@ -16,7 +16,9 @@ st.caption(f"Rol: {ROLES[rol]}. Para aprobar o rechazar hay que escribir un moti
 if mensaje := st.session_state.pop("mensaje_cola", None):
     st.success(mensaje)
 
-cola = cola_para_rol(facturas_por_estado(almacen().filas(sala)), rol)
+filas = almacen().filas(sala)
+moneda_base = contexto_y_reglas(filas)[1].moneda_base
+cola = cola_para_rol(facturas_por_estado(filas), rol)
 if not cola:
     st.write("No hay casos pendientes para tu rol.")
 
@@ -26,7 +28,7 @@ for f in cola:
         st.text(f"{f.factura_id} · {d['beneficiario']} · nivel {d['nivel'].lower()}")
         invalida = bool(d.get("ficha_invalida"))
         st.text(f"Monto: {monto_legible(d)}"
-                + (f" (≈ {formato_monto(d['monto_base'], 'COP')})" if not invalida and d["moneda"] != "COP" else "")
+                + (f" (≈ {formato_monto(d['monto_base'], moneda_base)})" if not invalida and d["moneda"] != moneda_base else "")
                 + f" · vence {d['vence'] or 'sin fecha'}")
         if invalida:
             st.warning("La ficha no tiene los datos obligatorios (" + str(d.get("campos_con_problema", "")) +

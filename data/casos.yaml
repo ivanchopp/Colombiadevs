@@ -369,7 +369,7 @@ casos:
     monto: '50000000'
     moneda: COP
     vence: '2026-10-01'
-    monto_base: '50000000.00'
+    monto_base: '12500.00'
     estado: PAGADA
     periodo: 2026-10
   - factura_id: H2
@@ -378,7 +378,7 @@ casos:
     monto: '49000000'
     moneda: COP
     vence: '2026-10-01'
-    monto_base: '49000000.00'
+    monto_base: '12250.00'
     estado: PAGADA
     periodo: 2026-10
 - id: C17
@@ -432,7 +432,7 @@ casos:
     monto: '13000000'
     moneda: COP
     vence: '2026-10-01'
-    monto_base: '13000000.00'
+    monto_base: '3250.00'
     estado: PAGADA
     periodo: 2026-10
 - id: C19
