@@ -2,4 +2,5 @@
 # pruebas
 pytest>=8
 hypothesis>=6
+openpyxl>=3.1   # solo para data/importar_compras.py
 reportlab>=4
