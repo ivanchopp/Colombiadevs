@@ -1,0 +1,18 @@
+# Rutas de pago de Blinka, según su sitio (captura que aportó el equipo el 17 oct).
+# Países y monedas: de Blinka. Costo y tiempo: SUPUESTOS; donde falta el dato queda «sin dato» (R7.4).
+# PSE solo sirve para RECIBIR depósitos en COP, por eso no es un canal de pago.
+canales:
+  - {nombre: "Bre-B", paises: [CO], monedas: [COP], costo: bajo, tiempo_horas: "0.1"}
+  - {nombre: "SPEI", paises: [MX], monedas: [MXN]}
+  - {nombre: "Pix / TED", paises: [BR], monedas: [BRL]}
+  - {nombre: "SEPA", paises: [DE, FR, ES, IT, NL, PT, IE, BE, AT, FI, LU, GR, SK, SI, EE, LV, LT, MT, CY], monedas: [EUR]}
+  - {nombre: "CBU / CVU / Alias", paises: [AR], monedas: [ARS]}
+  - {nombre: "Transferencia bancaria (Chile)", paises: [CL], monedas: [CLP]}
+  - {nombre: "Transferencia bancaria (Perú)", paises: [PE], monedas: [PEN]}
+  - {nombre: "Transferencia bancaria (Bolivia)", paises: [BO], monedas: [BOB]}
+  - {nombre: "Transferencia bancaria (Costa Rica)", paises: [CR], monedas: [CRC]}
+  - {nombre: "Transferencia bancaria (Sudáfrica)", paises: [ZA], monedas: [ZAR]}
+  - {nombre: "Ruta local en USD", paises: [PE, PA, CN, HK], monedas: [USD]}
+  - {nombre: "ACH y wire (EE. UU.)", paises: [US], monedas: [USD], costo: medio, tiempo_horas: "24"}
+  - {nombre: "SWIFT", paises: ["*"], monedas: [USD], costo: alto, tiempo_horas: "36"}
+  - {nombre: "USDC", paises: ["*"], monedas: [USD], costo: medio, tiempo_horas: "0.1", requiere_verificacion: true}

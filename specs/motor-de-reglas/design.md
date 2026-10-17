@@ -191,3 +191,18 @@ flowchart LR
 | El motor escala casi todo y baja la autonomía | Calibrar parámetros con las facturas normales; medirlo con `eval.py` |
 | Parámetros de ejemplo que parezcan reales | Marcarlos como «de demostración» en pantalla y en el CSV |
 | Los registros no están al día | Lo que no está registrado se escala (R4.1, R3.5) |
+
+## Ajustes al construir (17 oct)
+
+Decisiones tomadas al programar, para que spec y código no se separen:
+
+1. **La ficha lleva dos campos más:** `recibida` (fecha de recepción; sirve para emparejar con el calendario, R6.1, y para elegir la versión de reglas, R9.2) y `orden_en_texto` (el agente de entrada avisa que el texto traía una orden; solo agrega un `AVISO`, nunca cambia una decisión a favor, R2.4).
+2. **R5.3 es una revisión más:** `OK` si el nivel por monto es `NINGUNO`; si no, `AVISO` con ese nivel. Así `PAGAR` se reduce a «todas las revisiones `OK`».
+3. **`ESCALAR` nunca queda con nivel `NINGUNO`:** si ninguna revisión pide nivel, se asigna `PERSONA` (alguien debe revisar). `FRENAR` queda con nivel `NINGUNO`.
+4. **Sin tipo de cambio (R5.1) el nivel es `SENIOR`:** sin monto en moneda base no se puede medir nada, y las revisiones que dependen de él devuelven `FALLA` «no evaluable».
+5. **Nivel y gasto cuentan distinto** (R5.2 frente a D2): `monto_para_nivel` suma lo pagado, aprobado o pendiente del beneficiario en el periodo; el gasto del presupuesto (R3.6) suma solo lo pagado o aprobado.
+6. **El canal se calcula también para `ESCALAR`** (R7.1), para que quien aprueba lo vea. Sigue siendo solo recomendación. Canales con `requiere_verificacion` salen como «Revisar».
+7. **Sin cuenta registrada** (beneficiario fuera de los registros) la revisión R4.2 es `FALLA` a nivel `SENIOR`: lo no registrado se escala.
+8. **Contexto desde el acta** (`engine/contexto.py`): el historial, el gasto y las obligaciones ya emparejadas se derivan de los eventos del acta, no de otra tabla.
+9. **Canales (cambio del 17 oct, con datos de Blinka):** `canales.yaml` ahora sigue las rutas del sitio de Blinka: Bre-B (COP), SPEI (MXN), Pix / TED (BRL), SEPA (EUR), CBU/CVU/Alias (ARS), transferencias bancarias (CLP, PEN, BOB, CRC, ZAR), rutas locales en USD (Perú, Panamá, China, Hong Kong), ACH y wire (EE. UU.), SWIFT (USD, más de 200 países) y USDC (Base, Ethereum, Polygon, Celo, Solana). **PSE sale de los canales de pago:** solo sirve para recibir depósitos en COP. Costo y tiempo siguen siendo «supuesto» y quedan «sin dato» donde nadie los dio.
+10. **Reglas:** `reglas.yaml` trae una lista de conjuntos con `vigente_desde`; se elige el más reciente vigente a la fecha de recepción. Los conflictos y el detector de afloja/restringe (T12) quedan para después. `techos.yaml` se aplica como mínimo sobre `techo_duro_pago`.

@@ -1,20 +1,19 @@
-"""Códigos de sala. Spec: specs/acta-y-csv (AC7) y paneles-y-despliegue (PD2).
-
-Pendiente: crear, reiniciar y purgar salas en la base de datos (tarea AT7).
-"""
-from __future__ import annotations
-
+"""Salas de demo: un código por visitante (AC7)."""
+import re
 import secrets
 
-# Sin caracteres que se confunden (0/O, 1/I).
-ALFABETO = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+from data import demo_semilla
+
+ALFABETO = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"   # sin 0/O/1/I
+PATRON = re.compile(r"^[A-HJ-NP-Z2-9]{8}$")
 
 
-def generar_codigo(largo: int = 8) -> str:
-    """Código aleatorio y sin datos personales (AC7)."""
-    return "".join(secrets.choice(ALFABETO) for _ in range(largo))
+def codigo_valido(codigo) -> bool:
+    return isinstance(codigo, str) and PATRON.match(codigo) is not None
 
 
-def codigo_valido(codigo: str | None, largo: int = 8) -> bool:
-    """Solo comprueba el formato. Que la sala exista se comprueba contra la base (AT7)."""
-    return bool(codigo) and len(codigo) == largo and all(c in ALFABETO for c in codigo)
+def crear(almacen) -> str:
+    """Crea una sala nueva con los datos de ejemplo (AC7.3)."""
+    sala = "".join(secrets.choice(ALFABETO) for _ in range(8))
+    demo_semilla.cargar(almacen, sala)
+    return sala

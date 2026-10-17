@@ -1,9 +1,22 @@
-"""Verificación de la cadena de huellas de una sala.
+"""Verificar la cadena de huellas (AC2.3)."""
+from dataclasses import dataclass
 
-Spec: specs/acta-y-csv (AC2.3, AC2.4). Tarea AT2. Esqueleto: aún sin implementar.
-"""
-from __future__ import annotations
+from .huella import huella, huella_inicial
 
-def verificar_cadena(*args, **kwargs):
-    """Recalcula la cadena y devuelve correcta o la primera fila que no coincide."""
-    raise NotImplementedError("Tarea AT2: verificar_cadena")
+
+@dataclass
+class ResultadoCadena:
+    correcta: bool
+    filas: int
+    primera_fila_mala: int | None = None
+
+
+def verificar_cadena(almacen, sala_id) -> ResultadoCadena:
+    anterior = huella_inicial(sala_id)
+    esperado = 1
+    filas = almacen.filas(sala_id)
+    for f in filas:
+        if f.num != esperado or f.huella_anterior != anterior or f.huella != huella(anterior, f):
+            return ResultadoCadena(False, len(filas), f.num)
+        anterior, esperado = f.huella, esperado + 1
+    return ResultadoCadena(True, len(filas))

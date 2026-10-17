@@ -1,79 +1,100 @@
-"""Orquestador del motor de reglas: función pura, sin IA y sin red.
+"""Orquestador: corre todas las revisiones y resuelve la decisión. Función pura (R1)."""
+from pydantic import ValidationError
 
-Spec: specs/motor-de-reglas (R1, R10). Reglas de oro:
-  - PAGAR solo si hay revisiones y todas son OK (R1.2). Sin revisiones configuradas, nunca se paga.
-  - Si una revisión falla o lanza una excepción, el resultado es ESCALAR (R1.3).
-  - Se evalúan todas las revisiones, aunque una falle (R1.5).
-"""
-from __future__ import annotations
+from .canales import sugerir_canal
+from .modelos import Ficha, Resultado, Revision, nivel_max
+from .niveles import nivel_de_revisiones
+from .revisiones import NoEvaluable, beneficiario, calendario, entrada, frenar, montos
+from .revisiones.comun import a_base
 
-from collections.abc import Callable, Sequence
-
-from engine.modelos import Contexto, Decision, Ficha, Nivel, Resultado, Reglas, Revision
-from engine.niveles import nivel_maximo
-
-Revisar = Callable[[Ficha, Contexto, Reglas], Revision]
-
-# Las revisiones reales se registran aquí a medida que se implementan (tareas T4 a T7).
-REVISIONES: tuple[Revisar, ...] = ()
-
-
-def resolver(revisiones: Sequence[Revision]) -> Decision:
-    """La decisión más severa gana: FRENAR sobre ESCALAR, y ESCALAR sobre PAGAR (R1.4)."""
-    if not revisiones:
-        return "ESCALAR"                       # sin revisiones no hay base para pagar
-    if any(r.efecto == "FRENAR" and r.resultado != "OK" for r in revisiones):
-        return "FRENAR"
-    if any(r.resultado != "OK" for r in revisiones):
-        return "ESCALAR"
-    return "PAGAR"
+# (regla de referencia, función): todas corren, en este orden (R1.5).
+REVISIONES = [
+    ("R2", entrada.revisar),
+    ("R3.1", frenar.duplicado),
+    ("R4", beneficiario.revisar),
+    ("R6", calendario.revisar),
+    ("R3.2", frenar.acuerdo),
+    ("R3.6", frenar.presupuesto_y_techo),
+    ("R5", montos.revisar),
+]
 
 
-def _fallo_de_evaluacion(revision: Revisar, error: Exception) -> Revision:
-    """Una revisión que no se pudo evaluar cuenta como FALLA que escala (R1.3)."""
-    return Revision(
-        regla=getattr(revision, "__name__", "revision"),
-        resultado="FALLA",
-        efecto="ESCALAR",
-        nivel="PERSONA",
-        observado="no se pudo evaluar",
-        umbral="—",
-        mensaje=f"No se pudo evaluar esta revisión ({type(error).__name__}).",
-    )
+def _fallo(regla, error) -> Revision:
+    """Una revisión que no se pudo evaluar nunca deja pasar un pago (R1.3)."""
+    nivel = error.nivel if isinstance(error, NoEvaluable) else "SENIOR"
+    mensaje = str(error) if isinstance(error, NoEvaluable) else f"No se pudo evaluar {regla}."
+    return Revision(regla=regla, resultado="FALLA", efecto="ESCALAR", nivel=nivel,
+                    observado="no evaluable", umbral="evaluable", mensaje=mensaje)
 
 
-def evaluar(
-    ficha: Ficha,
-    contexto: Contexto,
-    reglas: Reglas,
-    revisiones: Sequence[Revisar] | None = None,
-) -> Resultado:
-    """Devuelve la decisión, el nivel, las revisiones y el motivo de una ficha."""
-    a_correr = REVISIONES if revisiones is None else tuple(revisiones)
-    resultados: list[Revision] = []
-    for revision in a_correr:
+def _motivo(decision, nivel, revisiones, obligacion_id) -> str:
+    if decision == "PAGAR":
+        return "Cumple todas las reglas" + (" y estaba en el calendario." if obligacion_id else ".")
+    malas = [r for r in revisiones if r.resultado != "OK"]
+    if decision == "FRENAR":
+        malas = [r for r in malas if r.efecto == "FRENAR"]
+    malas.sort(key=lambda r: (r.efecto != "FRENAR", -["NINGUNO", "PERSONA", "SENIOR"].index(r.nivel)))
+    causas = []
+    for r in malas:
+        m = r.mensaje.rstrip(".")
+        if m not in causas:
+            causas.append(m)
+    texto = "; ".join(causas[:2]) + "."
+    if decision == "ESCALAR":
+        texto += " Lo aprueba " + ("el senior de finanzas." if nivel == "SENIOR" else "la persona de finanzas.")
+    return texto
+
+
+def _ficha_invalida(reglas, error) -> Resultado:
+    campos = ", ".join(sorted({str(e["loc"][0]) for e in error.errors() if e["loc"]})) or "ficha"
+    rev = Revision(regla="R2.1", resultado="FALLA", efecto="ESCALAR", nivel="SENIOR",
+                   observado=campos, umbral="esquema cerrado", mensaje="Ficha inválida.")
+    return Resultado(decision="ESCALAR", nivel="SENIOR", revisiones=[rev],
+                     motivo=f"Ficha inválida (campos: {campos}). Lo aprueba el senior de finanzas.",
+                     version_reglas=reglas.version)
+
+
+def evaluar(ficha, ctx, reglas) -> Resultado:
+    try:
+        f = ficha if isinstance(ficha, Ficha) else Ficha.model_validate(ficha)
+    except ValidationError as e:                                         # R2.1
+        return _ficha_invalida(reglas, e)
+
+    revisiones: list[Revision] = []
+    for regla, revision in REVISIONES:
         try:
-            resultados.append(revision(ficha, contexto, reglas))
-        except Exception as error:             # noqa: BLE001 — fallo seguro (R1.3)
-            resultados.append(_fallo_de_evaluacion(revision, error))
+            revisiones.extend(revision(f, ctx, reglas))
+        except Exception as e:                                           # R1.3
+            revisiones.append(_fallo(regla, e))
 
-    decision = resolver(resultados)
-    niveles: list[Nivel] = [r.nivel for r in resultados]   # una revisión OK que exige nivel también cuenta
-    nivel = nivel_maximo(niveles)
-    if decision == "PAGAR" and nivel != "NINGUNO":   # R1.2
+    if any(r.efecto == "FRENAR" for r in revisiones):                    # R1.4
+        decision = "FRENAR"
+    elif any(r.resultado != "OK" for r in revisiones):
         decision = "ESCALAR"
-    if decision == "ESCALAR" and nivel == "NINGUNO":
-        nivel = "PERSONA"                            # toda escalada tiene un nivel que la resuelve
+    else:
+        decision = "PAGAR"
 
-    motivo = (
-        "Sin revisiones configuradas: se escala para que decida una persona."
-        if not resultados
-        else "; ".join(r.mensaje for r in resultados if r.resultado != "OK") or "Cumple todas las reglas."
-    )
-    return Resultado(
-        decision=decision,
-        nivel=nivel,
-        revisiones=resultados,
-        motivo=motivo,
-        version_reglas=reglas.version,
-    )
+    nivel = nivel_de_revisiones(revisiones)
+    if decision == "FRENAR":
+        nivel = "NINGUNO"
+    elif decision == "ESCALAR":
+        nivel = nivel_max(nivel, "PERSONA")                              # alguien debe revisar
+    elif nivel != "NINGUNO":                                             # R1.2
+        decision = "ESCALAR"
+
+    try:
+        base, tasa = a_base(f.monto, f.moneda, ctx)
+    except NoEvaluable:
+        base = tasa = None
+    try:
+        o = calendario.emparejar(f, ctx, reglas)
+    except Exception:
+        o = None
+    try:
+        canal = sugerir_canal(f, ctx, reglas) if decision != "FRENAR" else None   # R7.1
+    except Exception:
+        canal = None
+    return Resultado(decision=decision, nivel=nivel, revisiones=revisiones,
+                     motivo=_motivo(decision, nivel, revisiones, o and o.id),
+                     version_reglas=reglas.version, tasa_usada=tasa, monto_base=base,
+                     canal=canal, obligacion_id=o.id if o else None)

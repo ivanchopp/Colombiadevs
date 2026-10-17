@@ -1,0 +1,14 @@
+# Registros de la empresa (FICTICIOS, supuesto). Lo que no está aquí se escala.
+beneficiarios:
+  "Pixel Norte Ltda.":   {pais: CO, cuenta: "Bancolombia ···1180", acuerdo_monto: "2400000", acuerdo_moneda: COP}
+  "Cloudwerk GmbH":      {pais: DE, cuenta: "Deutsche ···7712",    acuerdo_monto: "540",     acuerdo_moneda: USD}
+  "Taller Azteca":       {pais: MX, cuenta: "BBVA ···3304",        acuerdo_monto: "12500",   acuerdo_moneda: MXN}
+  "Estúdio Verde":       {pais: BR, cuenta: "Itaú ···5521",        acuerdo_monto: "3520",    acuerdo_moneda: BRL}
+  "Diseños Alba":        {pais: CO, cuenta: "Davivienda ···6403",  acuerdo_monto: "4100000", acuerdo_moneda: COP}
+  "Imprenta Sol":        {pais: CO, cuenta: "Bancolombia ···2291", acuerdo_monto: "6000000", acuerdo_moneda: COP}
+  "Hosting Andes":       {pais: CO, cuenta: "Bancolombia ···7745"}
+  "Contador externo":    {pais: CO, cuenta: "Davivienda ···1008",  acuerdo_monto: "1500000", acuerdo_moneda: COP}
+  "Obras Cumbre SAS":    {pais: CO, cuenta: "Bancolombia ···9921", acuerdo_monto: "60000000", acuerdo_moneda: COP}
+historial:
+  - {factura_id: F-1031, beneficiario: "Taller Azteca", numero: "TA-0931", monto: "12500", moneda: MXN,
+     vence: 2026-09-25, monto_base: "2875000.00", estado: PAGADA, periodo: "2026-09"}

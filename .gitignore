@@ -1,10 +1,5 @@
-.env
-.venv/
-venv*/
 __pycache__/
 *.pyc
 .pytest_cache/
-.hypothesis/
-datos_locales/
-*.sqlite3
-*.db
+.env
+data/*.db

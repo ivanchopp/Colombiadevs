@@ -1,5 +1,3 @@
--- Acta de solo añadir (spec acta-y-csv, AC1). Versión local con SQLite.
--- Para purgar una sala (AC7.4) se usa un script de mantenimiento que no corre desde la aplicación.
 CREATE TABLE IF NOT EXISTS acta (
   sala_id          TEXT    NOT NULL,
   num              INTEGER NOT NULL,
@@ -17,12 +15,8 @@ CREATE TABLE IF NOT EXISTS acta (
   UNIQUE (sala_id, clave_idem)
 );
 
-CREATE TRIGGER IF NOT EXISTS acta_no_actualiza BEFORE UPDATE ON acta
-BEGIN
-  SELECT RAISE(ABORT, 'el acta es de solo añadir');
-END;
+CREATE TRIGGER IF NOT EXISTS acta_no_modifica BEFORE UPDATE ON acta
+BEGIN SELECT RAISE(ABORT, 'el acta es de solo añadir'); END;
 
 CREATE TRIGGER IF NOT EXISTS acta_no_borra BEFORE DELETE ON acta
-BEGIN
-  SELECT RAISE(ABORT, 'el acta es de solo añadir');
-END;
+BEGIN SELECT RAISE(ABORT, 'el acta es de solo añadir'); END;
