@@ -8,7 +8,7 @@ from pydantic import ValidationError
 from acta.estado import estado_publico, facturas_por_estado
 from engine.contexto import contexto_desde_acta
 from engine.guardarrail import registrar_decision
-from engine.reglas_io import cargar_contexto_base, cargar_reglas, hoy_bogota
+from engine.reglas_io import cargar_contexto_base, cargar_reglas, hoy_bogota, reglas_de_sala
 
 from . import aclaraciones, archivo, ejemplos, lectura_ia, segunda_lectura
 from .estado import EstadoEntrada
@@ -138,8 +138,9 @@ def finalizar(almacen, sala_id, factura_id) -> dict:
     hoy = hoy_bogota()
     ficha = construir_ficha(e, sala_id, factura_id, hoy)
     try:
-        reglas, _ = cargar_reglas(hoy)
-        ctx = contexto_desde_acta(cargar_contexto_base(hoy), almacen.filas(sala_id))
+        filas = almacen.filas(sala_id)
+        reglas = reglas_de_sala(cargar_reglas(hoy)[0], filas)          # con los cambios de la sala (PP8.7)
+        ctx = contexto_desde_acta(cargar_contexto_base(hoy), filas)
         registrar_decision(almacen, sala_id, ficha, ctx, reglas)
         publico = estado_publico(facturas_por_estado(almacen.filas(sala_id))[factura_id])
         cierre = ("Gracias. Tu factura quedó resuelta." if publico == "resuelta"

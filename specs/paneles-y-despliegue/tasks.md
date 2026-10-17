@@ -14,4 +14,5 @@ Estado: **borrador**. Requisitos: `requirements.md` · Diseño: `design.md`. Due
 | PT8 | Detalle de una factura con ficha y revisiones (en el tablero) | PP6.1 | Hecho |
 | PT9 | Conectar con el motor (`registrar_decision`) y el agente de entrada | PP5, PP2 | Hecho |
 | PT10 | Despliegue en Railway: `Dockerfile`, `railway.toml`, volumen, variables, `README.md` | PD1 | **Preparado y probado en local; falta desplegar en Railway** (SQLite en volumen; PostgreSQL pendiente) |
-| PT11 | Páginas de reglas y resumen (capa 3) | — | Pendiente |
+| PT11 | Página de reglas: ver, editar con formulario, vista previa, afloja/restringe y `CAMBIO_REGLA` en el acta | PP8, R9.4 a R9.6 | Hecho |
+| PT12 | Página de resumen de conciliación (capa 3) | AC8 | Pendiente |

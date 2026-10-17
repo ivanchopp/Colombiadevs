@@ -2,7 +2,7 @@
 
 > **Si eres un chat nuevo de Claude Code, empieza aquí.** Este archivo es la memoria del proyecto: qué se quiere hacer, qué ya se hizo, qué falta y qué sigue. Léelo completo antes de tocar nada y **actualízalo al terminar cada cambio** (ver «Cómo mantener este archivo»).
 
-**Última actualización:** sáb 17 oct 2026, 13:20 (hora Bogotá)
+**Última actualización:** sáb 17 oct 2026, 13:45 (hora Bogotá)
 **Entrega:** **dom 18 oct 2026, 8:00 a. m. (hora Bogotá).** Objetivo: enviar a las 7:00.
 **Repositorio:** https://github.com/ivanchopp/Colombiadevs · rama `main` (incluye el PR #2, commit `77a8763`). El trabajo nuevo se hace en ramas `claude/*` y entra por PR.
 
@@ -14,11 +14,11 @@
 - **De dónde viene:** el *Reto Blinka, «Agentes que pagan por la empresa»* (Hackathon 30X, HackRadar). Blinka es una fintech colombiana en EE. UU. con cuentas en USD y pagos a Latinoamérica.
 - **Idea central:** la IA solo **lee y redacta**. Un programa normal, el **motor de reglas**, **decide**. Ante la duda, el resultado es **escalar, nunca pagar**.
 - **Equipo:** 4 personas. Reparto sugerido: **A** motor y pruebas · **B** agentes con IA · **C** pantallas · **D** datos, evaluación y pitch.
-- **Estado del código (en `main`):** funciona de punta a punta el **motor de reglas**, el **acta** (SQLite), el **agente de entrada** y los **dos paneles** (Streamlit). **143 pruebas pasan** y `python3 eval.py` da **20 de 20, con 0 pagos indebidos**. La skill `verificador` aprobó la rama (VER-0005).
+- **Estado del código (en `main`):** funciona de punta a punta el **motor de reglas**, el **acta** (SQLite), el **agente de entrada** y los **dos paneles** (Streamlit). **152 pruebas pasan** y `python3 eval.py` da **20 de 20, con 0 pagos indebidos**. La skill `verificador` aprobó la rama (VER-0005).
 - **Lo que NO está probado:**
   1. **La lectura con IA real.** El agente lee con **Gemini o Claude** (intercambiables, ver `README.md`), pero solo se probó con clientes falsos, nunca con una clave. Sin clave corre en **modo demo**.
   2. **El despliegue en Railway.** Está preparado (`Dockerfile`, `railway.toml`) y se probó el arranque en local, pero la imagen de Docker y Railway no se han probado ni desplegado.
-- **No existen todavía:** el agente de reglas, el agente de conciliación y las páginas de reglas y resumen (capa 3), PostgreSQL con permisos, y el simulador de cambios de reglas.
+- **No existen todavía:** el agente de reglas en lenguaje natural, el agente de conciliación y la página de resumen (capa 3), PostgreSQL con permisos, y las vigencias con conflictos (T12).
 - **Para verlo:** `pip install -r requirements.txt` y `streamlit run app/Panel_1_Proveedor.py`. **Control de las 18:00:** `python3 eval.py`.
 
 ## 2. Lo que no se negocia
@@ -40,7 +40,7 @@
 |---|---|---|---|
 | **Núcleo** | Lectura de facturas con segunda lectura, motor de reglas con dos niveles de aprobación (persona y senior), acta con cadena de huellas, CSV y tablero, cola de aprobación, Panel 1, un test por caso trampa, despliegue en Railway | Sáb 18:00 | **Hecho**, salvo la lectura con IA real y el despliegue real (ver sección 1) |
 | **Capa 2** | Sugerencia de canal de pago con las rutas de Blinka (Bre-B, SPEI, Pix, SEPA, transferencias locales, rutas en USD, ACH y wire, SWIFT, USDC), solo recomendación | Sáb 18:00 a 21:00, si el control de las 18:00 pasa | **Hecho** |
-| **Capa 3** | Calendario de facturas esperadas, agente de reglas en lenguaje natural (con vigencias y detección de afloja/restringe), simular cambios, chat con el proveedor, agente de conciliación | Solo si sobra tiempo | Calendario y chat con el proveedor: **hechos**. Agente de reglas, vigencias con conflictos (T12), simular (T11) y conciliación: **no** |
+| **Capa 3** | Calendario de facturas esperadas, agente de reglas en lenguaje natural (con vigencias y detección de afloja/restringe), simular cambios, chat con el proveedor, agente de conciliación | Solo si sobra tiempo | Calendario y chat con el proveedor: **hechos**. Simular (T11) y afloja/restringe (parte de T12): **hechos** en la página de reglas. Agente de reglas en lenguaje natural, vigencias con conflictos y conciliación: **no** |
 | **A futuro** | Sello público del registro (raíz Merkle por lote anclada en testnet); billetera on-chain (Opción 5 de la guía), solo como visión en el pitch | No se construye | — |
 
 **Orden para recortar** si algo se atrasa: agente de conciliación → chat con el proveedor → calendario → agente de reglas (dejar edición por formulario o YAML) → enrutador de canal. La Opción 1 sola ya cumple el entregable y los tres criterios.
@@ -53,7 +53,7 @@
 - **Agente de reglas (IA) — no construido:** convertiría una instrucción en lenguaje normal en un cambio de reglas, con vista previa y confirmación.
 - **Agente de conciliación (IA) — no construido:** leería el acta (solo lectura), resumiría el periodo y avisaría de rarezas. No calcularía cifras.
 - **Acta:** registro de solo añadir; cada fila lleva la huella de la anterior. De ahí salen el CSV y el tablero.
-- **Persona de finanzas / senior de finanzas:** aprueban lo escalado según su nivel. Solo el senior aprueba lo de mayor riesgo y (cuando exista el agente de reglas) firma los cambios que *aflojan* una regla.
+- **Persona de finanzas / senior de finanzas:** aprueban lo escalado según su nivel. Solo el senior aprueba lo de mayor riesgo y firma los cambios que *aflojan* una regla (página de reglas).
 - **Evaluadores de la demo:** hacen de proveedor en el Panel 1 y revisan en el Panel 2.
 
 **Decisiones del motor** (parámetros de demostración en COP, todos «supuesto»):
@@ -64,7 +64,7 @@
 
 **Demo con dos paneles** que comparten una *sala* (un código por visitante en el enlace):
 - **Panel 1, proveedor (abierto):** chat con el agente de entrada, subir PDF/foto/correo/TXT, botones de facturas de ejemplo (normal, repetida, beneficiario nuevo, con orden escondida) y estado de la factura. **Nunca muestra reglas ni límites.**
-- **Panel 2, finanzas (con rol):** tablero con detalle de cada factura, cola de aprobación, calendario y acta. *(El chat de reglas y el resumen de conciliación no están construidos.)*
+- **Panel 2, finanzas (con rol):** tablero con detalle de cada factura, cola de aprobación, calendario, acta y **reglas** (ver, editar, vista previa y firma del senior para aflojar). *(El chat de reglas y el resumen de conciliación no están construidos.)*
 
 **Tecnología real:** Python 3.12 (`.python-version`, `Dockerfile`), **Gemini (`google-genai`) o Claude (`anthropic`)** para leer facturas, Pydantic, Streamlit (varias páginas), **SQLite** (en un volumen de Railway; PostgreSQL pendiente), pandas para el CSV, pytest y Hypothesis, imagen de Docker desplegada en **Railway**. Sin frameworks de agentes pesados.
 
@@ -80,14 +80,14 @@
 | `specs/README.md` | Índice y reglas de las especificaciones |
 | `specs/motor-de-reglas/` | 53 criterios EARS (R1 a R11), `design.md` (con «Ajustes al construir»), tareas T1 a T15 |
 | `specs/acta-y-csv/` | 51 criterios (AC1 a AC9), diseño, tareas AT1 a AT10 |
-| `specs/paneles-y-despliegue/` | Criterios PP1 a PP7 y PD1 (despliegue), diseño, tareas PT1 a PT11 |
+| `specs/paneles-y-despliegue/` | Criterios PP1 a PP8 y PD1 (despliegue), diseño, tareas PT1 a PT12 |
 | `specs/extraccion-y-agente-de-entrada/` | Criterios EA1 a EA9 y EA2b (proveedor intercambiable), diseño, tareas ET1 a ET8 |
 | `.claude/skills/verificador/` | Skill que revisa cada cambio, lo aprueba o rechaza y lo registra. **Úsala antes de commitear.** |
 | `VERIFICACIONES.md`, `.verificaciones/` | Historial de verificaciones (no se edita a mano) |
-| `engine/` | Motor de reglas (sin IA): `modelos`, `evaluar`, `revisiones/` (entrada, frenar, beneficiario, montos, calendario), `niveles`, `canales`, `guardarrail`, `contexto` (desde el acta), `reglas_io` |
+| `engine/` | Motor de reglas (sin IA): `modelos`, `evaluar`, `revisiones/` (entrada, frenar, beneficiario, montos, calendario), `niveles`, `canales`, `guardarrail`, `contexto` (desde el acta), `reglas_io` (incluye reglas por sala y validación de cambios), `simular` |
 | `acta/` | Acta en SQLite: huellas, escribir, verificar, estado, CSV, tablero, salas. `esquema_postgres.sql` viene de otra sesión y **no se usa** todavía |
 | `agents/` | Agente de entrada: `archivo`, `lectura_ia` (Gemini o Claude), `segunda_lectura` y `seguridad` (sin IA), `aclaraciones`, `estado`, `flujo`, `ejemplos`, `probar` |
-| `app/` | Streamlit. `Panel_1_Proveedor.py`, `pages/` con el Panel 2 (Tablero, Cola de aprobación, Calendario, Acta), `comun.py`, `apoyo.py` |
+| `app/` | Streamlit. `Panel_1_Proveedor.py`, `pages/` con el Panel 2 (Tablero, Cola de aprobación, Calendario, Acta, Reglas), `comun.py`, `apoyo.py` |
 | `data/` | `reglas.yaml`, `techos.yaml`, `registros.yaml`, `tasas.yaml`, `canales.yaml`, `calendario.csv` y `casos.yaml` (20 facturas de prueba), todo «supuesto»; `demo_semilla.py`; `facturas_ejemplo/` |
 | `eval.py` | Mide autonomía, seguridad (pagos indebidos = 0) y explicabilidad con los 20 casos |
 | `tests/`, `pytest.ini` | 143 pruebas (`python3 -m pytest -q`), incluida la de propiedades con Hypothesis |
@@ -99,7 +99,8 @@ Lo más reciente va arriba.
 
 | Cuándo | Commit | Qué se hizo |
 |---|---|---|
-| 17 oct | *(este commit)* | **P25 cerrado: R2.5 implementado.** Spec primero: `design.md` del motor alineado con el código (ficha con `origen_campos` y `segunda_lectura = no_disponible`; criterio R2.5 explicado campo por campo) y EA3.3 y EA6.4 ajustados. Código: R2.5 (un dato obligatorio que viene solo de una aclaración da `AVISO`, salvo que coincida con el acuerdo o el calendario; número y vencimiento siempre avisan), R2.2 con segunda lectura no disponible (imágenes y textos sin campos comparables) y el agente marca `origen_campos`. 11 pruebas nuevas, 4 violaciones nuevas en Hypothesis y 4 mutaciones del motor detectadas. 143 pruebas, `eval.py` 20/20. Diferencias deliberadas con el diseño de la otra sesión: `orden_en_texto` (agrega un `AVISO`) en lugar de `alerta_inyeccion`, y sin `campos_diferentes` ni `aclaraciones` en la ficha. |
+| 17 oct | *(este commit)* | **Página de reglas (PT11, PP8).** El entregable del reto pide una pantalla donde la empresa define sus reglas, y no existía. Spec primero: PP8 (7 criterios), diseño y tarea. Panel 2 › Reglas muestra los parámetros vigentes y el techo duro (no editable), permite editarlos, muestra la vista previa (qué cambia, si afloja o restringe y qué facturas de la sala cambiarían de decisión) y pide motivo. Aflojar exige el rol senior; si lo intenta la persona, queda un `INTENTO_RECHAZADO`. El cambio se guarda como `CAMBIO_REGLA` en el acta de la sala, vale solo hacia adelante y solo en esa sala, y la versión pasa a `v12.s1`. El agente de entrada y los paneles deciden con las reglas de la sala. Cierra T11 y la parte de afloja/restringe y techo de T12. 9 pruebas nuevas, 152 en total, `eval.py` 20/20. |
+| 17 oct | `5f764ef` | **P25 cerrado: R2.5 implementado.** Spec primero: `design.md` del motor alineado con el código (ficha con `origen_campos` y `segunda_lectura = no_disponible`; criterio R2.5 explicado campo por campo) y EA3.3 y EA6.4 ajustados. Código: R2.5 (un dato obligatorio que viene solo de una aclaración da `AVISO`, salvo que coincida con el acuerdo o el calendario; número y vencimiento siempre avisan), R2.2 con segunda lectura no disponible (imágenes y textos sin campos comparables) y el agente marca `origen_campos`. 11 pruebas nuevas, 4 violaciones nuevas en Hypothesis y 4 mutaciones del motor detectadas. 143 pruebas, `eval.py` 20/20. Diferencias deliberadas con el diseño de la otra sesión: `orden_en_texto` (agrega un `AVISO`) en lugar de `alerta_inyeccion`, y sin `campos_diferentes` ni `aclaraciones` en la ficha. |
 | 17 oct | `be99999` | **Actualización de este archivo** tras fusionar el PR #2: se quitaron filas y pendientes duplicados, se corrigió el estado real, se agregó la deriva entre la spec del motor y el código (P25) y las decisiones abiertas que quedaron sin spec. |
 | 17 oct | `77a8763` | **PR #2 fusionado en `main`:** motor de reglas, acta, agente de entrada, paneles y despliegue. |
 | 17 oct | `e6a1e72` | **Fusión de `main` en la rama.** Otra sesión había subido a `main` un esqueleto paralelo (`agents/entrada/`, `app/componentes/`, 45 pruebas) y specs propias de paneles y extracción: 37 archivos en conflicto. Por decisión del dueño **ganó esta rama** (más completa). Se conservó de `main`: skill `verificador`, `.verificaciones/`, `VERIFICACIONES.md`, `pytest.ini`, `.python-version`, `acta/esquema_postgres.sql` y los arreglos de D2. El esqueleto paralelo salió del árbol y sigue en el historial (`cda2588`). Verificado: VER-0005. |
@@ -176,7 +177,8 @@ En orden. El detalle de cada tarea está en `tasks.md` de cada spec.
 2. **Poner la clave de Gemini y correr `python3 -m agents.probar`** (P17). Si algo difiere, ajustar el modelo o la lectura.
 3. **El equipo confirma las specs** que valen (P23) y resuelve las decisiones abiertas (P1, P9, P10, P11).
 4. **Que otra persona escriba casos trampa nuevos** (P15) y los pase por `eval.py`.
-5. **Control de las 18:00:** correr `eval.py`. El enrutador de canal ya está hecho; con tiempo, la capa 3 (agente de reglas, T11 simular, T12 vigencias, conciliación, páginas de reglas y resumen). Si los casos trampa no pasan, esas horas se usan para corregir el motor.
+4b. ~~Página de reglas~~ (hecha; ver registro).
+5. **Control de las 18:00:** correr `eval.py`. El enrutador de canal ya está hecho; con tiempo, la capa 3 (agente de reglas en lenguaje natural, T12 vigencias con conflictos, conciliación y página de resumen). Si los casos trampa no pasan, esas horas se usan para corregir el motor.
 
 **Plan por horas** (hora de Bogotá):
 
