@@ -10,6 +10,8 @@ Aquí viven las especificaciones del proyecto, escritas antes de programar. Cada
 
 El diseño general está en `docs/Ruta-de-una-factura.pdf` y el plan hasta la entrega en `docs/Guia-6-alternativas-actualizada.pdf`.
 
+Además, `historias-de-usuario.md` reúne las 33 historias de todos los actores y las enlaza con los criterios de cada spec.
+
 ## Cómo leer los requisitos
 
 Notación EARS en español:
