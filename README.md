@@ -1,8 +1,8 @@
 # Colombiadevs · Agente que paga por la empresa
 
-Reto Blinka, «Agentes que pagan por la empresa» (Hackathon 30X). Un agente revisa las facturas de una empresa y decide si **pagar, frenar o escalar** cada una, siguiendo las reglas de la empresa y explicando cada decisión.
+Reto Blinka, «Agentes que pagan por la empresa» (Hackathon 30X). Es un agente para las **empresas clientes de Blinka**: revisa las facturas de sus proveedores y decide si **pagar, frenar o escalar** cada una, siguiendo las reglas de la empresa y explicando cada decisión. Al final entrega a Blinka un **archivo con las facturas aprobadas** (automática o manualmente) para que Blinka haga los pagos desde la cuenta del cliente. Nosotros somos la capa de control antes del pago (aclarado por el CEO de Blinka el 17 oct; ver `AVANCES.md`, secciones 1b y 8b).
 
-> **No mueve dinero real y solo usa datos ficticios.** «Pagar» es un pago de práctica que queda en el acta.
+> **No mueve dinero real y solo usa datos ficticios.** «Pagar» es una aprobación de práctica que queda en el acta. El archivo de salida con los pagos aprobados está especificado (`specs/archivo-de-salida/`) pero **aún no está programado**.
 
 ## Idea central
 

@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0019 | 2026-10-17 18:10 | APROBADO | Documentacion al dia con la reunion con el CEO de Blinka: enfoque cliente de Blinka, roadmap R1-R14 por fases, pendientes P29-P31 y spec nueva archivo-de-salida (AS1-AS4); sin codigo | 0 | 1 | 07b4849 | — |
 | VER-0018 | 2026-10-17 17:08 | APROBADO | Panel 1 sin botones de ejemplo: solo se sube archivo, 4 archivos de muestra descargables con rotulos neutros (PP2.4, PP2.5, EA8.4); spec, pruebas, README y AVANCES | 0 | 1 | bb0f497 | — |
 | VER-0017 | 2026-10-17 16:37 | APROBADO | Patrones de respaldo para facturas electronicas colombianas (EA3.4 a EA3.8): TOTAL, Razon social, Nro. Doc., moneda del total en letras; spec, pruebas y AVANCES | 0 | 1 | 6d2d137 | — |
 | VER-0016 | 2026-10-17 16:23 | APROBADO | AVANCES.md: se registra el despliegue en Railway probado (salud, Gemini activo, FECHA_DEMO), se cierra P20, se acotan P17 y P18 y se actualizan próximas tareas | 0 | 1 | 014409d | — |
@@ -22,6 +23,11 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0019 — APROBADO
+
+- **ADVERTENCIA** (alcance) `specs/archivo-de-salida/requirements.md`: El formato real del archivo que espera Blinka no se conoce; las columnas son un supuesto marcado y hay 4 decisiones abiertas (AS-D1 a AS-D4) → Preguntarle a Blinka antes de programar AST1
+- **NOTA** (convenciones) `AVANCES.md`: Las horas del roadmap son estimaciones y las notas de la reunion son de Gemini con errores de transcripcion; solo se uso lo claro → Confirmar con el equipo
 
 ## VER-0018 — APROBADO
 
