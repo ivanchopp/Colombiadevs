@@ -1,0 +1,7 @@
+# Tipos de cambio de ejemplo a COP (supuesto). Una moneda sin tasa se escala (R5.1).
+supuesto: true
+tasas:
+  COP: "1"
+  USD: "4085"
+  BRL: "750"
+  MXN: "230"

@@ -5,8 +5,7 @@ import streamlit as st
 
 from acta.estado import facturas_por_estado
 from app.apoyo import estados_calendario, formato_monto, inesperadas
-from app.comun import almacen, barra_lateral, encabezado, exigir_rol, obtener_sala
-from data.demo_semilla import CALENDARIO
+from app.comun import almacen, barra_lateral, contexto_y_reglas, encabezado, exigir_rol, obtener_sala
 
 MESES = ["", "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre",
          "octubre", "noviembre", "diciembre"]
@@ -19,13 +18,15 @@ barra_lateral(sala)
 encabezado("Panel 2 · Finanzas › Calendario", sala)
 exigir_rol()
 
-facturas = facturas_por_estado(almacen().filas(sala))
-eventos = estados_calendario(CALENDARIO, facturas, date.today())
+filas = almacen().filas(sala)
+facturas = facturas_por_estado(filas)
+ctx, reglas = contexto_y_reglas(filas)
+eventos = estados_calendario(ctx, reglas)
 por_dia: dict[date, list] = {}
 for e in eventos:
     por_dia.setdefault(e["fecha"], []).append(e)
 
-mes, anio = CALENDARIO[0][1].month, CALENDARIO[0][1].year
+mes, anio = eventos[0]["fecha"].month, eventos[0]["fecha"].year
 st.subheader(f"{MESES[mes].capitalize()} {anio} · días hábiles")
 st.caption("✔ llegó · … pendiente · ! atrasada. Una factura inesperada no se rechaza: se escala. "
            "Fechas y montos esperados son de ejemplo (supuesto).")

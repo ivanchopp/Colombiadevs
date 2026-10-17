@@ -166,3 +166,23 @@ flowchart TD
 2. **12:00 a 14:00:** Ola 1 y T8.
 3. **14:00 a 18:00:** T9, T13, T14 y T15, junto con las pantallas.
 4. **18:00:** control con `eval.py`. Si todos los casos trampa pasan, se suman T7 y, si hay tiempo, T6, T10, T12 y T11.
+
+## Estado (17 oct)
+
+| Tarea | Estado |
+|---|---|
+| T1 | Hecho |
+| T2 | Hecho |
+| T3 | Hecho |
+| T4 | Hecho |
+| T5 | Hecho |
+| T6 | Hecho |
+| T7 | Hecho |
+| T8 | Hecho |
+| T9 | Hecho |
+| T10 | Hecho |
+| T13 | Hecho |
+| T14 | Hecho |
+| T15 | Hecho |
+| T11 | Pendiente |
+| T12 | Pendiente (solo vigencias y techos) |

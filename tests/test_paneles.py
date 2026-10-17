@@ -7,6 +7,8 @@ from streamlit.testing.v1 import AppTest
 from acta.estado import facturas_por_estado
 from app import apoyo
 from app.apoyo import AprobacionRechazada
+from engine.contexto import contexto_desde_acta
+from engine.reglas_io import cargar_contexto_base, cargar_reglas
 
 
 def facturas(almacen, sala):
@@ -35,10 +37,12 @@ def test_pp5_3_rol_insuficiente_queda_en_el_acta(almacen, sala):
     assert fs["F-1045"].estado == "PENDIENTE" and len(fs["F-1045"].intentos) == 1
 
 
-def test_pp5_4_el_preparador_no_aprueba(almacen, sala):
+def test_pp5_4_el_preparador_no_aprueba(almacen, sala, monkeypatch):
     f = facturas(almacen, sala)["F-1043"]
+    monkeypatch.setitem(apoyo.ROLES, "PERSONA", f.decision["preparador"])   # el preparador intenta aprobar
     with pytest.raises(AprobacionRechazada):
-        apoyo.validar_aprobacion("PERSONA", f, "motivo", f.decision["preparador"])
+        apoyo.responder(almacen, sala, f, "PERSONA", True, "motivo", "Bre-B")
+    assert facturas(almacen, sala)["F-1043"].estado == "PENDIENTE"
 
 
 def test_pp5_5_aprobar_registra_canal_y_pasa_a_pagada(almacen, sala):
@@ -67,12 +71,13 @@ def test_formato_monto():
 
 
 def test_pp6_2_estados_del_calendario(almacen, sala):
-    from data.demo_semilla import CALENDARIO
-    est = {e["proveedor"] + str(e["fecha"]): e["estado"]
-           for e in apoyo.estados_calendario(CALENDARIO, facturas(almacen, sala), date(2026, 10, 17))}
-    assert est["Imprenta Sol2026-10-14"] == "atrasada"
-    assert est["Hosting Andes2026-10-21"] == "pendiente"
-    assert est["Pixel Norte Ltda.2026-10-02"] == "llegó"
+    hoy = date(2026, 10, 17)
+    ctx = contexto_desde_acta(cargar_contexto_base(hoy), almacen.filas(sala))
+    est = {(e["proveedor"], e["fecha"].day): e["estado"]
+           for e in apoyo.estados_calendario(ctx, cargar_reglas(hoy)[0])}
+    assert est[("Imprenta Sol", 14)] == "atrasada"
+    assert est[("Hosting Andes", 21)] == "pendiente"
+    assert est[("Pixel Norte Ltda.", 2)] == "llegó"
 
 
 @pytest.fixture

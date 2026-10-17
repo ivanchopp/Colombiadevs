@@ -3,6 +3,8 @@ import streamlit as st
 
 from acta import salas
 from acta.almacen import AlmacenSqlite
+from engine.contexto import contexto_desde_acta
+from engine.reglas_io import cargar_contexto_base, cargar_reglas, hoy_bogota
 from app.apoyo import ROLES
 
 SEGUNDOS_REFRESCO = 5
@@ -50,3 +52,9 @@ def encabezado(titulo: str, sala: str):
 def barra_lateral(sala: str):
     st.sidebar.caption(f"Sala {sala}")
     st.sidebar.caption("Demo con datos ficticios. Tasas, canales y costos son de ejemplo (supuesto).")
+
+
+def contexto_y_reglas(filas):
+    """Contexto del motor armado desde el acta de la sala, y las reglas vigentes hoy."""
+    hoy = hoy_bogota()
+    return contexto_desde_acta(cargar_contexto_base(hoy), filas), cargar_reglas(hoy)[0]

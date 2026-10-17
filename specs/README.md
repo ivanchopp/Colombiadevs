@@ -23,7 +23,7 @@ Cada criterio tiene un número (por ejemplo R3.1) y debe tener al menos una prue
 
 | Spec | Estado |
 |---|---|
-| `motor-de-reglas` | Borrador para revisión |
+| `motor-de-reglas` | Borrador para revisión (implementado, falta T11 y T12 completo) |
 | `extraccion-y-agente-de-entrada` | Pendiente |
 | `acta-y-csv` | Borrador para revisión |
 | `paneles-y-despliegue` | Borrador para revisión (paneles programados; despliegue pendiente) |

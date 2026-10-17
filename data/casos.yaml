@@ -1,0 +1,481 @@
+# 20 facturas ficticias con su decisión esperada (R11.3). Contexto base: data/*.yaml, hoy = 2026-10-17.
+hoy: '2026-10-17'
+casos:
+- id: C01
+  nombre: Normal en COP
+  criterios:
+  - R1.2
+  - R3.2
+  - R6.1
+  - R5.3
+  esperado:
+    decision: PAGAR
+    nivel: NINGUNO
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: &id001 {}
+    cuenta_aclarada: null
+    factura_id: C01
+    beneficiario: Pixel Norte Ltda.
+    numero: N-01
+    monto: '2400000'
+    moneda: COP
+    vence: '2026-10-22'
+    recibida: '2026-10-02'
+    cuenta_original: Bancolombia ···1180
+- id: C02
+  nombre: Normal en USD
+  criterios:
+  - R1.2
+  - R5.1
+  esperado:
+    decision: PAGAR
+    nivel: NINGUNO
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C02
+    beneficiario: Cloudwerk GmbH
+    numero: N-02
+    monto: '540'
+    moneda: USD
+    vence: '2026-10-28'
+    recibida: '2026-10-15'
+    cuenta_original: Deutsche ···7712
+- id: C03
+  nombre: Normal en MXN
+  criterios:
+  - R1.2
+  - R5.1
+  esperado:
+    decision: PAGAR
+    nivel: NINGUNO
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C03
+    beneficiario: Taller Azteca
+    numero: TA-1044
+    monto: '12500'
+    moneda: MXN
+    vence: '2026-10-25'
+    recibida: '2026-10-06'
+    cuenta_original: BBVA ···3304
+- id: C04
+  nombre: Repetida
+  criterios:
+  - R3.1
+  esperado:
+    decision: FRENAR
+    nivel: NINGUNO
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C04
+    beneficiario: Taller Azteca
+    numero: TA-0931
+    monto: '12500'
+    moneda: MXN
+    vence: '2026-09-25'
+    recibida: '2026-10-06'
+    cuenta_original: BBVA ···3304
+- id: C05
+  nombre: 8 % sobre lo acordado
+  criterios:
+  - R3.3
+  esperado:
+    decision: ESCALAR
+    nivel: PERSONA
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C05
+    beneficiario: Estúdio Verde
+    numero: N-05
+    monto: '3800'
+    moneda: BRL
+    vence: '2026-10-27'
+    recibida: '2026-10-14'
+    cuenta_original: Itaú ···5521
+- id: C06
+  nombre: 12,5 % sobre lo acordado
+  criterios:
+  - R3.4
+  esperado:
+    decision: FRENAR
+    nivel: NINGUNO
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C06
+    beneficiario: Pixel Norte Ltda.
+    numero: N-06
+    monto: '2700000'
+    moneda: COP
+    vence: '2026-10-22'
+    recibida: '2026-10-02'
+    cuenta_original: Bancolombia ···1180
+- id: C07
+  nombre: 4 % sobre lo acordado (tolerancia)
+  criterios:
+  - R3.2
+  esperado:
+    decision: PAGAR
+    nivel: NINGUNO
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C07
+    beneficiario: Pixel Norte Ltda.
+    numero: N-07
+    monto: '2500000'
+    moneda: COP
+    vence: '2026-10-22'
+    recibida: '2026-10-02'
+    cuenta_original: Bancolombia ···1180
+- id: C08
+  nombre: Beneficiario nuevo
+  criterios:
+  - R4.1
+  - R4.2
+  esperado:
+    decision: ESCALAR
+    nivel: SENIOR
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C08
+    beneficiario: Nuevo Proveedor SAS
+    numero: N-08
+    monto: '9600000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-16'
+    cuenta_original: Banco Lago ···4821
+- id: C09
+  nombre: Cuenta cambiada
+  criterios:
+  - R4.2
+  esperado:
+    decision: ESCALAR
+    nivel: SENIOR
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: Banco Lago ···4821
+    factura_id: C09
+    beneficiario: Pixel Norte Ltda.
+    numero: N-09
+    monto: '2400000'
+    moneda: COP
+    vence: '2026-10-22'
+    recibida: '2026-10-02'
+    cuenta_original: Bancolombia ···1180
+- id: C10
+  nombre: Inesperada
+  criterios:
+  - R6.2
+  - R5.3
+  esperado:
+    decision: ESCALAR
+    nivel: PERSONA
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C10
+    beneficiario: Diseños Alba
+    numero: N-10
+    monto: '4100000'
+    moneda: COP
+    vence: '2026-10-29'
+    recibida: '2026-10-16'
+    cuenta_original: Davivienda ···6403
+- id: C11
+  nombre: Orden escondida en el texto
+  criterios:
+  - R2.4
+  esperado:
+    decision: ESCALAR
+    nivel: PERSONA
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: true
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C11
+    beneficiario: Pixel Norte Ltda.
+    numero: N-11
+    monto: '2400000'
+    moneda: COP
+    vence: '2026-10-22'
+    recibida: '2026-10-02'
+    cuenta_original: Bancolombia ···1180
+- id: C12
+  nombre: Las lecturas no coinciden
+  criterios:
+  - R2.2
+  esperado:
+    decision: ESCALAR
+    nivel: PERSONA
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: no_coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C12
+    beneficiario: Pixel Norte Ltda.
+    numero: N-12
+    monto: '2400000'
+    moneda: COP
+    vence: '2026-10-22'
+    recibida: '2026-10-02'
+    cuenta_original: Bancolombia ···1180
+- id: C13
+  nombre: Lectura dudosa
+  criterios:
+  - R2.2
+  esperado:
+    decision: ESCALAR
+    nivel: PERSONA
+  ficha:
+    lectura_ia: dudosa
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C13
+    beneficiario: Pixel Norte Ltda.
+    numero: N-13
+    monto: '2400000'
+    moneda: COP
+    vence: '2026-10-22'
+    recibida: '2026-10-02'
+    cuenta_original: Bancolombia ···1180
+- id: C14
+  nombre: Aclarado cambia el monto
+  criterios:
+  - R2.3
+  esperado:
+    decision: ESCALAR
+    nivel: SENIOR
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados:
+      monto: '2500000'
+    cuenta_aclarada: null
+    factura_id: C14
+    beneficiario: Pixel Norte Ltda.
+    numero: N-14
+    monto: '2400000'
+    moneda: COP
+    vence: '2026-10-22'
+    recibida: '2026-10-02'
+    cuenta_original: Bancolombia ···1180
+- id: C15
+  nombre: Sin tipo de cambio
+  criterios:
+  - R5.1
+  - R1.3
+  esperado:
+    decision: ESCALAR
+    nivel: SENIOR
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C15
+    beneficiario: Cloudwerk GmbH
+    numero: N-15
+    monto: '500'
+    moneda: EUR
+    vence: '2026-10-28'
+    recibida: '2026-10-15'
+    cuenta_original: Deutsche ···7712
+- id: C16
+  nombre: Sin presupuesto
+  criterios:
+  - R3.6
+  esperado:
+    decision: FRENAR
+    nivel: NINGUNO
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C16
+    beneficiario: Pixel Norte Ltda.
+    numero: N-16
+    monto: '2400000'
+    moneda: COP
+    vence: '2026-10-22'
+    recibida: '2026-10-02'
+    cuenta_original: Bancolombia ···1180
+  historial_extra:
+  - factura_id: H1
+    beneficiario: Otros SAS
+    numero: H-1
+    monto: '50000000'
+    moneda: COP
+    vence: '2026-10-01'
+    monto_base: '50000000.00'
+    estado: PAGADA
+    periodo: 2026-10
+  - factura_id: H2
+    beneficiario: Otros dos SAS
+    numero: H-2
+    monto: '49000000'
+    moneda: COP
+    vence: '2026-10-01'
+    monto_base: '49000000.00'
+    estado: PAGADA
+    periodo: 2026-10
+- id: C17
+  nombre: Supera el techo duro
+  criterios:
+  - R3.7
+  esperado:
+    decision: FRENAR
+    nivel: NINGUNO
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C17
+    beneficiario: Obras Cumbre SAS
+    numero: N-17
+    monto: '60000000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-16'
+    cuenta_original: Bancolombia ···9921
+- id: C18
+  nombre: Límite por periodo del beneficiario
+  criterios:
+  - R5.4
+  esperado:
+    decision: ESCALAR
+    nivel: SENIOR
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C18
+    beneficiario: Pixel Norte Ltda.
+    numero: N-18
+    monto: '2400000'
+    moneda: COP
+    vence: '2026-10-22'
+    recibida: '2026-10-02'
+    cuenta_original: Bancolombia ···1180
+  historial_extra:
+  - factura_id: H3
+    beneficiario: Pixel Norte Ltda.
+    numero: H-3
+    monto: '13000000'
+    moneda: COP
+    vence: '2026-10-01'
+    monto_base: '13000000.00'
+    estado: PAGADA
+    periodo: 2026-10
+- id: C19
+  nombre: Monto medio, aprueba la persona
+  criterios:
+  - R5.3
+  esperado:
+    decision: ESCALAR
+    nivel: PERSONA
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C19
+    beneficiario: Imprenta Sol
+    numero: N-19
+    monto: '6000000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-14'
+    cuenta_original: Bancolombia ···2291
+- id: C20
+  nombre: Sin acuerdo registrado
+  criterios:
+  - R3.5
+  esperado:
+    decision: ESCALAR
+    nivel: PERSONA
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: *id001
+    cuenta_aclarada: null
+    factura_id: C20
+    beneficiario: Hosting Andes
+    numero: N-20
+    monto: '950000'
+    moneda: COP
+    vence: '2026-11-05'
+    recibida: '2026-10-21'
+    cuenta_original: Bancolombia ···7745

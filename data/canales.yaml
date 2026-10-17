@@ -1,0 +1,8 @@
+# Canales de pago de ejemplo. Costos y tiempos son SUPUESTOS (P3: verificar con Blinka).
+canales:
+  - {nombre: "Bre-B", paises: [CO], monedas: [COP], costo: bajo, tiempo_horas: "0.1", supuesto: true}
+  - {nombre: "PSE", paises: [CO], monedas: [COP], costo: bajo, tiempo_horas: "2", supuesto: true}
+  - {nombre: "USDC", paises: ["*"], monedas: [USD], costo: medio, tiempo_horas: "0.1",
+     requiere_verificacion: true, supuesto: true}
+  - {nombre: "ACH en USD", paises: [US], monedas: [USD], costo: medio, tiempo_horas: "24", supuesto: true}
+  - {nombre: "Wire en USD", paises: ["*"], monedas: [USD], costo: alto, tiempo_horas: "36", supuesto: true}

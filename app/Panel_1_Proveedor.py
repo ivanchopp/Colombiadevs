@@ -4,7 +4,7 @@ import streamlit as st
 from acta.estado import estado_publico, facturas_por_estado
 from app.apoyo import formato_monto
 from app.comun import almacen, barra_lateral, encabezado, obtener_sala
-from data.demo_semilla import ORIGEN
+from data.demo_semilla import PREPARADOR
 
 FACTURAS_MAX = 5
 PASOS = ["recibida", "datos confirmados", "en revisión", "resuelta"]
@@ -16,7 +16,7 @@ encabezado("Panel 1 · Portal del proveedor", sala)
 
 filas = almacen().filas(sala)
 facturas = facturas_por_estado(filas)
-propias = [f for f in facturas.values() if f.decision.get("origen") != ORIGEN]
+propias = [f for f in facturas.values() if f.decision.get("preparador") != PREPARADOR]
 st.info(f"Demo con datos ficticios. Has usado {len(propias)} de {FACTURAS_MAX} facturas permitidas.")
 
 izq, der = st.columns(2)

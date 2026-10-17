@@ -12,6 +12,6 @@ Estado: **borrador**. Requisitos: `requirements.md` · Diseño: `design.md`. Due
 | PT6 | Calendario y acta (con verificación de cadena) | PP6 | Hecho |
 | PT7 | Panel 1: estado público y facturas de ejemplo | PP2 | Hecho (sin agente de entrada) |
 | PT8 | Detalle de una factura con ficha y revisiones (en el tablero) | PP6.1 | Hecho |
-| PT9 | Conectar con el motor (`registrar_decision`) y el agente de entrada | PP5, PP2 | Pendiente (depende de T9, T15 y de la spec de extracción) |
+| PT9 | Conectar con el motor (`registrar_decision`) y el agente de entrada | PP5, PP2 | Motor conectado; falta el agente de entrada |
 | PT10 | Despliegue en Railway (PostgreSQL, variables, `Procfile`) | — | Pendiente |
 | PT11 | Páginas de reglas y resumen (capa 3) | — | Pendiente |

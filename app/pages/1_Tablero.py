@@ -1,6 +1,4 @@
 """Panel 2 · Tablero. Las cifras salen del acta (PP4)."""
-from datetime import date
-
 import pandas as pd
 import streamlit as st
 
@@ -8,8 +6,8 @@ from acta.estado import facturas_por_estado
 from acta.exportar_csv import exportar_eventos, exportar_facturas
 from acta.tablero import cifras, comprobar_consistencia
 from app.apoyo import DECISIONES, estados_calendario, formato_monto, quien_aprueba
-from app.comun import SEGUNDOS_REFRESCO, almacen, barra_lateral, encabezado, exigir_rol, obtener_sala
-from data.demo_semilla import CALENDARIO
+from app.comun import (SEGUNDOS_REFRESCO, almacen, barra_lateral, contexto_y_reglas, encabezado,
+                       exigir_rol, obtener_sala)
 
 st.set_page_config(page_title="Panel 2 · Tablero", layout="wide")
 sala = obtener_sala()
@@ -24,7 +22,8 @@ ICONO = {"PAGADA": "Pagada", "FRENADA": "Frenada", "PENDIENTE": "Escalada", "REC
 def tablero():
     filas = almacen().filas(sala)
     facturas = facturas_por_estado(filas)
-    atrasadas = sum(e["estado"] == "atrasada" for e in estados_calendario(CALENDARIO, facturas, date.today()))
+    ctx, reglas = contexto_y_reglas(filas)
+    atrasadas = sum(e["estado"] == "atrasada" for e in estados_calendario(ctx, reglas))
     c = cifras(filas, atrasadas)
 
     if not comprobar_consistencia(filas):
@@ -64,8 +63,7 @@ def tablero():
         izq, der = st.columns(2)
         with izq:
             st.caption("Ficha")
-            st.json({k: f.decision[k] for k in ("factura_id", "beneficiario", "monto", "moneda", "vence",
-                                                "preparador") if k in f.decision})
+            st.json(f.decision.get("ficha", {}))
         with der:
             st.caption(f"Revisiones del motor de reglas · {f.decision['version_reglas']} · "
                        f"decisión #{f.fila_decision}")

@@ -31,6 +31,10 @@ for f in cola:
         for r in d["revisiones"]:
             if r["resultado"] != "OK":
                 st.text(f"  {r['resultado']}: {r['mensaje']}")
+        if d.get("aviso_canal"):
+            st.caption(f"Canal: {d['aviso_canal']}")
+        elif d.get("canal_sugerido"):
+            st.caption(f"Canal sugerido: {d['canal_sugerido']} (solo recomendación, costos de ejemplo).")
         motivo = st.text_area("Motivo de tu decisión (obligatorio)", key=f"motivo_{f.factura_id}",
                               max_chars=500)
         canal = st.selectbox("Canal de pago (si apruebas)", CANALES, key=f"canal_{f.factura_id}",
