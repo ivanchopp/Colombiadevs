@@ -24,6 +24,10 @@ VIOLACIONES = {
     "supera_acuerdo": dict(monto="3000000"),
     "supera_techo": dict(beneficiario="Obras Cumbre SAS", monto="70000000", cuenta_original="Bancolombia ···9921"),
     "inesperada": dict(recibida="2026-10-12"),
+    "segunda_lectura_no_disponible": dict(segunda_lectura="no_disponible"),     # R2.2
+    "numero_solo_aclarado": dict(origen_campos={"numero": "aclarado"}),         # R2.5
+    "vence_solo_aclarado": dict(origen_campos={"vence": "aclarado"}),           # R2.5
+    "monto_aclarado_sin_respaldo": dict(monto="2600000", origen_campos={"monto": "aclarado"}),
 }
 
 

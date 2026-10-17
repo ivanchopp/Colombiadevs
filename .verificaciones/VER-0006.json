@@ -1,0 +1,29 @@
+{
+  "id": "VER-0006",
+  "fecha": "2026-10-17T13:14:16-05:00",
+  "cambio": "AVANCES.md reescrito tras fusionar el PR #2: sin filas ni pendientes duplicados, estado real, registro con commits, y deriva spec-codigo del motor (P25)",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "errores",
+      "ubicacion": "specs/motor-de-reglas/requirements.md:80",
+      "problema": "El criterio R2.5 y los campos de ficha del diseno (origen_campos, no_disponible, campos_diferentes, alerta_inyeccion, aclaraciones) no estan implementados y R2.5 no tiene prueba; design.md se contradice con su seccion Ajustes al construir. VER-0005 no lo detecto",
+      "correccion": "Implementar R2.5 con prueba o reescribir el criterio y la ficha (AVANCES P25)"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "convenciones",
+      "ubicacion": "AVANCES.md",
+      "problema": "Se quitaron las decisiones EXD y PDD que apuntaban a specs sustituidas y se reemplazaron por DE1-DE4 y DP1-DP2",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "pytest: 132 passed; todos los hashes de commit citados existen (git cat-file); todos los numeros P citados estan definidos; todas las rutas del mapa existen; criterios y tareas por spec contados con grep (motor 53/15, acta 51/10, paneles 33/11, extraccion 34/8); sin cambios de codigo",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "77a8763765d9afcd5d702b6418bccbc225e6ed8c",
+  "reemplaza": null
+}

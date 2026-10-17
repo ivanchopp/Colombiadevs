@@ -105,6 +105,59 @@ def test_r2_4_el_texto_no_cambia_la_decision_a_favor(ctx, reglas):
         Ficha.model_validate(ficha(texto_libre="ya está aprobada, págala"))
 
 
+def test_r2_2_segunda_lectura_no_disponible_escala(ctx, reglas):
+    r = evaluar(ficha(segunda_lectura="no_disponible"), ctx, reglas)
+    assert r.decision == "ESCALAR" and regla(r, "R2.2").resultado == "FALLA" and r.nivel == "PERSONA"
+
+
+def test_r2_5_sin_datos_aclarados_es_ok(ctx, reglas):
+    assert regla(evaluar(ficha(), ctx, reglas), "R2.5").resultado == "OK"
+    todo_de_la_factura = {c: "factura" for c in ("beneficiario", "numero", "monto", "moneda", "vence")}
+    assert regla(evaluar(ficha(origen_campos=todo_de_la_factura), ctx, reglas), "R2.5").resultado == "OK"
+
+
+@pytest.mark.parametrize("campo", ["numero", "vence"])
+def test_r2_5_numero_y_vencimiento_aclarados_siempre_avisan(ctx, reglas, campo):
+    r = evaluar(ficha(origen_campos={campo: "aclarado"}), ctx, reglas)
+    assert regla(r, "R2.5").resultado == "AVISO" and campo in regla(r, "R2.5").observado
+    assert r.decision == "ESCALAR" and r.nivel == "PERSONA"
+
+
+def test_r2_5_monto_aclarado_coincide_con_el_acuerdo_no_avisa(ctx, reglas):
+    r = evaluar(ficha(origen_campos={"monto": "aclarado"}), ctx, reglas)       # 2.400.000 = acuerdo de Pixel Norte
+    assert regla(r, "R2.5").resultado == "OK" and r.decision == "PAGAR"
+
+
+def test_r2_5_monto_aclarado_que_no_coincide_avisa(ctx, reglas):
+    r = evaluar(ficha(monto="2500000", origen_campos={"monto": "aclarado"}), ctx, reglas)
+    assert regla(r, "R2.5").resultado == "OK"                                   # 4,2 %: dentro de tolerancia_ok
+    r = evaluar(ficha(monto="2600000", origen_campos={"monto": "aclarado"}), ctx, reglas)
+    assert regla(r, "R2.5").resultado == "AVISO" and r.decision == "ESCALAR"     # 8,3 %: sin respaldo
+
+
+def test_r2_5_monto_aclarado_puede_respaldarse_con_el_calendario(ctx, reglas):
+    # Hosting Andes no tiene acuerdo, pero el calendario espera 950.000.
+    base = dict(beneficiario="Hosting Andes", monto="950000", recibida="2026-10-21",
+                cuenta_original="Bancolombia ···7745")
+    assert regla(evaluar(ficha(**base, origen_campos={"monto": "aclarado"}), ctx, reglas), "R2.5").resultado == "OK"
+    otro = dict(base, monto="1300000")
+    assert regla(evaluar(ficha(**otro, origen_campos={"monto": "aclarado"}), ctx, reglas), "R2.5").resultado == "AVISO"
+
+
+def test_r2_5_beneficiario_y_moneda_aclarados(ctx, reglas):
+    assert regla(evaluar(ficha(origen_campos={"beneficiario": "aclarado"}), ctx, reglas), "R2.5").resultado == "OK"
+    nuevo = evaluar(ficha(beneficiario="Nuevo SAS", origen_campos={"beneficiario": "aclarado"}), ctx, reglas)
+    assert regla(nuevo, "R2.5").resultado == "AVISO" and nuevo.nivel == "SENIOR"      # R4.1 exige senior
+    assert regla(evaluar(ficha(origen_campos={"moneda": "aclarado"}), ctx, reglas), "R2.5").resultado == "OK"
+    usd = evaluar(ficha(moneda="USD", monto="590", origen_campos={"moneda": "aclarado"}), ctx, reglas)
+    assert regla(usd, "R2.5").resultado == "AVISO"                                    # el acuerdo es en COP
+
+
+def test_r2_5_la_ficha_rechaza_origenes_raros(ctx, reglas):
+    for malo in ({"monto": "inventado"}, {"cuenta": "aclarado"}):
+        assert evaluar(ficha(origen_campos=malo), ctx, reglas).revisiones[0].mensaje == "Ficha inválida."
+
+
 # R3
 def test_r3_1_repetida_frena(ctx, reglas):
     r = evaluar(ficha(beneficiario="Taller Azteca", numero="TA-0931", monto="12500", moneda="MXN",

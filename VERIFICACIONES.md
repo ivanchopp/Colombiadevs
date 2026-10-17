@@ -4,11 +4,24 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0007 | 2026-10-17 13:20 | APROBADO | Cierra P25: implementa R2.5 y R2.2 con segunda lectura no disponible; ficha con origen_campos; spec del motor alineada con el codigo; AVANCES actualizado | 0 | 1 | be99999 | — |
+| VER-0006 | 2026-10-17 13:14 | APROBADO | AVANCES.md reescrito tras fusionar el PR #2: sin filas ni pendientes duplicados, estado real, registro con commits, y deriva spec-codigo del motor (P25) | 0 | 1 | 77a8763 | — |
 | VER-0005 | 2026-10-17 13:02 | APROBADO | Rama claude/focused-dirac-iurhyp: motor de reglas, acta, agente de entrada (Gemini o Claude), paneles y despliegue en Railway; fusion con main (gana la rama en conflictos) | 0 | 3 | 175774a | — |
 | VER-0004 | 2026-10-17 11:29 | APROBADO | Esqueleto del código (engine, acta, agents/entrada, app, tests) | 0 | 0 | 682827e | — |
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0007 — APROBADO
+
+- **ADVERTENCIA** (alcance) `data/casos.yaml`: R2.5 y R2.2 con segunda lectura no disponible tienen pruebas unitarias y de propiedades pero no un caso en casos.yaml (T3 pide un caso por criterio de R2 a R5); anadirlos cambiaria el total de 20 casos → Decidir si se amplia el set de casos (AVANCES P15)
+- **NOTA** (convenciones) `specs/motor-de-reglas/design.md`: La ficha difiere deliberadamente del diseno de otra sesion: orden_en_texto en lugar de alerta_inyeccion y sin campos_diferentes ni aclaraciones; documentado en Ajustes al construir → Confirmar con el equipo (P23)
+- **NOTA** (seguridad) `engine/revisiones/entrada.py`: R2.5 solo agrega cautela: un dato aclarado que coincide con registros no avisa, pero R2.2, R4 y las demas revisiones siguen aplicando y segunda_lectura no puede cambiarse por chat → Ninguna
+
+## VER-0006 — APROBADO
+
+- **ADVERTENCIA** (errores) `specs/motor-de-reglas/requirements.md:80`: El criterio R2.5 y los campos de ficha del diseno (origen_campos, no_disponible, campos_diferentes, alerta_inyeccion, aclaraciones) no estan implementados y R2.5 no tiene prueba; design.md se contradice con su seccion Ajustes al construir. VER-0005 no lo detecto → Implementar R2.5 con prueba o reescribir el criterio y la ficha (AVANCES P25)
+- **NOTA** (convenciones) `AVANCES.md`: Se quitaron las decisiones EXD y PDD que apuntaban a specs sustituidas y se reemplazaron por DE1-DE4 y DP1-DP2 → Ninguna
 
 ## VER-0005 — APROBADO
 

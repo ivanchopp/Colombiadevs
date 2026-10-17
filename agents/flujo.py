@@ -60,7 +60,7 @@ def recibir(almacen, sala_id, nombre, datos, cliente=None, clave_ejemplo=None) -
     campos, modo = _leer(tipo, datos, texto, clave_ejemplo, cliente)
 
     if texto is None:
-        segunda, difieren = "no_coincide", []                       # EA3.3
+        segunda, difieren = "no_disponible", []                     # EA3.3
     else:
         segunda, difieren = segunda_lectura.comparar(campos, texto)
     dudosos = [c for c in ORDEN_CAMPOS if c in set(campos["dudosos"]) | set(difieren)]
@@ -113,18 +113,20 @@ def construir_ficha(e: dict, sala_id: str, factura_id: str, hoy) -> dict:
     """Ficha con código. Lo aclarado va aparte y solo rellena lo que faltaba en el original (EA6.1)."""
     L, aclarados = e["lectura"], e["aclarados"]
     ia_dudosa = e["modo"] in ("regex",) or bool(L["dudosos"])
-    valores = {}
+    valores, origen = {}, {}
     for c in ("beneficiario", "numero", "monto", "moneda", "vence"):
         if L.get(c) in (None, ""):
             valores[c] = aclarados.get(c)
-            ia_dudosa = True                           # el original faltaba: nunca queda como lectura confiable
+            origen[c] = "aclarado"                     # el original faltaba: el motor lo trata según R2.5
+            ia_dudosa = True                           # y la lectura nunca queda como confiable
         else:
             valores[c] = str(L[c])
+            origen[c] = "factura"
     return dict(
         factura_id=factura_id, beneficiario=valores["beneficiario"], numero=valores["numero"],
         monto=valores["monto"], moneda=valores["moneda"], vence=valores["vence"],
         recibida=hoy.isoformat(), cuenta_original=L.get("cuenta"), cuenta_aclarada=None,
-        valores_aclarados={k: v for k, v in aclarados.items()},
+        valores_aclarados={k: v for k, v in aclarados.items()}, origen_campos=origen,
         lectura_ia="dudosa" if ia_dudosa or e["pendientes"] else "ok",
         segunda_lectura=e["segunda"],                  # el chat no puede cambiarla (EA5.4)
         orden_en_texto=e["orden_en_texto"], preparador=f"proveedor-{sala_id}")
