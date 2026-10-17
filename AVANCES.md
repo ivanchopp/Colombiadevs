@@ -2,7 +2,7 @@
 
 > **Si eres un chat nuevo de Claude Code, empieza aquí.** Este archivo es la memoria del proyecto: qué se quiere hacer, qué ya se hizo, qué falta y qué sigue. Léelo completo antes de tocar nada y **actualízalo al terminar cada cambio** (ver «Cómo mantener este archivo»).
 
-**Última actualización:** sáb 17 oct 2026, 11:15 (hora Bogotá)
+**Última actualización:** sáb 17 oct 2026, 11:40 (hora Bogotá)
 **Entrega:** **dom 18 oct 2026, 8:00 a. m. (hora Bogotá).** Objetivo: enviar a las 7:00.
 **Repositorio:** https://github.com/ivanchopp/Colombiadevs (rama `main`, no hay otras)
 
@@ -14,7 +14,7 @@
 - **De dónde viene:** el *Reto Blinka, «Agentes que pagan por la empresa»* (Hackathon 30X, HackRadar). Blinka es una fintech colombiana en EE. UU. con cuentas en USD y pagos a Latinoamérica.
 - **Idea central:** la IA solo **lee y redacta**. Un programa normal, el **motor de reglas**, **decide**. Ante la duda, el resultado es **escalar, nunca pagar**.
 - **Equipo:** 4 personas. Reparto sugerido: **A** motor y pruebas · **B** agentes con IA · **C** pantallas · **D** datos, evaluación y pitch.
-- **Estado del código:** **todavía no hay código.** Hay documentos de diseño, una guía de plan y las specs del motor de reglas.
+- **Estado del código:** hay **los paneles (Streamlit) y un núcleo mínimo del acta (SQLite)**, con 26 pruebas. **Falta el motor de reglas, los agentes con IA y el despliegue.** Las decisiones que se ven hoy en los paneles son una **semilla de ejemplo** (`data/demo_semilla.py`), no las calcula el motor. Para verlo: `pip install -r requirements.txt` y `streamlit run app/Panel_1_Proveedor.py`.
 
 ## 2. Lo que no se negocia
 
@@ -74,7 +74,12 @@
 | `specs/README.md` | Índice y reglas de las especificaciones |
 | `specs/motor-de-reglas/` | `requirements.md` (52 criterios EARS), `design.md`, `tasks.md` (T1 a T15) |
 | `specs/acta-y-csv/` | Acta de solo añadir con huellas, CSV, tablero, salas y agente de conciliación. `requirements.md` (criterios AC), `design.md`, `tasks.md` (AT1 a AT10) |
-| *(aún no existe)* `engine/`, `agents/`, `app/`, `data/`, `tests/`, `eval.py`, `init_db.py` | Estructura de código prevista |
+| `specs/paneles-y-despliegue/` | Requisitos (PP1 a PP7), diseño y tareas (PT1 a PT11) de los dos paneles |
+| `app/` | Streamlit. `Panel_1_Proveedor.py` (portal abierto), `pages/` con el Panel 2 (Tablero, Cola de aprobación, Calendario, Acta), `comun.py` (sala, rol) y `apoyo.py` (funciones puras) |
+| `acta/` | Núcleo mínimo del acta en SQLite: huellas, escribir, verificar, estado, CSV, tablero, salas |
+| `data/demo_semilla.py` | Facturas y calendario de ejemplo de las maquetas. **Provisional** |
+| `tests/` | 26 pruebas (`python3 -m pytest -q`) |
+| *(aún no existe)* `engine/`, `agents/`, `eval.py`, `init_db.py` | Estructura de código prevista |
 
 ## 6. Registro de cambios
 
@@ -82,7 +87,8 @@ Lo más reciente va arriba.
 
 | Cuándo | Commit | Qué se hizo |
 |---|---|---|
-| 17 oct | *(este commit)* | Specs de `acta-y-csv`: 9 bloques de requisitos (AC1 a AC9), diseño con tabla de solo añadir, huellas, CSV y salas, y 10 tareas (AT1 a AT10). Faltan 2 specs. |
+| 17 oct | *(este commit)* | **Primeros tableros.** Spec `paneles-y-despliegue` (PP1 a PP7). Código: Panel 1 (estado público, sin reglas ni motivos) y Panel 2 con selector de rol, tablero con refresco cada 5 s y descarga de CSV, cola de aprobación (motivo obligatorio, nivel por rol, separación de funciones, intento rechazado al acta, una sola respuesta por decisión), calendario, acta con verificación de cadena y detalle de factura. Núcleo mínimo del acta en SQLite (AC1 a AC7). Revisado a mano en el navegador. |
+| 17 oct | *(commit anterior)* | Specs de `acta-y-csv`: 9 bloques de requisitos (AC1 a AC9), diseño con tabla de solo añadir, huellas, CSV y salas, y 10 tareas (AT1 a AT10). Faltan 2 specs. |
 | 17 oct | `1d0a7d1` | Se crearon `AVANCES.md` y `CLAUDE.md`, para que cualquier chat nuevo de Claude Code conozca el proyecto, lo hecho, lo pendiente y lo que sigue. |
 | 17 oct | `4ad15b4` | Se corrigieron las maquetas de «Ruta de una factura»: umbral de pago automático (3 M), motivo de la F-1045 y nivel de la F-1047 (persona, no senior). Presupuesto del periodo en **100 M**. PDF actualizado. |
 | 17 oct | `77c9522` | Specs del motor de reglas: 11 bloques de requisitos, diseño y 15 tareas. Índice en `specs/README.md`. |
@@ -108,6 +114,11 @@ Cosas ya hechas que hay que **revisar, confirmar o corregir**:
 | P6 | **El PDF se genera a mano** desde la página en línea (Chromium, A3 horizontal). Si la página cambia, hay que regenerar y subir el PDF | Quien edite el diseño |
 | P7 | Si se construye el sello público: confirmar con los organizadores que una **testnet no cuenta como mover dinero** | Solo si se retoma |
 | P8 | Las fichas de la guía describen la **Opción 6 completa** a propósito. El alcance real es solo el enrutador | Ninguno, solo saberlo |
+| P10 | **La semilla de ejemplo no la decide el motor.** Los 2 pagos y los casos escalados de los paneles se escriben a mano en el acta (`origen: semilla_maqueta`). Hay que reemplazarlos por decisiones reales del motor (T15) y no presentarlos como tales en la demo | Quien conecte el motor |
+| P11 | `apoyo.validar_aprobacion` y `TECHO_DURO_PAGO` son **provisionales**: se sustituyen por `engine/guardarrail.py` (T9). No hay chequeo atómico entre validar y escribir; la clave de idempotencia evita la doble respuesta | A, al hacer T9 |
+| P12 | El menú lateral de Streamlit muestra «Cola de aprobacion» sin tilde (sale del nombre del archivo). Cosmético | Opcional: `st.navigation` |
+| P13 | El acta usa **SQLite**. Falta PostgreSQL con roles y permisos (AC1.2) para Railway, y no hay purga de salas (AC7.4) | Al desplegar (PT10) |
+| P14 | Panel 1 sin agente de entrada: subir archivo y botones de ejemplo están **desactivados** (DP3) | Spec `extraccion-y-agente-de-entrada` |
 | P9 | **Decisiones abiertas DA1 a DA5** de `specs/acta-y-csv/requirements.md` (una fila por evento, cadena por sala, separador del CSV, reinicio de sala, sello público) | El equipo las confirma. Hay propuesta por defecto |
 
 ## 8. Próximas tareas
@@ -115,8 +126,9 @@ Cosas ya hechas que hay que **revisar, confirmar o corregir**:
 En orden. El detalle de cada tarea del motor está en `specs/motor-de-reglas/tasks.md`.
 
 1. **Revisar y aprobar** las specs `motor-de-reglas` (resolver D1 a D5) y `acta-y-csv` (resolver DA1 a DA5).
-2. **Escribir las specs que faltan** (máx. 90 min en total, sin repetir el diseño): ~~`acta-y-csv`~~ (borrador hecho), `extraccion-y-agente-de-entrada`, `paneles-y-despliegue`.
+2. **Escribir las specs que faltan** (máx. 90 min en total, sin repetir el diseño): ~~`acta-y-csv`~~ (borrador hecho), `extraccion-y-agente-de-entrada`, ~~`paneles-y-despliegue`~~ (borrador hecho; revisar DP1 a DP3).
 3. **Despliegue de prueba en Railway:** app mínima que lea la clave, llame al modelo una vez y guarde una fila. Abrirla desde otro computador.
+3b. **Paneles pendientes** (PT9 a PT11): conectar con el motor y el agente de entrada, despliegue, y las páginas de reglas y resumen (capa 3).
 4. **Ola 0 del motor:** T1 modelos y esquemas (A), T2 datos semilla (D), T3 20 casos de prueba con decisión esperada (D).
 5. **Ola 1:** T4 entrada y frenar, T5 beneficiario, montos y niveles, T10 cargar reglas. Luego T8 orquestador, T9 guardarraíl, T13 pruebas de propiedades, T14 `eval.py`, T15 conexión con el acta.
 6. **Control de las 18:00:** correr `eval.py`. Si los casos trampa pasan, se suma el enrutador de canal (T7) y, con tiempo, las piezas de la capa 3. Si no pasan, esas horas se usan para corregir el motor.
