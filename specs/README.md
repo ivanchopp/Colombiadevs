@@ -28,7 +28,7 @@ Cada criterio tiene un número (por ejemplo R3.1) y debe tener al menos una prue
 | `acta-y-csv` | Borrador para revisión |
 | `paneles-y-despliegue` | Borrador para revisión (paneles y página de reglas programados; despliegue pendiente) |
 | `ordenes-de-compra` | Borrador para revisión (alcance nuevo del 17 oct; registro de proveedores cargado, el motor aún no lo usa; 12 decisiones abiertas) |
-| `archivo-de-salida` | Borrador para revisión (alcance nuevo de la reunión con Blinka del 17 oct, 17:02; sin programar; 4 decisiones abiertas) |
+| `archivo-de-salida` | Borrador para revisión (alcance nuevo de la reunión con Blinka del 17 oct; implementado con columnas supuestas; 4 decisiones abiertas) |
 
 ## Reglas de trabajo
 
