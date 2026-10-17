@@ -1,0 +1,23 @@
+{
+  "id": "VER-0020",
+  "fecha": "2026-10-17T18:14:31-05:00",
+  "cambio": "AVANCES y spec del archivo de salida: se quitan las notas de Gemini y el nombre del CEO; el agente de reglas en lenguaje natural pasa a la fase 1 del roadmap (R7) y contratos queda R8",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "specs/archivo-de-salida/requirements.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "AVANCES.md",
+      "problema": "El agente de reglas en lenguaje natural entra en la fase 1 sin spec escrita; hay que escribirla antes de programar (primero la spec)",
+      "correccion": "Escribir la spec del agente de reglas antes de R7"
+    }
+  ],
+  "comprobaciones": "git diff revisado; solo documentacion; pytest 216 passed; referencias R7/R8 y P29 revisadas; sin Sebastian ni notas de Gemini en AVANCES, README ni specs",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "65fcb0fc34ac4a2141948440531012afe70caf9e",
+  "reemplaza": null
+}
