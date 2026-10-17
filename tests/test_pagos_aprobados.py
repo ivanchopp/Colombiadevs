@@ -72,8 +72,9 @@ def test_as1_4_un_intento_rechazado_no_cambia_el_resultado(almacen, sala, regist
 
 def test_as2_2_monto_y_moneda_son_los_de_la_factura(almacen, sala, registros):
     filas = {x["factura_id"]: x for x in generar(almacen, sala, registros)[0]}
-    cw = filas["F-1046"]
-    assert (cw["monto"], cw["moneda"]) == ("540.00", "USD") and Decimal(cw["monto_base"]) > Decimal("540")
+    pn, cw = filas["F-1042"], filas["F-1046"]
+    assert (pn["monto"], pn["moneda"], pn["monto_base"]) == ("2400000.00", "COP", "600.00")   # lo que paga Blinka, y la base
+    assert (cw["monto"], cw["moneda"], cw["monto_base"]) == ("540.00", "USD", "540.00")
 
 
 def test_as2_4_la_cuenta_sale_del_registro(almacen, sala, registros):
