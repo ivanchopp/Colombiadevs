@@ -49,6 +49,7 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 - **EA2b.6** CUANDO el enlace traiga `?diagnostico=1`, EL PANEL 1 DEBERÁ mostrar, para cada variable relacionada con la IA, solo si está «definida», «vacía» o «no definida», el proveedor resultante, la razón por la que está en modo demo y, si existen, el entorno, el servicio y el commit del despliegue. NUNCA DEBERÁ mostrar el valor de una clave.
 - **EA2b.7** EL diagnóstico DEBERÁ listar, solo por nombre, las variables del entorno que parezcan una clave de Gemini, Google o Anthropic (por ejemplo `GEMINI_APY_KEY`) pero no sean las esperadas, para detectar errores de escritura. NO DEBERÁ marcar claves de otros servicios (por ejemplo `MAPBOX_API_KEY`).
 - **EA2b.8** EL SISTEMA DEBERÁ ignorar los espacios al inicio y al final de una clave, y tratar una clave de solo espacios como vacía.
+- **EA2b.9** CUANDO la lectura con IA falle y el sistema degrade a la lectura por patrones (EA8.1), EL SISTEMA DEBERÁ dejar el error en el registro del servidor (los Logs de Railway), sin ningún valor de clave, para que quien administre la demo vea que la IA no está respondiendo aunque la pantalla diga que está activa.
 
 ### EA3. Segunda lectura (sin IA)
 - **EA3.1** EL SISTEMA DEBERÁ extraer el texto (PDF, EML, TXT) y buscar con patrones de texto el beneficiario, el monto, la moneda y el vencimiento.
@@ -67,8 +68,8 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 
 ### EA6. Ficha y llamada al motor
 - **EA6.1** UNA VEZ resueltos o agotados los turnos, EL SISTEMA DEBERÁ armar la ficha con código, validarla con el esquema de `engine.modelos.Ficha` y llamar a `registrar_decision`.
-- **EA6.2** EL SISTEMA NO DEBERÁ decidir ni sugerir pagos; solo entrega la ficha. SI la ficha no es válida, ENTONCES no se registra y se informa al proveedor que la factura quedó en revisión manual.
-- **EA6.4** SI un dato original no se pudo leer y el proveedor lo aclaró, ENTONCES EL SISTEMA DEBERÁ usar lo aclarado, marcar ese campo con `origen_campos = aclarado` (el motor lo trata según R2.5) y dejar `lectura_ia = dudosa`, de modo que se escale. SI aun así falta algún dato obligatorio, ENTONCES la factura no se registra y queda en «revisión manual».
+- **EA6.2** EL SISTEMA NO DEBERÁ decidir ni sugerir pagos; solo entrega la ficha. SI la ficha no es válida, ENTONCES EL SISTEMA DEBERÁ registrarla en el acta como escalada (R2.1, R8.6), de modo que una persona la vea en el Panel 2, e informar al proveedor que quedó en revisión manual. NUNCA DEBERÁ dejar una factura que el proveedor ve «en revisión» sin que finanzas la vea.
+- **EA6.4** SI un dato original no se pudo leer y el proveedor lo aclaró, ENTONCES EL SISTEMA DEBERÁ usar lo aclarado, marcar ese campo con `origen_campos = aclarado` (el motor lo trata según R2.5) y dejar `lectura_ia = dudosa`, de modo que se escale. SI aun así falta algún dato obligatorio, ENTONCES la ficha es inválida y se registra como escalada «en revisión manual» (EA6.2).
 - **EA6.3** EL `preparador` DEBERÁ ser el código de la sala (separación de funciones, R8.2).
 
 ### EA7. Estado de entrada

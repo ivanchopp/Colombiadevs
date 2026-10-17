@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0015 | 2026-10-17 16:11 | APROBADO | Arreglo: una factura con ficha invalida se registra escalada (R8.6) y aparece en el tablero; no se puede aprobar (PP5.7); errores de lectura con IA en los Logs sin claves (EA2b.9); specs y AVANCES | 0 | 2 | 014409d | — |
 | VER-0014 | 2026-10-17 16:02 | APROBADO | FACTURAS_MAX configurable (EA1.5), aviso del Panel 1 sin la palabra demo, diagnostico sin falsos positivos de otros servicios, y fusion de main con renumeracion de VER-0010 a VER-0012; specs y AVANCES al dia | 0 | 1 | 5fba303 | — |
 | VER-0013 | 2026-10-17 14:02 | APROBADO | Linea de diagnostico de la IA en el Panel 1 (?diagnostico=1): proveedor, motivo del modo demo, estado de cada variable sin mostrar valores, nombres parecidos y datos del despliegue; espacios en claves ignorados; spec EA2b.6-8 y AVANCES | 0 | 1 | 67eb333 | — |
 | VER-0012 | 2026-10-17 16:00 | APROBADO | Revisión de la documentación: estado (164 pruebas, PR #7), mapa del repositorio, alcance de órdenes de compra, README (página de reglas) e índice de specs | 0 | 0 | 7527f07 | — |
@@ -18,6 +19,12 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0015 — APROBADO
+
+- **ADVERTENCIA** (alcance) `app/pages/2_Cola_de_aprobacion.py`: Una ficha invalida solo se puede rechazar: no hay boton ni canal para pedir al proveedor que reenvie los datos; quien rechaza debe avisarle por fuera → Decidir si se construye un flujo de reenvio (AVANCES P28)
+- **ADVERTENCIA** (errores) `agents/flujo.py`: El Panel 1 puede decir Gemini aunque la lectura haya degradado a patrones de texto por un fallo de la API; el unico rastro esta en los Logs del servidor → Revisar los Logs de Railway buscando La lectura con IA fallo (AVANCES P28)
+- **NOTA** (seguridad) `engine/guardarrail.py`: Una ficha invalida nunca llega a PAGAR: se registra ESCALAR/SENIOR, la aprobacion se rechaza en el guardarrail y la cola no ofrece el boton; proponer PAGAR con ficha invalida se rechaza y deja INTENTO_RECHAZADO. No cambia ninguna regla de decision para fichas validas → Ninguna
 
 ## VER-0014 — APROBADO
 

@@ -83,6 +83,16 @@ DESPLIEGUE = (("entorno", "RAILWAY_ENVIRONMENT_NAME"), ("servicio", "RAILWAY_SER
 PARECE_DE_IA = re.compile(r"GEMINI|GENAI|(GOOGLE|ANTHROPIC|CLAUDE).*KEY|KEY.*(GOOGLE|ANTHROPIC|CLAUDE)", re.I)
 
 
+def sin_secretos(texto: str, env=None) -> str:
+    """Quita de un texto (por ejemplo un error de la API) el valor de cualquier clave configurada."""
+    env = os.environ if env is None else env
+    for nombre in CLAVES:
+        valor = _valor(env, nombre)
+        if len(valor) >= 8:
+            texto = texto.replace(valor, "***")
+    return texto
+
+
 def diagnostico(env=None) -> dict:
     """Por qué la app usa (o no) un proveedor de IA. Solo estados y nombres: nunca el valor de una clave (EA2b.6)."""
     env = os.environ if env is None else env

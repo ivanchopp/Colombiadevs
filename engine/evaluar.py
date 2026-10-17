@@ -50,7 +50,8 @@ def _ficha_invalida(reglas, error) -> Resultado:
     rev = Revision(regla="R2.1", resultado="FALLA", efecto="ESCALAR", nivel="SENIOR",
                    observado=campos, umbral="esquema cerrado", mensaje="Ficha inválida.")
     return Resultado(decision="ESCALAR", nivel="SENIOR", revisiones=[rev],
-                     motivo=f"Ficha inválida (campos: {campos}). Lo aprueba el senior de finanzas.",
+                     motivo=(f"Ficha inválida: faltan o no se pudieron leer datos obligatorios ({campos}). Una persona debe "
+                             "revisarla; no se puede aprobar un pago sin esos datos."),
                      version_reglas=reglas.version)
 
 

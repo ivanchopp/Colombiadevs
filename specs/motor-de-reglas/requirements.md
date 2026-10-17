@@ -132,6 +132,7 @@ Notación EARS en español: «CUANDO <evento>, EL MOTOR DE REGLAS DEBERÁ <respu
 - **R8.3** SI el monto supera `techo_duro_pago`, ENTONCES ninguna aprobación humana podrá convertirlo en `PAGAR`.
 - **R8.4** CUANDO una persona rechace un caso escalado, EL MOTOR DE REGLAS DEBERÁ registrarlo como `RECHAZADA` con su motivo.
 - **R8.5** Una aprobación humana NO podrá cambiar el monto ni el beneficiario de la ficha.
+- **R8.6** CUANDO la ficha no cumpla el esquema (R2.1), `registrar_decision` DEBERÁ registrar el caso en el acta como `ESCALAR` con nivel `SENIOR` y su motivo, para que una persona lo vea, y NO DEBERÁ descartarlo. NINGUNA aprobación humana podrá convertir ese caso en pago: solo podrá rechazarse (R8.4), porque faltan datos obligatorios.
 
 ### R9. Reglas versionadas
 **Historia:** como persona de finanzas, quiero cambiar las reglas por fecha sin pedirle ayuda a ingeniería.

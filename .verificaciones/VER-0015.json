@@ -1,0 +1,52 @@
+{
+  "id": "VER-0015",
+  "fecha": "2026-10-17T16:11:53-05:00",
+  "cambio": "Arreglo: una factura con ficha invalida se registra escalada (R8.6) y aparece en el tablero; no se puede aprobar (PP5.7); errores de lectura con IA en los Logs sin claves (EA2b.9); specs y AVANCES",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "engine/guardarrail.py",
+    "engine/contexto.py",
+    "engine/evaluar.py",
+    "agents/flujo.py",
+    "agents/lectura_ia.py",
+    "acta/exportar_csv.py",
+    "app/apoyo.py",
+    "app/pages/1_Tablero.py",
+    "app/pages/2_Cola_de_aprobacion.py",
+    "app/pages/3_Calendario.py",
+    "tests/test_agente_entrada.py",
+    "tests/test_guardarrail.py",
+    "tests/test_paneles.py",
+    "specs/motor-de-reglas",
+    "specs/extraccion-y-agente-de-entrada",
+    "specs/paneles-y-despliegue",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "app/pages/2_Cola_de_aprobacion.py",
+      "problema": "Una ficha invalida solo se puede rechazar: no hay boton ni canal para pedir al proveedor que reenvie los datos; quien rechaza debe avisarle por fuera",
+      "correccion": "Decidir si se construye un flujo de reenvio (AVANCES P28)"
+    },
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "errores",
+      "ubicacion": "agents/flujo.py",
+      "problema": "El Panel 1 puede decir Gemini aunque la lectura haya degradado a patrones de texto por un fallo de la API; el unico rastro esta en los Logs del servidor",
+      "correccion": "Revisar los Logs de Railway buscando La lectura con IA fallo (AVANCES P28)"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "engine/guardarrail.py",
+      "problema": "Una ficha invalida nunca llega a PAGAR: se registra ESCALAR/SENIOR, la aprobacion se rechaza en el guardarrail y la cola no ofrece el boton; proponer PAGAR con ficha invalida se rechaza y deja INTENTO_RECHAZADO. No cambia ninguna regla de decision para fichas validas",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "pytest: 205 passed (14 nuevas); python3 eval.py: 20/20 y 0 pagos indebidos; reproducido el fallo antes del arreglo (2 de 3 casos no llegaban al acta) y comprobado despues que los 3 llegan; 4 mutaciones detectadas por las pruebas (se puede aprobar una invalida, se vuelve a descartar, entra al historial, la cola ofrece aprobar); revisado en navegador local (tablero con sin leer y Senior; cola); el error de la API no incluye el valor de la clave (prueba con una clave de ejemplo); sin secretos en el diff",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "014409d8b6e7a85c35f8ff33f7b1fe29f66d8ed7",
+  "reemplaza": null
+}

@@ -155,6 +155,8 @@ def registrar_decision(resultado_propuesto, ficha, contexto, reglas, actor=None)
 ```
 `validar_aprobacion` comprueba: rol del actor mayor o igual al nivel exigido, motivo no vacío, actor distinto de `ficha.preparador`, y monto menor o igual a `techo_duro_pago`.
 
+**Ficha inválida (R2.1, R8.6).** `registrar_decision` ya no lanza si la ficha no cumple el esquema: `evaluar` devuelve `ESCALAR` / `SENIOR` con la revisión `FALLA` «Ficha inválida», y se escribe un `DECISION` con `ficha_invalida: true`, los datos que se pudieron leer y los demás campos en blanco (`monto` y `monto_base` en `0.00`, moneda `N/D`). Ese caso (a) aparece en el tablero y en la cola del senior, (b) **no entra en el historial del motor** (no tiene monto ni fecha válidos) y (c) **no se puede aprobar**: `validar_aprobacion` rechaza la aprobación y la pantalla solo ofrece rechazar. Si falta el `factura_id`, sí lanza: es un error de programación.
+
 **Reglas versionadas (R9):**
 - `reglas.yaml` tiene una lista de conjuntos con `version`, `vigente_desde`, `vigente_hasta` y los parámetros.
 - Se carga con Pydantic. Si falla, se conserva la versión anterior y se informa el error (R9.1).

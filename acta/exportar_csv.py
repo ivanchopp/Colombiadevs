@@ -32,7 +32,9 @@ def exportar_facturas(filas_acta, delimitador=",") -> bytes:
     for f in sorted(facturas_por_estado(filas_acta).values(), key=lambda x: x.fila_decision):
         d, r = f.decision, f.respuesta or {}
         fallidas = ";".join(x["regla"] for x in d.get("revisiones", []) if x["resultado"] == "FALLA")
-        filas.append([f.factura_id, d["beneficiario"], d["monto"], d["moneda"], d["monto_base"],
+        invalida = bool(d.get("ficha_invalida"))             # sin monto ni moneda leídos: celdas vacías, no inventadas
+        filas.append([f.factura_id, d["beneficiario"], "" if invalida else d["monto"],
+                      "" if invalida else d["moneda"], d["monto_base"],
                       d.get("tasa", ""), f.estado, d["decision"], d["nivel"], f.aprobador or "",
                       r.get("rol", ""), d["motivo"], fallidas, d.get("canal_sugerido") or "",
                       r.get("canal_elegido") or "", d["version_reglas"], f.fila_acta, f.huella[:10],
