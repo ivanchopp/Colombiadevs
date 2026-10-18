@@ -1,36 +1,40 @@
 {
   "id": "VER-0051",
-  "fecha": "2026-10-17T21:47:54-05:00",
-  "cambio": "Gemini: modelo por defecto vigente gemini-3.5-flash (el 2.5 fue retirado), razonamiento minimo con Gemini 3, pista de la falla en el diagnostico (EA2b.12, EA2b.13, ET15); 14 pruebas; fusion de main (PR 25); AVANCES",
+  "fecha": "2026-10-17T22:30:18-05:00",
+  "cambio": "Revisión del estado tras el PR #25: guion de la demo, índice de specs, ET3/ET7, PT13 duplicado y AVANCES al día; sin código",
   "veredicto": "APROBADO",
   "archivos": [
-    "agents/lectura_ia.py",
-    "app/Panel_1_Proveedor.py",
-    "tests/test_diagnostico_ia.py",
-    "tests/test_agente_entrada.py",
-    "specs/extraccion-y-agente-de-entrada",
-    "README.md",
-    ".env.example",
-    "AVANCES.md"
+    "AVANCES.md",
+    "docs/guion-demo.md",
+    "specs/README.md",
+    "specs/extraccion-y-agente-de-entrada/tasks.md",
+    "specs/paneles-y-despliegue/tasks.md"
   ],
   "hallazgos": [
     {
       "severidad": "ADVERTENCIA",
       "categoria": "errores",
-      "ubicacion": "agents/lectura_ia.py",
-      "problema": "No se probo con la clave real de Gemini: se cambio el modelo por defecto y la configuracion segun la documentacion y busquedas, pero la respuesta de gemini-3.5-flash con PDF, foto y esquema JSON sigue sin verificarse. Si en Railway esta definida MODELO_GEMINI=gemini-2.5-flash, esa variable manda sobre el nuevo defecto",
-      "correccion": "Redeplegar, borrar MODELO_GEMINI si es el modelo viejo y pulsar Probar la conexion"
+      "ubicacion": "docs/guion-demo.md:22",
+      "problema": "La factura normal del guion solo llega a PAGAR si la IA real lee y hoy no lee en producción (P17)",
+      "correccion": "Resolver P17 antes del ensayo; el guion ya avisa y da el plan B"
     },
     {
       "severidad": "NOTA",
       "categoria": "convenciones",
-      "ubicacion": "specs/extraccion-y-agente-de-entrada/tasks.md",
-      "problema": "La tarea del modelo se llamaba ET14 igual que la del XML de LATAM de main; pasa a ET15",
-      "correccion": ""
+      "ubicacion": "specs/paneles-y-despliegue/tasks.md:20",
+      "problema": "PT13 estaba repetido; la tarea de los archivos de muestra pasa a PT14 y PT7 se ajustó",
+      "correccion": "Ninguna"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "docs/Ruta-de-una-factura.pdf",
+      "problema": "Los PDF no se revisaron ni cambiaron (siguen con beneficiarios anteriores, P6)",
+      "correccion": "Regenerarlos si se muestran"
     }
   ],
-  "comprobaciones": "pytest: 489 passed (14 nuevas); python3 eval.py: 29/29 y 0 pagos indebidos; 5 mutaciones detectadas (modelo viejo, sin razonamiento minimo, razonamiento a todos, tope de salida bajo, sin pista); el cambio de modelo se baso en la pagina de deprecaciones de Google y en hilos del foro, hallados por busqueda; sin claves ni datos reales",
-  "rama": "claude/focused-dirac-iurhyp",
-  "commit": "bb10f6fc24fdfcc3de06111fae7517044734bdba",
+  "comprobaciones": "git diff revisado; python3 -m pytest -q: 473 passed; python3 eval.py: 29/29, 0 pagos indebidos, 29/29 con motivo (sobre 057715c); referencias P/ART/EA/ET/PT/PP del diff comprobadas con grep; sin secretos ni datos reales en el diff",
+  "rama": "main",
+  "commit": "057715c1e01910a73d408d415870dd13dd458e36",
   "reemplaza": null
 }
