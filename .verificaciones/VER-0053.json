@@ -1,5 +1,5 @@
 {
-  "id": "VER-0051",
+  "id": "VER-0053",
   "fecha": "2026-10-17T21:44:41-05:00",
   "cambio": "P34: el nombre del beneficiario se asocia al del registro sin mayúsculas, tildes ni puntuación (R4.4 a R4.6, T17), Ficha.beneficiario_leido; fusión de main (PR #24, CFDI) y renumeración de VER-0048 a VER-0050",
   "veredicto": "APROBADO",

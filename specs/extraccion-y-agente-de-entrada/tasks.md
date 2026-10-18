@@ -17,3 +17,4 @@ Dueño sugerido: **B** (agentes). Requisitos: `requirements.md` · Diseño: `des
 | ET12 | Diagnóstico: última falla de lectura con IA y botón «Probar la conexión» con los modelos disponibles | EA2b.10, EA2b.11 | Hecho |
 | ET11 | Factura electrónica en XML (UBL/DIAN) sin IA, segunda lectura por patrones y dígito de verificación del NIT en local | EA10 | Hecho |
 | ET13 | Factura electrónica de México (CFDI 3.3 y 4.0) sin IA, segunda lectura por patrones y RFC con su dígito verificador en local | EA11 | Hecho |
+| ET14 | XML de otros países de Latinoamérica: tabla `FORMATOS` (SRI, CFE, NF-e, DTE, Costa Rica, SIFEN), lectura estructural y segunda lectura por patrones con las mismas rutas, decimales estrictos (también en el CFDI y el UBL), codificación declarada, RUC de SUNAT y XML desconocido leído como texto y escalado | EA12 | Hecho |

@@ -4,8 +4,10 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
-| VER-0051 | 2026-10-17 21:44 | APROBADO | P34: el nombre del beneficiario se asocia al del registro sin mayúsculas, tildes ni puntuación (R4.4 a R4.6, T17), Ficha.beneficiario_leido; fusión de main (PR #24, CFDI) y renumeración de VER-0048 a VER-0050 | 0 | 0 | c6e649f | — |
-| VER-0050 | 2026-10-17 21:33 | APROBADO | R6 cerrado: modelo por defecto de Gemini pasa a gemini-3.8-flash (el anterior ya no está disponible), README, .env.example, specs y AVANCES; pendientes P34 y P35 | 0 | 0 | 1204539 | — |
+| VER-0054 | 2026-10-17 21:47 | APROBADO | Fusión de main (PR #25: XML de LATAM) en la rama de P34 y R6 cerrado; las verificaciones de la rama pasan a VER-0052 y VER-0053 | 0 | 0 | 2563cdb | — |
+| VER-0053 | 2026-10-17 21:44 | APROBADO | P34: el nombre del beneficiario se asocia al del registro sin mayúsculas, tildes ni puntuación (R4.4 a R4.6, T17), Ficha.beneficiario_leido; fusión de main (PR #24, CFDI) y renumeración de VER-0048 a VER-0050 | 0 | 0 | c6e649f | — |
+| VER-0052 | 2026-10-17 21:33 | APROBADO | R6 cerrado: modelo por defecto de Gemini pasa a gemini-3.8-flash (el anterior ya no está disponible), README, .env.example, specs y AVANCES; pendientes P34 y P35 | 0 | 0 | 1204539 | — |
+| VER-0050 | 2026-10-17 21:43 | APROBADO | EA12/ET14: XML de otros países de LATAM (SRI, CFE, NF-e, DTE, Costa Rica, SIFEN) sin IA desde una tabla de rutas, fusionado con el CFDI del PR #24 (EA11); decimal estricto en las dos lecturas (también CFDI y UBL); ISO-8859-1; RUC de SUNAT; XML desconocido se lee como texto y se escala; arreglo del choque sobre SRI vs CFDI; spec, pruebas, README, Panel 1 y AVANCES | 0 | 2 | ae659cc | — |
 | VER-0049 | 2026-10-17 21:33 | APROBADO | Fusion de main (R6, PR 21 y 23) en la rama del CFDI: VER del CFDI pasa a 0048, tarea del CFDI pasa a ET13 porque ET12 la uso R6, AVANCES reconciliado; sin codigo nuevo | 0 | 0 | 0b90e4f | — |
 | VER-0048 | 2026-10-17 21:13 | APROBADO | R5 parte 2: factura electronica de Mexico CFDI 3.3 y 4.0 sin IA (EA11, ET12): solo tipo ingreso, RFC con digito verificador en local, UUID del timbre, segunda lectura por atributos; spec, 41 pruebas, README y AVANCES | 0 | 1 | 233e90a | — |
 | VER-0047 | 2026-10-17 21:10 | APROBADO | Fusión de main (PR #21: OT7 y registro al día) en la rama de R6; la verificación de R6 pasa de VER-0045 a VER-0046 | 0 | 0 | c2ec3cf | — |
@@ -56,15 +58,26 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
 
-## VER-0051 — APROBADO
+## VER-0054 — APROBADO
+
+- **NOTA** (convenciones) `.verificaciones/VER-0052.json:2`: Los IDs VER-0050 y anteriores los ocupó la sesión del XML en main; se conservaron los de main y las de esta rama (R6 cerrado y P34) pasaron a VER-0052 y VER-0053 → Ninguna
+
+## VER-0053 — APROBADO
 
 - **NOTA** (seguridad) `engine/revisiones/comun.py:20`: La asociación por nombre normalizado no abre una puerta nueva: el nombre exacto ya era falsificable por el proveedor y la cuenta se sigue comparando con la registrada (R4.2); si dos proveedores normalizan igual no se asocia ninguno y escala. Una prueba de propiedades garantiza que una variante nunca decide distinto que el nombre exacto → Ninguna
 - **NOTA** (alcance) `AVANCES.md:232`: Asociar por NIT queda fuera (R4.6) como mejora; las decisiones ya guardadas en actas anteriores conservan el nombre leído y, si una persona las aprueba, no entran al archivo de pagos por falta de cuenta registrada (falla segura) → Ninguna
 
-## VER-0050 — APROBADO
+## VER-0052 — APROBADO
 
 - **NOTA** (errores) `AVANCES.md:224`: El nombre de un proveedor en mayúsculas (como en la foto de prueba) no coincide con la lista permitida y escala al senior: falla segura pero baja la autonomía; queda como P34 con propuesta, sin tocar el motor → El equipo decide; requiere spec primero
 - **NOTA** (alcance) `agents/lectura_ia.py:9`: Los nombres de modelo de Google cambian: la variable MODELO_GEMINI y el botón del diagnóstico quedan como salida si vuelve a fallar → Ninguna
+
+## VER-0050 — APROBADO
+
+- **ADVERTENCIA** (alcance) `agents/xml_factura.py`: Las rutas de SRI, CFE, NF-e, DTE, Costa Rica y SIFEN se escribieron con conocimiento general de esos esquemas y se probaron con XML mínimos ficticios, no con facturas reales de cada país → Probar con un XML representativo de cada país antes de presentarlo como soportado
+- **ADVERTENCIA** (alcance) `AVANCES.md`: Las 4 facturas CFDI del equipo no traen TipoDeComprobante y EA11.2 (PR #24) las rechaza; DE6 (moneda vs país) sigue abierta → Pedir los XML con TipoDeComprobante=I; spec propia para DE6
+- **NOTA** (errores) `agents/segunda_lectura.py`: Choque de la fusión: la detección del CFDI no distinguía mayúsculas y tomaba el sobre <comprobante> del SRI como CFDI; ahora decide por la raíz; mutación detectada → Ninguna
+- **NOTA** (convenciones) `specs/extraccion-y-agente-de-entrada/requirements.md`: EA11, ET13 y VER-0048 ya estaban usados por el PR #24: esta parte es EA12, ET14, DE5 y DE6 sin saltos → Ninguna
 
 ## VER-0049 — APROBADO
 
