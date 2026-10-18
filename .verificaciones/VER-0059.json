@@ -1,0 +1,27 @@
+{
+  "id": "VER-0059",
+  "fecha": "2026-10-18T08:21:48-05:00",
+  "cambio": "Calendario mes a mes: selector de mes, botones anterior/siguiente y 12 meses hacia adelante (PP6.4, PT17)",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "app/apoyo.py",
+    "app/pages/3_Calendario.py",
+    "specs/paneles-y-despliegue/requirements.md",
+    "specs/paneles-y-despliegue/tasks.md",
+    "tests/test_calendario_meses.py"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "data/calendario.csv",
+      "problema": "El calendario solo tiene obligaciones de octubre de 2026, así que los meses futuros salen vacíos; no se agregaron datos para no cambiar los casos de eval.py",
+      "correccion": "Agregar obligaciones de ejemplo (supuesto) y revisar eval.py si se quieren ver datos en meses futuros"
+    }
+  ],
+  "comprobaciones": "git diff revisado; pytest completo: 567 pasan; página vista en un navegador (octubre y noviembre); motor y datos no tocados",
+  "rama": "claude/determined-planck-2vrgbo",
+  "commit": "954c6aa47a04ff7840bf61751477029f94e8e2c1",
+  "reemplaza": null
+}
