@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0063 | 2026-10-18 09:32 | APROBADO | Descripción del proyecto en docs/descripcion-del-proyecto.md y su registro en AVANCES.md | 0 | 0 | e4c6d78 | — |
 | VER-0062 | 2026-10-18 09:29 | APROBADO | README ajustado para que lo entienda alguien de 15 años (lenguaje menos infantil, términos con su definición: inyección de instrucciones, huella del acta) | 0 | 0 | f7017ff | — |
 | VER-0061 | 2026-10-18 08:59 | APROBADO | README reescrito para un público de 12 años con costos (IA, servidor y persona) y enlaces; registro de la prueba del agente de reglas con la IA real (P29) | 0 | 1 | 2a30eeb | — |
 | VER-0060 | 2026-10-18 08:29 | APROBADO | Obligaciones de ejemplo para noviembre y diciembre de 2026 en data/calendario.csv (O10 a O27) y pruebas ajustadas (PP6.4) | 0 | 0 | 3e19df2 | — |
@@ -66,6 +67,10 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0063 — APROBADO
+
+- **NOTA** (errores) `docs/descripcion-del-proyecto.md`: Las cifras (29/29, 0 pagos indebidos, más de 550 pruebas) vienen de las corridas del 18 oct; si cambia el número de pruebas conviene actualizarlo → Ninguna
 
 ## VER-0062 — APROBADO
 

@@ -1,0 +1,23 @@
+{
+  "id": "VER-0063",
+  "fecha": "2026-10-18T09:32:14-05:00",
+  "cambio": "Descripción del proyecto en docs/descripcion-del-proyecto.md y su registro en AVANCES.md",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "docs/descripcion-del-proyecto.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "docs/descripcion-del-proyecto.md",
+      "problema": "Las cifras (29/29, 0 pagos indebidos, más de 550 pruebas) vienen de las corridas del 18 oct; si cambia el número de pruebas conviene actualizarlo",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "git diff revisado; contenido contrastado con AVANCES.md y el README; sin código, claves ni datos reales",
+  "rama": "claude/determined-planck-2vrgbo",
+  "commit": "e4c6d784a8aa1d8aa7727fe78414a72896b13c04",
+  "reemplaza": null
+}
