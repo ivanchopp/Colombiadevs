@@ -1,0 +1,40 @@
+{
+  "id": "VER-0051",
+  "fecha": "2026-10-17T22:30:18-05:00",
+  "cambio": "Revisión del estado tras el PR #25: guion de la demo, índice de specs, ET3/ET7, PT13 duplicado y AVANCES al día; sin código",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "docs/guion-demo.md",
+    "specs/README.md",
+    "specs/extraccion-y-agente-de-entrada/tasks.md",
+    "specs/paneles-y-despliegue/tasks.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "errores",
+      "ubicacion": "docs/guion-demo.md:22",
+      "problema": "La factura normal del guion solo llega a PAGAR si la IA real lee y hoy no lee en producción (P17)",
+      "correccion": "Resolver P17 antes del ensayo; el guion ya avisa y da el plan B"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "convenciones",
+      "ubicacion": "specs/paneles-y-despliegue/tasks.md:20",
+      "problema": "PT13 estaba repetido; la tarea de los archivos de muestra pasa a PT14 y PT7 se ajustó",
+      "correccion": "Ninguna"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "docs/Ruta-de-una-factura.pdf",
+      "problema": "Los PDF no se revisaron ni cambiaron (siguen con beneficiarios anteriores, P6)",
+      "correccion": "Regenerarlos si se muestran"
+    }
+  ],
+  "comprobaciones": "git diff revisado; python3 -m pytest -q: 473 passed; python3 eval.py: 29/29, 0 pagos indebidos, 29/29 con motivo (sobre 057715c); referencias P/ART/EA/ET/PT/PP del diff comprobadas con grep; sin secretos ni datos reales en el diff",
+  "rama": "main",
+  "commit": "057715c1e01910a73d408d415870dd13dd458e36",
+  "reemplaza": null
+}
