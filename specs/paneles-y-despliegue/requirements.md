@@ -11,14 +11,14 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 
 **Dentro:** Panel 1 (portal, estado público), Panel 2 (tablero, cola de aprobación, detalle, calendario, acta, descarga de CSV), sala por enlace, selector de rol, refresco automático.
 
-**Fuera (otras specs):** lectura de facturas y chat con el proveedor (`extraccion-y-agente-de-entrada`), chat de reglas y resumen con IA (capa 3), reglas de decisión (`motor-de-reglas`).
+**Fuera (otras specs):** lectura de facturas y chat con el proveedor (`extraccion-y-agente-de-entrada`), chat de reglas en lenguaje natural y resumen con IA (capa 3), reglas de decisión (`motor-de-reglas`).
 
 ## Parámetros por defecto (supuestos)
 
 | Parámetro | Valor |
 |---|---|
 | `segundos_refresco` | 5 |
-| `facturas_max_por_sala` | 5 |
+| `facturas_max_por_sala` | 5 (se cambia con la variable `FACTURAS_MAX`) |
 | Roles de demostración | `PERSONA`, `SENIOR` |
 
 ## Requisitos
@@ -32,7 +32,9 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 ### PP2. Panel 1 (proveedor)
 - **PP2.1** EL PANEL 1 NO DEBERÁ mostrar reglas, umbrales, motivos internos, nombres de personas ni montos de límites (AC4.3).
 - **PP2.2** EL PANEL 1 DEBERÁ mostrar por factura solo el estado público: «recibida», «datos confirmados», «en revisión» o «resuelta».
-- **PP2.3** EL PANEL 1 DEBERÁ indicar que los datos son ficticios y cuántas facturas se han usado de `facturas_max_por_sala`.
+- **PP2.3** EL PANEL 1 DEBERÁ indicar que los datos son ficticios y cuántas facturas se han usado de `facturas_max_por_sala`. EL aviso NO DEBERÁ llamar «demo» a los datos ficticios, para no confundirse con el modo demo de la IA (EA8.3): dice «Datos ficticios, solo para práctica».
+- **PP2.4** EL PANEL 1 NO DEBERÁ ofrecer botones que registren una factura sin que el sistema la lea: la única entrada es subir un archivo. El sistema DEBERÁ leer el archivo y dejar que el motor de reglas decida si es normal, repetida, de beneficiario nuevo o con una orden escondida; nada en la pantalla elige ese resultado.
+- **PP2.5** EL PANEL 1 DEBERÁ ofrecer cuatro archivos de muestra ficticios para descargar y volver a subir, con un nombre neutro (el proveedor y el número de factura), sin decir qué caso es cada uno ni qué regla activa (PP2.1). La guía de qué caso muestra cada archivo queda en el `README.md`.
 
 ### PP3. Roles (Panel 2)
 - **PP3.1** EL PANEL 2 DEBERÁ pedir elegir un rol (`PERSONA` o `SENIOR`) antes de mostrar datos. Es un selector de demostración, no un inicio de sesión.
@@ -40,11 +42,11 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 
 ### PP4. Tablero
 - **PP4.1** EL TABLERO DEBERÁ mostrar las cifras de AC6.1 (pagadas, frenadas, pendientes, esperadas atrasadas, gasto y porcentaje del presupuesto), tal como las entrega `acta/tablero.py`.
-- **PP4.2** CADA fila DEBERÁ mostrar factura, proveedor, monto, decisión, quién aprueba, motivo y canal sugerido (AC6.4).
+- **PP4.2** (Para una ficha inválida, el monto se muestra como «sin leer».) CADA fila DEBERÁ mostrar factura, proveedor, monto, decisión, quién aprueba, motivo y canal sugerido (AC6.4).
 - **PP4.3** EL TABLERO DEBERÁ refrescarse cada `segundos_refresco` y mostrar la hora de la última actualización (AC6.5).
 - **PP4.4** SI el tablero, el CSV y el acta no coinciden (AC6.3), ENTONCES EL TABLERO DEBERÁ mostrar un aviso visible.
 - **PP4.5** EL TABLERO DEBERÁ ofrecer la descarga de `facturas.csv` y `eventos.csv` (AC5).
-- **PP4.6** EL TABLERO DEBERÁ marcar como «supuesto» las tasas, canales y costos de ejemplo, y decir que la moneda base es COP.
+- **PP4.6** EL TABLERO DEBERÁ marcar como «supuesto» las tasas, canales y costos de ejemplo, y decir cuál es la moneda base (la configurada en `reglas.yaml`, hoy USD) sin suponerla (R5.6).
 
 ### PP5. Cola de aprobación
 - **PP5.1** CADA rol DEBERÁ ver solo los casos de su nivel: `PERSONA` los de nivel persona; `SENIOR` los de nivel senior (y puede ver los de persona).
@@ -53,6 +55,7 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 - **PP5.4** SI quien aprueba es el preparador del caso, ENTONCES EL SISTEMA DEBERÁ rechazar la acción (separación de funciones, R8.2).
 - **PP5.5** AL aprobar, EL SISTEMA DEBERÁ permitir elegir el canal de pago y registrarlo en el acta. La aprobación es un pago de práctica: no mueve dinero.
 - **PP5.6** LA interfaz NUNCA DEBERÁ mostrar un pago como hecho si la escritura en el acta falló (AC1.5).
+- **PP5.7** SI la factura tiene la ficha inválida (R8.6), ENTONCES la cola DEBERÁ mostrarla con su motivo, NO DEBERÁ ofrecer el botón de aprobar y EL SISTEMA DEBERÁ rechazar cualquier intento de aprobarla, registrando un `INTENTO_RECHAZADO`. Solo se podrá rechazar.
 
 ### PP6. Detalle, calendario y acta
 - **PP6.1** EL DETALLE de una factura DEBERÁ mostrar la ficha, la lista de revisiones (OK, FALLA, AVISO), el resultado, la versión de reglas y el número de fila del acta.
@@ -63,6 +66,24 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 - **PP7.1** Las pantallas NO DEBERÁN contener lógica de decisión ni cálculos de dinero: llaman a `acta/` y `engine/`.
 - **PP7.2** Cada criterio de PP1, PP2 y PP5 DEBERÁ tener una prueba automática sobre las funciones de apoyo (`app/apoyo.py`), y las páginas se prueban con `streamlit.testing.v1.AppTest`.
 - **PP7.3** EL texto escrito por personas (motivos, nombres) DEBERÁ mostrarse como texto plano, nunca como HTML.
+
+### PP8. Reglas (entregable del reto)
+**Historia:** como persona de finanzas, quiero ver y cambiar las reglas de pago desde una pantalla, sin pedirle ayuda a ingeniería.
+
+- **PP8.1** EL PANEL 2 DEBERÁ tener una página «Reglas» que muestre los parámetros vigentes de la sala, su versión y el techo duro (de solo lectura, R9.5).
+- **PP8.2** LA página DEBERÁ permitir editar con un formulario: `autopago_max`, `persona_max`, `limite_periodo_beneficiario`, `presupuesto_periodo`, `tolerancia_ok`, `tolerancia_frenar` y `ventana_dias`.
+- **PP8.3** ANTES de confirmar, LA página DEBERÁ mostrar qué cambia, si el cambio afloja o restringe, y qué facturas de la sala cambiarían de decisión (vista previa, R9.6), sin escribir nada.
+- **PP8.4** SI el cambio afloja una regla (R9.4), ENTONCES solo el rol `SENIOR` podrá confirmarlo. SI lo intenta `PERSONA`, ENTONCES EL SISTEMA DEBERÁ rechazarlo y registrar un `INTENTO_RECHAZADO`.
+- **PP8.5** SI un umbral de monto supera el techo duro, o los valores no son coherentes (`autopago_max` ≤ `persona_max`, `tolerancia_ok` ≤ `tolerancia_frenar`, valores positivos), ENTONCES EL SISTEMA DEBERÁ rechazar el cambio con una explicación (R9.5).
+- **PP8.6** PARA confirmar, EL SISTEMA DEBERÁ exigir un motivo y registrar un evento `CAMBIO_REGLA` con los valores antes y después, si afloja, quién lo pidió, quién lo firmó y la versión nueva (AC3.3).
+- **PP8.7** UN cambio confirmado DEBERÁ aplicarse solo a las facturas que se decidan después, y solo en esa sala. Las decisiones ya registradas no cambian.
+
+### PP9. Órdenes de compra (OC6)
+- **PP9.1** (OC6.1) EL PANEL 2 DEBERÁ tener una página «Órdenes de compra» con cada orden: número, proveedor, artículo, total en la moneda de la orden, estado («abierta» o «facturada») y, si está facturada, la factura que la usó con su estado. Las cifras de arriba (abiertas y facturadas) salen del mismo cálculo que el motor (OC5), no de la pantalla.
+- **PP9.2** LA página DEBERÁ decir que las órdenes son de ejemplo («supuesto») y mostrar una orden marcada «no coincide con el proveedor» con esa advertencia.
+- **PP9.3** (OC6.2) EL detalle de una factura DEBERÁ mostrar, si cita una orden, su número, proveedor, total y estado, y el resultado de la revisión de la orden (OC4). SI cita una orden que no existe, ENTONCES DEBERÁ decir «orden inexistente»; NUNCA inventar datos.
+- **PP9.4** (OC6.3) EL PANEL 1 NO DEBERÁ mostrar órdenes, montos autorizados ni si una orden existe.
+- **PP9.5** LAS funciones de apoyo (`app/apoyo.py`) DEBERÁN armar estas vistas sin lógica de decisión (PP7.1) y el texto de proveedores y artículos se muestra como texto plano (PP7.3).
 
 ## Decisiones abiertas
 

@@ -106,7 +106,7 @@ flowchart TD
 ### T9. Guardarraíl y aprobaciones
 - **Dueño:** A · **Estimación:** 1 h · **Capa:** núcleo
 - `guardarrail.py`: `registrar_decision` que revalida, y `validar_aprobacion` (rol, motivo, separación de funciones, techo duro, sin cambiar monto ni beneficiario).
-- **Cubre:** R8.1 a R8.5
+- **Cubre:** R8.1 a R8.6
 - **Listo cuando:** `tests/test_guardarrail.py` pasa, y un intento de pagar fuera de las reglas se rechaza.
 
 ### T13. Pruebas de propiedades
@@ -144,21 +144,23 @@ flowchart TD
 
 | Requisito | Tarea | Archivo de pruebas |
 |---|---|---|
-| R1.* | T8 | `tests/test_decision.py` |
-| R2.* | T4 | `tests/test_entrada.py` |
-| R3.* | T4 | `tests/test_frenar.py` |
-| R4.* | T5 | `tests/test_beneficiario.py` |
-| R5.* | T5 | `tests/test_montos.py` |
-| R6.* | T6 | `tests/test_calendario.py` |
-| R7.* | T7 | `tests/test_canales.py` |
+| R1.* | T8 | `tests/test_motor.py` |
+| R2.* | T4 | `tests/test_motor.py` |
+| R3.* | T4 | `tests/test_motor.py` |
+| R4.* | T5 | `tests/test_motor.py` |
+| R5.* | T5 | `tests/test_motor.py` |
+| R6.* | T6 | `tests/test_motor.py` |
+| R7.* | T7 | `tests/test_motor.py` |
 | R8.* | T9 | `tests/test_guardarrail.py` |
 | R9.1, R9.3 | T10 | `tests/test_reglas_io.py` |
 | R9.2, R9.4, R9.5 | T12 | `tests/test_reglas_io.py` |
-| R9.6 | T11 | `tests/test_simular.py` |
-| R10.* | T8 | `tests/test_decision.py` |
+| R9.6 | T11 | `tests/test_reglas_pagina.py` |
+| R10.* | T8 | `tests/test_motor.py` |
 | R11.1 | Todas | Una prueba por criterio |
 | R11.2 | T13 | `tests/test_propiedades.py` |
-| R11.3, R11.4 | T14 | `eval.py` |
+| R11.3, R11.4 | T14 | `eval.py`, `tests/test_casos.py` |
+
+Las pruebas del motor quedaron en `tests/test_motor.py` y no en los archivos separados que nombran las tareas T4 a T8 (corregido el 17 oct).
 
 ## Orden sugerido para hoy
 
@@ -184,5 +186,6 @@ flowchart TD
 | T13 | Hecho |
 | T14 | Hecho |
 | T15 | Hecho |
-| T11 | Pendiente |
-| T12 | Pendiente (solo vigencias y techos) |
+| T11 | Hecho: `engine/simular.py`, vista previa de la página de reglas (PP8.3) |
+| T12 | Parcial: afloja/restringe y techo duro hechos (`reglas_io.cambios_que_aflojan`, `validar_cambio`); faltan conflictos por especificidad |
+| T16 | Hecho: moneda base USD y configurable (R5.6 a R5.8); `tests/test_moneda_base.py` |

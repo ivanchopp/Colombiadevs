@@ -1,0 +1,53 @@
+{
+  "id": "VER-0050",
+  "fecha": "2026-10-17T21:43:44-05:00",
+  "cambio": "EA12/ET14: XML de otros países de LATAM (SRI, CFE, NF-e, DTE, Costa Rica, SIFEN) sin IA desde una tabla de rutas, fusionado con el CFDI del PR #24 (EA11); decimal estricto en las dos lecturas (también CFDI y UBL); ISO-8859-1; RUC de SUNAT; XML desconocido se lee como texto y se escala; arreglo del choque sobre SRI vs CFDI; spec, pruebas, README, Panel 1 y AVANCES",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "agents/xml_factura.py",
+    "agents/segunda_lectura.py",
+    "agents/archivo.py",
+    "agents/flujo.py",
+    "app/Panel_1_Proveedor.py",
+    "tests/test_xml_latam.py",
+    "specs/extraccion-y-agente-de-entrada/requirements.md",
+    "specs/extraccion-y-agente-de-entrada/design.md",
+    "specs/extraccion-y-agente-de-entrada/tasks.md",
+    "README.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "agents/xml_factura.py",
+      "problema": "Las rutas de SRI, CFE, NF-e, DTE, Costa Rica y SIFEN se escribieron con conocimiento general de esos esquemas y se probaron con XML mínimos ficticios, no con facturas reales de cada país",
+      "correccion": "Probar con un XML representativo de cada país antes de presentarlo como soportado"
+    },
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "AVANCES.md",
+      "problema": "Las 4 facturas CFDI del equipo no traen TipoDeComprobante y EA11.2 (PR #24) las rechaza; DE6 (moneda vs país) sigue abierta",
+      "correccion": "Pedir los XML con TipoDeComprobante=I; spec propia para DE6"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "agents/segunda_lectura.py",
+      "problema": "Choque de la fusión: la detección del CFDI no distinguía mayúsculas y tomaba el sobre <comprobante> del SRI como CFDI; ahora decide por la raíz; mutación detectada",
+      "correccion": "Ninguna"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "convenciones",
+      "ubicacion": "specs/extraccion-y-agente-de-entrada/requirements.md",
+      "problema": "EA11, ET13 y VER-0048 ya estaban usados por el PR #24: esta parte es EA12, ET14, DE5 y DE6 sin saltos",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "git diff y fusión con origin/main (PR #24) revisados; python3 -m pytest -q: 473 passed; python3 eval.py: 29/29, 0 pagos indebidos; 6 mutaciones detectadas (decimal en tabla y en CFDI, desconocido escala, DOLAR a USD, sobre SRI vs CFDI, schemeID de SUNAT); se eliminó el soporte de atributos en rutas al quedar sin uso; las 4 facturas CFDI del equipo leídas sin subirlas al repositorio; sin secretos en el diff",
+  "rama": "xml-latam",
+  "commit": "ae659cce078cc1a2da71465e28ff3fcde3a974df",
+  "reemplaza": null
+}

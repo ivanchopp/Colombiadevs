@@ -4,7 +4,7 @@ import streamlit as st
 from acta import salas
 from acta.almacen import AlmacenSqlite
 from engine.contexto import contexto_desde_acta
-from engine.reglas_io import cargar_contexto_base, cargar_reglas, hoy_bogota
+from engine.reglas_io import cargar_contexto_base, cargar_reglas, hoy_bogota, reglas_de_sala
 from app.apoyo import ROLES
 
 SEGUNDOS_REFRESCO = 5
@@ -55,6 +55,6 @@ def barra_lateral(sala: str):
 
 
 def contexto_y_reglas(filas):
-    """Contexto del motor armado desde el acta de la sala, y las reglas vigentes hoy."""
+    """Contexto del motor armado desde el acta de la sala, y las reglas vigentes hoy en esa sala (PP8.7)."""
     hoy = hoy_bogota()
-    return contexto_desde_acta(cargar_contexto_base(hoy), filas), cargar_reglas(hoy)[0]
+    return contexto_desde_acta(cargar_contexto_base(hoy), filas), reglas_de_sala(cargar_reglas(hoy)[0], filas)

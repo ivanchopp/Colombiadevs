@@ -30,7 +30,8 @@ engine/
 └─ simular.py        # qué cambiaría con un cambio de reglas (R9.6)
 data/
 ├─ reglas.yaml       # parámetros, vigencias y versión
-├─ registros.yaml    # beneficiarios permitidos, cuentas, acuerdos, historial, presupuesto
+├─ proveedores.yaml  # lista permitida, cuentas y país (156 proveedores válidos; spec ordenes-de-compra, OC1.6)
+├─ registros.yaml    # acuerdos e historial, por nombre de proveedor
 ├─ calendario.csv    # obligaciones esperadas del mes
 ├─ canales.yaml      # canales, países, monedas, costo y tiempo (todo «supuesto»)
 └─ tasas.yaml        # tipos de cambio de ejemplo
@@ -49,12 +50,11 @@ class Ficha(BaseModel):
     cuenta_original: str | None
     cuenta_aclarada: str | None
     valores_aclarados: dict[str, Any]  # solo campos que el agente aclaró
-    origen_campos: dict[str, Literal["factura", "aclarado"]]   # de dónde salió cada campo
+    origen_campos: dict[str, Literal["factura", "aclarado"]] = {}   # vacío = todo viene de la factura (R2.5)
     lectura_ia: Literal["ok", "dudosa"]
     segunda_lectura: Literal["coincide", "no_coincide", "no_disponible"]
-    campos_diferentes: list[str] = []  # los que la segunda lectura vio distintos
-    alerta_inyeccion: bool = False     # solo informa; el motor no lee el texto libre
-    aclaraciones: list[dict] = []      # turnos con el proveedor, para el detalle y el acta
+    recibida: date                     # fecha de recepción: calendario (R6.1) y reglas vigentes (R9.2)
+    orden_en_texto: bool = False       # el agente vio una orden escondida; el motor no lee el texto libre
     preparador: str                  # quién subió el caso (R8.2)
 
 class Revision(BaseModel):
@@ -104,6 +104,7 @@ def evaluar(ficha, contexto, reglas):
 1. Esquema de la ficha (R2.1)
 2. Las dos lecturas coinciden (R2.2)
 3. Diferencias aclarado contra original (R2.3)
+3b. Datos que vienen solo de una aclaración (R2.5)
 4. Tipo de cambio (R5.1)
 5. Duplicado (R3.1)
 6. Beneficiario y cuenta (R4)
@@ -113,6 +114,12 @@ def evaluar(ficha, contexto, reglas):
 10. Límite por periodo (R5.4)
 
 ## Piezas con lógica propia
+
+**Datos aclarados (R2.5):** los cinco campos obligatorios son beneficiario, número, monto, moneda y vencimiento. Un campo con `origen_campos[campo] = "aclarado"` genera un `AVISO` (nivel `PERSONA`), **salvo** que su valor coincida con los registros de la empresa:
+- beneficiario: está en la lista permitida;
+- monto: dentro de `tolerancia_ok` del acuerdo o de alguna obligación del calendario del mismo beneficiario;
+- moneda: igual a la del acuerdo registrado;
+- número y vencimiento: no hay registro con qué contrastarlos, así que siempre generan el `AVISO`.
 
 **Huella de duplicado (R3.1):** `sha256(beneficiario | numero | monto | fecha)` sobre valores normalizados (mayúsculas, sin espacios extra, monto a dos decimales). Se compara con el historial.
 
@@ -148,6 +155,8 @@ def registrar_decision(resultado_propuesto, ficha, contexto, reglas, actor=None)
                            actor, clave_idem)   # lo implementa la spec acta-y-csv
 ```
 `validar_aprobacion` comprueba: rol del actor mayor o igual al nivel exigido, motivo no vacío, actor distinto de `ficha.preparador`, y monto menor o igual a `techo_duro_pago`.
+
+**Ficha inválida (R2.1, R8.6).** `registrar_decision` ya no lanza si la ficha no cumple el esquema: `evaluar` devuelve `ESCALAR` / `SENIOR` con la revisión `FALLA` «Ficha inválida», y se escribe un `DECISION` con `ficha_invalida: true`, los datos que se pudieron leer y los demás campos en blanco (`monto` y `monto_base` en `0.00`, moneda `N/D`). Ese caso (a) aparece en el tablero y en la cola del senior, (b) **no entra en el historial del motor** (no tiene monto ni fecha válidos) y (c) **no se puede aprobar**: `validar_aprobacion` rechaza la aprobación y la pantalla solo ofrece rechazar. Si falta el `factura_id`, sí lanza: es un error de programación.
 
 **Reglas versionadas (R9):**
 - `reglas.yaml` tiene una lista de conjuntos con `version`, `vigente_desde`, `vigente_hasta` y los parámetros.
@@ -196,7 +205,7 @@ flowchart LR
 
 Decisiones tomadas al programar, para que spec y código no se separen:
 
-1. **La ficha lleva dos campos más:** `recibida` (fecha de recepción; sirve para emparejar con el calendario, R6.1, y para elegir la versión de reglas, R9.2) y `orden_en_texto` (el agente de entrada avisa que el texto traía una orden; solo agrega un `AVISO`, nunca cambia una decisión a favor, R2.4).
+1. **La ficha del motor** (arriba) incluye `origen_campos` y `segunda_lectura = no_disponible` (R2.2, R2.5), más dos campos propios: `recibida` (fecha de recepción; sirve para emparejar con el calendario, R6.1, y para elegir la versión de reglas, R9.2) y `orden_en_texto`. **Diferencias deliberadas con el diseño del agente de entrada de otra sesión:** `orden_en_texto` hace el papel de `alerta_inyeccion`, pero además agrega un `AVISO` (R2.4: solo suma cautela, nunca autoriza nada); y `campos_diferentes` y `aclaraciones` **no** viajan en la ficha: el agente los guarda en su tabla `entrada` junto con el chat, y lo aclarado queda en `valores_aclarados`.
 2. **R5.3 es una revisión más:** `OK` si el nivel por monto es `NINGUNO`; si no, `AVISO` con ese nivel. Así `PAGAR` se reduce a «todas las revisiones `OK`».
 3. **`ESCALAR` nunca queda con nivel `NINGUNO`:** si ninguna revisión pide nivel, se asigna `PERSONA` (alguien debe revisar). `FRENAR` queda con nivel `NINGUNO`.
 4. **Sin tipo de cambio (R5.1) el nivel es `SENIOR`:** sin monto en moneda base no se puede medir nada, y las revisiones que dependen de él devuelven `FALLA` «no evaluable».
@@ -206,3 +215,4 @@ Decisiones tomadas al programar, para que spec y código no se separen:
 8. **Contexto desde el acta** (`engine/contexto.py`): el historial, el gasto y las obligaciones ya emparejadas se derivan de los eventos del acta, no de otra tabla.
 9. **Canales (cambio del 17 oct, con datos de Blinka):** `canales.yaml` ahora sigue las rutas del sitio de Blinka: Bre-B (COP), SPEI (MXN), Pix / TED (BRL), SEPA (EUR), CBU/CVU/Alias (ARS), transferencias bancarias (CLP, PEN, BOB, CRC, ZAR), rutas locales en USD (Perú, Panamá, China, Hong Kong), ACH y wire (EE. UU.), SWIFT (USD, más de 200 países) y USDC (Base, Ethereum, Polygon, Celo, Solana). **PSE sale de los canales de pago:** solo sirve para recibir depósitos en COP. Costo y tiempo siguen siendo «supuesto» y quedan «sin dato» donde nadie los dio.
 10. **Reglas:** `reglas.yaml` trae una lista de conjuntos con `vigente_desde`; se elige el más reciente vigente a la fecha de recepción. Los conflictos y el detector de afloja/restringe (T12) quedan para después. `techos.yaml` se aplica como mínimo sobre `techo_duro_pago`.
+11. **Moneda base USD (cambio del 17 oct, R5.6 a R5.8):** los clientes de Blinka operan en dólares. `reglas.yaml`, `techos.yaml`, `tasas.yaml`, `calendario.csv` y los montos base de `registros.yaml` y `casos.yaml` pasaron de COP a USD con un cambio de escala uniforme de 1 USD = 4.000 COP (supuesto), así que las 20 decisiones de prueba no cambian. Los montos de las facturas siguen en su moneda original. `comun.en_base(valor, reglas)` da formato con la moneda base; ningún módulo escribe «COP» o «USD» como base (lo comprueba `tests/test_moneda_base.py`). La revisión R5.7 escala al senior si la tabla de cambio no da 1 para la base. Con USD, el redondeo a centavos hace que una diferencia de 1 COP en el límite del 10 % ya no se note.

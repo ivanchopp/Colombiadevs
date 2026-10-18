@@ -1,0 +1,24 @@
+{
+  "id": "VER-0012",
+  "fecha": "2026-10-17T16:00:44-05:00",
+  "cambio": "Revisión de la documentación: estado (164 pruebas, PR #7), mapa del repositorio, alcance de órdenes de compra, README (página de reglas) e índice de specs",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "README.md",
+    "specs/README.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "AVANCES.md",
+      "problema": "Se corrigieron datos desactualizados: 152 y 143 pruebas (son 164), repositorio en PR #2 (va en PR #7), un commit sin número y el estado del alcance de órdenes de compra",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "Recorrido de AVANCES.md, README.md, specs/README.md y tasks.md contra el repositorio; pytest 164 passed; eval.py 20/20 y 0 pagos indebidos; referencias de commits verificadas con git log; sin cambios de código",
+  "rama": "main",
+  "commit": "7527f0728686940e4634881a36ce8583ebb75415",
+  "reemplaza": null
+}

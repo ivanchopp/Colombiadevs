@@ -75,9 +75,9 @@ def test_pp6_2_estados_del_calendario(almacen, sala):
     ctx = contexto_desde_acta(cargar_contexto_base(hoy), almacen.filas(sala))
     est = {(e["proveedor"], e["fecha"].day): e["estado"]
            for e in apoyo.estados_calendario(ctx, cargar_reglas(hoy)[0])}
-    assert est[("Imprenta Sol", 14)] == "atrasada"
-    assert est[("Hosting Andes", 21)] == "pendiente"
-    assert est[("Pixel Norte Ltda.", 2)] == "llegó"
+    assert est[("Alimentos del Valle S.A.S.", 14)] == "atrasada"
+    assert est[("Consultores Energéticos Magdalena S.A.S.", 21)] == "pendiente"
+    assert est[("Tecnología Cafetera S.A.S.", 2)] == "llegó"
 
 
 @pytest.fixture
@@ -99,9 +99,27 @@ def test_pp1_1_panel_1_crea_sala_y_no_muestra_reglas(entorno):
     assert not at.exception
     sala = at.query_params["sala"][0]
     texto = " ".join(x.value for x in at.text) + " ".join(x.value for x in at.info)
-    assert sala and "Has usado 0 de 5" in texto
+    assert sala and "Has usado 0 de 5" in texto and "Datos ficticios, solo para práctica" in texto
     for prohibido in ("3.000.000", "Beneficiario nuevo y cuenta", "umbral", "SENIOR"):
         assert prohibido not in texto
+
+
+def test_pp2_4_panel_1_no_tiene_botones_de_ejemplo(entorno):
+    at = abrir("app/Panel_1_Proveedor.py")
+    assert not at.exception
+    botones = " ".join(b.label for b in at.button)
+    for prohibido in ("ejemplo", "Normal", "Repetida", "Beneficiario nuevo", "orden escondida"):
+        assert prohibido.lower() not in botones.lower()
+    fuente = (RAIZ / "app/Panel_1_Proveedor.py").read_text(encoding="utf-8")
+    assert "recibir_ejemplo" not in fuente and "LECTURAS_GUARDADAS" not in fuente
+
+
+def test_pp2_5_los_rotulos_de_muestra_no_dicen_el_caso():
+    from agents import ejemplos
+    assert set(ejemplos.ROTULOS) == set(ejemplos.EJEMPLOS)
+    for rotulo in ejemplos.ROTULOS.values():
+        for caso in ("normal", "repetida", "nuevo", "orden", "escondida"):
+            assert caso not in rotulo.lower()
 
 
 @pytest.mark.parametrize("pagina", ["Tablero", "Cola_de_aprobacion", "Calendario", "Acta"])
@@ -112,3 +130,63 @@ def test_pp3_1_panel_2_pide_rol_antes_de_mostrar_datos(entorno, pagina):
     assert not at.exception
     assert any("Elige un rol" in i.value for i in at.info)
     assert len(at.dataframe) == 0
+
+
+# R8.6 y PP5.7: la ficha inválida se ve, y solo se puede rechazar
+@pytest.fixture
+def invalida(almacen, sala):
+    from agents import flujo
+    e = flujo.recibir(almacen, sala, "vacia.txt", b"hola, adjunto mi factura")
+    e = flujo.responder(almacen, sala, e["factura_id"], "no")
+    e = flujo.responder(almacen, sala, e["factura_id"], "no")
+    return e["factura_id"]
+
+
+def test_pp5_7_no_se_puede_aprobar_una_ficha_invalida_y_queda_el_intento(almacen, sala, invalida):
+    f = facturas(almacen, sala)[invalida]
+    with pytest.raises(AprobacionRechazada, match="no se puede aprobar"):
+        apoyo.responder(almacen, sala, f, "SENIOR", True, "lo apruebo igual", "Bre-B")
+    actual = facturas(almacen, sala)[invalida]
+    assert actual.estado == "PENDIENTE" and len(actual.intentos) == 1
+
+
+def test_pp5_7_una_ficha_invalida_si_se_puede_rechazar(almacen, sala, invalida):
+    f = facturas(almacen, sala)[invalida]
+    apoyo.responder(almacen, sala, f, "SENIOR", False, "Faltan datos: que la envíe de nuevo")
+    assert facturas(almacen, sala)[invalida].estado == "RECHAZADA"
+
+
+def test_pp5_1_la_ficha_invalida_es_de_nivel_senior(almacen, sala, invalida):
+    assert invalida in {f.factura_id for f in apoyo.cola_para_rol(facturas(almacen, sala), "SENIOR")}
+    assert invalida not in {f.factura_id for f in apoyo.cola_para_rol(facturas(almacen, sala), "PERSONA")}
+
+
+def test_pp4_2_el_tablero_cuenta_y_muestra_la_ficha_invalida(almacen, sala, invalida):
+    from acta import exportar_csv, tablero
+    filas = almacen.filas(sala)
+    assert tablero.cifras(filas).pendientes == 4 and tablero.comprobar_consistencia(filas)
+    assert apoyo.monto_legible(facturas(almacen, sala)[invalida].decision) == "sin leer"
+    csv_texto = exportar_csv.exportar_facturas(filas).decode("utf-8-sig")
+    fila = next(l for l in csv_texto.splitlines() if l.startswith(invalida + ","))
+    assert fila.split(",")[2:4] == ["", ""]                            # monto y moneda vacíos, no inventados
+
+
+def _cola(tmp_path, monkeypatch, almacen, sala, rol):
+    import streamlit as st
+    from streamlit.testing.v1 import AppTest
+    st.cache_resource.clear()                     # la conexión a la base se guarda en caché entre pruebas
+    monkeypatch.setenv("ACTA_DB", almacen.ruta)
+    at = AppTest.from_file(str(RAIZ / "app/pages/2_Cola_de_aprobacion.py"), default_timeout=30)
+    at.query_params["sala"] = sala
+    at.session_state["rol"] = rol
+    at.run()
+    return at
+
+
+def test_pp5_7_la_cola_no_ofrece_aprobar_una_ficha_invalida(tmp_path, monkeypatch, almacen, sala, invalida):
+    at = _cola(tmp_path, monkeypatch, almacen, sala, "SENIOR")
+    assert not at.exception
+    botones = {b.key for b in at.button}
+    assert f"re_{invalida}" in botones and f"ap_{invalida}" not in botones      # solo rechazar
+    assert any("No se puede aprobar un pago sin esos datos" in w.value for w in at.warning)
+    assert "ap_F-1045" in botones                                               # las válidas sí se aprueban

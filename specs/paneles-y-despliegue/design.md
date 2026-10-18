@@ -58,3 +58,20 @@ flowchart LR
 | Se muestra como pagada una factura cuya escritura falló | Mostrar el éxito solo después de que `escribir_evento` devuelva la fila (PP5.6) |
 | El Panel 1 filtra reglas o motivos | Estado público con lista cerrada y prueba específica (PP2.1) |
 | Texto con HTML en un motivo | Mostrar siempre con `st.text` / `st.write` sin HTML (PP7.3) |
+
+## Página de reglas (PP8)
+
+- **Dónde vive un cambio:** en el acta de la sala, como evento `CAMBIO_REGLA` (tipo ya permitido por AC1.3). `reglas.yaml` no se toca, así cada visitante cambia sus reglas sin afectar a los demás y el cambio queda en la cadena de huellas.
+- **Reglas de una sala:** `engine.reglas_io.reglas_de_sala(base, filas)` toma las reglas vigentes de `reglas.yaml` y les aplica el último `CAMBIO_REGLA` de la sala. La versión queda como `<versión base>.s<n>` (por ejemplo `v12.s1`) y aparece en cada decisión. La usan los paneles y el agente de entrada al decidir.
+- **Afloja o restringe:** `cambios_que_aflojan(antes, después)`. Afloja si sube un umbral de monto, el presupuesto, una tolerancia o la ventana de días.
+- **Validación:** `validar_cambio` exige valores positivos, `autopago_max` ≤ `persona_max`, `tolerancia_ok` ≤ `tolerancia_frenar` ≤ 1 y que ningún umbral de monto pase el techo duro. El techo duro no es editable.
+- **Vista previa:** `engine.simular.simular(filas, ctx, antes, después)` vuelve a evaluar la ficha guardada de cada decisión con las dos versiones y devuelve las que cambian. No escribe nada.
+- **Confirmar:** `app.apoyo.cambiar_reglas` valida rol, motivo y coherencia, y escribe el evento. Si un rol `PERSONA` intenta aflojar, se registra `INTENTO_RECHAZADO`.
+- shortcut: el cambio se aplica sobre la versión base vigente hoy; si `reglas.yaml` cambia de versión, la sala conserva sus parámetros cambiados. Basta para la demo.
+
+## Página de órdenes de compra (PP9)
+
+- `app/pages/6_Ordenes_de_compra.py` (el menú lo muestra sin tilde, como P12). Lee `ctx.ordenes` y `ctx.oc_facturadas` que ya arma el motor desde el acta; no calcula nada propio.
+- `app/apoyo.py`: `ordenes_con_estado(ctx, facturas)` devuelve una fila por orden (número, proveedor, artículo, total formateado, estado, factura que la usó y su estado, advertencia) y `oc_de_factura(factura, ctx)` devuelve lo que muestra el detalle (o `None` si la factura no cita OC).
+- El detalle del tablero agrega una línea bajo la ficha con la orden citada y el resultado de OC4 (la revisión ya figura en la lista de revisiones).
+- El Panel 1 no cambia: sigue sin mostrar órdenes (PP9.4).

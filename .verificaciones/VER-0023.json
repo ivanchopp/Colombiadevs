@@ -1,0 +1,42 @@
+{
+  "id": "VER-0023",
+  "fecha": "2026-10-17T19:01:45-05:00",
+  "cambio": "Revisión total de la documentación tras el PR #16: AVANCES, README, specs/README, tareas (ET3, ET7, ET8, PT7, PT10), trazabilidad del motor, OCD3 aplicada y P32 nuevo; sin código",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "README.md",
+    "specs/README.md",
+    "specs/extraccion-y-agente-de-entrada/tasks.md",
+    "specs/motor-de-reglas/tasks.md",
+    "specs/ordenes-de-compra/requirements.md",
+    "specs/paneles-y-despliegue/tasks.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "errores",
+      "ubicacion": "specs/motor-de-reglas/tasks.md",
+      "problema": "Los 'Listo cuando' de T4 a T8 siguen nombrando archivos de prueba que no existen (test_entrada.py, test_decision.py...); la tabla de trazabilidad ya apunta a tests/test_motor.py y lo aclara",
+      "correccion": "Dejarlo así (registro histórico) o reescribir esas líneas si se retoma la spec"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "docs/Ruta-de-una-factura.pdf",
+      "problema": "Las maquetas del PDF siguen con los beneficiarios anteriores (P6); no se pueden regenerar desde aquí",
+      "correccion": "Regenerar desde la página en línea del equipo"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "AVANCES.md",
+      "problema": "No se pudo comprobar qué commit corre Railway: la red de la sesión no alcanza el dominio (403 del proxy)",
+      "correccion": "Revisar ?diagnostico=1 (P32)"
+    }
+  ],
+  "comprobaciones": "git diff revisado; python3 -m pytest -q: 218 passed; python3 eval.py: 20/20, 0 pagos indebidos, 20/20 explicables; grep de referencias de pruebas R1-R11 contra tests/; sin secretos en el diff",
+  "rama": "docs-revision-total",
+  "commit": "4a08313a66617c644e16037fe40169de2788a559",
+  "reemplaza": null
+}

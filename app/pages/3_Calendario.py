@@ -4,7 +4,7 @@ from datetime import date, timedelta
 import streamlit as st
 
 from acta.estado import facturas_por_estado
-from app.apoyo import estados_calendario, formato_monto, inesperadas
+from app.apoyo import estados_calendario, inesperadas, monto_legible
 from app.comun import almacen, barra_lateral, contexto_y_reglas, encabezado, exigir_rol, obtener_sala
 
 MESES = ["", "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre",
@@ -54,4 +54,4 @@ if not fuera:
     st.write("No hay facturas inesperadas.")
 for f in fuera:
     st.text(f"{f.factura_id} · {f.decision['beneficiario']} · "
-            f"{formato_monto(f.decision['monto'], f.decision['moneda'])} · inesperada: se escala")
+            f"{monto_legible(f.decision)} · inesperada: se escala")

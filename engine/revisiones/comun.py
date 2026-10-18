@@ -26,10 +26,15 @@ def huella_factura(beneficiario, numero, monto, fecha) -> str:
                      f"{Decimal(monto).quantize(DOS):.2f}", fecha.isoformat()])
 
 
-def moneda_texto(valor: Decimal, moneda="COP") -> str:
+def moneda_texto(valor: Decimal, moneda: str) -> str:
     ent, _, dec = f"{valor:,.2f}".partition(".")
     ent = ent.replace(",", ".")
     return f"{ent} {moneda}" if dec == "00" else f"{ent},{dec} {moneda}"
+
+
+def en_base(valor: Decimal, reglas) -> str:
+    """Un monto con la moneda base de las reglas (R5.6): nunca una moneda fija."""
+    return moneda_texto(valor, reglas.moneda_base)
 
 
 def porcentaje(valor: Decimal) -> str:

@@ -19,13 +19,13 @@ casos:
     valores_aclarados: &id001 {}
     cuenta_aclarada: null
     factura_id: C01
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-01
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C02
   nombre: Normal en USD
   criterios:
@@ -42,13 +42,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C02
-    beneficiario: Cloudwerk GmbH
+    beneficiario: Tecnología Quiteña S.A.
     numero: N-02
     monto: '540'
     moneda: USD
     vence: '2026-10-28'
     recibida: '2026-10-15'
-    cuenta_original: Deutsche ···7712
+    cuenta_original: Cuenta demo ···0005
 - id: C03
   nombre: Normal en MXN
   criterios:
@@ -65,13 +65,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C03
-    beneficiario: Taller Azteca
+    beneficiario: Papelería Corporativa Anáhuac S.A. de C.V.
     numero: TA-1044
     monto: '12500'
     moneda: MXN
     vence: '2026-10-25'
     recibida: '2026-10-06'
-    cuenta_original: BBVA ···3304
+    cuenta_original: Cuenta demo ···0029
 - id: C04
   nombre: Repetida
   criterios:
@@ -87,13 +87,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C04
-    beneficiario: Taller Azteca
+    beneficiario: Papelería Corporativa Anáhuac S.A. de C.V.
     numero: TA-0931
     monto: '12500'
     moneda: MXN
     vence: '2026-09-25'
     recibida: '2026-10-06'
-    cuenta_original: BBVA ···3304
+    cuenta_original: Cuenta demo ···0029
 - id: C05
   nombre: 8 % sobre lo acordado
   criterios:
@@ -109,13 +109,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C05
-    beneficiario: Estúdio Verde
+    beneficiario: Importadora Químicos Rímac S.A.C.
     numero: N-05
-    monto: '3800'
-    moneda: BRL
+    monto: '2615'
+    moneda: PEN
     vence: '2026-10-27'
     recibida: '2026-10-14'
-    cuenta_original: Itaú ···5521
+    cuenta_original: Cuenta demo ···0017
 - id: C06
   nombre: 12,5 % sobre lo acordado
   criterios:
@@ -131,13 +131,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C06
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-06
     monto: '2700000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C07
   nombre: 4 % sobre lo acordado (tolerancia)
   criterios:
@@ -153,13 +153,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C07
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-07
     monto: '2500000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C08
   nombre: Beneficiario nuevo
   criterios:
@@ -198,13 +198,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: Banco Lago ···4821
     factura_id: C09
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-09
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C10
   nombre: Inesperada
   criterios:
@@ -221,13 +221,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C10
-    beneficiario: Diseños Alba
+    beneficiario: Textiles Modernos Pereira S.A.S.
     numero: N-10
     monto: '4100000'
     moneda: COP
     vence: '2026-10-29'
     recibida: '2026-10-16'
-    cuenta_original: Davivienda ···6403
+    cuenta_original: Cuenta demo ···0010
 - id: C11
   nombre: Orden escondida en el texto
   criterios:
@@ -243,13 +243,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C11
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-11
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C12
   nombre: Las lecturas no coinciden
   criterios:
@@ -265,13 +265,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C12
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-12
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C13
   nombre: Lectura dudosa
   criterios:
@@ -287,13 +287,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C13
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-13
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C14
   nombre: Aclarado cambia el monto
   criterios:
@@ -310,13 +310,13 @@ casos:
       monto: '2500000'
     cuenta_aclarada: null
     factura_id: C14
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-14
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
 - id: C15
   nombre: Sin tipo de cambio
   criterios:
@@ -333,13 +333,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C15
-    beneficiario: Cloudwerk GmbH
+    beneficiario: Tecnología Quiteña S.A.
     numero: N-15
     monto: '500'
     moneda: JPY
     vence: '2026-10-28'
     recibida: '2026-10-15'
-    cuenta_original: Deutsche ···7712
+    cuenta_original: Cuenta demo ···0005
 - id: C16
   nombre: Sin presupuesto
   criterios:
@@ -355,13 +355,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C16
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-16
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
   historial_extra:
   - factura_id: H1
     beneficiario: Otros SAS
@@ -369,7 +369,7 @@ casos:
     monto: '50000000'
     moneda: COP
     vence: '2026-10-01'
-    monto_base: '50000000.00'
+    monto_base: '12500.00'
     estado: PAGADA
     periodo: 2026-10
   - factura_id: H2
@@ -378,7 +378,7 @@ casos:
     monto: '49000000'
     moneda: COP
     vence: '2026-10-01'
-    monto_base: '49000000.00'
+    monto_base: '12250.00'
     estado: PAGADA
     periodo: 2026-10
 - id: C17
@@ -396,13 +396,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C17
-    beneficiario: Obras Cumbre SAS
+    beneficiario: Inversiones Metalmecánicos Cauca S.A.S.
     numero: N-17
     monto: '60000000'
     moneda: COP
     vence: '2026-10-30'
     recibida: '2026-10-16'
-    cuenta_original: Bancolombia ···9921
+    cuenta_original: Cuenta demo ···0053
 - id: C18
   nombre: Límite por periodo del beneficiario
   criterios:
@@ -418,21 +418,21 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C18
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: N-18
     monto: '2400000'
     moneda: COP
     vence: '2026-10-22'
     recibida: '2026-10-02'
-    cuenta_original: Bancolombia ···1180
+    cuenta_original: Cuenta demo ···0028
   historial_extra:
   - factura_id: H3
-    beneficiario: Pixel Norte Ltda.
+    beneficiario: Tecnología Cafetera S.A.S.
     numero: H-3
     monto: '13000000'
     moneda: COP
     vence: '2026-10-01'
-    monto_base: '13000000.00'
+    monto_base: '3250.00'
     estado: PAGADA
     periodo: 2026-10
 - id: C19
@@ -450,13 +450,13 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C19
-    beneficiario: Imprenta Sol
+    beneficiario: Alimentos del Valle S.A.S.
     numero: N-19
     monto: '6000000'
     moneda: COP
     vence: '2026-10-30'
     recibida: '2026-10-14'
-    cuenta_original: Bancolombia ···2291
+    cuenta_original: Cuenta demo ···0026
 - id: C20
   nombre: Sin acuerdo registrado
   criterios:
@@ -472,10 +472,216 @@ casos:
     valores_aclarados: *id001
     cuenta_aclarada: null
     factura_id: C20
-    beneficiario: Hosting Andes
+    beneficiario: Consultores Energéticos Magdalena S.A.S.
     numero: N-20
     monto: '950000'
     moneda: COP
     vence: '2026-11-05'
     recibida: '2026-10-21'
-    cuenta_original: Bancolombia ···7745
+    cuenta_original: Cuenta demo ···0009
+- id: C21
+  nombre: OC que cuadra, monto bajo
+  criterios: [OC4.1, OC4.9]
+  esperado: {decision: PAGAR, nivel: NINGUNO}
+  calendario_extra:
+  - {id: OC-C21, beneficiario: "Agroindustrias del Huila S.A.S.", fecha: '2026-10-15', monto_base: '290'}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C21
+    beneficiario: "Agroindustrias del Huila S.A.S."
+    numero: N-21
+    monto: '1160000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0004
+    orden_compra: PO-2026-001
+    id_tributaria: '999016272-1'
+- id: C22
+  nombre: OC con identificación tributaria incorrecta
+  criterios: [OC4.3]
+  esperado: {decision: ESCALAR, nivel: SENIOR}
+  calendario_extra:
+  - {id: OC-C22, beneficiario: "Consultores Energéticos Magdalena S.A.S.", fecha: '2026-10-15', monto_base: '290'}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C22
+    beneficiario: "Consultores Energéticos Magdalena S.A.S."
+    numero: N-22
+    monto: '1160000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0009
+    orden_compra: PO-2026-005
+    id_tributaria: '929610444-9'
+- id: C23
+  nombre: OC alterada +15 % (PO-010)
+  criterios: [OC4.5]
+  esperado: {decision: FRENAR, nivel: NINGUNO}
+  calendario_extra:
+  - {id: OC-C23, beneficiario: "Textiles Modernos Pereira S.A.S.", fecha: '2026-10-15', monto_base: '333.5'}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C23
+    beneficiario: "Textiles Modernos Pereira S.A.S."
+    numero: N-23
+    monto: '1334000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0010
+    orden_compra: PO-2026-010
+    id_tributaria: '978961183-0'
+- id: C24
+  nombre: OC alterada +15 % (PO-015)
+  criterios: [OC4.5]
+  esperado: {decision: FRENAR, nivel: NINGUNO}
+  calendario_extra:
+  - {id: OC-C24, beneficiario: "Industrias Eléctricos Magdalena S.A.S.", fecha: '2026-10-15', monto_base: '333.5'}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C24
+    beneficiario: "Industrias Eléctricos Magdalena S.A.S."
+    numero: N-24
+    monto: '1334000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0056
+    orden_compra: PO-2026-015
+    id_tributaria: '935742512-5'
+- id: C25
+  nombre: OC alterada +8 %
+  criterios: [OC4.5]
+  esperado: {decision: ESCALAR, nivel: PERSONA}
+  calendario_extra:
+  - {id: OC-C25, beneficiario: "Agroindustrias del Huila S.A.S.", fecha: '2026-10-15', monto_base: '313.2'}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C25
+    beneficiario: "Agroindustrias del Huila S.A.S."
+    numero: N-25
+    monto: '1252800'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0004
+    orden_compra: PO-2026-001
+    id_tributaria: '999016272-1'
+- id: C26
+  nombre: OC inexistente
+  criterios: [OC4.2]
+  esperado: {decision: ESCALAR, nivel: SENIOR}
+  calendario_extra:
+  - {id: OC-C26, beneficiario: "Agroindustrias del Huila S.A.S.", fecha: '2026-10-15', monto_base: '290'}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C26
+    beneficiario: "Agroindustrias del Huila S.A.S."
+    numero: N-26
+    monto: '1160000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0004
+    orden_compra: PO-2026-999
+    id_tributaria: '999016272-1'
+- id: C27
+  nombre: OC ya facturada por otra factura
+  criterios: [OC4.6, OC5.2]
+  esperado: {decision: FRENAR, nivel: NINGUNO}
+  calendario_extra:
+  - {id: OC-C27, beneficiario: "Laboratorios Clínicos Cundinamarca S.A.S.", fecha: '2026-10-15', monto_base: '290'}
+  oc_facturadas: {PO2026002: F-OTRA}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C27
+    beneficiario: "Laboratorios Clínicos Cundinamarca S.A.S."
+    numero: N-27
+    monto: '1160000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0006
+    orden_compra: PO-2026-002
+    id_tributaria: '966177115-3'
+- id: C28
+  nombre: OC de otro proveedor
+  criterios: [OC4.3]
+  esperado: {decision: ESCALAR, nivel: SENIOR}
+  calendario_extra:
+  - {id: OC-C28, beneficiario: "Laboratorios Clínicos Cundinamarca S.A.S.", fecha: '2026-10-15', monto_base: '290'}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C28
+    beneficiario: "Laboratorios Clínicos Cundinamarca S.A.S."
+    numero: N-28
+    monto: '1160000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0006
+    orden_compra: PO-2026-004
+    id_tributaria: '966177115-3'
+- id: C29
+  nombre: OC que cuadra pero fuera del calendario
+  criterios: [OC4.9, R6.2]
+  esperado: {decision: ESCALAR, nivel: PERSONA}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C29
+    beneficiario: "Corporación Alimentarios Orinoquía S.A.S."
+    numero: N-29
+    monto: '1160000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0007
+    orden_compra: PO-2026-004
+    id_tributaria: '980746390-5'

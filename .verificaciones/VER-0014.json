@@ -1,0 +1,47 @@
+{
+  "id": "VER-0014",
+  "fecha": "2026-10-17T16:02:26-05:00",
+  "cambio": "FACTURAS_MAX configurable (EA1.5), aviso del Panel 1 sin la palabra demo, diagnostico sin falsos positivos de otros servicios, y fusion de main con renumeracion de VER-0010 a VER-0012; specs y AVANCES al dia",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "agents/flujo.py",
+    "agents/lectura_ia.py",
+    "app/Panel_1_Proveedor.py",
+    "tests/test_agente_entrada.py",
+    "tests/test_paneles.py",
+    "specs/extraccion-y-agente-de-entrada/requirements.md",
+    "specs/paneles-y-despliegue/requirements.md",
+    "README.md",
+    ".env.example",
+    "AVANCES.md",
+    "VERIFICACIONES.md",
+    ".verificaciones"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "seguridad",
+      "ubicacion": "agents/flujo.py",
+      "problema": "FACTURAS_MAX no es un tope de gasto: limita las facturas por sala, pero cada sala nueva recibe otras tantas, y subirlo aumenta las llamadas reales a la IA",
+      "correccion": "Poner una cuota en Google AI Studio o Google Cloud (AVANCES P27)"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": ".verificaciones/VER-0010.json",
+      "problema": "La fusion con main encontro dos VER-0010 distintos; el de main conserva su ID y el de esta rama se renumero a VER-0012 antes de llegar a main; la tabla se regenero con el script del verificador",
+      "correccion": "Ninguna"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "convenciones",
+      "ubicacion": "agents/lectura_ia.py",
+      "problema": "El diagnostico ya no detecta nombres parecidos de claves genericas (API_KEY) ni de otros servicios; solo Gemini, Google y Anthropic",
+      "correccion": "Ampliar PARECE_DE_IA si hace falta"
+    }
+  ],
+  "comprobaciones": "pytest: 191 passed; python3 eval.py: 20/20, 0 pagos indebidos; 2 mutaciones del limite (acepta 0 y 999999, nunca se aplica) detectadas por las pruebas; sin marcas de conflicto en AVANCES.md ni VERIFICACIONES.md; JSON de verificacion unicos y consecutivos hasta VER-0012; sin secretos en el diff; sin cambios en el motor ni en las reglas de decision",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "5fba30381bb50ae7a68d1253bf7c449582622ac8",
+  "reemplaza": null
+}

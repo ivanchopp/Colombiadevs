@@ -1,0 +1,27 @@
+{
+  "id": "VER-0026",
+  "fecha": "2026-10-17T19:10:40-05:00",
+  "cambio": "Fusion de main (PR 15, 16, 17) en la rama de R1 y R4: datos de base escalados a USD sobre los 156 proveedores, pruebas ajustadas, VER renumerados a 0024 y 0025, AVANCES reconciliado",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "VERIFICACIONES.md",
+    "data",
+    "tests",
+    "specs/README.md",
+    ".verificaciones"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "data/calendario.csv",
+      "problema": "Con los 156 proveedores, la obligacion O4 (2.850.350 COP) no es multiplo exacto de la tasa 1/4000 y se redondeo a 712,59 USD; el emparejamiento por tolerancia no cambia",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "pytest: 240 passed; python3 eval.py: 20/20 y 0 pagos indebidos; conflictos resueltos en datos, pruebas y documentacion; los VER 0021 a 0023 de main se conservaron y los de R1 y R4 pasaron a 0024 y 0025; sin codigo nuevo",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "bfef4f4851c409b8aba7326fb1da9283622918fe",
+  "reemplaza": null
+}

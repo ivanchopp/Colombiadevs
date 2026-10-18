@@ -15,12 +15,32 @@ encabezado("Panel 1 · Portal del proveedor", sala)
 
 estados = EstadoEntrada(almacen())
 facturas = estados.listar(sala)
-st.info(f"Demo con datos ficticios. Has usado {len(facturas)} de {flujo.FACTURAS_MAX} facturas permitidas.")
+st.info(f"Datos ficticios, solo para práctica. Has usado {len(facturas)} de {flujo.facturas_max()} facturas permitidas.")
 if not flujo.modo_demo():
     st.caption(f"Lectura de facturas con IA: {flujo.lectura_ia.descripcion_proveedor()}.")
 else:
-    st.caption("Modo demo: sin conexión a la IA. Las facturas de ejemplo usan lecturas guardadas y los archivos "
-               "propios se leen solo con patrones de texto, por lo que pasan a revisión de una persona.")
+    st.caption("Modo demo: sin conexión a la IA. Los archivos se leen solo con patrones de texto, por lo que "
+               "pasan a revisión de una persona. Para ver por qué, agrega ?diagnostico=1 al enlace.")
+
+if st.query_params.get("diagnostico"):
+    d = flujo.lectura_ia.diagnostico()
+    with st.container(border=True):
+        st.markdown("**Diagnóstico de la IA** (solo estados y nombres; nunca el valor de una clave)")
+        lineas = [f"Proveedor activo: {d['proveedor'] or 'ninguno (modo demo)'}", f"Motivo: {d['razon']}", ""]
+        lineas += [f"{n}: {e}" for n, e in d["claves"].items()]
+        lineas += [f"{n}: {v}" for n, v in d["ajustes"].items()]
+        if d["parecidas"]:
+            lineas += ["", "Variables con nombre parecido pero distinto (¿error de escritura?): "
+                       + ", ".join(d["parecidas"])]
+        lineas += ["", *[f"Despliegue · {k}: {v}" for k, v in d["despliegue"].items()]]
+        st.text("\n".join(lineas))
+        f = flujo.lectura_ia.ULTIMA_FALLA
+        st.text("Última falla de lectura con IA: "
+                + (f"{f['cuando']} · {f['proveedor']} · {f['mensaje']}" if f["cuando"] else "ninguna desde el último arranque"))
+        if not flujo.modo_demo() and st.button("Probar la conexión con la IA ahora"):    # EA2b.11: una llamada
+            r = flujo.lectura_ia.probar_conexion()
+            st.text(f"{'OK' if r['ok'] else 'FALLA'} · {r['proveedor']} ({r['modelo']})\n{r['detalle']}"
+                    + (("\nModelos disponibles: " + ", ".join(r["modelos"])) if r["modelos"] else ""))
 
 if aviso := st.session_state.pop("aviso_panel1", None):
     st.error(aviso)
@@ -38,15 +58,17 @@ def intentar(accion, *args, **kw):
 izq, der = st.columns(2)
 with izq:
     st.subheader("Envía una factura")
-    archivo = st.file_uploader("Arrastra aquí un PDF, una foto o un correo",
-                               type=["pdf", "jpg", "jpeg", "png", "eml", "txt"])
-    st.caption("PDF, JPG, PNG o EML · máx. 5 MB")
+    archivo = st.file_uploader("Arrastra aquí un PDF, una foto, un correo o un XML",
+                               type=["pdf", "jpg", "jpeg", "png", "eml", "txt", "xml"])
+    st.caption("PDF, JPG, PNG, EML o XML de factura electrónica (Colombia, Perú, México, Ecuador, Uruguay, Brasil, Chile, Costa Rica, Paraguay; otros formatos se revisan a mano) · máx. 5 MB")
     if archivo is not None and st.button("Enviar esta factura", type="primary"):
         intentar(flujo.recibir, almacen(), sala, archivo.name, archivo.getvalue())
-    st.markdown("**Probar con una factura de ejemplo**")
-    for col, (clave, nombre) in zip(st.columns(4), ejemplos.EJEMPLOS.items()):
-        if col.button(nombre, key=f"ej_{clave}", use_container_width=True):
-            intentar(flujo.recibir_ejemplo, almacen(), sala, clave)
+    with st.expander("Archivos de muestra (ficticios)"):
+        st.caption("Descarga uno y súbelo arriba. El sistema lo lee y decide solo.")
+        for clave in ejemplos.EJEMPLOS:
+            nombre, datos = ejemplos.leer_ejemplo(clave)
+            st.download_button(ejemplos.ROTULOS[clave], datos, file_name=nombre, mime="text/plain",
+                               key=f"muestra_{clave}", use_container_width=True)
 
 with der:
     st.subheader("Estado de tus facturas")

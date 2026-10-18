@@ -1,0 +1,41 @@
+{
+  "id": "VER-0010",
+  "fecha": "2026-10-17T14:24:20-05:00",
+  "cambio": "Spec nueva ordenes-de-compra (OC1 a OC8, diseño, OT1 a OT7, decisiones OCD1 a OCD11) y enlaces en specs/README, motor-de-reglas y AVANCES",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "specs/ordenes-de-compra/requirements.md",
+    "specs/ordenes-de-compra/design.md",
+    "specs/ordenes-de-compra/tasks.md",
+    "specs/README.md",
+    "specs/motor-de-reglas/requirements.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "specs/ordenes-de-compra/requirements.md:Decisiones abiertas",
+      "problema": "Los datos entregados tienen inconsistencias (moneda sin código, IVA 16 % para todos, sin cuentas, 16 de 30 identificaciones repetidas o con formato inválido) que cambian los resultados esperados",
+      "correccion": "Resolver OCD1, OCD3, OCD4, OCD5 y OCD11 antes de OT1"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "data/fuentes",
+      "problema": "Los Excel originales no se suben: el repositorio es público y traen dirección, teléfono y correo; OC1.2 lo deja escrito",
+      "correccion": "Ninguna"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "specs/ordenes-de-compra/tasks.md",
+      "problema": "Unas 7 h de trabajo frente a la entrega de las 8:00; hay versión mínima de unas 4 h",
+      "correccion": "El equipo decide si entra"
+    }
+  ],
+  "comprobaciones": "Spec escrita antes del código; referencias cruzadas (EA2.1, EA2.4, EA3, EA5, PP2.1, AC3.1, R2.5, R3.5, R4.2, R5.1, R9.1, R11.2) verificadas con grep; formato de las 30 identificaciones tributarias y aritmética de las 30 OC comprobados con un script sobre los Excel; sin datos de contacto en el diff; pytest 152 passed (sin cambios de código); OC4 mantiene ante la duda ESCALAR y no salta revisiones (OC4.9)",
+  "rama": "main",
+  "commit": "67eb3338a89eccece5f2bda96d46b16341bf227f",
+  "reemplaza": null
+}

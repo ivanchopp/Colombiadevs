@@ -1,0 +1,35 @@
+{
+  "id": "VER-0039",
+  "fecha": "2026-10-17T20:25:45-05:00",
+  "cambio": "R7 version minima sin IA: agente de reglas en lenguaje natural (ART1-ART4): agents/reglas_texto.py, caja de texto en la pagina Reglas que solo rellena el formulario, comprobacion de coherencia, origen y pedido en CAMBIO_REGLA; 55 pruebas",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "agents/reglas_texto.py",
+    "app/apoyo.py",
+    "app/pages/5_Reglas.py",
+    "tests/test_agente_reglas.py",
+    "tests/test_reglas_pagina.py",
+    "specs/agente-de-reglas",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "agents/reglas_texto.py",
+      "problema": "Solo el lector por patrones: entiende frases simples y todo lo demas es no entendido. La IA (ART5), el tope por sala, la degradacion y el cliente falso de IA no estan; el vocabulario fijo de la comprobacion de coherencia puede dar falsas alarmas",
+      "correccion": "Hacer ART5 y calibrar con pedidos reales"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "app/pages/5_Reglas.py",
+      "problema": "El texto no tiene camino propio hacia las reglas: solo rellena el formulario, y validar_cambio, el techo duro, la firma del senior, el motivo y el acta son los de siempre; una propuesta dudosa exige la marca de revision; si la persona edita la cifra despues, el origen vuelve a formulario",
+      "correccion": ""
+    }
+  ],
+  "comprobaciones": "pytest: 324 passed (55 nuevas); python3 eval.py: 20/20 y 0 pagos indebidos; 6 mutaciones detectadas (boton sin la marca, sin comprobacion de coherencia, sin fuera de alcance, sin origen, negativos, origen siempre texto); propiedad con texto arbitrario (300 ejemplos); la pagina se probo con AppTest con rol de persona y de senior, no en navegador; sin secretos ni datos reales",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "a1e21e78d971d421897591049ffb840872cb8059",
+  "reemplaza": null
+}

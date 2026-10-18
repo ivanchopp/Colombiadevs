@@ -1,0 +1,43 @@
+{
+  "id": "VER-0011",
+  "fecha": "2026-10-17T15:40:19-05:00",
+  "cambio": "Registro de proveedores (OT1, parte de proveedores): importar_compras.py, data/proveedores.yaml con 200 proveedores y pruebas; spec con OCD12",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "data/importar_compras.py",
+    "data/proveedores.yaml",
+    "tests/test_proveedores.py",
+    "requirements.txt",
+    "specs/ordenes-de-compra/requirements.md",
+    "specs/ordenes-de-compra/design.md",
+    "specs/ordenes-de-compra/tasks.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "data/proveedores.yaml",
+      "problema": "El motor todavía no usa este registro: R4.1 sigue leyendo los 9 beneficiarios de registros.yaml, así que ningún proveedor nuevo se paga solo hasta OT2",
+      "correccion": "Implementar OT2 tras resolver OCD4"
+    },
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "errores",
+      "ubicacion": "specs/ordenes-de-compra/requirements.md:OCD12",
+      "problema": "Los ID de proveedor del archivo de órdenes ya no coinciden con el listado de 200",
+      "correccion": "Enlazar por nombre al importar las órdenes"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "data/proveedores.yaml",
+      "problema": "Sin dirección, teléfono ni correo (prueba automática); el .xlsx no se sube; cuentas ficticias marcadas",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "Spec ya escrita (OT1, OC1); git diff revisado; data/proveedores.yaml generado desde el .xlsx: 200 filas, ids y nombres únicos, 20 identificaciones repetidas y 30 inválidas, contrastado con un script independiente; sin @ ni teléfonos en el YAML; pytest 164 passed; eval.py 20/20 y 0 pagos indebidos (el motor no cambia); openpyxl solo en requirements.txt de desarrollo, no en producción",
+  "rama": "main",
+  "commit": "2f7c3df0aebbd0d5d081198980163ea33b9761e7",
+  "reemplaza": null
+}

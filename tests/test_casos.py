@@ -2,9 +2,9 @@
 import eval as evaluacion
 
 
-def test_r11_3_los_20_casos_dan_lo_esperado():
+def test_r11_3_los_29_casos_dan_lo_esperado():
     filas = evaluacion.correr()
-    assert len(filas) == 20
+    assert len(filas) == 29
     malos = [(f["caso"]["id"], f["resultado"].decision, f["resultado"].nivel) for f in filas if not f["bien"]]
     assert malos == []
 

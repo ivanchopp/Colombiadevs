@@ -12,8 +12,8 @@ HOY = date(2026, 10, 17)
 CTX, REGLAS = cargar_contexto_base(HOY), cargar_reglas(HOY)[0]
 
 VIOLACIONES = {
-    "duplicada": dict(beneficiario="Taller Azteca", numero="TA-0931", monto="12500", moneda="MXN",
-                      vence="2026-09-25", cuenta_original="BBVA ···3304"),
+    "duplicada": dict(beneficiario="Papelería Corporativa Anáhuac S.A. de C.V.", numero="TA-0931", monto="12500", moneda="MXN",
+                      vence="2026-09-25", cuenta_original="Cuenta demo ···0029"),
     "beneficiario_nuevo": dict(beneficiario="Desconocido SAS"),
     "cuenta_distinta": dict(cuenta_aclarada="Banco Falso ···0000"),
     "lecturas_distintas": dict(segunda_lectura="no_coincide"),
@@ -22,8 +22,12 @@ VIOLACIONES = {
     "monto_aclarado": dict(valores_aclarados={"monto": "1"}),
     "sin_tasa": dict(moneda="JPY"),
     "supera_acuerdo": dict(monto="3000000"),
-    "supera_techo": dict(beneficiario="Obras Cumbre SAS", monto="70000000", cuenta_original="Bancolombia ···9921"),
+    "supera_techo": dict(beneficiario="Inversiones Metalmecánicos Cauca S.A.S.", monto="70000000", cuenta_original="Cuenta demo ···0053"),
     "inesperada": dict(recibida="2026-10-12"),
+    "segunda_lectura_no_disponible": dict(segunda_lectura="no_disponible"),     # R2.2
+    "numero_solo_aclarado": dict(origen_campos={"numero": "aclarado"}),         # R2.5
+    "vence_solo_aclarado": dict(origen_campos={"vence": "aclarado"}),           # R2.5
+    "monto_aclarado_sin_respaldo": dict(monto="2600000", origen_campos={"monto": "aclarado"}),
 }
 
 
@@ -47,12 +51,12 @@ def test_ficha_cualquiera_nunca_rompe_ni_paga_sin_cumplir(cambios, _):
 
 
 @settings(max_examples=200, deadline=None)
-@given(st.integers(0, 10**8), st.sampled_from(["PAGADA", "PENDIENTE", "FRENADA", "RECHAZADA"]))
+@given(st.integers(0, 30_000), st.sampled_from(["PAGADA", "PENDIENTE", "FRENADA", "RECHAZADA"]))
 def test_pagar_nunca_supera_el_autopago_ni_el_presupuesto(previo, estado):
-    mov = Movimiento(factura_id="H", beneficiario="Pixel Norte Ltda.", numero="H", monto=previo, moneda="COP",
+    mov = Movimiento(factura_id="H", beneficiario="Tecnología Cafetera S.A.S.", numero="H", monto=previo, moneda="USD",
                      vence=date(2026, 10, 1), monto_base=previo, estado=estado, periodo="2026-10")
     ctx = CTX.model_copy(update={"historial": CTX.historial + [mov]})
     r = evaluar(ficha(), ctx, REGLAS)
     if r.decision == "PAGAR":
         acumulado = previo if estado in ("PAGADA", "PENDIENTE") else 0
-        assert acumulado + 2400000 <= REGLAS.autopago_max
+        assert acumulado + 600 <= REGLAS.autopago_max         # 2.400.000 COP = 600 USD

@@ -23,10 +23,13 @@ Cada criterio tiene un número (por ejemplo R3.1) y debe tener al menos una prue
 
 | Spec | Estado |
 |---|---|
-| `motor-de-reglas` | Borrador para revisión (implementado, falta T11 y T12 completo) |
-| `extraccion-y-agente-de-entrada` | Borrador para revisión (implementado en modo demo; falta probar con la API real) |
-| `acta-y-csv` | Borrador para revisión |
-| `paneles-y-despliegue` | Borrador para revisión (paneles programados; despliegue pendiente) |
+| `motor-de-reglas` | Borrador para revisión (implementado; T11 hecho, falta la parte de conflictos por especificidad de T12) |
+| `extraccion-y-agente-de-entrada` | Borrador para revisión (implementado, con XML de Latinoamérica sin IA, EA10 a EA12; **la IA real no lee en producción**, P17; Claude sin probar) |
+| `acta-y-csv` | Borrador para revisión (versión mínima en SQLite implementada; faltan PostgreSQL, purga de salas y conciliación) |
+| `paneles-y-despliegue` | Borrador para revisión (paneles, página de reglas, página de órdenes de compra y despliegue en Railway hechos; falta la página de conciliación, PT12) |
+| `ordenes-de-compra` | Versión mínima en el motor (R3, 17 oct): revisión OC4 con **órdenes sintéticas** y los 156 proveedores válidos como lista permitida; OT5 y OT7 hechas; faltan las órdenes reales (OCD13) y la columna en `facturas.csv` (OT4); 13 decisiones, 9 abiertas |
+| `archivo-de-salida` | Borrador para revisión (alcance nuevo de la reunión con Blinka del 17 oct; implementado con columnas supuestas; 4 decisiones abiertas) |
+| `agente-de-reglas` | Borrador para revisión (alcance nuevo de la reunión con Blinka, R7; versión mínima sin IA hecha, ART1 a ART4; falta la IA, ART5; 6 decisiones abiertas) |
 
 ## Reglas de trabajo
 

@@ -5,7 +5,7 @@ import streamlit as st
 from acta.estado import facturas_por_estado
 from acta.exportar_csv import exportar_eventos, exportar_facturas
 from acta.tablero import cifras, comprobar_consistencia
-from app.apoyo import DECISIONES, estados_calendario, formato_monto, quien_aprueba
+from app.apoyo import DECISIONES, estados_calendario, formato_monto, monto_legible, oc_de_factura, quien_aprueba
 from app.comun import (SEGUNDOS_REFRESCO, almacen, barra_lateral, contexto_y_reglas, encabezado,
                        exigir_rol, obtener_sala)
 
@@ -24,7 +24,7 @@ def tablero():
     facturas = facturas_por_estado(filas)
     ctx, reglas = contexto_y_reglas(filas)
     atrasadas = sum(e["estado"] == "atrasada" for e in estados_calendario(ctx, reglas))
-    c = cifras(filas, atrasadas)
+    c = cifras(filas, atrasadas, reglas.presupuesto_periodo)
 
     if not comprobar_consistencia(filas):
         st.error("Aviso: el tablero y el CSV no coinciden con el acta. No confíes en estas cifras.")
@@ -35,15 +35,15 @@ def tablero():
     m[2].metric("Pendientes de aprobación", c.pendientes)
     m[3].metric("Esperadas atrasadas", c.atrasadas)
     st.progress(min(float(c.porcentaje) / 100, 1.0),
-                text=f"Gasto del periodo frente al límite: {formato_monto(c.gasto, 'COP')} de "
-                     f"{formato_monto(c.presupuesto, 'COP')} · {c.porcentaje} %")
-    st.caption(f"Todo en pesos colombianos como moneda base · tasas de cambio, canales y costos de ejemplo "
+                text=f"Gasto del periodo frente al límite: {formato_monto(c.gasto, reglas.moneda_base)} de "
+                     f"{formato_monto(c.presupuesto, reglas.moneda_base)} · {c.porcentaje} %")
+    st.caption(f"Todo en {reglas.moneda_base} como moneda base · tasas de cambio, canales y costos de ejemplo "
                f"(supuestos) · actualizado {c.actualizado[11:19]} UTC")
 
     datos = [{
         "Factura": f.factura_id,
         "Proveedor": f.decision["beneficiario"],
-        "Monto": formato_monto(f.decision["monto"], f.decision["moneda"]),
+        "Monto": monto_legible(f.decision),
         "Decisión": ICONO[f.estado],
         "Aprueba": quien_aprueba(f),
         "Motivo": f.decision["motivo"],
@@ -60,6 +60,13 @@ def tablero():
     elegida = st.selectbox("Factura", list(facturas), label_visibility="collapsed", key="detalle")
     if elegida:
         f = facturas[elegida]
+        oc = oc_de_factura(f, ctx)
+        if oc:                                                                       # PP9.3
+            if oc["existe"]:
+                st.text(f"Orden de compra {oc['numero']} · {oc['proveedor']} · total {oc['total']} · {oc['estado']}")
+            else:
+                st.text(f"Orden de compra {oc['numero']} · orden inexistente")
+            st.text(f"Revisión de la orden: {oc['resultado']}")
         izq, der = st.columns(2)
         with izq:
             st.caption("Ficha")

@@ -1,0 +1,24 @@
+{
+  "id": "VER-0047",
+  "fecha": "2026-10-17T21:10:08-05:00",
+  "cambio": "Fusión de main (PR #21: OT7 y registro al día) en la rama de R6; la verificación de R6 pasa de VER-0045 a VER-0046",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "VERIFICACIONES.md",
+    ".verificaciones"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "convenciones",
+      "ubicacion": ".verificaciones/VER-0046.json:2",
+      "problema": "El ID VER-0045 lo ocupó la verificación del registro al día de la otra sesión; se conservó el de main y la de R6 pasó a VER-0046",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "python3 -m pytest -q: 407 pasan; python3 eval.py: 29/29, 0 pagos indebidos; sin marcas de conflicto; solo documentación y registros cambiaron en la fusión",
+  "rama": "claude/friendly-cerf-aygx2r",
+  "commit": "c2ec3cf44539d4fa91bf361fa18a9635978a2a85",
+  "reemplaza": null
+}

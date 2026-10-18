@@ -1,0 +1,48 @@
+{
+  "id": "VER-0008",
+  "fecha": "2026-10-17T13:29:46-05:00",
+  "cambio": "Página de reglas (PT11, PP8): ver y editar reglas por sala, vista previa (T11), afloja/restringe y techo duro (T12 parcial), CAMBIO_REGLA en el acta",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "specs/paneles-y-despliegue/requirements.md",
+    "specs/paneles-y-despliegue/design.md",
+    "specs/paneles-y-despliegue/tasks.md",
+    "specs/motor-de-reglas/tasks.md",
+    "specs/README.md",
+    "engine/reglas_io.py",
+    "engine/simular.py",
+    "app/apoyo.py",
+    "app/comun.py",
+    "agents/flujo.py",
+    "app/pages/5_Reglas.py",
+    "tests/test_reglas_pagina.py",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "app/apoyo.py:cambiar_reglas",
+      "problema": "Quien pide y quien firma un cambio que afloja es el mismo rol de demostración: no hay separación de funciones real entre solicitante y firmante (R8.2 la exige para aprobaciones, R9.4 solo pide la firma del senior)",
+      "correccion": "Si se quiere, exigir que el senior firme un cambio pedido por otra persona en un segundo paso"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "engine/reglas_io.py:reglas_de_sala",
+      "problema": "El cambio se aplica desde que se confirma, no según la fecha de recepción de la factura (R9.2); es lo esperado para la demo y está documentado como shortcut en design.md",
+      "correccion": "Revisar si se implementan vigencias con conflictos (T12)"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "engine/reglas_io.py:validar_cambio",
+      "problema": "El senior puede subir tolerancia_frenar hasta 100 %; lo permite la spec. Los umbrales de monto siguen acotados por el techo duro y R8.3 no cambia",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "git diff revisado; spec PP8 escrita antes del código; pytest: 152 passed; eval.py 20/20 y 0 pagos indebidos; flujo completo de la página probado con AppTest (rol senior restringe, vista previa con 2 facturas, fila CAMBIO_REGLA, versión v12.s1) y rol persona bloqueado al aflojar con INTENTO_RECHAZADO; búsqueda de float y secretos en el diff sin resultados; resolver() y guardarraíl sin cambios; reglas_de_sala solo aplica parámetros editables y conserva el techo duro",
+  "rama": "main",
+  "commit": "0d0424a60483d15ec398add1ce2551b5bf8093d5",
+  "reemplaza": null
+}

@@ -4,7 +4,7 @@ from pydantic import ValidationError
 from .canales import sugerir_canal
 from .modelos import Ficha, Resultado, Revision, nivel_max
 from .niveles import nivel_de_revisiones
-from .revisiones import NoEvaluable, beneficiario, calendario, entrada, frenar, montos
+from .revisiones import NoEvaluable, beneficiario, calendario, entrada, frenar, montos, orden_compra
 from .revisiones.comun import a_base
 
 # (regla de referencia, función): todas corren, en este orden (R1.5).
@@ -12,6 +12,7 @@ REVISIONES = [
     ("R2", entrada.revisar),
     ("R3.1", frenar.duplicado),
     ("R4", beneficiario.revisar),
+    ("OC4", orden_compra.revisar),
     ("R6", calendario.revisar),
     ("R3.2", frenar.acuerdo),
     ("R3.6", frenar.presupuesto_y_techo),
@@ -50,7 +51,8 @@ def _ficha_invalida(reglas, error) -> Resultado:
     rev = Revision(regla="R2.1", resultado="FALLA", efecto="ESCALAR", nivel="SENIOR",
                    observado=campos, umbral="esquema cerrado", mensaje="Ficha inválida.")
     return Resultado(decision="ESCALAR", nivel="SENIOR", revisiones=[rev],
-                     motivo=f"Ficha inválida (campos: {campos}). Lo aprueba el senior de finanzas.",
+                     motivo=(f"Ficha inválida: faltan o no se pudieron leer datos obligatorios ({campos}). Una persona debe "
+                             "revisarla; no se puede aprobar un pago sin esos datos."),
                      version_reglas=reglas.version)
 
 
@@ -84,7 +86,7 @@ def evaluar(ficha, ctx, reglas) -> Resultado:
 
     try:
         base, tasa = a_base(f.monto, f.moneda, ctx)
-    except NoEvaluable:
+    except (NoEvaluable, ArithmeticError):                               # un monto absurdo (1E100) no rompe el motor
         base = tasa = None
     try:
         o = calendario.emparejar(f, ctx, reglas)

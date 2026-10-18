@@ -36,12 +36,49 @@ def test_r8_1_una_decision_buena_se_registra_con_su_motivo(almacen, entorno):
     assert fila.payload["revisiones"] and fila.payload["motivo"]
 
 
-def test_ficha_invalida_no_se_registra(almacen, entorno):
+def test_r8_6_una_ficha_invalida_se_registra_escalada_y_no_se_pierde(almacen, entorno):
     ctx, reglas = entorno
-    with pytest.raises(Exception):
-        registrar_decision(almacen, "SALA0003", ficha(monto="-1"), ctx, reglas)
-    assert almacen.filas("SALA0003") == []
+    fila = registrar_decision(almacen, "SALA0003", ficha(monto="-1"), ctx, reglas)
+    p = fila.payload
+    assert (p["decision"], p["nivel"], p["ficha_invalida"]) == ("ESCALAR", "SENIOR", True)
+    assert p["monto"] == "0.00" and p["moneda"] == "N/D" and p["revisiones"][0]["mensaje"] == "Ficha inválida."
+    assert "no se puede aprobar" in p["motivo"] and p["campos_con_problema"] == "monto"
+    assert [f.tipo for f in almacen.filas("SALA0003")] == ["DECISION"]
 
+
+def test_r8_6_sin_factura_id_si_lanza(almacen, entorno):
+    ctx, reglas = entorno
+    sin_id = ficha(monto="-1")
+    del sin_id["factura_id"]
+    with pytest.raises(Exception):
+        registrar_decision(almacen, "SALA0004", sin_id, ctx, reglas)
+    assert almacen.filas("SALA0004") == []
+
+
+def test_r8_6_proponer_pagar_una_ficha_invalida_se_rechaza_y_queda_el_intento(almacen, entorno):
+    ctx, reglas = entorno
+    falso = evaluar(ficha(), ctx, reglas)
+    assert falso.decision == "PAGAR"
+    with pytest.raises(DecisionRechazada):
+        registrar_decision(almacen, "SALA0005", ficha(monto="-1"), ctx, reglas, propuesto=falso)
+    assert [f.tipo for f in almacen.filas("SALA0005")] == ["INTENTO_RECHAZADO"]
+
+
+def test_r8_6_la_ficha_invalida_no_entra_al_historial_del_motor(almacen, entorno):
+    ctx, reglas = entorno
+    registrar_decision(almacen, "SALA0006", ficha(monto="-1"), ctx, reglas)
+    ctx2 = contexto_desde_acta(ctx, almacen.filas("SALA0006"))
+    assert len(ctx2.historial) == len(ctx.historial)                    # no suma al periodo ni al presupuesto
+    assert all(o.factura_id is None for o in ctx2.calendario)
+
+
+def test_r8_6_validar_aprobacion_bloquea_aprobar_pero_no_rechazar():
+    base = dict(rol="SENIOR", nivel_exigido="SENIOR", motivo="ok", actor="Senior", preparador="p",
+                monto_base=Decimal("0"), techo=Decimal("50000000"))
+    with pytest.raises(AprobacionRechazada, match="no se puede aprobar"):
+        validar_aprobacion(**base, ficha_invalida=True, aprobar=True)
+    validar_aprobacion(**base, ficha_invalida=True, aprobar=False)      # rechazar sí se puede
+    validar_aprobacion(**base, ficha_invalida=False, aprobar=True)
 
 def test_contexto_desde_el_acta_cierra_el_calendario_y_suma_el_periodo(almacen, entorno):
     ctx, reglas = entorno
