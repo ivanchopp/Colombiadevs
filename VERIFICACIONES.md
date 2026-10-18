@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0033 | 2026-10-17 20:10 | APROBADO | OT5: el agente de entrada lee el número de orden de compra y el NIT (IA, patrones y segunda lectura), 3 muestras con OC, obligación O9 en el calendario y arreglo del monto absurdo (1E100) en el motor | 0 | 1 | 60dbd11 | — |
 | VER-0032 | 2026-10-17 20:01 | APROBADO | Fusión de main (PR #18, documentación) en la rama de R2 y R3 antes de abrir el PR: conserva VER-0027 de main y renumera las verificaciones de la rama a VER-0028 a VER-0031 | 0 | 0 | 6ec6a2a | — |
 | VER-0031 | 2026-10-17 19:22 | APROBADO | Fusión de main (R1 archivo de salida y R4 moneda base USD, PR #14) en la rama de R2 y R3: calendario de los casos de OC en USD, sin moneda por defecto en OrdenCompra y renumeración de verificaciones a VER-0027 a VER-0029 | 0 | 0 | 1764f22 | — |
 | VER-0030 | 2026-10-17 19:15 | APROBADO | Fusión de main (PR #15 a #17: 156 proveedores válidos y revisión de la documentación) en la rama de R2 y R3; reasigna las órdenes sintéticas, casos y pruebas a proveedores válidos y renumera VER-0021/0022 a VER-0024/0025 | 0 | 1 | 9202506 | — |
@@ -36,6 +37,12 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0033 — APROBADO
+
+- **ADVERTENCIA** (alcance) `specs/ordenes-de-compra/design.md`: La spec de OT5 se escribió después del código en la misma sesión (la regla pide spec primero); el contenido describe lo construido y las pruebas lo cubren → Escribir la spec antes en los próximos cambios
+- **NOTA** (errores) `engine/evaluar.py:88`: Se corrigió de paso un fallo previo de main: un monto absurdo (1E100) lanzaba InvalidOperation en el motor; ahora escala (R1.3). Lo encontró la prueba de propiedades → Ninguna
+- **NOTA** (alcance) `data/ordenes_compra.yaml:1`: Las órdenes siguen siendo sintéticas (OCD13); el agente no pregunta por la OC en el chat, así que OC3.4 no se produce → Importar las órdenes reales cuando existan
 
 ## VER-0032 — APROBADO
 

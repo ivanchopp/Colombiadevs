@@ -676,12 +676,12 @@ casos:
     valores_aclarados: {}
     cuenta_aclarada: null
     factura_id: C29
-    beneficiario: "Agroindustrias del Huila S.A.S."
+    beneficiario: "Corporación Alimentarios Orinoquía S.A.S."
     numero: N-29
     monto: '1160000'
     moneda: COP
     vence: '2026-10-30'
     recibida: '2026-10-15'
-    cuenta_original: Cuenta demo ···0004
-    orden_compra: PO-2026-001
-    id_tributaria: '999016272-1'
+    cuenta_original: Cuenta demo ···0007
+    orden_compra: PO-2026-004
+    id_tributaria: '980746390-5'
