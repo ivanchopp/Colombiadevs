@@ -23,7 +23,7 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 | `turnos_max` | 2 |
 | `largo_max_mensaje` | 500 caracteres |
 | Modelo de lectura (Claude) | `claude-sonnet-5-5` (cambia con `MODELO_ENTRADA`) |
-| Modelo de lectura (Gemini) | `gemini-2.5-flash` (cambia con `MODELO_GEMINI`; **sin verificar**) |
+| Modelo de lectura (Gemini) | `gemini-3.8-flash` (cambia con `MODELO_GEMINI`; verificado en Railway el 17 oct: `gemini-2.5-flash` ya no está disponible) |
 
 ## Requisitos
 

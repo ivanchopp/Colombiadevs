@@ -4,6 +4,10 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0055 | 2026-10-18 06:33 | APROBADO | Fusión de main (PR #26, documentación) en la rama de P34 y R6 cerrado antes del PR: AVANCES reconciliado (la IA lee, Railway corre 52e1387, próximas tareas para la entrega) y ET7 hecho | 0 | 0 | 8a5e562 | — |
+| VER-0054 | 2026-10-17 21:47 | APROBADO | Fusión de main (PR #25: XML de LATAM) en la rama de P34 y R6 cerrado; las verificaciones de la rama pasan a VER-0052 y VER-0053 | 0 | 0 | 2563cdb | — |
+| VER-0053 | 2026-10-17 21:44 | APROBADO | P34: el nombre del beneficiario se asocia al del registro sin mayúsculas, tildes ni puntuación (R4.4 a R4.6, T17), Ficha.beneficiario_leido; fusión de main (PR #24, CFDI) y renumeración de VER-0048 a VER-0050 | 0 | 0 | c6e649f | — |
+| VER-0052 | 2026-10-17 21:33 | APROBADO | R6 cerrado: modelo por defecto de Gemini pasa a gemini-3.8-flash (el anterior ya no está disponible), README, .env.example, specs y AVANCES; pendientes P34 y P35 | 0 | 0 | 1204539 | — |
 | VER-0051 | 2026-10-17 22:30 | APROBADO | Revisión del estado tras el PR #25: guion de la demo, índice de specs, ET3/ET7, PT13 duplicado y AVANCES al día; sin código | 0 | 1 | 057715c | — |
 | VER-0050 | 2026-10-17 21:43 | APROBADO | EA12/ET14: XML de otros países de LATAM (SRI, CFE, NF-e, DTE, Costa Rica, SIFEN) sin IA desde una tabla de rutas, fusionado con el CFDI del PR #24 (EA11); decimal estricto en las dos lecturas (también CFDI y UBL); ISO-8859-1; RUC de SUNAT; XML desconocido se lee como texto y se escala; arreglo del choque sobre SRI vs CFDI; spec, pruebas, README, Panel 1 y AVANCES | 0 | 2 | ae659cc | — |
 | VER-0049 | 2026-10-17 21:33 | APROBADO | Fusion de main (R6, PR 21 y 23) en la rama del CFDI: VER del CFDI pasa a 0048, tarea del CFDI pasa a ET13 porque ET12 la uso R6, AVANCES reconciliado; sin codigo nuevo | 0 | 0 | 0b90e4f | — |
@@ -55,6 +59,24 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0055 — APROBADO
+
+- **NOTA** (errores) `AVANCES.md:19`: El AVANCES de main (PR #26) seguía diciendo que la IA real no lee en producción y recomendaba arreglar P17; se reconcilió con lo comprobado el 18 oct a las 06:30 (Railway en 52e1387, IA OK con gemini-3.8-flash) → Ninguna
+
+## VER-0054 — APROBADO
+
+- **NOTA** (convenciones) `.verificaciones/VER-0052.json:2`: Los IDs VER-0050 y anteriores los ocupó la sesión del XML en main; se conservaron los de main y las de esta rama (R6 cerrado y P34) pasaron a VER-0052 y VER-0053 → Ninguna
+
+## VER-0053 — APROBADO
+
+- **NOTA** (seguridad) `engine/revisiones/comun.py:20`: La asociación por nombre normalizado no abre una puerta nueva: el nombre exacto ya era falsificable por el proveedor y la cuenta se sigue comparando con la registrada (R4.2); si dos proveedores normalizan igual no se asocia ninguno y escala. Una prueba de propiedades garantiza que una variante nunca decide distinto que el nombre exacto → Ninguna
+- **NOTA** (alcance) `AVANCES.md:232`: Asociar por NIT queda fuera (R4.6) como mejora; las decisiones ya guardadas en actas anteriores conservan el nombre leído y, si una persona las aprueba, no entran al archivo de pagos por falta de cuenta registrada (falla segura) → Ninguna
+
+## VER-0052 — APROBADO
+
+- **NOTA** (errores) `AVANCES.md:224`: El nombre de un proveedor en mayúsculas (como en la foto de prueba) no coincide con la lista permitida y escala al senior: falla segura pero baja la autonomía; queda como P34 con propuesta, sin tocar el motor → El equipo decide; requiere spec primero
+- **NOTA** (alcance) `agents/lectura_ia.py:9`: Los nombres de modelo de Google cambian: la variable MODELO_GEMINI y el botón del diagnóstico quedan como salida si vuelve a fallar → Ninguna
 
 ## VER-0051 — APROBADO
 

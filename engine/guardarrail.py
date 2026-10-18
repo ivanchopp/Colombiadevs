@@ -5,7 +5,7 @@ from pydantic import ValidationError
 
 from acta.escribir import LARGO_MAX_MOTIVO, escribir_evento
 
-from .evaluar import evaluar
+from .evaluar import asociar_beneficiario, evaluar
 from .modelos import RANGO, Ficha
 
 
@@ -19,6 +19,7 @@ class AprobacionRechazada(Exception):
 
 def payload_decision(ficha, resultado, ctx) -> dict:
     f = ficha if isinstance(ficha, Ficha) else Ficha.model_validate(ficha)
+    f = asociar_beneficiario(f, ctx)                       # el acta lleva el nombre registrado (R4.4)
     reg = ctx.registros.get(f.beneficiario)
     canal = resultado.canal
     return {

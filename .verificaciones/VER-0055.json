@@ -1,0 +1,25 @@
+{
+  "id": "VER-0055",
+  "fecha": "2026-10-18T06:33:56-05:00",
+  "cambio": "Fusión de main (PR #26, documentación) en la rama de P34 y R6 cerrado antes del PR: AVANCES reconciliado (la IA lee, Railway corre 52e1387, próximas tareas para la entrega) y ET7 hecho",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "specs/extraccion-y-agente-de-entrada/tasks.md",
+    "VERIFICACIONES.md",
+    ".verificaciones"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "AVANCES.md:19",
+      "problema": "El AVANCES de main (PR #26) seguía diciendo que la IA real no lee en producción y recomendaba arreglar P17; se reconcilió con lo comprobado el 18 oct a las 06:30 (Railway en 52e1387, IA OK con gemini-3.8-flash)",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "python3 -m pytest -q: 497 pasan; python3 eval.py: 29/29, 0 pagos indebidos; Railway comprobado a las 06:30: salud ok, commit 52e1387, MODELO_GEMINI=gemini-3.8-flash y botón del diagnóstico en OK; sin marcas de conflicto; solo documentación y registros cambiaron en esta fusión",
+  "rama": "claude/friendly-cerf-aygx2r",
+  "commit": "8a5e562cb4bd7ba6f7272aa50169ab4b23b577a4",
+  "reemplaza": null
+}
