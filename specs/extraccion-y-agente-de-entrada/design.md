@@ -40,6 +40,20 @@ flowchart LR
 
 **Segunda lectura.** Montos: se aceptan `2.400.000`, `2,400,000.00` y `2400000`; si hay punto y coma, el último separador es el decimal; con un solo separador y tres dígitos después, es de miles. Moneda: código de tres letras junto al monto. Fecha: `AAAA-MM-DD` o `DD/MM/AAAA`. Beneficiario: línea `Proveedor:` o `De:`.
 
+**XML de varios países (EA10, EA11).** `xml_factura.py` reconoce el formato por el nombre local de la raíz. UBL 2.1 (Colombia, Perú) conserva su lectura propia (EA10). Los demás formatos se leen con la tabla `FORMATOS`: por cada campo, una lista de rutas alternativas (`Emisor/RznSoc`), donde `+` une partes con «-» (`IdDoc/Serie+IdDoc/Nro`) y `@` lee un atributo (`Emisor/@Rfc`; `@Total` es un atributo de la raíz). Cada paso de la ruta busca el primer descendiente con ese nombre, así que los envoltorios (`nfeProc`, `EnvioDTE`, `rDE`) no estorban. La segunda lectura (`segunda_lectura.leer_xml`) resuelve las mismas rutas con expresiones regulares sobre el texto, sin el analizador. El sobre `autorizacion` del SRI trae la factura en un CDATA: se desenvuelve como el `AttachedDocument` de la DIAN. Un XML bien formado de raíz desconocida lanza `FormatoDesconocido` y el flujo lo lee como texto; su segunda lectura no encuentra los campos, así que queda `no_disponible` y el motor escala (R2.2).
+
+| Formato | País | Raíz | Moneda | Vencimiento |
+|---|---|---|---|---|
+| UBL 2.1 | Colombia (DIAN), Perú (SUNAT) | `Invoice` | `currencyID` | `DueDate` / `PaymentDueDate` |
+| CFDI 4.0 | México | `Comprobante` | `@Moneda` | No trae |
+| Comprobante SRI | Ecuador | `factura` | `moneda` («DOLAR» → USD) | No trae |
+| CFE | Uruguay | `CFE` | `TpoMoneda` | `FchVenc` |
+| NF-e | Brasil | `nfeProc`, `NFe` | BRL por esquema | `dup/dVenc` |
+| DTE | Chile | `DTE`, `EnvioDTE` | CLP por esquema | `FchVenc` |
+| Factura electrónica | Costa Rica | `FacturaElectronica` | `CodigoMoneda` (CRC si falta) | No trae |
+| SIFEN | Paraguay | `rDE`, `DE` | `cMoneOpe` | `dVencCuo` |
+| Sin XML común | Argentina (ARCA valida por servicio web con CAE), Venezuela (factura digital de imprenta autorizada) | — | Se lee como texto y se escala | — |
+
 **Dudosos.** Un campo es dudoso si la IA no lo entregó, o si la segunda lectura lo encontró distinto o no lo encontró.
 
 **Órdenes escondidas.** Lista cerrada de expresiones regulares en español e inglés. Es una señal que solo suma cautela: nunca autoriza nada.

@@ -104,6 +104,19 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 - **EA10.8** EL sistema NO consulta a la DIAN ni a otra autoridad: que el dígito sea correcto **no prueba** que la factura sea válida ni que el NIT exista. Esa consulta queda en el roadmap (R10). Ningún texto de pantalla DEBERÁ afirmar que la factura «está validada por la DIAN».
 - **EA10.9** EL NIT leído DEBERÁ guardarse en el estado de la entrada (`id_tributaria`) para las órdenes de compra; NO DEBERÁ entrar a la ficha del motor hasta que esa spec lo pida.
 
+### EA11. Facturas electrónicas XML de otros países de Latinoamérica
+**Historia:** como cliente de Blinka con proveedores en varios países, quiero subir el XML de la factura electrónica de cada país y que se lea sin IA, igual que el de la DIAN.
+
+- **EA11.1** EL SISTEMA DEBERÁ reconocer, por el nombre local del elemento raíz y sin depender del espacio de nombres declarado, estos formatos: UBL 2.1 (`Invoice`, Colombia y Perú, EA10), CFDI de México (`Comprobante`), comprobante del SRI de Ecuador (`factura`, también dentro de una `autorizacion`), CFE de Uruguay (`CFE`), NF-e de Brasil (`nfeProc` o `NFe`), DTE de Chile (`DTE` o `EnvioDTE`), factura electrónica de Costa Rica (`FacturaElectronica`) y documento electrónico de Paraguay (`rDE` o `DE`). Las rutas de cada campo viven en una sola tabla (`agents/xml_factura.FORMATOS`).
+- **EA11.2** PARA cada formato reconocido, EL SISTEMA DEBERÁ leer con el analizador estructural, sin IA: beneficiario (razón social del emisor), número (serie y folio unidos con «-» cuando el formato los separa), monto total a pagar, moneda, vencimiento (si el formato lo trae) e identificación tributaria del emisor, y DEBERÁ guardar el nombre del formato en la lectura (`formato`).
+- **EA11.3** LOS montos de un XML DEBERÁN leerse como decimal con punto (`Decimal`), en las dos lecturas; NUNCA con la heurística de separador de miles de los textos (un `640.125` es 640,125, no 640.125).
+- **EA11.4** LA moneda DEBERÁ salir del campo del formato. Solo SI el formato no tiene campo de moneda y su esquema fija una (NF-e: `BRL`; DTE: `CLP`) o fija una por defecto cuando el campo falta (Costa Rica: `CRC`), ENTONCES se usa esa. «DOLAR» del SRI de Ecuador DEBERÁ leerse como `USD`. Cualquier otro valor que no sea un código de 3 letras DEBERÁ dejar la moneda sin leer (dudosa).
+- **EA11.5** SI el formato no trae vencimiento (CFDI, SRI y Costa Rica no lo traen como fecha), ENTONCES el vencimiento DEBERÁ quedar sin leer y el agente DEBERÁ preguntarlo (EA5); lo aclarado sigue R2.5 (no se paga solo).
+- **EA11.6** LA segunda lectura (EA10.4) DEBERÁ usar las mismas rutas de la tabla con patrones de texto sobre las etiquetas, no con el analizador, y marcar `coincide` solo si encuentra los cuatro campos comparables y todos coinciden.
+- **EA11.7** SI el XML está bien formado pero su raíz no es de un formato reconocido (por ejemplo Argentina o Venezuela, que no tienen un XML de factura común entre empresas), ENTONCES EL SISTEMA NO DEBERÁ rechazarlo: DEBERÁ leerlo como texto (con la IA si hay clave, si no con patrones) y la lectura DEBERÁ quedar `dudosa`, así que la factura se escala; NUNCA `PAGAR` sin lectura estructural.
+- **EA11.8** EL SISTEMA DEBERÁ aceptar XML en UTF-8 o en la codificación que declare (por ejemplo `ISO-8859-1`, usual en Chile), y DEBERÁ seguir rechazando `DOCTYPE` y `ENTITY` (EA10.3) también dentro de una `autorizacion` del SRI.
+- **EA11.9** EL SISTEMA solo verifica el dígito del NIT colombiano (EA10.5). Las identificaciones de otros países (RFC, RUC, RUT, CNPJ, RUC del SRI, RUT de la DGI) se leen y se guardan, pero NO se validan, y ningún texto DEBERÁ afirmar que la factura está validada por la autoridad tributaria.
+
 ### EA9. Calidad
 - **EA9.1** Cada criterio DEBERÁ tener una prueba automática, sin red y sin clave, usando un cliente falso para la IA.
 - **EA9.2** UNA prueba DEBERÁ comprobar que las cuatro facturas de ejemplo producen la decisión esperada: normal → `PAGAR`, repetida → `FRENAR`, beneficiario nuevo → `ESCALAR` al senior, orden escondida → `ESCALAR`.
@@ -116,4 +129,6 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 | DE1 | ¿La confirmación por chat puede devolver `coincide`? | No (EA5.4): lo dicho por chat no verifica |
 | DE2 | ¿El agente pregunta por la cuenta bancaria? | No en esta versión: la cuenta se compara solo con los registros |
 | DE3 | ¿Modelo de lectura? | `claude-sonnet-5-5` o `gemini-2.5-flash`; verificar los nombres vigentes antes de la entrega (P4) |
+| DE5 | ¿Un archivo con varias facturas (`EnvioDTE` de Chile con varios `DTE`)? | Se lee solo la primera; el resto se ignora. Subir una factura por archivo |
+| DE6 | ¿Se valida que la moneda de la factura corresponda al país del proveedor (P33)? | Fuera de esta spec: es una revisión del motor y necesita su propia spec |
 | DE4 | ¿Datos enviados a Gemini? | Solo facturas ficticias. Los planes gratuitos de Gemini pueden usar lo enviado para mejorar el producto: no subir datos reales |

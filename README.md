@@ -84,6 +84,6 @@ Qué se probó y qué no: el arranque, la comprobación de salud, la persistenci
 
 - Los valores (montos, tasas, costos, límites) son de **demostración** y están marcados como «supuesto».
 - El acta usa **SQLite**. La inmutabilidad la garantizan triggers y la cadena de huellas; falta PostgreSQL con permisos de base de datos (ver `AVANCES.md`, P13).
-- También se acepta el **XML de la factura electrónica** (UBL/DIAN): se lee sin IA y se revisa el dígito de verificación del NIT en local. **No consulta a la DIAN.**
+- También se acepta el **XML de la factura electrónica**, sin IA, en los formatos de Colombia y Perú (UBL 2.1), México (CFDI), Ecuador (SRI), Uruguay (CFE), Brasil (NF-e), Chile (DTE), Costa Rica y Paraguay (SIFEN). Un XML de otro formato (por ejemplo de Argentina o Venezuela, que no tienen un XML común entre empresas) se lee como texto y siempre se escala. Solo se revisa en local el dígito de verificación del NIT colombiano. **No consulta a ninguna autoridad tributaria.**
 - La lectura con **Gemini** se probó en Railway con los textos de ejemplo; falta probarla con un PDF o una foto propios (P17). **Claude** no se ha probado contra la API real.
 - No hay inicio de sesión: el Panel 2 usa un selector de rol de demostración.
