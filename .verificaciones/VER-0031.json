@@ -1,0 +1,36 @@
+{
+  "id": "VER-0031",
+  "fecha": "2026-10-17T19:22:19-05:00",
+  "cambio": "Fusión de main (R1 archivo de salida y R4 moneda base USD, PR #14) en la rama de R2 y R3: calendario de los casos de OC en USD, sin moneda por defecto en OrdenCompra y renumeración de verificaciones a VER-0027 a VER-0029",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "engine/revisiones/frenar.py",
+    "engine/modelos.py",
+    "data/casos.yaml",
+    "tests/test_ordenes_compra.py",
+    "AVANCES.md",
+    "specs/README.md",
+    "VERIFICACIONES.md",
+    ".verificaciones"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "convenciones",
+      "ubicacion": "AVANCES.md:5",
+      "problema": "En main siguen 240 pruebas y 20 casos; las cifras de 266 y 29 valen solo en la rama hasta que se fusione (AVANCES lo dice)",
+      "correccion": "Actualizar al fusionar el PR"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "data/casos.yaml:1",
+      "problema": "Los casos de OC usan calendario_extra en USD (COP × 0,00025); si cambia la tasa del peso en tasas.yaml hay que recalcularlos",
+      "correccion": "Ninguna ahora"
+    }
+  ],
+  "comprobaciones": "python3 -m pytest -q: 266 pasan (incluye la prueba R5.6 de main que prohíbe COP/USD fijos en el código); python3 eval.py: 29/29, 0 pagos indebidos; sin marcas de conflicto; IDs de main (VER-0024 a VER-0026) intactos",
+  "rama": "claude/friendly-cerf-aygx2r",
+  "commit": "1764f22d796f48aee8815a223baa3227eea627f8",
+  "reemplaza": null
+}

@@ -1,49 +1,53 @@
 {
   "id": "VER-0029",
-  "fecha": "2026-10-17T19:15:48-05:00",
-  "cambio": "Fusión de main (PR #15 a #17: 156 proveedores válidos y revisión de la documentación) en la rama de R2 y R3; reasigna las órdenes sintéticas, casos y pruebas a proveedores válidos y renumera VER-0021/0022 a VER-0024/0025",
+  "fecha": "2026-10-17T18:29:58-05:00",
+  "cambio": "R3: órdenes de compra en el motor (versión mínima): modelos, carga, revisión OC4, 10 casos, 25 pruebas y documentación",
   "veredicto": "APROBADO",
   "archivos": [
-    "engine/reglas_io.py",
     "engine/compras.py",
+    "engine/revisiones/orden_compra.py",
+    "engine/modelos.py",
+    "engine/evaluar.py",
+    "engine/contexto.py",
+    "engine/reglas_io.py",
+    "engine/revisiones/frenar.py",
     "data/ordenes_compra.yaml",
     "data/casos.yaml",
+    "eval.py",
     "tests/test_ordenes_compra.py",
     "tests/test_casos.py",
-    "eval.py",
-    "AVANCES.md",
-    "specs/README.md",
     "specs/ordenes-de-compra/design.md",
+    "specs/ordenes-de-compra/requirements.md",
     "specs/ordenes-de-compra/tasks.md",
+    "specs/README.md",
     "README.md",
-    "VERIFICACIONES.md",
-    ".verificaciones"
+    "AVANCES.md"
   ],
   "hallazgos": [
     {
       "severidad": "ADVERTENCIA",
       "categoria": "alcance",
       "ubicacion": "data/ordenes_compra.yaml:1",
-      "problema": "Las órdenes siguen siendo sintéticas: el archivo real no tiene proveedores del listado de válidos (OCD13) y no está cargado",
-      "correccion": "Conseguir un archivo de órdenes con proveedores válidos e importarlo (OT1)"
+      "problema": "Las órdenes son sintéticas: el archivo real del equipo no está en el repositorio. La spec y AVANCES lo declaran; los resultados con las órdenes reales pueden diferir",
+      "correccion": "Importar el .xlsx real (OT1) y volver a correr eval.py"
     },
     {
       "severidad": "NOTA",
-      "categoria": "errores",
-      "ubicacion": "tests/test_ordenes_compra.py:1",
-      "problema": "El listado de válidos no trae proveedores marcados: OC4.4 se prueba marcando uno a mano, no con un dato real",
-      "correccion": "Ninguna mientras el listado no traiga marcas"
+      "categoria": "alcance",
+      "ubicacion": "engine/revisiones/orden_compra.py:1",
+      "problema": "El agente de entrada aún no lee el número de OC (OT5): una factura subida al Panel 1 no cita OC, por lo que la revisión nueva solo actúa con fichas de prueba",
+      "correccion": "Hacer OT5"
     },
     {
       "severidad": "NOTA",
-      "categoria": "convenciones",
-      "ubicacion": ".verificaciones/VER-0024.json:2",
-      "problema": "Los IDs VER-0021 y VER-0022 de esta rama chocaron con los de main y se renumeraron a VER-0024 y VER-0025; el contenido y la fecha originales se conservan",
+      "categoria": "seguridad",
+      "ubicacion": "engine/reglas_io.py:50",
+      "problema": "Los 200 proveedores pasan a la lista permitida sin acuerdo: sin OC ni acuerdo siguen escalando a PERSONA (R3.5) y los marcados van al senior; ningún camino nuevo paga sin todas las revisiones OK (R1.2)",
       "correccion": "Ninguna"
     }
   ],
-  "comprobaciones": "main (5341931) probado aparte en un worktree: 218 pruebas y 20/20; rama fusionada: python3 -m pytest -q 244 pasan, python3 eval.py 29/29 con 0 pagos indebidos; sin marcas de conflicto en el árbol; se usó la carga de proveedores de main y se quitó la copia propia; sin claves ni datos reales",
+  "comprobaciones": "python3 -m pytest -q: 241 pasan; python3 eval.py: 30/30, 0 pagos indebidos; 4 mutaciones de la revisión OC4 (no frenar facturada, ignorar identificación distinta, ignorar marcas, no frenar +10%) detectadas por las pruebas; spec escrita antes del código; sin claves ni datos reales en el diff",
   "rama": "claude/friendly-cerf-aygx2r",
-  "commit": "9202506e8599646c20b2f38620566efb694cabf2",
+  "commit": "ea0e355ed8b8d856a34fea437f9cf075106e2309",
   "reemplaza": null
 }

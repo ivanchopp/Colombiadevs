@@ -1,23 +1,22 @@
 {
   "id": "VER-0027",
-  "fecha": "2026-10-17T18:22:10-05:00",
-  "cambio": "R2: guion de la demo y el pitch (docs/guion-demo.md) y registro en AVANCES.md",
+  "fecha": "2026-10-17T19:54:17-05:00",
+  "cambio": "AVANCES al día tras el PR #14 (cabecera, mapa del archivo de salida, commit de R4) y P33 con el análisis de 4 facturas XML de ejemplo; sin código",
   "veredicto": "APROBADO",
   "archivos": [
-    "docs/guion-demo.md",
     "AVANCES.md"
   ],
   "hallazgos": [
     {
       "severidad": "NOTA",
       "categoria": "alcance",
-      "ubicacion": "docs/guion-demo.md:36",
-      "problema": "Los resultados de cada archivo de muestra no se verificaron uno por uno en producción; el guion lo declara y pide confirmarlos en el ensayo",
-      "correccion": "Ensayar el guion en la app desplegada"
+      "ubicacion": "AVANCES.md",
+      "problema": "Las 4 facturas XML no se suben: el repositorio es público y vienen de fuera; P33 solo describe lo encontrado",
+      "correccion": "Ninguna"
     }
   ],
-  "comprobaciones": "git diff revisado; solo documentación, sin código; el guion no afirma el archivo de salida, la conexión con Blinka, DIAN ni lenguaje natural como hechos; sin claves ni datos reales; cifras (20/20, 0 pagos indebidos, límite de 5 facturas por sala) contrastadas con AVANCES y eval.py",
-  "rama": "claude/friendly-cerf-aygx2r",
-  "commit": "3990ea38a99901027753231e7eba7bd51b9b10c2",
+  "comprobaciones": "git diff revisado; python3 -m pytest -q: 240 passed; python3 eval.py: 20/20, 0 pagos indebidos; conversiones de P33 calculadas con data/tasas.yaml; emisores contrastados con data/proveedores.yaml",
+  "rama": "docs-pr14-xml",
+  "commit": "8510675a965f53db6086429d5f4b5246f0cffe97",
   "reemplaza": null
 }
