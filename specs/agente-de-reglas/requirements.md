@@ -44,15 +44,18 @@ El CEO de Blinka contó que su plataforma ya programa pagos con un solo comando 
 - **AR2.1** LA propuesta DEBERÁ ser una lista de hasta 4 cambios; cada uno con `parametro` (uno de los siete), `operacion` (`fijar`, `subir_monto`, `bajar_monto`, `subir_porcentaje` o `bajar_porcentaje`), `valor` y, para los parámetros de monto, `moneda`.
 - **AR2.2** LA IA NO DEBERÁ hacer cuentas. El código DEBERÁ calcular el valor nuevo con `Decimal` a partir del valor vigente y de la operación.
 - **AR2.3** SI el pedido da un monto en otra moneda («10 millones de pesos»), ENTONCES EL CÓDIGO DEBERÁ convertirlo a la moneda base con la tabla de cambio (R5.1). SI no hay tasa, ENTONCES DEBERÁ rechazar el cambio con una explicación.
-- **AR2.4** SI el pedido es ambiguo, incompleto o menciona algo que no es uno de los siete parámetros, ENTONCES EL SISTEMA DEBERÁ responder con una pregunta o con «no entendí» y NO DEBERÁ adivinar. Ante la duda no hay cambio.
+- **AR2.4** CUANDO haya IA, LA IA DEBERÁ decidir si el pedido es claro. SI es ambiguo, incompleto o menciona algo que no es uno de los siete parámetros, ENTONCES DEBERÁ devolver el estado `aclaracion` con una pregunta corta (o `no_entendido`) y NINGÚN cambio. EL CÓDIGO NO DEBERÁ interpretar el lenguaje: solo valida el esquema, calcula y aplica las reglas. Ante la duda no hay cambio.
 - **AR2.5** SI el pedido pide algo fuera de alcance (techo duro, fechas de vigencia, proveedores), ENTONCES EL SISTEMA DEBERÁ decir que eso no se cambia por texto y por qué.
 - **AR2.6** EL pedido DEBERÁ tener entre 1 y 500 caracteres.
+- **AR2.7** SIN IA, EL lector por patrones DEBERÁ responder `no_entendido` ante cualquier frase que no sea de las simples (AR6.2); NO DEBERÁ resolver ambigüedades.
+- **AR2.8** DESPUÉS de que la IA (o el lector) devuelva una propuesta, EL CÓDIGO DEBERÁ compararla con el texto del pedido, sin interpretar el lenguaje, y marcar la propuesta como `dudosa` si ocurre alguna de estas señales: (a) hay menos cambios que menciones de parámetros en el pedido; (b) un número del pedido no aparece como valor en ningún cambio; (c) un valor de la propuesta no aparece como número en el pedido (salvo operaciones relativas pedidas con «doble», «triple» o «mitad»). Cada señal DEBERÁ explicarse con una frase armada por código.
 
 ### AR3. Qué se le muestra a la persona
 - **AR3.1** ANTES de confirmar, EL SISTEMA DEBERÁ mostrar, con texto armado por código (no escrito por la IA): lo que entendió, el valor vigente y el nuevo de cada parámetro, si el cambio afloja o restringe, y qué facturas de la sala cambiarían de decisión (R9.6, PP8.3).
 - **AR3.2** EL sistema DEBERÁ mostrar el pedido original como texto plano, y NO DEBERÁ mostrar texto libre de la IA como si fuera un dato.
 - **AR3.3** LA propuesta DEBERÁ poder descartarse sin dejar rastro en el acta.
 - **AR3.4** SI la propuesta es inválida, ENTONCES EL SISTEMA DEBERÁ explicar cuál regla la frena, con las mismas frases del formulario.
+- **AR3.5** SI la propuesta es `dudosa` (AR2.8), ENTONCES EL SISTEMA DEBERÁ mostrar las señales como advertencia, mostrar el pedido original al lado y NO DEBERÁ habilitar el botón de aplicar hasta que la persona marque «Revisé que estos son todos los cambios que quería». Una propuesta no dudosa no pide esa marca.
 
 ### AR4. Registro
 - **AR4.1** AL confirmar, EL `CAMBIO_REGLA` DEBERÁ guardar además el origen (`texto`) y el pedido original (máximo 500 caracteres), sin cambiar el resto del evento (PP8.6).
@@ -77,7 +80,8 @@ El CEO de Blinka contó que su plataforma ya programa pagos con un solo comando 
 - **AR8.1** Cada criterio DEBERÁ tener al menos una prueba automática, sin red ni clave, con un cliente falso de IA.
 - **AR8.2** UNA tabla de al menos 15 pedidos con su propuesta esperada (absolutos, relativos, otra moneda, ambiguos, fuera de alcance, con inyección) DEBERÁ pasar con el lector de respaldo y con un cliente falso.
 - **AR8.3** UNA prueba de propiedades DEBERÁ comprobar AR5.3: para cualquier texto y cualquier salida de la IA (incluso basura), nunca se aplica un cambio que el formulario rechazaría ni se registra sin confirmación.
-- **AR8.4** LAS pruebas DEBERÁN cubrir las mutaciones: aplicar sin confirmar, saltarse la firma del senior, saltarse el techo duro, dejar que la IA calcule.
+- **AR8.4** LAS pruebas DEBERÁN cubrir las mutaciones: aplicar sin confirmar, saltarse la firma del senior, saltarse el techo duro, dejar que la IA calcule, no marcar una propuesta dudosa y habilitar el botón sin la marca de revisión.
+- **AR8.5** UNA tabla de pedidos con una propuesta que *omite* un cambio, *cambia* un número o *inventa* un valor DEBERÁ marcarse `dudosa` con la señal correcta; y la tabla de AR8.2 con propuestas correctas NO DEBERÁ marcarse.
 
 ## Decisiones abiertas
 

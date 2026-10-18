@@ -23,6 +23,7 @@ texto ──▶ lector (IA o patrones) ──▶ Propuesta cerrada ──▶ res
 | Esquema y modelos | `agents/reglas_texto.py` | `CambioPedido` y `Propuesta` (Pydantic cerrado, `extra="forbid"`), hasta 4 cambios; `ESQUEMA` JSON para la salida estructurada |
 | Lector con IA | `agents/reglas_texto.py` | Una llamada de texto al proveedor activo (Gemini o Claude, como `lectura_ia`), salida estructurada, pedido dentro de un bloque de datos |
 | Lector por patrones | `agents/reglas_texto.py` | Expresiones para «fija / pon / sube / baja … a / en / un N %»; sin IA (AR6) |
+| Comprobación | `agents/reglas_texto.py` | `comprobar_coherencia(pedido, propuesta)` devuelve las señales de AR2.8 (frases armadas por código) |
 | Resolución | `agents/reglas_texto.py` | `resolver(propuesta, actuales, tasas)` devuelve valores `Decimal` o una explicación; convierte otras monedas con la tabla de cambio (AR2.3) |
 | Página | `app/pages/5_Reglas.py` | Caja de texto, botón «Entender», resumen armado por código y relleno del formulario |
 | Origen en el acta | `app/apoyo.py` | `cambiar_reglas(..., origen="formulario"\\|"texto", pedido=None)` agrega `origen` y `pedido` al `CAMBIO_REGLA` |
@@ -32,6 +33,16 @@ texto ──▶ lector (IA o patrones) ──▶ Propuesta cerrada ──▶ res
 - **Recibe:** el pedido (hasta 500 caracteres) dentro de un bloque marcado como datos y el catálogo de parámetros (nombre, unidad, si es monto, porcentaje o días). **No recibe** valores vigentes, facturas, proveedores ni la tabla de cambio.
 - **Devuelve:** un objeto con `estado` (`propuesta`, `aclaracion` o `no_entendido`), `cambios` (la lista cerrada de AR2.1) y `pregunta` (texto corto). El texto de `pregunta` se muestra tal cual **solo** como pregunta, nunca como dato (AR3.2).
 - **Operaciones:** `fijar` (valor absoluto), `subir_monto` / `bajar_monto` (suma o resta una cantidad), `subir_porcentaje` / `bajar_porcentaje` (multiplica por `1 ± valor/100`). La IA solo identifica la operación y el número; **las cuentas las hace el código**.
+
+## Quién interpreta y quién comprueba
+
+- **Con IA, la IA interpreta el lenguaje** y decide si hay ambigüedad (`aclaracion`, `no_entendido`). **El código no interpreta**: valida el esquema, calcula y aplica las reglas.
+- **Sin IA** el lector por patrones solo entiende frases simples y todo lo demás es `no_entendido`.
+- **Comprobación de coherencia por código (AR2.8):** la IA puede equivocarse con seguridad, y una segunda IA suele repetir el error. Por eso el código compara, sin interpretar, la propuesta con el texto:
+  1. Cuenta las menciones de parámetros en el pedido con un vocabulario fijo («pago automático», «presupuesto», «tolerancia»…) y avisa si la propuesta trae menos cambios.
+  2. Extrae los números del pedido (dígitos, con puntos o comas de miles y decimales, y los multiplicadores «mil» y «millones») y avisa si alguno no es el `valor` de un cambio.
+  3. Avisa si un `valor` de la propuesta no está entre los números del pedido, salvo «doble», «triple» o «mitad».
+  La propuesta queda `dudosa` y la página exige la marca «Revisé que estos son todos los cambios que quería» antes de habilitar el botón (AR3.5). **No rechaza nada:** la decisión sigue siendo de la persona. No hay segunda llamada a la IA.
 
 ## Resolución y redondeo
 
