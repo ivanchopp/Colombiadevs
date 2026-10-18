@@ -1,0 +1,24 @@
+{
+  "id": "VER-0036",
+  "fecha": "2026-10-17T20:27:32-05:00",
+  "cambio": "Fusión de main (06e1178, quita menciones a un cargo de Blinka) en la rama de OT7 antes del PR; la verificación de OT7 pasa de VER-0034 a VER-0035",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "VERIFICACIONES.md",
+    ".verificaciones"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "convenciones",
+      "ubicacion": ".verificaciones/VER-0035.json:2",
+      "problema": "El ID VER-0034 lo ocupó otra sesión en main; se conservó el de main y la verificación de OT7 se renumeró a VER-0035",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "python3 -m pytest -q: 310 pasan; python3 eval.py: 29/29, 0 pagos indebidos; sin marcas de conflicto; solo documentación y registros cambiaron",
+  "rama": "claude/friendly-cerf-aygx2r",
+  "commit": "95178c6e6cc05a274dfbc26d606e130b213c9475",
+  "reemplaza": null
+}

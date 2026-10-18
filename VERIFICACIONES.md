@@ -4,7 +4,9 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
-| VER-0034 | 2026-10-17 20:23 | APROBADO | OT7: página Órdenes de compra en el Panel 2, orden citada en el detalle de la factura, funciones de apoyo y 12 pruebas; spec PP9 y PT13 | 0 | 0 | 865bed0 | — |
+| VER-0036 | 2026-10-17 20:27 | APROBADO | Fusión de main (06e1178, quita menciones a un cargo de Blinka) en la rama de OT7 antes del PR; la verificación de OT7 pasa de VER-0034 a VER-0035 | 0 | 0 | 95178c6 | — |
+| VER-0035 | 2026-10-17 20:23 | APROBADO | OT7: página Órdenes de compra en el Panel 2, orden citada en el detalle de la factura, funciones de apoyo y 12 pruebas; spec PP9 y PT13 | 0 | 0 | 865bed0 | — |
+| VER-0034 | 2026-10-17 20:23 | APROBADO | Se quitan las menciones a un cargo de Blinka (AVANCES, spec archivo-de-salida, historial de verificaciones) | 0 | 0 | 865bed0 | — |
 | VER-0033 | 2026-10-17 20:10 | APROBADO | OT5: el agente de entrada lee el número de orden de compra y el NIT (IA, patrones y segunda lectura), 3 muestras con OC, obligación O9 en el calendario y arreglo del monto absurdo (1E100) en el motor | 0 | 1 | 60dbd11 | — |
 | VER-0032 | 2026-10-17 20:01 | APROBADO | Fusión de main (PR #18, documentación) en la rama de R2 y R3 antes de abrir el PR: conserva VER-0027 de main y renumera las verificaciones de la rama a VER-0028 a VER-0031 | 0 | 0 | 6ec6a2a | — |
 | VER-0031 | 2026-10-17 19:22 | APROBADO | Fusión de main (R1 archivo de salida y R4 moneda base USD, PR #14) en la rama de R2 y R3: calendario de los casos de OC en USD, sin moneda por defecto en OrdenCompra y renumeración de verificaciones a VER-0027 a VER-0029 | 0 | 0 | 1764f22 | — |
@@ -18,8 +20,8 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0023 | 2026-10-17 19:01 | APROBADO | Revisión total de la documentación tras el PR #16: AVANCES, README, specs/README, tareas (ET3, ET7, ET8, PT7, PT10), trazabilidad del motor, OCD3 aplicada y P32 nuevo; sin código | 0 | 1 | 4a08313 | — |
 | VER-0022 | 2026-10-17 18:54 | APROBADO | El motor usa los 156 proveedores válidos (OCD4, OT2 parcial, OC1.6): lista permitida desde proveedores.yaml y migración de casos, calendario, muestras, semilla de la demo, README y pruebas | 0 | 1 | f65ca8f | — |
 | VER-0021 | 2026-10-17 18:44 | APROBADO | Listado de proveedores válidos: data/proveedores.yaml pasa de 200 a 156 proveedores (sin marcas); OCD5 y OCD11 resueltas, OCD13 nueva; AVANCES y specs al día | 0 | 1 | 3990ea3 | — |
-| VER-0020 | 2026-10-17 18:14 | APROBADO | AVANCES y spec del archivo de salida: se quitan las notas de Gemini y el nombre del CEO; el agente de reglas en lenguaje natural pasa a la fase 1 del roadmap (R7) y contratos queda R8 | 0 | 1 | 65fcb0f | — |
-| VER-0019 | 2026-10-17 18:10 | APROBADO | Documentacion al dia con la reunion con el CEO de Blinka: enfoque cliente de Blinka, roadmap R1-R14 por fases, pendientes P29-P31 y spec nueva archivo-de-salida (AS1-AS4); sin codigo | 0 | 1 | 07b4849 | — |
+| VER-0020 | 2026-10-17 18:14 | APROBADO | AVANCES y spec del archivo de salida: se quitan las notas de Gemini; el agente de reglas en lenguaje natural pasa a la fase 1 del roadmap (R7) y contratos queda R8 | 0 | 1 | 65fcb0f | — |
+| VER-0019 | 2026-10-17 18:10 | APROBADO | Documentacion al dia con la reunion con Blinka: enfoque cliente de Blinka, roadmap R1-R14 por fases, pendientes P29-P31 y spec nueva archivo-de-salida (AS1-AS4); sin codigo | 0 | 1 | 07b4849 | — |
 | VER-0018 | 2026-10-17 17:08 | APROBADO | Panel 1 sin botones de ejemplo: solo se sube archivo, 4 archivos de muestra descargables con rotulos neutros (PP2.4, PP2.5, EA8.4); spec, pruebas, README y AVANCES | 0 | 1 | bb0f497 | — |
 | VER-0017 | 2026-10-17 16:37 | APROBADO | Patrones de respaldo para facturas electronicas colombianas (EA3.4 a EA3.8): TOTAL, Razon social, Nro. Doc., moneda del total en letras; spec, pruebas y AVANCES | 0 | 1 | 6d2d137 | — |
 | VER-0016 | 2026-10-17 16:23 | APROBADO | AVANCES.md: se registra el despliegue en Railway probado (salud, Gemini activo, FECHA_DEMO), se cierra P20, se acotan P17 y P18 y se actualizan próximas tareas | 0 | 1 | 014409d | — |
@@ -39,7 +41,11 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
 
-## VER-0034 — APROBADO
+## VER-0036 — APROBADO
+
+- **NOTA** (convenciones) `.verificaciones/VER-0035.json:2`: El ID VER-0034 lo ocupó otra sesión en main; se conservó el de main y la verificación de OT7 se renumeró a VER-0035 → Ninguna
+
+## VER-0035 — APROBADO
 
 - **NOTA** (convenciones) `app/pages/6_Ordenes_de_compra.py:1`: El menú lateral de Streamlit muestra «Ordenes de compra» sin tilde (sale del nombre del archivo), igual que P12 → Opcional: st.navigation
 - **NOTA** (alcance) `data/ordenes_compra.yaml:1`: La página muestra las órdenes sintéticas (OCD13) y lo dice en pantalla («de ejemplo, supuesto»); falta la columna orden_compra en facturas.csv → Hacerlo cuando lleguen las órdenes reales
