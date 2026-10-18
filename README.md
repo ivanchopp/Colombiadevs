@@ -13,7 +13,7 @@ La IA **solo lee y pregunta**. Quien **decide** es el **motor de reglas**, códi
 | Agente de entrada (IA) | Lee la factura, la verifica con una segunda lectura sin IA, pregunta lo dudoso (máx. 2 turnos) y arma la ficha | `agents/` |
 | Motor de reglas (sin IA) | Decide `PAGAR`, `FRENAR` o `ESCALAR`, el nivel de aprobación y sugiere un canal | `engine/` |
 | Acta | Registro de solo añadir con cadena de huellas; de ahí salen el CSV y el tablero | `acta/` |
-| Panel 1 (proveedor) | Sube facturas, chatea con el agente, ve solo el estado de su factura | `app/Panel_1_Proveedor.py` |
+| Panel 1 (proveedor) | Sube facturas, chatea con el agente, ve solo el estado de su factura | `app/Envía_facturas.py` |
 | Panel 2 (finanzas) | Tablero, cola de aprobación, calendario, acta, órdenes de compra, reglas (ver, cambiar y firmar) y descarga de CSV | `app/pages/` |
 
 Más contexto: `AVANCES.md` (estado y pendientes), `specs/` (requisitos de cada parte) y `docs/`.
@@ -22,7 +22,7 @@ Más contexto: `AVANCES.md` (estado y pendientes), `specs/` (requisitos de cada 
 
 ```bash
 pip install -r requirements.txt
-streamlit run app/Panel_1_Proveedor.py      # abre el Panel 1; el Panel 2 está en el menú lateral
+streamlit run app/Envía_facturas.py      # abre el Panel 1; el Panel 2 está en el menú lateral
 python3 -m pytest -q                         # pruebas
 python3 eval.py                              # autonomía, seguridad y explicabilidad con 29 facturas
 ```

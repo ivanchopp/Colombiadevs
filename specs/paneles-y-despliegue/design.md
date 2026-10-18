@@ -6,14 +6,14 @@ Estado: **borrador para revisión del equipo**. Requisitos: `requirements.md`. D
 
 1. **Las pantallas solo muestran.** Todo cálculo vive en `acta/` (cifras, estado, CSV) y toda decisión en `engine/`.
 2. **Una fuente de verdad:** el acta. Las pantallas leen proyecciones, nunca tablas propias.
-3. **Una app, dos paneles.** `app/Panel_1_Proveedor.py` es la entrada; el Panel 2 vive en `app/pages/`.
+3. **Una app, dos paneles.** `app/Envía_facturas.py` es la entrada; el Panel 2 vive en `app/pages/`.
 4. **Texto de personas = texto plano** (nada de `unsafe_allow_html` con datos de usuario).
 
 ## Estructura
 
 ```
 app/
-├─ Panel_1_Proveedor.py     # portal abierto: estado público, facturas de ejemplo
+├─ Envía_facturas.py     # portal abierto: estado público, facturas de ejemplo
 ├─ comun.py                 # sala por enlace, conexión al acta, selector de rol, formato
 ├─ apoyo.py                 # funciones puras: cola por rol, validar aprobación, formato de montos
 └─ pages/

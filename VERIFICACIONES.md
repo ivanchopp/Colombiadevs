@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0058 | 2026-10-18 07:27 | APROBADO | Panel 1 «Envía facturas» (archivo renombrado), Panel 2 entra como persona de finanzas y recuerda el rol, punto rojo con número por rol y aviso lateral de pendientes (PP2.7, PP3.1, PP3.3 a PP3.5, PT16) | 0 | 1 | 6aa9552 | — |
 | VER-0057 | 2026-10-18 07:01 | APROBADO | Agente de reglas con IA (ART5): lector con Gemini o Claude, tope por sala en la base, degradación a patrones, validación de la salida y comprobación de coherencia (AR5.6 a AR5.8) | 0 | 1 | f1e3f55 | — |
 | VER-0056 | 2026-10-18 06:50 | APROBADO | Diagnóstico de la IA lee también un PDF, motivo de fin y tope de salida mayor en Gemini (EA2b.12, ET15); el Panel 1 vacía el selector de archivos al enviar (PP2.6, PT15) | 0 | 1 | 0bc24c0 | — |
 | VER-0055 | 2026-10-18 06:33 | APROBADO | Fusión de main (PR #26, documentación) en la rama de P34 y R6 cerrado antes del PR: AVANCES reconciliado (la IA lee, Railway corre 52e1387, próximas tareas para la entrega) y ET7 hecho | 0 | 0 | 8a5e562 | — |
@@ -61,6 +62,11 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0058 — APROBADO
+
+- **ADVERTENCIA** (errores) `Dockerfile:15`: El arranque de Railway usa el archivo con tilde (Envía_facturas.py); se probó con el entorno vacío en local, pero no en Railway → Tras redesplegar, confirmar que la app arranca; si falla por el nombre, volver al archivo sin tilde
+- **NOTA** (alcance) `app/comun.py:32`: Los puntos rojos se calculan al cargar la página; no hay refresco automático → Opcional: st.fragment con run_every
 
 ## VER-0057 — APROBADO
 

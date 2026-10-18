@@ -12,4 +12,4 @@ COPY . .
 # sin privilegios no podría escribir el acta. Es una demo con datos ficticios.
 
 # Railway define PORT. El volumen (si existe) se monta en RAILWAY_VOLUME_MOUNT_PATH.
-CMD ["sh", "-c", "exec python -m streamlit run app/Panel_1_Proveedor.py --server.address=0.0.0.0 --server.port=${PORT:-8501} --server.headless=true"]
+CMD ["sh", "-c", "exec python -m streamlit run app/Envía_facturas.py --server.address=0.0.0.0 --server.port=${PORT:-8501} --server.headless=true"]

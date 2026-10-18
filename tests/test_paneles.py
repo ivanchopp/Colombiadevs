@@ -95,7 +95,7 @@ def abrir(ruta):
 
 
 def test_pp1_1_panel_1_crea_sala_y_no_muestra_reglas(entorno):
-    at = abrir("app/Panel_1_Proveedor.py")
+    at = abrir("app/Envía_facturas.py")
     assert not at.exception
     sala = at.query_params["sala"][0]
     texto = " ".join(x.value for x in at.text) + " ".join(x.value for x in at.info)
@@ -105,12 +105,12 @@ def test_pp1_1_panel_1_crea_sala_y_no_muestra_reglas(entorno):
 
 
 def test_pp2_4_panel_1_no_tiene_botones_de_ejemplo(entorno):
-    at = abrir("app/Panel_1_Proveedor.py")
+    at = abrir("app/Envía_facturas.py")
     assert not at.exception
     botones = " ".join(b.label for b in at.button)
     for prohibido in ("ejemplo", "Normal", "Repetida", "Beneficiario nuevo", "orden escondida"):
         assert prohibido.lower() not in botones.lower()
-    fuente = (RAIZ / "app/Panel_1_Proveedor.py").read_text(encoding="utf-8")
+    fuente = (RAIZ / "app/Envía_facturas.py").read_text(encoding="utf-8")
     assert "recibir_ejemplo" not in fuente and "LECTURAS_GUARDADAS" not in fuente
 
 
@@ -123,13 +123,13 @@ def test_pp2_5_los_rotulos_de_muestra_no_dicen_el_caso():
 
 
 @pytest.mark.parametrize("pagina", ["Tablero", "Cola_de_aprobacion", "Calendario", "Acta"])
-def test_pp3_1_panel_2_pide_rol_antes_de_mostrar_datos(entorno, pagina):
+def test_pp3_1_panel_2_entra_como_persona_de_finanzas_sin_pedir_rol(entorno, pagina):
     ruta = {"Tablero": "1_Tablero", "Cola_de_aprobacion": "2_Cola_de_aprobacion",
             "Calendario": "3_Calendario", "Acta": "4_Acta"}[pagina]
     at = abrir(f"app/pages/{ruta}.py")
     assert not at.exception
-    assert any("Elige un rol" in i.value for i in at.info)
-    assert len(at.dataframe) == 0
+    assert not any("Elige un rol" in i.value for i in at.info)
+    assert at.session_state["rol"] == "PERSONA" and at.segmented_control(key="selector_rol").value == "PERSONA"
 
 
 # R8.6 y PP5.7: la ficha inválida se ve, y solo se puede rechazar

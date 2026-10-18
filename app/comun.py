@@ -3,9 +3,10 @@ import streamlit as st
 
 from acta import salas
 from acta.almacen import AlmacenSqlite
+from acta.estado import facturas_por_estado
 from engine.contexto import contexto_desde_acta
 from engine.reglas_io import cargar_contexto_base, cargar_reglas, hoy_bogota, reglas_de_sala
-from app.apoyo import ROLES
+from app.apoyo import ROLES, cola_para_rol, pendientes_por_rol
 
 SEGUNDOS_REFRESCO = 5
 
@@ -29,17 +30,25 @@ def obtener_sala() -> str:
     return sala
 
 
+def _etiqueta_rol(rol: str, pendientes: dict[str, int]) -> str:
+    n = pendientes.get(rol, 0)
+    return f"{ROLES[rol]} 🔴 {n}" if n else ROLES[rol]               # PP3.3: punto rojo con el número
+
+
 def exigir_rol() -> str:
-    """Selector de rol de demostración. No es un inicio de sesión (PP3)."""
+    """Selector de rol de demostración. Entra como persona de finanzas y recuerda lo elegido (PP3.1)."""
     claves = list(ROLES)
     actual = st.session_state.get("rol")
+    actual = actual if actual in claves else "PERSONA"
+    facturas = facturas_por_estado(almacen().filas(st.session_state["sala"]))
+    pendientes = pendientes_por_rol(facturas)
     elegido = st.segmented_control(
-        "Entrar como", claves, format_func=ROLES.get,
-        default=actual if actual in claves else None, key="selector_rol")
-    if elegido is None:
-        st.info("Elige un rol para ver el panel de finanzas. Es un selector de demostración.")
-        st.stop()
+        "Entrar como", claves, format_func=lambda r: _etiqueta_rol(r, pendientes),
+        default=actual, key="selector_rol") or actual               # si se deselecciona, se queda el anterior
     st.session_state["rol"] = elegido
+    en_cola = sum(1 for f in cola_para_rol(facturas, elegido) if not f.decision.get("ficha_invalida"))   # PP3.4
+    if elegido and en_cola:
+        st.sidebar.markdown(f"🔴 **{en_cola}** aprobación(es) pendiente(s) en la cola")
     return elegido
 
 

@@ -11,7 +11,7 @@ from tests.test_agente_entrada import ClienteFalso, GeminiFalso as GeminiLectura
 
 CLAVE = "AIzaSyUnaClaveMuyLargaYSecreta1234567890"
 LECTURA = dict(beneficiario="Prueba SAS", numero="T-1", monto="100", moneda="COP", vence="2026-10-30", cuenta=None, dudosos=[])
-RUTA = str(Path(__file__).resolve().parent.parent / "app" / "Panel_1_Proveedor.py")
+RUTA = str(Path(__file__).resolve().parent.parent / "app" / "Envía_facturas.py")
 
 
 @pytest.fixture(autouse=True)

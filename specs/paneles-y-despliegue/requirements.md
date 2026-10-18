@@ -36,10 +36,14 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 - **PP2.4** EL PANEL 1 NO DEBERÁ ofrecer botones que registren una factura sin que el sistema la lea: la única entrada es subir un archivo. El sistema DEBERÁ leer el archivo y dejar que el motor de reglas decida si es normal, repetida, de beneficiario nuevo o con una orden escondida; nada en la pantalla elige ese resultado.
 - **PP2.5** EL PANEL 1 DEBERÁ ofrecer cuatro archivos de muestra ficticios para descargar y volver a subir, con un nombre neutro (el proveedor y el número de factura), sin decir qué caso es cada uno ni qué regla activa (PP2.1). La guía de qué caso muestra cada archivo queda en el `README.md`.
 - **PP2.6** CUANDO el proveedor envíe una factura, EL PANEL 1 DEBERÁ vaciar el selector de archivos (el archivo enviado no queda cargado ni se puede reenviar por error) y mostrar el chat de **esa** factura, sin texto escrito de otra. EL cuadro de respuesta DEBERÁ aparecer solo mientras la factura espera aclaraciones.
+- **PP2.7** EL Panel 1 DEBERÁ llamarse **«Envía facturas»** en el menú lateral y en su título de página (antes «Panel 1 · Portal del proveedor»). Sigue siendo el portal abierto de PP2.1.
 
 ### PP3. Roles (Panel 2)
-- **PP3.1** EL PANEL 2 DEBERÁ pedir elegir un rol (`PERSONA` o `SENIOR`) antes de mostrar datos. Es un selector de demostración, no un inicio de sesión.
+- **PP3.1** EL PANEL 2 DEBERÁ entrar por defecto como **`PERSONA`** (persona de finanzas) en cada sala nueva, sin pedir elegir, y recordar el rol que se elija al pasar de una página a otra. Es un selector de demostración, no un inicio de sesión. *(Antes pedía elegir un rol antes de mostrar datos.)*
 - **PP3.2** EL PANEL 2 DEBERÁ mostrar el rol activo en todas las páginas.
+- **PP3.3** CUANDO haya aprobaciones pendientes que se pueden aprobar, EL SELECTOR de rol DEBERÁ mostrar un **punto rojo con el número** sobre el rol al que le corresponde aprobarlas: las de nivel `PERSONA` sobre «Persona de finanzas» y las de nivel `SENIOR` sobre «Senior de finanzas». SIN pendientes, ningún punto. NO DEBERÁ contar las facturas de ficha inválida (PP5.7), que solo se pueden rechazar.
+- **PP3.4** EL PANEL 2 DEBERÁ mostrar en el menú lateral, bajo el código de sala, un aviso «🔴 N aprobación(es) pendiente(s) en la cola» con las que el rol activo puede ver (PP5.1), solo si N > 0. El Panel 1 NO DEBERÁ mostrar este aviso ni ningún conteo (PP2.1).
+- **PP3.5** LOS puntos se calculan desde el acta (el estado de cada factura), no se guardan; se actualizan cada vez que se vuelve a cargar la página.
 
 ### PP4. Tablero
 - **PP4.1** EL TABLERO DEBERÁ mostrar las cifras de AC6.1 (pagadas, frenadas, pendientes, esperadas atrasadas, gasto y porcentaje del presupuesto), tal como las entrega `acta/tablero.py`.
