@@ -17,6 +17,7 @@ class Cerrado(BaseModel):
 class Ficha(Cerrado):
     factura_id: str = Field(min_length=1)
     beneficiario: str = Field(min_length=1)
+    beneficiario_leido: str | None = None      # lo que decía la factura, si se asoció a otro nombre del registro (R4.4)
     numero: str = Field(min_length=1)
     monto: Decimal = Field(gt=0)
     moneda: str = Field(pattern=r"^[A-Z]{3}$")

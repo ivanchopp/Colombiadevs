@@ -96,6 +96,9 @@ Notación EARS en español: «CUANDO <evento>, EL MOTOR DE REGLAS DEBERÁ <respu
 
 - **R4.1** CUANDO el beneficiario no esté en la lista permitida, EL MOTOR DE REGLAS DEBERÁ devolver `ESCALAR` con nivel `SENIOR`, sin importar el monto.
 - **R4.2** CUANDO la cuenta aclarada sea distinta a la registrada para el beneficiario, EL MOTOR DE REGLAS DEBERÁ devolver `ESCALAR` con nivel `SENIOR`.
+- **R4.4** (P34) CUANDO el nombre del beneficiario no esté en la lista permitida tal cual, pero coincida con **exactamente un** proveedor registrado al compararlos sin mayúsculas, tildes, puntos, comas ni espacios de más (por ejemplo «IMPRESOS Y PUBLICIDAD CALI SAS» y «Impresos y Publicidad Cali S.A.S.»), EL MOTOR DE REGLAS DEBERÁ tratar la factura como de ese proveedor: guardar el **nombre registrado** como beneficiario y el nombre tal como se leyó aparte (`beneficiario_leido`), y mostrar ambos en la revisión R4.1. SI coincide con dos o más proveedores, o con ninguno, ENTONCES NO se asocia y aplica R4.1.
+- **R4.5** LA coincidencia de R4.4 NO DEBERÁ cambiar ninguna otra revisión: la cuenta sigue comparándose con la registrada (R4.2) y el resto corre con el nombre registrado, para que el historial, el calendario, los acuerdos, los límites por periodo y las órdenes de compra cuenten bajo un solo nombre. NO DEBERÁ dar un `AVISO` ni escalar por sí sola.
+- **R4.6** EL MOTOR NO DEBERÁ asociar un proveedor por parecido (letras distintas, abreviaturas) ni por la identificación tributaria: solo por R4.4. Eso queda como mejora (P34).
 - **R4.3** EL MOTOR DE REGLAS DEBERÁ tratar lo que el proveedor diga por chat como información sin verificar. Solo los registros de la empresa sirven para verificar.
 
 ### R5. Montos, niveles y límites

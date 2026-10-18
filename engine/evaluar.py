@@ -5,7 +5,7 @@ from .canales import sugerir_canal
 from .modelos import Ficha, Resultado, Revision, nivel_max
 from .niveles import nivel_de_revisiones
 from .revisiones import NoEvaluable, beneficiario, calendario, entrada, frenar, montos, orden_compra
-from .revisiones.comun import a_base
+from .revisiones.comun import a_base, nombre_registrado
 
 # (regla de referencia, función): todas corren, en este orden (R1.5).
 REVISIONES = [
@@ -56,11 +56,21 @@ def _ficha_invalida(reglas, error) -> Resultado:
                      version_reglas=reglas.version)
 
 
+def asociar_beneficiario(ficha: Ficha, ctx) -> Ficha:
+    """R4.4: si el nombre coincide con exactamente un proveedor sin contar mayúsculas, tildes ni puntuación,
+    la ficha pasa a llevar el nombre registrado y conserva lo leído aparte. Evaluar y guardar usan lo mismo."""
+    registrado = nombre_registrado(ficha.beneficiario, ctx)
+    if registrado and registrado != ficha.beneficiario:
+        return ficha.model_copy(update={"beneficiario": registrado, "beneficiario_leido": ficha.beneficiario})
+    return ficha
+
+
 def evaluar(ficha, ctx, reglas) -> Resultado:
     try:
         f = ficha if isinstance(ficha, Ficha) else Ficha.model_validate(ficha)
     except ValidationError as e:                                         # R2.1
         return _ficha_invalida(reglas, e)
+    f = asociar_beneficiario(f, ctx)
 
     revisiones: list[Revision] = []
     for regla, revision in REVISIONES:

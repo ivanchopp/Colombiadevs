@@ -11,7 +11,9 @@ def revisar(ficha, ctx, reglas):
                 Revision(regla="R4.2", resultado="FALLA", efecto="ESCALAR", nivel="SENIOR",
                          observado="sin cuenta registrada", umbral="cuenta registrada",
                          mensaje="No hay una cuenta registrada para comparar.")]
-    rs = [Revision(regla="R4.1", resultado="OK", mensaje="El beneficiario está en la lista permitida.")]
+    leido = f" (leído como «{ficha.beneficiario_leido}»)" if ficha.beneficiario_leido else ""        # R4.4
+    rs = [Revision(regla="R4.1", resultado="OK", observado=ficha.beneficiario_leido or "",
+                   mensaje=f"El beneficiario está en la lista permitida{leido}.")]
     cuenta = ficha.cuenta_aclarada or ficha.cuenta_original
     if cuenta is None:
         rs.append(Revision(regla="R4.2", resultado="FALLA", efecto="ESCALAR", nivel="SENIOR",

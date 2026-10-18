@@ -188,4 +188,5 @@ Las pruebas del motor quedaron en `tests/test_motor.py` y no en los archivos sep
 | T15 | Hecho |
 | T11 | Hecho: `engine/simular.py`, vista previa de la página de reglas (PP8.3) |
 | T12 | Parcial: afloja/restringe y techo duro hechos (`reglas_io.cambios_que_aflojan`, `validar_cambio`); faltan conflictos por especificidad |
+| T17 | Hecho: el nombre del beneficiario se asocia al registrado sin mayúsculas, tildes ni puntuación (R4.4 a R4.6, P34); `tests/test_nombre_beneficiario.py` |
 | T16 | Hecho: moneda base USD y configurable (R5.6 a R5.8); `tests/test_moneda_base.py` |
