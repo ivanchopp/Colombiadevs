@@ -224,6 +224,16 @@ python3 eval.py                          # autonomía, seguridad y explicabilida
 
 `python3 eval.py` es el **control de seguridad**: debe decir «0 pagos indebidos».
 
+**Las pruebas** son de tres tipos:
+
+| Tipo | Qué comprueba | Cómo correrlo |
+|---|---|---|
+| **Unitarias y de funciones** | Cada pieza por separado: el motor de reglas, el acta, la lectura de archivos, el agente de reglas, el cálculo de montos (más de 600, algunas con datos al azar) | `python3 -m pytest -q` |
+| **De seguridad** | 29 facturas de prueba contra las decisiones esperadas; deben dar **0 pagos indebidos** | `python3 eval.py` |
+| **De extremo a extremo** | Un navegador real recorre la app como lo haría una persona: sube una factura, aprueba, cambia reglas, mira el calendario | `pip install playwright` y `E2E=1 python3 -m pytest tests/e2e -q` |
+
+Las de extremo a extremo arrancan la app solas, en modo demo (sin IA, sin costo). Para probar una app ya publicada, solo lectura: `E2E_URL=https://tu-dominio python3 -m pytest tests/e2e -q -k solo_lectura`. Para ver cuánto del código cubren las pruebas: `pip install pytest-cov` y `python3 -m pytest --cov=engine --cov=agents --cov=acta --cov=app`.
+
 Más ayuda para Streamlit: https://docs.streamlit.io/
 
 ### 7.3 IA para leer facturas: Gemini o Claude
