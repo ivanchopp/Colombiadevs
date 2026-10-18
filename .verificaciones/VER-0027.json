@@ -1,0 +1,22 @@
+{
+  "id": "VER-0027",
+  "fecha": "2026-10-17T19:11:58-05:00",
+  "cambio": "AVANCES.md al dia tras fusionar el PR 14: cabecera main 8510675, hash de R4, no probado (R1 y R4 en navegador y Railway), proximas tareas y fila de registro; sin codigo",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "convenciones",
+      "ubicacion": "AVANCES.md",
+      "problema": "La hora de la ultima actualizacion sale del reloj de la sesion (19:15 Bogota); las horas de filas anteriores del registro fueron aproximadas",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "git diff revisado; solo AVANCES.md; pytest 240 passed y eval 20/20 sobre 8510675; hashes y numeros de VER contrastados con git log y .verificaciones; sin codigo",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "8510675a965f53db6086429d5f4b5246f0cffe97",
+  "reemplaza": null
+}

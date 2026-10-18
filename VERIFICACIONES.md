@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0027 | 2026-10-17 19:11 | APROBADO | AVANCES.md al dia tras fusionar el PR 14: cabecera main 8510675, hash de R4, no probado (R1 y R4 en navegador y Railway), proximas tareas y fila de registro; sin codigo | 0 | 0 | 8510675 | — |
 | VER-0026 | 2026-10-17 19:10 | APROBADO | Fusion de main (PR 15, 16, 17) en la rama de R1 y R4: datos de base escalados a USD sobre los 156 proveedores, pruebas ajustadas, VER renumerados a 0024 y 0025, AVANCES reconciliado | 0 | 0 | bfef4f4 | — |
 | VER-0025 | 2026-10-17 18:28 | APROBADO | R4: moneda base USD y configurable (R5.6-R5.8): datos a USD con escala uniforme 1 USD = 4000 COP, sin COP fijo en motor ni pantallas, regla R5.7; spec, pruebas y AVANCES | 0 | 1 | 3990ea3 | — |
 | VER-0024 | 2026-10-17 18:21 | APROBADO | R1: archivo de salida pagos_aprobados.csv (AS1-AS4): solo facturas PAGADA, cuenta del registro, cadena verificada, boton en la pagina Acta; spec, 17 pruebas, README y AVANCES | 0 | 1 | 3990ea3 | — |
@@ -30,6 +31,10 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0027 — APROBADO
+
+- **NOTA** (convenciones) `AVANCES.md`: La hora de la ultima actualizacion sale del reloj de la sesion (19:15 Bogota); las horas de filas anteriores del registro fueron aproximadas → Ninguna
 
 ## VER-0026 — APROBADO
 
