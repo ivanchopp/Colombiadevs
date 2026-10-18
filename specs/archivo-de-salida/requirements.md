@@ -5,7 +5,7 @@ Diseño: `design.md` · Tareas: `tasks.md`.
 
 ## Resumen
 
-El CEO de Blinka confirmó cómo se cierra el flujo: **el sistema genera un archivo con las facturas aprobadas, automática o manualmente, y Blinka hace los pagos a los proveedores desde la cuenta del cliente.** Nosotros no movemos dinero: decidimos y entregamos la lista.
+Blinka confirmó cómo se cierra el flujo: **el sistema genera un archivo con las facturas aprobadas, automática o manualmente, y Blinka hace los pagos a los proveedores desde la cuenta del cliente.** Nosotros no movemos dinero: decidimos y entregamos la lista.
 
 Hoy solo exportamos `facturas.csv` y `eventos.csv` (spec `acta-y-csv`). Son de **auditoría**: traen todas las decisiones y no traen la cuenta bancaria de destino. Esta spec agrega un tercer archivo, `pagos_aprobados.csv`, que es la **instrucción de pago** para Blinka.
 
