@@ -51,6 +51,8 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 - **EA2b.7** EL diagnóstico DEBERÁ listar, solo por nombre, las variables del entorno que parezcan una clave de Gemini, Google o Anthropic (por ejemplo `GEMINI_APY_KEY`) pero no sean las esperadas, para detectar errores de escritura. NO DEBERÁ marcar claves de otros servicios (por ejemplo `MAPBOX_API_KEY`).
 - **EA2b.8** EL SISTEMA DEBERÁ ignorar los espacios al inicio y al final de una clave, y tratar una clave de solo espacios como vacía.
 - **EA2b.9** CUANDO la lectura con IA falle y el sistema degrade a la lectura por patrones (EA8.1), EL SISTEMA DEBERÁ dejar el error en el registro del servidor (los Logs de Railway), sin ningún valor de clave, para que quien administre la demo vea que la IA no está respondiendo aunque la pantalla diga que está activa.
+- **EA2b.10** (R6) EL diagnóstico (`?diagnostico=1`) DEBERÁ mostrar la **última falla de lectura con IA** (hora, proveedor y mensaje, sin ningún valor de clave), para ver la causa sin abrir los Logs. Una falla degrada en silencio la factura a patrones (EA8.1), y por eso una app con la IA «activa» puede no estar leyendo con IA.
+- **EA2b.11** (R6) EL diagnóstico DEBERÁ ofrecer un botón «Probar la conexión con la IA ahora» que haga **una** lectura mínima con el proveedor activo y muestre el resultado o el error (sin claves) y, para Gemini, los nombres de los modelos disponibles para elegir `MODELO_GEMINI`. NO DEBERÁ aparecer sin el parámetro.
 
 ### EA3. Segunda lectura (sin IA)
 - **EA3.1** EL SISTEMA DEBERÁ extraer el texto (PDF, EML, TXT) y buscar con patrones de texto el beneficiario, el monto, la moneda y el vencimiento.
