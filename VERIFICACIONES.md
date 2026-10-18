@@ -4,6 +4,8 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0057 | 2026-10-18 07:01 | APROBADO | Agente de reglas con IA (ART5): lector con Gemini o Claude, tope por sala en la base, degradación a patrones, validación de la salida y comprobación de coherencia (AR5.6 a AR5.8) | 0 | 1 | f1e3f55 | — |
+| VER-0056 | 2026-10-18 06:50 | APROBADO | Diagnóstico de la IA lee también un PDF, motivo de fin y tope de salida mayor en Gemini (EA2b.12, ET15); el Panel 1 vacía el selector de archivos al enviar (PP2.6, PT15) | 0 | 1 | 0bc24c0 | — |
 | VER-0055 | 2026-10-18 06:33 | APROBADO | Fusión de main (PR #26, documentación) en la rama de P34 y R6 cerrado antes del PR: AVANCES reconciliado (la IA lee, Railway corre 52e1387, próximas tareas para la entrega) y ET7 hecho | 0 | 0 | 8a5e562 | — |
 | VER-0054 | 2026-10-17 21:47 | APROBADO | Fusión de main (PR #25: XML de LATAM) en la rama de P34 y R6 cerrado; las verificaciones de la rama pasan a VER-0052 y VER-0053 | 0 | 0 | 2563cdb | — |
 | VER-0053 | 2026-10-17 21:44 | APROBADO | P34: el nombre del beneficiario se asocia al del registro sin mayúsculas, tildes ni puntuación (R4.4 a R4.6, T17), Ficha.beneficiario_leido; fusión de main (PR #24, CFDI) y renumeración de VER-0048 a VER-0050 | 0 | 0 | c6e649f | — |
@@ -59,6 +61,14 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0057 — APROBADO
+
+- **ADVERTENCIA** (errores) `agents/reglas_texto.py:1`: El lector con IA solo se probó con clientes falsos; el esquema JSON y el prompt no se han probado con Gemini ni Claude reales (esta sesión no tiene clave) → Probar en Railway los pedidos de P29 tras redesplegar
+
+## VER-0056 — APROBADO
+
+- **ADVERTENCIA** (errores) `agents/lectura_ia.py:9`: El tope de 16.384 tokens como causa del PDF fallido es una hipótesis sin confirmar con la IA real (esta sesión no tiene clave) → Confirmar con ?diagnostico=1 en Railway tras redesplegar (P35)
 
 ## VER-0055 — APROBADO
 

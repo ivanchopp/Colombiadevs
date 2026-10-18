@@ -5,6 +5,7 @@ import os
 import re
 from decimal import Decimal, InvalidOperation
 
+MAX_SALIDA_GEMINI = 16384        # EA2b.12: un modelo que «piensa» gasta parte del cupo antes del JSON
 MODELO_CLAUDE_DEFECTO = "claude-sonnet-5-5"
 MODELO_GEMINI_DEFECTO = "gemini-3.8-flash"      # verificado en Railway el 17 oct; gemini-2.5-flash ya no está disponible. Cambia con MODELO_GEMINI
 
@@ -123,22 +124,33 @@ def modelos_disponibles(cliente=None, proveedor: str | None = None) -> list[str]
         return []
 
 
+PDF_PRUEBA_B64 = (
+    "JVBERi0xLjMKJZOMi54gUmVwb3J0TGFiIEdlbmVyYXRlZCBQREYgZG9jdW1lbnQgKG9wZW5zb3VyY2UpCjEgMCBvYmoKPDwKL0YxIDIgMCBSCj4+CmVuZG9iagoyIDAgb2JqCjw8Ci9CYXNlRm9udCAvSGVsdmV0aWNhIC9FbmNvZGluZyAvV2luQW5zaUVuY29kaW5nIC9OYW1lIC9GMSAvU3VidHlwZSAvVHlwZTEgL1R5cGUgL0ZvbnQKPj4KZW5kb2JqCjMgMCBvYmoKPDwKL0NvbnRlbnRzIDcgMCBSIC9NZWRpYUJveCBbIDAgMCA1OTUuMjc1NiA4NDEuODg5OCBdIC9QYXJlbnQgNiAwIFIgL1Jlc291cmNlcyA8PAovRm9udCAxIDAgUiAvUHJvY1NldCBbIC9QREYgL1RleHQgL0ltYWdlQiAvSW1hZ2VDIC9JbWFnZUkgXQo+PiAvUm90YXRlIDAgL1RyYW5zIDw8Cgo+PiAKICAvVHlwZSAvUGFnZQo+PgplbmRvYmoKNCAwIG9iago8PAovUGFnZU1vZGUgL1VzZU5vbmUgL1BhZ2VzIDYgMCBSIC9UeXBlIC9DYXRhbG9nCj4+CmVuZG9iago1IDAgb2JqCjw8Ci9BdXRob3IgKGFub255bW91cykgL0NyZWF0aW9uRGF0ZSAoRDoyMDAwMDEwMTAwMDAwMCswMCcwMCcpIC9DcmVhdG9yIChhbm9ueW1vdXMpIC9LZXl3b3JkcyAoKSAvTW9kRGF0ZSAoRDoyMDAwMDEwMTAwMDAwMCswMCcwMCcpIC9Qcm9kdWNlciAoUmVwb3J0TGFiIFBERiBMaWJyYXJ5IC0gXChvcGVuc291cmNlXCkpIAogIC9TdWJqZWN0ICh1bnNwZWNpZmllZCkgL1RpdGxlICh1bnRpdGxlZCkgL1RyYXBwZWQgL0ZhbHNlCj4+CmVuZG9iago2IDAgb2JqCjw8Ci9Db3VudCAxIC9LaWRzIFsgMyAwIFIgXSAvVHlwZSAvUGFnZXMKPj4KZW5kb2JqCjcgMCBvYmoKPDwKL0xlbmd0aCAyNDMKPj4Kc3RyZWFtCjEgMCAwIDEgMCAwIGNtICBCVCAvRjEgMTIgVGYgMTQuNCBUTCBFVApCVCAxIDAgMCAxIDcyIDc2MCBUbSAoRkFDVFVSQSBOXDI2MCBULTEpIFRqIFQqIEVUCkJUIDEgMCAwIDEgNzIgNzQwIFRtIChQcm92ZWVkb3I6IFBydWViYSBTQVMpIFRqIFQqIEVUCkJUIDEgMCAwIDEgNzIgNzIwIFRtIChWZW5jZTogMjAyNi0xMC0zMCkgVGogVCogRVQKQlQgMSAwIDAgMSA3MiA3MDAgVG0gKFRvdGFsOiAxMDAgQ09QKSBUaiBUKiBFVAogCmVuZHN0cmVhbQplbmRvYmoKeHJlZgowIDgKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDYxIDAwMDAwIG4gCjAwMDAwMDAwOTIgMDAwMDAgbiAKMDAwMDAwMDE5OSAwMDAwMCBuIAowMDAwMDAwNDAyIDAwMDAwIG4gCjAwMDAwMDA0NzAgMDAwMDAgbiAKMDAwMDAwMDczMSAwMDAwMCBuIAowMDAwMDAwNzkwIDAwMDAwIG4gCnRyYWlsZXIKPDwKL0lEIApbPDFjMTc4MTk4ZmJkZmE1MWIyNTk5NWQ4OWQ0MTAyMDQzPjwxYzE3ODE5OGZiZGZhNTFiMjU5OTVkODlkNDEwMjA0Mz5dCiUgUmVwb3J0TGFiIGdlbmVyYXRlZCBQREYgZG9jdW1lbnQgLS0gZGlnZXN0IChvcGVuc291cmNlKQoKL0luZm8gNSAwIFIKL1Jvb3QgNCAwIFIKL1NpemUgOAo+PgpzdGFydHhyZWYKMTA4MwolJUVPRgo=")
+
+
 def probar_conexion(cliente=None, proveedor: str | None = None) -> dict:
-    """Una lectura mínima con el proveedor activo (EA2b.11). Devuelve {ok, proveedor, modelo, detalle, modelos}."""
+    """Dos lecturas mínimas con el proveedor activo: un texto y un PDF (EA2b.11, EA2b.12).
+    Devuelve {ok, proveedor, modelo, detalle, modelos}; `ok` exige que ambas lean bien."""
     proveedor = proveedor or (_proveedor_del_cliente(cliente) if cliente is not None else proveedor_activo())
     if proveedor is None:
         return {"ok": False, "proveedor": None, "modelo": None, "detalle": "No hay proveedor de IA configurado.",
                 "modelos": []}
     modelo = modelo_gemini() if proveedor == "gemini" else modelo_claude()
     texto = "FACTURA N° T-1\nProveedor: Prueba SAS\nVence: 2026-10-30\nTotal: 100 COP"
-    try:
-        r = leer_con_ia("txt", texto.encode(), texto, cliente, proveedor)
+    pdf = base64.b64decode(PDF_PRUEBA_B64)
+
+    def intento(nombre, tipo, datos, txt):
+        try:
+            r = leer_con_ia(tipo, datos, txt, cliente, proveedor)
+        except LecturaFallida as e:
+            return False, f"{nombre}: FALLA · {sin_secretos(str(e))[:400]}"
         ok = str(r.get("monto")) == "100" and (r.get("moneda") or "").upper() == "COP"
-        detalle = ("La IA respondió y leyó bien la factura de prueba." if ok else
-                   f"La IA respondió, pero leyó otra cosa: monto {r.get('monto')}, moneda {r.get('moneda')}.")
-    except LecturaFallida as e:
-        ok, detalle = False, sin_secretos(str(e))[:500]
-    return {"ok": ok, "proveedor": proveedor, "modelo": modelo, "detalle": detalle,
+        return ok, (f"{nombre}: leyó bien la factura de prueba." if ok else
+                    f"{nombre}: respondió, pero leyó otra cosa: monto {r.get('monto')}, moneda {r.get('moneda')}.")
+
+    ok_t, d_t = intento("Texto", "txt", texto.encode(), texto)
+    ok_p, d_p = intento("PDF", "pdf", pdf, None)
+    return {"ok": ok_t and ok_p, "proveedor": proveedor, "modelo": modelo, "detalle": f"{d_t}\n{d_p}",
             "modelos": modelos_disponibles(cliente, proveedor)}
 
 
@@ -237,6 +249,15 @@ def _bruto_claude(cliente, tipo, datos, texto) -> dict:
     return json.loads(next(b.text for b in r.content if b.type == "text"))
 
 
+def _motivo_fin(r) -> str:
+    """« (finish_reason: MAX_TOKENS)» si Gemini lo informa; vacío si no (EA2b.12)."""
+    try:
+        m = getattr(r.candidates[0], "finish_reason", None)
+    except (AttributeError, IndexError, TypeError):
+        return ""
+    return f" (finish_reason: {getattr(m, 'name', m)})" if m else ""
+
+
 def _bruto_gemini(cliente, tipo, datos, texto) -> dict:
     from google.genai import types
     if tipo in ("pdf", "imagen"):
@@ -248,11 +269,15 @@ def _bruto_gemini(cliente, tipo, datos, texto) -> dict:
         model=modelo_gemini(), contents=contenido,
         config=types.GenerateContentConfig(
             system_instruction=SISTEMA, response_mime_type="application/json",
-            response_json_schema=ESQUEMA, temperature=0, max_output_tokens=4096))
+            response_json_schema=ESQUEMA, temperature=0, max_output_tokens=MAX_SALIDA_GEMINI))
+    motivo = _motivo_fin(r)
     texto_json = getattr(r, "text", None)
     if not texto_json:                                     # vacía o bloqueada por filtros (EA2b.5)
-        raise LecturaFallida("Gemini no devolvió texto (respuesta vacía o bloqueada).")
-    return json.loads(texto_json)
+        raise LecturaFallida(f"Gemini no devolvió texto (respuesta vacía o bloqueada){motivo}.")
+    try:
+        return json.loads(texto_json)
+    except ValueError as e:                                # cortada o inválida: el motivo de fin dice por qué (EA2b.12)
+        raise LecturaFallida(f"Gemini devolvió un JSON inválido{motivo}: {e}") from e
 
 
 def _proveedor_del_cliente(cliente) -> str:

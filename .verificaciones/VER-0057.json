@@ -1,0 +1,30 @@
+{
+  "id": "VER-0057",
+  "fecha": "2026-10-18T07:01:05-05:00",
+  "cambio": "Agente de reglas con IA (ART5): lector con Gemini o Claude, tope por sala en la base, degradación a patrones, validación de la salida y comprobación de coherencia (AR5.6 a AR5.8)",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "agents/reglas_texto.py",
+    "agents/estado.py",
+    "app/pages/5_Reglas.py",
+    "specs/README.md",
+    "specs/agente-de-reglas/requirements.md",
+    "specs/agente-de-reglas/design.md",
+    "specs/agente-de-reglas/tasks.md",
+    "tests/test_reglas_ia.py"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "errores",
+      "ubicacion": "agents/reglas_texto.py:1",
+      "problema": "El lector con IA solo se probó con clientes falsos; el esquema JSON y el prompt no se han probado con Gemini ni Claude reales (esta sesión no tiene clave)",
+      "correccion": "Probar en Railway los pedidos de P29 tras redesplegar"
+    }
+  ],
+  "comprobaciones": "git diff revisado; pytest completo: 543 pasan; 5 mutaciones detectadas (no descartar cambios sin propuesta, no contar el tope, no marcar la llamada, quitar el límite 10^12, quitar la comprobación de coherencia); sin float ni claves en el diff; el motor y validar_cambio no se tocaron",
+  "rama": "claude/determined-planck-2vrgbo",
+  "commit": "f1e3f555ef701451b2838fcd9a8e6bcb6d2dc369",
+  "reemplaza": null
+}

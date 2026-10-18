@@ -50,6 +50,7 @@ def intentar(accion, *args, **kw):
     try:
         e = accion(*args, **kw)
         st.session_state["factura_activa"] = e["factura_id"]
+        st.session_state["envio"] = st.session_state.get("envio", 0) + 1       # PP2.6: nuevo selector, vacío
     except flujo.EntradaRechazada as err:
         st.session_state["aviso_panel1"] = str(err)
     st.rerun()
@@ -59,7 +60,8 @@ izq, der = st.columns(2)
 with izq:
     st.subheader("Envía una factura")
     archivo = st.file_uploader("Arrastra aquí un PDF, una foto, un correo o un XML",
-                               type=["pdf", "jpg", "jpeg", "png", "eml", "txt", "xml"])
+                               type=["pdf", "jpg", "jpeg", "png", "eml", "txt", "xml"],
+                               key=f"archivo_{st.session_state.get('envio', 0)}")      # PP2.6: se vacía al enviar
     st.caption("PDF, JPG, PNG, EML o XML de factura electrónica (Colombia, Perú, México, Ecuador, Uruguay, Brasil, Chile, Costa Rica, Paraguay; otros formatos se revisan a mano) · máx. 5 MB")
     if archivo is not None and st.button("Enviar esta factura", type="primary"):
         intentar(flujo.recibir, almacen(), sala, archivo.name, archivo.getvalue())

@@ -18,3 +18,4 @@ Estado: **borrador**. Requisitos: `requirements.md` · Diseño: `design.md`. Due
 | PT13 | Página «Órdenes de compra», orden citada en el detalle de la factura y prueba de que el Panel 1 no muestra órdenes | PP9, OC6 | Hecho |
 | PT12 | Página de resumen de conciliación (capa 3) | AC8 | Pendiente |
 | PT14 | Panel 1: quitar los botones de ejemplo y ofrecer cuatro archivos de muestra descargables | PP2.4, PP2.5, EA8.4 | Hecho |
+| PT15 | Panel 1: vaciar el selector de archivos al enviar una factura | PP2.6 | Hecho (`test_pp2_6_...`) |

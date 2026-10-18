@@ -4,6 +4,7 @@ from decimal import Decimal
 import streamlit as st
 
 from agents import reglas_texto
+from agents.estado import ContadorPedidosIA
 from app.apoyo import ROLES, cambiar_reglas, formato_monto
 from app.comun import almacen, barra_lateral, contexto_y_reglas, encabezado, exigir_rol, obtener_sala
 from engine.reglas_io import EDITABLES, ErrorDeReglas, cambios_que_aflojan, validar_cambio
@@ -64,8 +65,12 @@ st.subheader("Pedir un cambio con texto")
 st.caption("Escribe qué quieres cambiar. El sistema solo **propone**: rellena el formulario de abajo y nada se aplica "
            "hasta que escribas el motivo y confirmes. " + reglas_texto.EJEMPLO)
 pedido = st.text_area("Tu pedido", max_chars=reglas_texto.LARGO_MAX, key="pedido_reglas", label_visibility="collapsed")
+contador = ContadorPedidosIA(almacen())
 if st.button("Entender el pedido"):
-    entendido = reglas_texto.entender(pedido, actuales, ctx.tasas)
+    cupo = contador.usados(sala) < reglas_texto.pedidos_max()               # AR5.5
+    entendido = reglas_texto.entender(pedido, actuales, ctx.tasas, puede_usar_ia=cupo)
+    if entendido.llamo_ia:
+        contador.sumar(sala)                                                 # AR5.6: también si la llamada falla
     st.session_state["propuesta_texto"] = entendido
     st.session_state.pop("revisado_texto", None)
     if entendido.estado == "propuesta":
@@ -74,7 +79,9 @@ if st.button("Entender el pedido"):
 propuesta = st.session_state.get("propuesta_texto")
 if propuesta is not None:
     with st.container(border=True):
-        st.caption(f"Leído {'con IA' if propuesta.lector == 'ia' else 'por patrones (sin IA)'}. Tu pedido:")
+        explicacion = {"tope": f" (se agotaron los {reglas_texto.pedidos_max()} pedidos con IA de esta sala)",
+                       "falla": " (la IA no respondió)"}.get(propuesta.motivo_patrones, "")
+        st.caption(f"Leído {'con IA' if propuesta.lector == 'ia' else 'por patrones (sin IA)'}{explicacion}. Tu pedido:")
         st.text(propuesta.pedido)                              # siempre texto plano (AR3.2)
         if propuesta.estado != "propuesta":
             st.info(propuesta.pregunta or "No entendí el pedido.")

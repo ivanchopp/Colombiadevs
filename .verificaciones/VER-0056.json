@@ -1,0 +1,29 @@
+{
+  "id": "VER-0056",
+  "fecha": "2026-10-18T06:50:30-05:00",
+  "cambio": "Diagnóstico de la IA lee también un PDF, motivo de fin y tope de salida mayor en Gemini (EA2b.12, ET15); el Panel 1 vacía el selector de archivos al enviar (PP2.6, PT15)",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "agents/lectura_ia.py",
+    "app/Panel_1_Proveedor.py",
+    "specs/extraccion-y-agente-de-entrada/requirements.md",
+    "specs/extraccion-y-agente-de-entrada/tasks.md",
+    "specs/paneles-y-despliegue/requirements.md",
+    "specs/paneles-y-despliegue/tasks.md",
+    "tests/test_diagnostico_ia.py"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "errores",
+      "ubicacion": "agents/lectura_ia.py:9",
+      "problema": "El tope de 16.384 tokens como causa del PDF fallido es una hipótesis sin confirmar con la IA real (esta sesión no tiene clave)",
+      "correccion": "Confirmar con ?diagnostico=1 en Railway tras redesplegar (P35)"
+    }
+  ],
+  "comprobaciones": "git diff revisado; pytest completo: 502 pasan; sin float ni claves en el diff; el motor no se tocó; criterios EA2b.12 y PP2.6 con pruebas",
+  "rama": "claude/determined-planck-2vrgbo",
+  "commit": "0bc24c0380bea992fbdc3b0e5acba1e9fb6187f2",
+  "reemplaza": null
+}
