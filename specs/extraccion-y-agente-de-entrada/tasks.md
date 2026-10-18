@@ -10,7 +10,7 @@ Dueño sugerido: **B** (agentes). Requisitos: `requirements.md` · Diseño: `des
 | ET4 | `aclaraciones.py` y `estado.py` | EA5, EA7 | Hecho |
 | ET5 | `flujo.py` y `ejemplos.py` (modo demo) | EA6, EA8 | Hecho |
 | ET6 | Panel 1: chat, subida y ejemplos activos | PP2, EA8.3 | Hecho |
-| ET7 | Probar con la clave real (Gemini ahora, Claude después) y ajustar el modelo | EA2 | **Parcial:** `gemini-2.5-flash` funciona en Railway (17 oct). Falta un PDF y una foto propios (P17) y probar Claude |
+| ET7 | Probar con la clave real (Gemini ahora, Claude después) y ajustar el modelo | EA2 | **Hecho para Gemini (17 oct):** `gemini-2.5-flash` ya no estaba disponible; con `gemini-3.8-flash` un PDF y una foto propios se leen bien en Railway. Falta probar Claude |
 | ET8 | Proveedor intercambiable: Gemini y Claude | EA2b | Hecho (Gemini probado con clave real; Claude sin probar) |
 | ET9 | Línea de diagnóstico del proveedor (`?diagnostico=1`) | EA2b.6 a EA2b.8 | Hecho |
 | ET10 | Patrones de respaldo para facturas electrónicas colombianas (TOTAL, Razón social, Nro. Doc., moneda del total en letras) | EA3.4 a EA3.8 | Hecho |

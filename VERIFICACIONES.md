@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0048 | 2026-10-17 21:33 | APROBADO | R6 cerrado: modelo por defecto de Gemini pasa a gemini-3.8-flash (el anterior ya no está disponible), README, .env.example, specs y AVANCES; pendientes P34 y P35 | 0 | 0 | 1204539 | — |
 | VER-0047 | 2026-10-17 21:10 | APROBADO | Fusión de main (PR #21: OT7 y registro al día) en la rama de R6; la verificación de R6 pasa de VER-0045 a VER-0046 | 0 | 0 | c2ec3cf | — |
 | VER-0046 | 2026-10-17 21:08 | APROBADO | R6: diagnóstico ampliado de la IA (última falla de lectura y botón Probar la conexión con los modelos disponibles) tras comprobar en Railway que la IA real no lee; spec EA2b.10, EA2b.11, ET12 | 0 | 1 | bc7547d | — |
 | VER-0045 | 2026-10-17 21:04 | APROBADO | Rama de OT7: hashes reales en dos filas del registro de AVANCES y fila nueva; ultima verificacion VER-0045; solo documentacion, para que el PR 21 vuelva a leer la rama | 0 | 0 | bc7547d | — |
@@ -51,6 +52,11 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0048 — APROBADO
+
+- **NOTA** (errores) `AVANCES.md:224`: El nombre de un proveedor en mayúsculas (como en la foto de prueba) no coincide con la lista permitida y escala al senior: falla segura pero baja la autonomía; queda como P34 con propuesta, sin tocar el motor → El equipo decide; requiere spec primero
+- **NOTA** (alcance) `agents/lectura_ia.py:9`: Los nombres de modelo de Google cambian: la variable MODELO_GEMINI y el botón del diagnóstico quedan como salida si vuelve a fallar → Ninguna
 
 ## VER-0047 — APROBADO
 

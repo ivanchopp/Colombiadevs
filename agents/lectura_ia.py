@@ -6,7 +6,7 @@ import re
 from decimal import Decimal, InvalidOperation
 
 MODELO_CLAUDE_DEFECTO = "claude-sonnet-5-5"
-MODELO_GEMINI_DEFECTO = "gemini-2.5-flash"      # sin verificar: cambiar con MODELO_GEMINI si ya no existe
+MODELO_GEMINI_DEFECTO = "gemini-3.8-flash"      # verificado en Railway el 17 oct; gemini-2.5-flash ya no está disponible. Cambia con MODELO_GEMINI
 
 
 def modelo_claude() -> str:
