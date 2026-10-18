@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0041 | 2026-10-17 20:53 | APROBADO | Se quita el nombre de una persona de AVANCES y de la guía en PDF | 0 | 0 | 9698a63 | — |
 | VER-0040 | 2026-10-17 20:33 | APROBADO | Fusion de main (R2, R3, OT5, PR 18 y 20) en la rama de R5 y R7: segunda lectura del XML ahora tambien compara orden de compra y NIT, XML lee OrderReference, VER renumerados 0035-0039, AVANCES reconciliado | 0 | 1 | cb5d2cb | — |
 | VER-0039 | 2026-10-17 20:25 | APROBADO | R7 version minima sin IA: agente de reglas en lenguaje natural (ART1-ART4): agents/reglas_texto.py, caja de texto en la pagina Reglas que solo rellena el formulario, comprobacion de coherencia, origen y pedido en CAMBIO_REGLA; 55 pruebas | 0 | 1 | a1e21e7 | — |
 | VER-0038 | 2026-10-17 20:13 | APROBADO | Spec del agente de reglas: la IA decide la ambiguedad y el codigo solo valida (AR2.4, AR2.7), comprobacion de coherencia por codigo de la propuesta contra el pedido (AR2.8, AR3.5, AR8.5); diseno, tareas y AVANCES; sin codigo | 0 | 1 | f06d5c0 | — |

@@ -1,0 +1,15 @@
+{
+  "id": "VER-0041",
+  "fecha": "2026-10-17T20:53:33-05:00",
+  "cambio": "Se quita el nombre de una persona de AVANCES y de la guía en PDF",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "docs/Guia-6-alternativas-actualizada.pdf"
+  ],
+  "hallazgos": [],
+  "comprobaciones": "grep y pdftotext sin coincidencias; PDF regenerado de 11 páginas",
+  "rama": "main",
+  "commit": "9698a63aa7a450f99cef8d6cbd61bef869c3bbc5",
+  "reemplaza": null
+}

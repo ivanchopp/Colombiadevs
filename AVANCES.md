@@ -38,7 +38,7 @@ Blinka habló con el equipo. **Lo que se dijo es la fuente de verdad del product
 5. **Contratos:** los clientes tienen estructuras de pago complejas basadas en contratos. Se sugirió **subir el contrato con la estructura y la cadencia de pagos** para agendarlos solos.
 6. **MCP:** Blinka lanzó la semana pasada un servidor MCP para conectarse a sistemas de IA como GPT y **programar pagos con un comando de texto**. En la reunión se dijo que el equipo ya trabajaba en **ajustar reglas de pago con lenguaje natural**.
 7. **Moneda y contabilidad:** los clientes operan hoy **en dólares** y llevan la contabilidad en Blinka o la conectan a sistemas como QuickBooks.
-8. **Criptomonedas:** los pagos internacionales y los de Bre-B se ejecutan con cripto por debajo, pero se dijo que eso **«se sale un poco del alcance principal»**. Marcelo añadió que otros medios de pago son un extra de innovación y que primero se resuelve la necesidad principal.
+8. **Criptomonedas:** los pagos internacionales y los de Bre-B se ejecutan con cripto por debajo, pero se dijo que eso **«se sale un poco del alcance principal»**. También se dijo que otros medios de pago son un extra de innovación y que primero se resuelve la necesidad principal.
 9. **Idea para el pitch:** productizar y «agentizar» un **equipo de compras de unas 10 personas** que analiza proveedores y centros de costos.
 
 **Cómo encaja lo que ya existe**
@@ -123,7 +123,7 @@ Blinka habló con el equipo. **Lo que se dijo es la fuente de verdad del product
 | `README.md` | Cómo correr, probar y desplegar; variables de entorno; Gemini o Claude |
 | `docs/guion-demo.md` | **Guion de la demo y el pitch** (4 a 5 min): la capa de control de los clientes de Blinka, solo lo que existe hoy, preguntas probables y lo que no se dice |
 | `docs/Ruta-de-una-factura.pdf` | **Diseño general:** actores, flujo, maquetas, herramientas, despliegue, a futuro. Se genera de una página en línea privada del equipo |
-| `docs/Guia-6-alternativas-actualizada.pdf` | Guía de las 6 alternativas de @Marcelo Linero, ajustada a la entrega de las 8:00, con plan por horas |
+| `docs/Guia-6-alternativas-actualizada.pdf` | Guía de las 6 alternativas original, ajustada a la entrega de las 8:00, con plan por horas |
 | `specs/README.md` | Índice y reglas de las especificaciones |
 | `specs/motor-de-reglas/` | 53 criterios EARS (R1 a R11), `design.md` (con «Ajustes al construir»), tareas T1 a T15 |
 | `specs/acta-y-csv/` | 51 criterios (AC1 a AC9), diseño, tareas AT1 a AT10 |
@@ -198,7 +198,7 @@ Lo más reciente va arriba.
 | 17 oct | *(análisis)* | Se estudió la documentación de feature specs de Kiro. Se adoptó el **método** (requisitos EARS, diseño y tareas) en `specs/`, sin instalar Kiro. |
 | 17 oct | `d9dff20` | Guía de las 6 alternativas actualizada: entrega a las 8:00, plan por horas, Opción 6 reducida al enrutador de canal y sello público a futuro. |
 | 17 oct | `2941e8c` | PDF de «Ruta de una factura» con la **sugerencia de canal de pago** (paso 8, maqueta, tabla de canales) y la sección «A futuro». |
-| 17 oct | *(decisión)* | Se compararon la guía de @Marcelo Linero y nuestro diseño. Se **confirmó la entrega: dom 18 oct 8:00 a. m.** (antes se creía 12:00 y se había dicho 20:00). |
+| 17 oct | *(decisión)* | Se compararon la guía original y nuestro diseño. Se **confirmó la entrega: dom 18 oct 8:00 a. m.** (antes se creía 12:00 y se había dicho 20:00). |
 | 16–17 oct | *(sin commits)* | Diseño construido en conversación: agente de reglas, agente de entrada con chat al proveedor, calendario, agente de conciliación, CSV y tablero, niveles persona/senior, dos paneles con sala, 8 maquetas, despliegue solo en Railway. «Jurado» pasó a llamarse **«motor de reglas»**. |
 | 16 oct | `7f9c408` | Primer PDF de «Ruta de una factura» en `docs/`. |
 | 16 oct | *(inicio)* | Repositorio creado por el equipo como **`Colombiadevs`** (se había pedido «Colombia Devs»; GitHub no admite espacios). |
