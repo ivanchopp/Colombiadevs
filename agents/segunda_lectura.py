@@ -21,6 +21,12 @@ RE_NUMERO_DOC = re.compile(r"n(?:ro|[uú]mero|[°º])?\.?\s*(?:de\s+)?(?:doc(?:u
 RE_NUMERO = re.compile(r"(?:factura|invoice)\s*(?:n[°ºo.]*|no\.?|#|num(?:ero)?)?\s*[:\-]?\s*(?P<n>(?=[A-Z0-9\-]*\d)[A-Z0-9][A-Z0-9\-]{2,24})", re.I)
 
 
+# Orden de compra e identificación tributaria del emisor (OC3.2): solo si la factura los trae.
+RE_OC = re.compile(r"(?:[oó]rden\s+de\s+compra|purchase\s+order|\bO\.?C\.?|\bPO)\s*(?:n[°ºo.]*|no\.?|#|num(?:ero)?)?\s*[:\-]?\s*"
+                   r"(?P<oc>[A-Z][A-Z0-9]{0,3}[\- ]?\d[A-Z0-9\- ]{2,20}\d|\d{5,15})", re.I)
+RE_ID_TRIB = re.compile(r"\b(?:NIT|RUC|RFC|identificaci[oó]n\s+tributaria)\s*[:\-]?\s*(?P<id>(?=[A-Z0-9\-]*\d)[A-Z0-9][A-Z0-9\-]{7,15})", re.I)
+
+
 def parsear_monto(texto: str) -> Decimal | None:
     t = texto.strip().rstrip(".,")
     if not t or not re.fullmatch(NUM, t):
@@ -51,15 +57,26 @@ def parsear_fecha(texto: str) -> date | None:
         return None
 
 
+def _alfanum(t) -> str:
+    return re.sub(r"[^A-Z0-9]", "", str(t).upper())
+
+
 def normalizar(t: str) -> str:
     return " ".join(t.upper().split())
 
 
 def leer(texto: str | None) -> dict:
     """Campos que los patrones encuentran. Lo que no encuentra queda en None."""
-    r = {"beneficiario": None, "numero": None, "monto": None, "moneda": None, "vence": None}
+    r = {"beneficiario": None, "numero": None, "monto": None, "moneda": None, "vence": None,
+         "orden_compra": None, "id_tributaria": None}
     if not texto:
         return r
+    oc = RE_OC.search(texto)
+    if oc:
+        r["orden_compra"] = oc.group("oc").strip().upper()
+    ident = RE_ID_TRIB.search(texto)
+    if ident:
+        r["id_tributaria"] = ident.group("id").upper()
     for patron in RE_MONTO:
         m = patron.search(texto)
         if m and parsear_monto(m.group("m")) is not None:
@@ -109,5 +126,9 @@ def comparar(ia: dict, texto: str | None) -> tuple[str, list[str]]:
         elif campo == "moneda" and str(a).upper() != b:
             difieren.append(campo)
         elif campo == "vence" and str(a) != str(b):
+            difieren.append(campo)
+    for campo in ("orden_compra", "id_tributaria"):                      # OC3.2: solo cuentan si alguien los vio
+        a, b = ia.get(campo), patrones[campo]
+        if (a is not None or b is not None) and (a is None or b is None or _alfanum(a) != _alfanum(b)):
             difieren.append(campo)
     return ("coincide" if not difieren else "no_coincide"), difieren

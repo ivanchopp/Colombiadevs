@@ -292,3 +292,9 @@ def test_r10_explicabilidad(ctx, reglas):
     r = evaluar(ficha(beneficiario="Nuevo SAS", monto="9600000"), ctx, reglas)
     assert r.version_reglas == "v12" and r.revisiones and r.motivo.count(". ") <= 1
     assert all(x.mensaje for x in r.revisiones)
+
+
+def test_r1_3_un_monto_absurdo_escala_y_no_rompe_el_motor(ctx, reglas):
+    """Hypothesis encontró que «1E100» lanzaba InvalidOperation: el motor nunca debe lanzar (R1.3)."""
+    r = evaluar(ficha(monto="1E100"), ctx, reglas)
+    assert r.decision != "PAGAR" and r.monto_base is None

@@ -303,8 +303,9 @@ def test_pp2_5_las_muestras_subidas_como_archivo_se_clasifican_solas(almacen, sa
         assert (d["decision"], d["nivel"]) == (dec, nivel), clave
 
 
-def test_pp2_4_sin_ia_las_muestras_subidas_siempre_se_escalan(almacen, sala):
+def test_pp2_4_sin_ia_las_muestras_subidas_siempre_se_escalan(almacen, sala, monkeypatch):
     from agents import ejemplos
+    monkeypatch.setenv("FACTURAS_MAX", "20")                 # hay más muestras que el límite por sala
     for clave in ejemplos.EJEMPLOS:
         nombre, datos = ejemplos.leer_ejemplo(clave)
         e = flujo.recibir(almacen, sala, nombre, datos)

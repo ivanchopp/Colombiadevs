@@ -9,7 +9,7 @@ Antes de seguir con las órdenes reales, el equipo confirma **OCD1, OCD12 y OCD1
 | OT2 | `engine/compras.py` y modelos: cargar, conservar la última versión válida, contexto con proveedores y órdenes; `Ficha` con `orden_compra` e `id_tributaria` | OC1.5, OC1.6, OC2.1 | 0,75 h | **Hecho** (lista permitida desde `proveedores.yaml`; órdenes y campos de la ficha en el contexto) |
 | OT3 | `engine/revisiones/orden_compra.py` y su lugar en `REVISIONES`; ajustar `frenar.acuerdo` para OC4.1 | OC4 | 1,5 h | **Hecho** |
 | OT4 | Estado de la OC desde el acta y `orden_compra` en el payload de `DECISION` y en `facturas.csv` | OC5 | 0,75 h | **Parcial:** el estado «facturada» sale del acta (`contexto_desde_acta`); falta la columna en `facturas.csv` (el payload ya la lleva dentro de `ficha`) |
-| OT5 | Agente de entrada: leer y comparar número de OC e identificación tributaria; modo demo con las facturas nuevas | OC3 | 1 h | Pendiente |
+| OT5 | Agente de entrada: leer y comparar número de OC e identificación tributaria; modo demo con las facturas nuevas | OC3 | 1 h | **Hecho** (EA2.5 y EA3.9; 3 muestras con OC en el Panel 1 y una obligación nueva en el calendario; ver «OT5» en `design.md`) |
 | OT6 | Casos de OC7.1 en `casos.yaml`, estrategia de Hypothesis y `tests/test_ordenes_compra.py` | OC7, OC8 | 1 h | **Hecho** con órdenes sintéticas |
 | OT7 | Página «Órdenes de compra», OC en el detalle de la factura y 3 facturas de ejemplo con OC en el Panel 1 | OC6 | 1 h | Pendiente |
 
@@ -27,7 +27,7 @@ Antes de seguir con las órdenes reales, el equipo confirma **OCD1, OCD12 y OCD1
 |---|---|---|
 | OC1 | OT1 | `tests/test_proveedores.py` |
 | OC2 | OT1, OT2 | `tests/test_ordenes_compra.py` |
-| OC3 | OT5 | `tests/test_agente_entrada.py` |
+| OC3 | OT5 | `tests/test_oc_entrada.py` |
 | OC4 | OT3 | `tests/test_ordenes_compra.py`, `casos.yaml` |
 | OC5 | OT4 | `tests/test_ordenes_compra.py` |
 | OC6 | OT7 | `tests/test_paneles.py` (AppTest) |

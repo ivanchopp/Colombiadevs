@@ -124,3 +124,12 @@ Cada beneficiario de ejemplo pasó a un proveedor válido con el mismo papel en 
 - **Estado «facturada»:** `contexto_desde_acta` lo calcula con las facturas en estado `PAGADA` o `PENDIENTE` cuyo `ficha.orden_compra` coincide (OC5.2). No hay estado guardado aparte.
 - **Datos:** `data/ordenes_compra.yaml` es **sintético**, usa proveedores del listado de **válidos** (por eso OCD13 no le afecta) y está marcado como tal. Se valida al cargar (OC2.2): número repetido, proveedor inexistente o cuentas que no cuadran lo rechazan. Si el archivo falla, el registro queda vacío y toda OC citada da «inexistente» (senior): falla seguro (OC1.5).
 - **Fuera de esta versión:** lectura de la OC por el agente de entrada (OT5), página de órdenes (OT7), columna en `facturas.csv` y el importador del `.xlsx`.
+
+## OT5: el agente de entrada lee la OC (17 oct)
+
+- **Lectura con IA (OC3.1):** `ESQUEMA` suma `orden_compra` e `id_tributaria` (con `null` si no aparecen). No entran en `dudosos`. La instrucción de sistema pide copiarlos tal cual y no estimarlos. El agente sigue sin recibir órdenes ni proveedores (OC3.3, EA2.4).
+- **Segunda lectura (OC3.2):** `RE_OC` y `RE_ID_TRIB` en `agents/segunda_lectura.py`. `comparar` suma los dos campos solo si alguna de las lecturas los vio; la IA que «inventa» una OC que el texto no trae da `no_coincide`.
+- **Ficha:** `construir_ficha` copia `orden_compra` e `id_tributaria` de la lectura original (`origen_campos` no los marca: vienen de la factura).
+- **El agente no pregunta por la OC.** No hay turno de chat para ella, así que el origen `aclarado` de OC3.4 no se produce; OC4.10 queda cubierta por construcción, porque cualquier OC inexistente, ajena o que no cuadra ya escala o frena en OC4.
+- **Muestras (OC6.4, parte):** `oc_cuadra` (PO-2026-001, paga sola), `oc_monto` (PO-2026-010, +15 %, se frena) y `oc_nit` (PO-2026-005, NIT distinto, senior). Para que la primera se pague sola, `calendario.csv` suma la obligación `O9` (Agroindustrias del Huila, 290 USD, 15 oct): una OC que cuadra **no** reemplaza el calendario (OC4.9).
+- **Sin IA** (modo demo) las tres se leen con patrones, la lectura queda dudosa y se escalan.

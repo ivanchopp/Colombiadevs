@@ -1,0 +1,52 @@
+{
+  "id": "VER-0033",
+  "fecha": "2026-10-17T20:10:53-05:00",
+  "cambio": "OT5: el agente de entrada lee el número de orden de compra y el NIT (IA, patrones y segunda lectura), 3 muestras con OC, obligación O9 en el calendario y arreglo del monto absurdo (1E100) en el motor",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "agents/lectura_ia.py",
+    "agents/segunda_lectura.py",
+    "agents/flujo.py",
+    "agents/ejemplos.py",
+    "data/facturas_ejemplo/oc_cuadra.txt",
+    "data/facturas_ejemplo/oc_monto.txt",
+    "data/facturas_ejemplo/oc_nit.txt",
+    "data/calendario.csv",
+    "data/casos.yaml",
+    "engine/evaluar.py",
+    "tests/test_oc_entrada.py",
+    "tests/test_motor.py",
+    "tests/test_agente_entrada.py",
+    "specs/extraccion-y-agente-de-entrada/requirements.md",
+    "specs/ordenes-de-compra/design.md",
+    "specs/ordenes-de-compra/tasks.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "specs/ordenes-de-compra/design.md",
+      "problema": "La spec de OT5 se escribió después del código en la misma sesión (la regla pide spec primero); el contenido describe lo construido y las pruebas lo cubren",
+      "correccion": "Escribir la spec antes en los próximos cambios"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "engine/evaluar.py:88",
+      "problema": "Se corrigió de paso un fallo previo de main: un monto absurdo (1E100) lanzaba InvalidOperation en el motor; ahora escala (R1.3). Lo encontró la prueba de propiedades",
+      "correccion": "Ninguna"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "data/ordenes_compra.yaml:1",
+      "problema": "Las órdenes siguen siendo sintéticas (OCD13); el agente no pregunta por la OC en el chat, así que OC3.4 no se produce",
+      "correccion": "Importar las órdenes reales cuando existan"
+    }
+  ],
+  "comprobaciones": "python3 -m pytest -q: 298 pasan; python3 eval.py: 29/29, 0 pagos indebidos; 3 mutaciones de OT5 detectadas (ficha sin OC, comparación desactivada, patrón de OC numérica); prueba de que el agente no recibe órdenes ni proveedores; sin claves ni datos reales en el diff",
+  "rama": "claude/friendly-cerf-aygx2r",
+  "commit": "60dbd119b9b51a2f507f1bdf0973af500d7c605c",
+  "reemplaza": null
+}

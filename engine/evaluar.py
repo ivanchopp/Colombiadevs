@@ -86,7 +86,7 @@ def evaluar(ficha, ctx, reglas) -> Resultado:
 
     try:
         base, tasa = a_base(f.monto, f.moneda, ctx)
-    except NoEvaluable:
+    except (NoEvaluable, ArithmeticError):                               # un monto absurdo (1E100) no rompe el motor
         base = tasa = None
     try:
         o = calendario.emparejar(f, ctx, reglas)
