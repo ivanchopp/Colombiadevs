@@ -12,7 +12,7 @@ from engine.contexto import contexto_desde_acta
 from engine.guardarrail import registrar_decision
 from engine.reglas_io import cargar_contexto_base, cargar_reglas, hoy_bogota, reglas_de_sala
 
-from . import aclaraciones, archivo, ejemplos, lectura_ia, segunda_lectura
+from . import aclaraciones, archivo, ejemplos, id_tributaria, lectura_ia, segunda_lectura, xml_factura
 from .estado import EstadoEntrada
 from .seguridad import detectar_orden
 
@@ -41,7 +41,12 @@ def _agregar(chat, rol, texto):
 
 
 def _leer(tipo, datos, texto, clave_ejemplo, cliente):
-    """(campos, modo). modo: ia | guardada | regex. Ante cualquier falla, regex y dudosa (EA8)."""
+    """(campos, modo). modo: xml | ia | guardada | regex. Ante cualquier falla, regex y dudosa (EA8)."""
+    if tipo == "xml":                                    # lectura estructural, sin IA (EA10.2)
+        try:
+            return xml_factura.leer(datos), "xml"
+        except xml_factura.XmlInvalido as e:
+            raise EntradaRechazada(str(e)) from e
     if cliente is not None or lectura_ia.hay_clave():
         try:
             return lectura_ia.leer_con_ia(tipo, datos, texto, cliente), "ia"
@@ -75,6 +80,14 @@ def recibir(almacen, sala_id, nombre, datos, cliente=None, clave_ejemplo=None) -
         raise EntradaRechazada(str(e)) from e
     texto = archivo.extraer_texto(tipo, datos)
     campos, modo = _leer(tipo, datos, texto, clave_ejemplo, cliente)
+    if modo != "xml":                                    # EA10.7: el primer NIT con dígito del texto
+        nit = id_tributaria.primer_nit(texto)
+        if nit:
+            campos["id_tributaria"] = f"{nit[0]}-{nit[1]}"
+            campos["nit_dv"] = "correcto" if nit[2] else "incorrecto"
+    if campos.get("nit_dv") == "incorrecto" or campos.get("cufe") == "falta":
+        log.warning("Factura con identificación dudosa (NIT %s, CUFE %s): la lectura queda dudosa y se escala.",
+                    campos.get("nit_dv") or "sin dato", campos.get("cufe") or "sin dato")
 
     if texto is None:
         segunda, difieren = "no_disponible", []                     # EA3.3
@@ -129,7 +142,8 @@ def responder(almacen, sala_id, factura_id, mensaje: str) -> dict:
 def construir_ficha(e: dict, sala_id: str, factura_id: str, hoy) -> dict:
     """Ficha con código. Lo aclarado va aparte y solo rellena lo que faltaba en el original (EA6.1)."""
     L, aclarados = e["lectura"], e["aclarados"]
-    ia_dudosa = e["modo"] in ("regex",) or bool(L["dudosos"])
+    ia_dudosa = (e["modo"] in ("regex",) or bool(L["dudosos"])
+                 or L.get("nit_dv") == "incorrecto" or L.get("cufe") == "falta")      # EA10.5, EA10.6
     valores, origen = {}, {}
     for c in ("beneficiario", "numero", "monto", "moneda", "vence"):
         if L.get(c) in (None, ""):

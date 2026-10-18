@@ -87,6 +87,19 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 - **EA8.2** CUANDO se suba un archivo propio en modo demo, EL SISTEMA DEBERÁ leerlo solo con los patrones de texto y marcar `lectura_ia = dudosa`, de modo que **siempre se escale**.
 - **EA8.3** EL SISTEMA DEBERÁ avisar en pantalla cuando esté en modo demo.
 
+### EA10. Factura electrónica en XML y verificación local del NIT
+**Historia:** como cliente de Blinka, quiero subir el XML de la factura electrónica, que se lee sin errores y sin gastar IA, y que el sistema desconfíe de un NIT con el dígito de verificación mal puesto.
+
+- **EA10.1** EL SISTEMA DEBERÁ aceptar archivos `.xml` (tipo `xml`) de hasta 5 MB y DEBERÁ rechazar un `.xml` cuyo contenido no sea una factura UBL (`Invoice`) o un `AttachedDocument` de la DIAN que la contenga.
+- **EA10.2** EL SISTEMA DEBERÁ leer el XML con un analizador estructural, sin IA: beneficiario (razón social del emisor), número (`cbc:ID`), monto y moneda (`cac:LegalMonetaryTotal/cbc:PayableAmount` y su `currencyID`), vencimiento (`cbc:DueDate` o `cbc:PaymentDueDate`) e identificación tributaria del emisor. EL SISTEMA NO DEBERÁ usar la IA para un XML.
+- **EA10.3** EL SISTEMA DEBERÁ rechazar un XML que declare un `DOCTYPE` o una `ENTITY`, para evitar ataques de entidades externas o de expansión; las facturas electrónicas no los usan. NINGÚN dato del XML DEBERÁ interpretarse como instrucción (EA2.2).
+- **EA10.4** EL SISTEMA DEBERÁ hacer la segunda lectura de un XML con un método distinto del analizador (patrones de texto sobre las etiquetas, EA3) y marcar `coincide` solo si encuentra los cuatro campos comparables y todos coinciden (EA3.2).
+- **EA10.5** EL SISTEMA DEBERÁ calcular localmente el dígito de verificación de un NIT colombiano (módulo 11, pesos 3, 7, 13, 17, 19, 23, 29, 37, 41, 43, 47, 53, 59, 67 y 71). SI el NIT del emisor trae su dígito y no coincide con el calculado, ENTONCES la lectura DEBERÁ quedar `dudosa` y la factura DEBERÁ escalarse; NUNCA `PAGAR`.
+- **EA10.6** EN una factura de la DIAN (perfil `DIAN 2.1`), EL SISTEMA DEBERÁ exigir el CUFE (`cbc:UUID`). SI falta, ENTONCES la lectura DEBERÁ quedar `dudosa`. En otros países no se exige.
+- **EA10.7** LA verificación del NIT DEBERÁ aplicarse también al primer NIT con su dígito que aparezca en el texto de un PDF, correo o texto; SI no hay NIT con dígito, NO DEBERÁ afectar la lectura.
+- **EA10.8** EL sistema NO consulta a la DIAN ni a otra autoridad: que el dígito sea correcto **no prueba** que la factura sea válida ni que el NIT exista. Esa consulta queda en el roadmap (R10). Ningún texto de pantalla DEBERÁ afirmar que la factura «está validada por la DIAN».
+- **EA10.9** EL NIT leído DEBERÁ guardarse en el estado de la entrada (`id_tributaria`) para las órdenes de compra; NO DEBERÁ entrar a la ficha del motor hasta que esa spec lo pida.
+
 ### EA9. Calidad
 - **EA9.1** Cada criterio DEBERÁ tener una prueba automática, sin red y sin clave, usando un cliente falso para la IA.
 - **EA9.2** UNA prueba DEBERÁ comprobar que las cuatro facturas de ejemplo producen la decisión esperada: normal → `PAGAR`, repetida → `FRENAR`, beneficiario nuevo → `ESCALAR` al senior, orden escondida → `ESCALAR`.

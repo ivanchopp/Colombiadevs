@@ -4,7 +4,7 @@ import io
 from email import policy
 
 TAMANO_MAX = 5 * 1024 * 1024
-EXTENSIONES = {"pdf": "pdf", "jpg": "imagen", "jpeg": "imagen", "png": "imagen", "eml": "eml", "txt": "txt"}
+EXTENSIONES = {"pdf": "pdf", "jpg": "imagen", "jpeg": "imagen", "png": "imagen", "eml": "eml", "txt": "txt", "xml": "xml"}
 
 
 class ArchivoRechazado(Exception):
@@ -23,19 +23,21 @@ def detectar_tipo(datos: bytes) -> str | None:
         return None
     if "\x00" in texto:
         return None
-    primeras = texto.lstrip()[:2000].lower()
+    primeras = texto.lstrip("\ufeff \t\r\n")[:2000].lower()
+    if primeras.startswith("<?xml") or primeras.startswith("<invoice") or primeras.startswith("<attacheddocument"):
+        return "xml"
     return "eml" if ("\nsubject:" in "\n" + primeras and "\nfrom:" in "\n" + primeras) else "txt"
 
 
 def validar(nombre: str, datos: bytes) -> str:
-    """Devuelve el tipo (pdf, imagen, eml, txt) o lanza ArchivoRechazado."""
+    """Devuelve el tipo (pdf, imagen, eml, txt, xml) o lanza ArchivoRechazado."""
     if not datos:
         raise ArchivoRechazado("El archivo está vacío.")
     if len(datos) > TAMANO_MAX:
         raise ArchivoRechazado("El archivo supera 5 MB.")
     ext = nombre.rsplit(".", 1)[-1].lower() if "." in nombre else ""
     if ext not in EXTENSIONES:
-        raise ArchivoRechazado("Solo se aceptan PDF, JPG, PNG, EML o TXT.")
+        raise ArchivoRechazado("Solo se aceptan PDF, JPG, PNG, EML, TXT o XML.")
     real = detectar_tipo(datos)
     if real is None:
         raise ArchivoRechazado("No reconozco el contenido del archivo.")

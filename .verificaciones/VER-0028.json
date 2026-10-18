@@ -1,0 +1,45 @@
+{
+  "id": "VER-0028",
+  "fecha": "2026-10-17T19:20:04-05:00",
+  "cambio": "R5: factura electronica en XML (UBL/DIAN) leida sin IA, segunda lectura por patrones, digito de verificacion del NIT en local y CUFE; spec EA10, 29 pruebas, README y AVANCES",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "agents/xml_factura.py",
+    "agents/id_tributaria.py",
+    "agents/archivo.py",
+    "agents/flujo.py",
+    "agents/segunda_lectura.py",
+    "app/Panel_1_Proveedor.py",
+    "tests/test_xml_factura.py",
+    "specs/extraccion-y-agente-de-entrada",
+    "README.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "agents/id_tributaria.py",
+      "problema": "El digito de verificacion solo prueba que el NIT esta bien formado; no consulta a la DIAN ni prueba que la factura sea valida (R10). El XML de prueba es ficticio y no se probo con un XML real de la DIAN",
+      "correccion": "Probar con un XML real y planear R10"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "agents/flujo.py",
+      "problema": "Una factura con NIT dudoso o sin CUFE queda escalada sin que finanzas vea el motivo en pantalla (la ficha es cerrada); el motivo solo sale en los Logs",
+      "correccion": "Mostrar el motivo cuando entre el NIT a la ficha (R3)"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "agents/xml_factura.py",
+      "problema": "Se rechaza todo XML con DOCTYPE o ENTITY antes de analizarlo, y un XML nunca usa la IA; ninguna senal nueva afloja una regla, solo puede volver la lectura dudosa",
+      "correccion": ""
+    }
+  ],
+  "comprobaciones": "pytest: 269 passed (29 nuevas); python3 eval.py: 20/20 y 0 pagos indebidos; 5 mutaciones detectadas (sin NIT ni CUFE, sin NIT, sin guarda DOCTYPE, digito mal calculado, sin NIT en texto); el NIT 900609782-1 de la factura real sale correcto y los 4 NIT conocidos coinciden; el panel acepta xml (probado con AppTest); sin secretos ni datos reales en el diff",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "446684f49693c347d75ef81668f552651cdd4aa1",
+  "reemplaza": null
+}

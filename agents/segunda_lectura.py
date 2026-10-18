@@ -21,6 +21,38 @@ RE_NUMERO_DOC = re.compile(r"n(?:ro|[uú]mero|[°º])?\.?\s*(?:de\s+)?(?:doc(?:u
 RE_NUMERO = re.compile(r"(?:factura|invoice)\s*(?:n[°ºo.]*|no\.?|#|num(?:ero)?)?\s*[:\-]?\s*(?P<n>(?=[A-Z0-9\-]*\d)[A-Z0-9][A-Z0-9\-]{2,24})", re.I)
 
 
+# XML de factura electrónica (EA10.4): otro método que el analizador, patrones sobre las etiquetas.
+_P = r"(?:[\w.-]+:)?"
+RE_XML_MONTO = re.compile(rf"<{_P}PayableAmount\b[^>]*\bcurrencyID=[\"'](?P<c>[A-Za-z]{{3}})[\"'][^>]*>\s*(?P<m>[\d.,]+)\s*<", re.I)
+RE_XML_MONTO_INV = re.compile(rf"<{_P}PayableAmount\b[^>]*>\s*(?P<m>[\d.,]+)\s*<", re.I)
+RE_XML_EMISOR = re.compile(rf"<{_P}AccountingSupplierParty\b.*?</{_P}AccountingSupplierParty>", re.I | re.S)
+RE_XML_NOMBRE = re.compile(rf"<{_P}RegistrationName\b[^>]*>\s*(?:<!\[CDATA\[)?\s*(?P<b>[^<\]]+?)\s*(?:\]\]>)?\s*<", re.I)
+RE_XML_VENCE = re.compile(rf"<{_P}(?:DueDate|PaymentDueDate)\b[^>]*>\s*(?P<f>\d{{4}}-\d{{2}}-\d{{2}})\s*<", re.I)
+RE_XML_ID = re.compile(rf"<{_P}Invoice\b.*?<{_P}ID\b[^>]*>\s*(?P<n>[^<\s]+)\s*<", re.I | re.S)
+
+
+def es_xml(texto: str | None) -> bool:
+    return bool(texto) and texto.lstrip("\ufeff \t\r\n").startswith("<")
+
+
+def leer_xml(texto: str) -> dict:
+    r = {"beneficiario": None, "numero": None, "monto": None, "moneda": None, "vence": None}
+    m = RE_XML_MONTO.search(texto)
+    if m and parsear_monto(m.group("m")) is not None:
+        r["monto"], r["moneda"] = parsear_monto(m.group("m")), m.group("c").upper()
+    emisor = RE_XML_EMISOR.search(texto)
+    b = RE_XML_NOMBRE.search(emisor.group(0)) if emisor else None
+    if b:
+        r["beneficiario"] = b.group("b").strip()
+    f = RE_XML_VENCE.search(texto)
+    if f:
+        r["vence"] = parsear_fecha(f.group("f"))
+    n = RE_XML_ID.search(texto)
+    if n:
+        r["numero"] = n.group("n").upper()
+    return r
+
+
 def parsear_monto(texto: str) -> Decimal | None:
     t = texto.strip().rstrip(".,")
     if not t or not re.fullmatch(NUM, t):
@@ -60,6 +92,8 @@ def leer(texto: str | None) -> dict:
     r = {"beneficiario": None, "numero": None, "monto": None, "moneda": None, "vence": None}
     if not texto:
         return r
+    if es_xml(texto):
+        return leer_xml(texto)
     for patron in RE_MONTO:
         m = patron.search(texto)
         if m and parsear_monto(m.group("m")) is not None:
