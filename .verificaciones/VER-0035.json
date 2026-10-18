@@ -1,38 +1,22 @@
 {
   "id": "VER-0035",
-  "fecha": "2026-10-17T20:23:13-05:00",
-  "cambio": "OT7: página Órdenes de compra en el Panel 2, orden citada en el detalle de la factura, funciones de apoyo y 12 pruebas; spec PP9 y PT13",
+  "fecha": "2026-10-17T19:11:58-05:00",
+  "cambio": "AVANCES.md al dia tras fusionar el PR 14: cabecera main 8510675, hash de R4, no probado (R1 y R4 en navegador y Railway), proximas tareas y fila de registro; sin codigo",
   "veredicto": "APROBADO",
   "archivos": [
-    "app/apoyo.py",
-    "app/pages/6_Ordenes_de_compra.py",
-    "app/pages/1_Tablero.py",
-    "tests/test_ordenes_paneles.py",
-    "specs/paneles-y-despliegue/requirements.md",
-    "specs/paneles-y-despliegue/design.md",
-    "specs/paneles-y-despliegue/tasks.md",
-    "specs/ordenes-de-compra/tasks.md",
-    "README.md",
     "AVANCES.md"
   ],
   "hallazgos": [
     {
       "severidad": "NOTA",
       "categoria": "convenciones",
-      "ubicacion": "app/pages/6_Ordenes_de_compra.py:1",
-      "problema": "El menú lateral de Streamlit muestra «Ordenes de compra» sin tilde (sale del nombre del archivo), igual que P12",
-      "correccion": "Opcional: st.navigation"
-    },
-    {
-      "severidad": "NOTA",
-      "categoria": "alcance",
-      "ubicacion": "data/ordenes_compra.yaml:1",
-      "problema": "La página muestra las órdenes sintéticas (OCD13) y lo dice en pantalla («de ejemplo, supuesto»); falta la columna orden_compra en facturas.csv",
-      "correccion": "Hacerlo cuando lleguen las órdenes reales"
+      "ubicacion": "AVANCES.md",
+      "problema": "La hora de la ultima actualizacion sale del reloj de la sesion (19:15 Bogota); las horas de filas anteriores del registro fueron aproximadas",
+      "correccion": "Ninguna"
     }
   ],
-  "comprobaciones": "python3 -m pytest -q: 310 pasan; python3 eval.py: 29/29, 0 pagos indebidos; 3 mutaciones de la página y el apoyo detectadas; spec escrita antes del código; las pantallas no calculan dinero ni decisiones (solo leen ctx y el acta); el Panel 1 no muestra órdenes (prueba); texto de proveedores y artículos en tabla de texto plano",
-  "rama": "claude/friendly-cerf-aygx2r",
-  "commit": "865bed0aec605b3ba2930908c1f5162e1a6cbe38",
+  "comprobaciones": "git diff revisado; solo AVANCES.md; pytest 240 passed y eval 20/20 sobre 8510675; hashes y numeros de VER contrastados con git log y .verificaciones; sin codigo",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "8510675a965f53db6086429d5f4b5246f0cffe97",
   "reemplaza": null
 }

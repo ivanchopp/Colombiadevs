@@ -116,5 +116,5 @@ def test_pp8_1_pagina_pide_rol_y_luego_muestra_reglas(entorno):
     at.number_input(key="regla_autopago_max").set_value(1_000).run()           # aflojar (autopago de 750 a 1.000 USD)
     assert any("afloja" in w.value for w in at.warning)
     at.text_area(key="motivo_reglas").set_value("subir").run()
-    at.button[0].click().run()
+    next(b for b in at.button if b.label == "Confirmar cambio").click().run()
     assert any("senior" in e.value for e in at.error)

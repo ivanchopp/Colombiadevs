@@ -1,0 +1,23 @@
+{
+  "id": "VER-0038",
+  "fecha": "2026-10-17T20:13:52-05:00",
+  "cambio": "Spec del agente de reglas: la IA decide la ambiguedad y el codigo solo valida (AR2.4, AR2.7), comprobacion de coherencia por codigo de la propuesta contra el pedido (AR2.8, AR3.5, AR8.5); diseno, tareas y AVANCES; sin codigo",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "specs/agente-de-reglas",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "specs/agente-de-reglas/requirements.md",
+      "problema": "La comprobacion de coherencia (AR2.8) usa un vocabulario fijo y una lectura de numeros por codigo: puede dar falsas alarmas o dejar pasar un caso raro; por eso solo marca como dudosa y exige una marca de revision, no rechaza",
+      "correccion": "Calibrar con la tabla de pedidos de AR8.5 al programarla"
+    }
+  ],
+  "comprobaciones": "git diff revisado; solo documentacion; pytest 269 passed sin cambios; numeracion AR2.4 a AR2.8, AR3.1 a AR3.5 y AR8.5 revisada; tareas y horas (8 h, minima 5 h) alineadas con la spec y AVANCES; la IA sigue sin decidir ni aplicar: la persona confirma",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "f06d5c0c06038507f290d1c30a92a5d01cc827a1",
+  "reemplaza": null
+}

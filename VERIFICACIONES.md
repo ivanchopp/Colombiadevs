@@ -4,8 +4,16 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
-| VER-0036 | 2026-10-17 20:27 | APROBADO | Fusión de main (06e1178, quita menciones a un cargo de Blinka) en la rama de OT7 antes del PR; la verificación de OT7 pasa de VER-0034 a VER-0035 | 0 | 0 | 95178c6 | — |
-| VER-0035 | 2026-10-17 20:23 | APROBADO | OT7: página Órdenes de compra en el Panel 2, orden citada en el detalle de la factura, funciones de apoyo y 12 pruebas; spec PP9 y PT13 | 0 | 0 | 865bed0 | — |
+| VER-0044 | 2026-10-17 20:56 | APROBADO | Fusión de main (PR #22: R5 XML y R7 reglas en lenguaje natural) en la rama de OT7: conserva ambos cambios de app/apoyo.py y renumera las verificaciones de la rama a VER-0042 y VER-0043 | 0 | 0 | bda2db1 | — |
+| VER-0043 | 2026-10-17 20:27 | APROBADO | Fusión de main (06e1178, quita menciones a un cargo de Blinka) en la rama de OT7 antes del PR; la verificación de OT7 pasa de VER-0034 a VER-0035 | 0 | 0 | 95178c6 | — |
+| VER-0042 | 2026-10-17 20:23 | APROBADO | OT7: página Órdenes de compra en el Panel 2, orden citada en el detalle de la factura, funciones de apoyo y 12 pruebas; spec PP9 y PT13 | 0 | 0 | 865bed0 | — |
+| VER-0041 | 2026-10-17 20:53 | APROBADO | Se quita el nombre de una persona de AVANCES y de la guía en PDF | 0 | 0 | 9698a63 | — |
+| VER-0040 | 2026-10-17 20:33 | APROBADO | Fusion de main (R2, R3, OT5, PR 18 y 20) en la rama de R5 y R7: segunda lectura del XML ahora tambien compara orden de compra y NIT, XML lee OrderReference, VER renumerados 0035-0039, AVANCES reconciliado | 0 | 1 | cb5d2cb | — |
+| VER-0039 | 2026-10-17 20:25 | APROBADO | R7 version minima sin IA: agente de reglas en lenguaje natural (ART1-ART4): agents/reglas_texto.py, caja de texto en la pagina Reglas que solo rellena el formulario, comprobacion de coherencia, origen y pedido en CAMBIO_REGLA; 55 pruebas | 0 | 1 | a1e21e7 | — |
+| VER-0038 | 2026-10-17 20:13 | APROBADO | Spec del agente de reglas: la IA decide la ambiguedad y el codigo solo valida (AR2.4, AR2.7), comprobacion de coherencia por codigo de la propuesta contra el pedido (AR2.8, AR3.5, AR8.5); diseno, tareas y AVANCES; sin codigo | 0 | 1 | f06d5c0 | — |
+| VER-0037 | 2026-10-17 20:02 | APROBADO | Spec del agente de reglas en lenguaje natural (R7): requisitos AR1-AR8, diseño, tareas ART1-ART6; AVANCES y specs/README; sin codigo | 0 | 1 | 5632263 | — |
+| VER-0036 | 2026-10-17 19:20 | APROBADO | R5: factura electronica en XML (UBL/DIAN) leida sin IA, segunda lectura por patrones, digito de verificacion del NIT en local y CUFE; spec EA10, 29 pruebas, README y AVANCES | 0 | 1 | 446684f | — |
+| VER-0035 | 2026-10-17 19:11 | APROBADO | AVANCES.md al dia tras fusionar el PR 14: cabecera main 8510675, hash de R4, no probado (R1 y R4 en navegador y Railway), proximas tareas y fila de registro; sin codigo | 0 | 0 | 8510675 | — |
 | VER-0034 | 2026-10-17 20:23 | APROBADO | Se quitan las menciones a un cargo de Blinka (AVANCES, spec archivo-de-salida, historial de verificaciones) | 0 | 0 | 865bed0 | — |
 | VER-0033 | 2026-10-17 20:10 | APROBADO | OT5: el agente de entrada lee el número de orden de compra y el NIT (IA, patrones y segunda lectura), 3 muestras con OC, obligación O9 en el calendario y arreglo del monto absurdo (1E100) en el motor | 0 | 1 | 60dbd11 | — |
 | VER-0032 | 2026-10-17 20:01 | APROBADO | Fusión de main (PR #18, documentación) en la rama de R2 y R3 antes de abrir el PR: conserva VER-0027 de main y renumera las verificaciones de la rama a VER-0028 a VER-0031 | 0 | 0 | 6ec6a2a | — |
@@ -41,14 +49,47 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
 
-## VER-0036 — APROBADO
+## VER-0044 — APROBADO
+
+- **NOTA** (convenciones) `.verificaciones/VER-0042.json:2`: Los IDs VER-0035 y VER-0036 los ocuparon verificaciones de R5 y R7 en main; se conservaron los de main y las de OT7 pasaron a VER-0042 y VER-0043 → Ninguna
+
+## VER-0043 — APROBADO
 
 - **NOTA** (convenciones) `.verificaciones/VER-0035.json:2`: El ID VER-0034 lo ocupó otra sesión en main; se conservó el de main y la verificación de OT7 se renumeró a VER-0035 → Ninguna
 
-## VER-0035 — APROBADO
+## VER-0042 — APROBADO
 
 - **NOTA** (convenciones) `app/pages/6_Ordenes_de_compra.py:1`: El menú lateral de Streamlit muestra «Ordenes de compra» sin tilde (sale del nombre del archivo), igual que P12 → Opcional: st.navigation
 - **NOTA** (alcance) `data/ordenes_compra.yaml:1`: La página muestra las órdenes sintéticas (OCD13) y lo dice en pantalla («de ejemplo, supuesto»); falta la columna orden_compra en facturas.csv → Hacerlo cuando lleguen las órdenes reales
+
+## VER-0040 — APROBADO
+
+- **ADVERTENCIA** (alcance) `agents/xml_factura.py`: El lector de XML solo entiende UBL (DIAN y otros paises); los 4 XML de ejemplo del equipo son CFDI 4.0 de Mexico y se rechazan con No es una factura UBL (AVANCES P33) → Decidir si se agrega el CFDI
+- **NOTA** (errores) `agents/segunda_lectura.py`: Main agrego que la orden de compra y el NIT cuenten en la segunda lectura; el XML ahora los lee con ambos metodos para que coincidan, y flujo.py no pisa el NIT que ya leyo la IA o los patrones
+
+## VER-0039 — APROBADO
+
+- **ADVERTENCIA** (alcance) `agents/reglas_texto.py`: Solo el lector por patrones: entiende frases simples y todo lo demas es no entendido. La IA (ART5), el tope por sala, la degradacion y el cliente falso de IA no estan; el vocabulario fijo de la comprobacion de coherencia puede dar falsas alarmas → Hacer ART5 y calibrar con pedidos reales
+- **NOTA** (seguridad) `app/pages/5_Reglas.py`: El texto no tiene camino propio hacia las reglas: solo rellena el formulario, y validar_cambio, el techo duro, la firma del senior, el motivo y el acta son los de siempre; una propuesta dudosa exige la marca de revision; si la persona edita la cifra despues, el origen vuelve a formulario
+
+## VER-0038 — APROBADO
+
+- **ADVERTENCIA** (alcance) `specs/agente-de-reglas/requirements.md`: La comprobacion de coherencia (AR2.8) usa un vocabulario fijo y una lectura de numeros por codigo: puede dar falsas alarmas o dejar pasar un caso raro; por eso solo marca como dudosa y exige una marca de revision, no rechaza → Calibrar con la tabla de pedidos de AR8.5 al programarla
+
+## VER-0037 — APROBADO
+
+- **ADVERTENCIA** (alcance) `specs/agente-de-reglas/requirements.md`: Seis decisiones abiertas (AR-D1 a AR-D6) con propuesta por defecto; el agente no esta programado y se calcula en unas 7 horas (4,5 h la version minima sin IA) → El equipo confirma las decisiones antes de programar
+- **NOTA** (seguridad) `specs/agente-de-reglas/design.md`: El agente no tiene camino propio hacia las reglas: solo rellena el formulario existente, asi que validar_cambio, el techo duro, la firma del senior y el motivo se cumplen por construccion; la IA no recibe valores vigentes ni datos de la empresa
+
+## VER-0036 — APROBADO
+
+- **ADVERTENCIA** (alcance) `agents/id_tributaria.py`: El digito de verificacion solo prueba que el NIT esta bien formado; no consulta a la DIAN ni prueba que la factura sea valida (R10). El XML de prueba es ficticio y no se probo con un XML real de la DIAN → Probar con un XML real y planear R10
+- **NOTA** (errores) `agents/flujo.py`: Una factura con NIT dudoso o sin CUFE queda escalada sin que finanzas vea el motivo en pantalla (la ficha es cerrada); el motivo solo sale en los Logs → Mostrar el motivo cuando entre el NIT a la ficha (R3)
+- **NOTA** (seguridad) `agents/xml_factura.py`: Se rechaza todo XML con DOCTYPE o ENTITY antes de analizarlo, y un XML nunca usa la IA; ninguna senal nueva afloja una regla, solo puede volver la lectura dudosa
+
+## VER-0035 — APROBADO
+
+- **NOTA** (convenciones) `AVANCES.md`: La hora de la ultima actualizacion sale del reloj de la sesion (19:15 Bogota); las horas de filas anteriores del registro fueron aproximadas → Ninguna
 
 ## VER-0033 — APROBADO
 
