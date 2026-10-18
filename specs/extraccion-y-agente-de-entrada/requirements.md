@@ -104,6 +104,19 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 - **EA10.8** EL sistema NO consulta a la DIAN ni a otra autoridad: que el dígito sea correcto **no prueba** que la factura sea válida ni que el NIT exista. Esa consulta queda en el roadmap (R10). Ningún texto de pantalla DEBERÁ afirmar que la factura «está validada por la DIAN».
 - **EA10.9** EL NIT leído DEBERÁ guardarse en el estado de la entrada (`id_tributaria`) para las órdenes de compra; NO DEBERÁ entrar a la ficha del motor hasta que esa spec lo pida.
 
+### EA11. Factura electrónica de México (CFDI)
+**Historia:** como cliente de Blinka con proveedores en México, quiero subir el XML de su CFDI y que se lea igual que una factura colombiana, con las mismas desconfianzas.
+
+- **EA11.1** EL SISTEMA DEBERÁ aceptar también el XML de un `Comprobante` CFDI (versiones 3.3 y 4.0, espacios de nombres `http://www.sat.gob.mx/cfd/3` y `/4`) como factura, además de UBL (EA10.1). EL SISTEMA NO DEBERÁ usar la IA para él (EA10.2) y DEBERÁ aplicar las mismas guardas contra `DOCTYPE` y `ENTITY` (EA10.3).
+- **EA11.2** EL SISTEMA DEBERÁ aceptar solo un `Comprobante` de tipo `I` (ingreso). SI es de otro tipo (`E` egreso o nota de crédito, `P` pago, `T` traslado, `N` nómina), ENTONCES DEBERÁ rechazarlo con una explicación: una nota de crédito no es una factura por pagar.
+- **EA11.3** EL SISTEMA DEBERÁ leer del CFDI: beneficiario (`Emisor@Nombre`), número (`Serie` y `Folio`, unidos con guion, o solo `Folio`), monto (`Total`), moneda (`Moneda`) e identificación tributaria del emisor (`Emisor@Rfc`). SI falta el folio, ENTONCES el número queda sin leer y dudoso; NO DEBERÁ sustituirse por el UUID.
+- **EA11.4** UN CFDI NO trae fecha de vencimiento. EL vencimiento DEBERÁ quedar sin leer y dudoso, y EL agente DEBERÁ preguntarlo al proveedor (EA3.8). NO DEBERÁ interpretarse el texto de `CondicionesDePago`.
+- **EA11.5** SI la moneda es `XXX` (sin moneda) o no es un código de tres letras, ENTONCES la moneda DEBERÁ quedar sin leer y dudosa. NO DEBERÁ suponerse una moneda.
+- **EA11.6** EL SISTEMA DEBERÁ revisar en local el RFC del emisor: formato de persona moral (12 caracteres) o física (13) y su dígito verificador (módulo 11). SI el formato o el dígito no cuadran, o es un RFC genérico (`XAXX010101000`, `XEXX010101000`), ENTONCES la lectura DEBERÁ quedar `dudosa` y la factura DEBERÁ escalarse; NUNCA `PAGAR` (como EA10.5).
+- **EA11.7** EN un CFDI, EL SISTEMA DEBERÁ exigir el UUID del `TimbreFiscalDigital`. SI falta, ENTONCES la lectura DEBERÁ quedar `dudosa` (como EA10.6).
+- **EA11.8** LA segunda lectura DEBERÁ hacerse con patrones de texto sobre los atributos, un método distinto del analizador, y comparar los mismos campos que en EA10.4. EL RFC DEBERÁ compararse como la identificación tributaria (EA3.9).
+- **EA11.9** EL sistema NO consulta al SAT: un RFC con el dígito correcto o un UUID presente **no prueban** que la factura sea válida (roadmap R10). NO DEBERÁ revisar que la moneda corresponda al país del proveedor (AVANCES P33): una factura en MXN de un proveedor de otro país solo se convierte con la tabla de cambio.
+
 ### EA9. Calidad
 - **EA9.1** Cada criterio DEBERÁ tener una prueba automática, sin red y sin clave, usando un cliente falso para la IA.
 - **EA9.2** UNA prueba DEBERÁ comprobar que las cuatro facturas de ejemplo producen la decisión esperada: normal → `PAGAR`, repetida → `FRENAR`, beneficiario nuevo → `ESCALAR` al senior, orden escondida → `ESCALAR`.
