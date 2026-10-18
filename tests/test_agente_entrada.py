@@ -553,7 +553,7 @@ def test_ea2b_6_el_panel_muestra_el_diagnostico_solo_con_el_parametro(tmp_path, 
     monkeypatch.setenv("ACTA_DB", str(tmp_path / "p.db"))
     monkeypatch.setenv("GEMINI_API_KEY", SECRETO)
     monkeypatch.setenv("GEMINI_APY_KEY", "typo")
-    ruta = str(Path(__file__).resolve().parent.parent / "app" / "Panel_1_Proveedor.py")
+    ruta = str(Path(__file__).resolve().parent.parent / "app" / "Envía_facturas.py")
 
     def texto(at):
         return " ".join(x.value for x in at.text) + " ".join(x.value for x in at.markdown)
@@ -571,7 +571,7 @@ def test_ea2b_6_el_aviso_de_demo_explica_como_ver_el_motivo(tmp_path, monkeypatc
     from pathlib import Path
     from streamlit.testing.v1 import AppTest
     monkeypatch.setenv("ACTA_DB", str(tmp_path / "p.db"))
-    at = AppTest.from_file(str(Path(__file__).resolve().parent.parent / "app" / "Panel_1_Proveedor.py"),
+    at = AppTest.from_file(str(Path(__file__).resolve().parent.parent / "app" / "Envía_facturas.py"),
                            default_timeout=30).run()
     assert any("?diagnostico=1" in c.value for c in at.caption)
 
@@ -611,7 +611,7 @@ def test_ea1_5_el_panel_muestra_el_limite_configurado_y_el_diagnostico_lo_lista(
     from streamlit.testing.v1 import AppTest
     monkeypatch.setenv("ACTA_DB", str(tmp_path / "p.db"))
     monkeypatch.setenv("FACTURAS_MAX", "12")
-    at = AppTest.from_file(str(Path(__file__).resolve().parent.parent / "app" / "Panel_1_Proveedor.py"),
+    at = AppTest.from_file(str(Path(__file__).resolve().parent.parent / "app" / "Envía_facturas.py"),
                            default_timeout=30)
     at.query_params["diagnostico"] = "1"
     at.run()

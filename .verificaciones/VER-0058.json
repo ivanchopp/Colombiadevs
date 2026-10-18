@@ -1,0 +1,41 @@
+{
+  "id": "VER-0058",
+  "fecha": "2026-10-18T07:27:08-05:00",
+  "cambio": "Panel 1 «Envía facturas» (archivo renombrado), Panel 2 entra como persona de finanzas y recuerda el rol, punto rojo con número por rol y aviso lateral de pendientes (PP2.7, PP3.1, PP3.3 a PP3.5, PT16)",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "Dockerfile",
+    "README.md",
+    "app/Envía_facturas.py",
+    "app/apoyo.py",
+    "app/comun.py",
+    "specs/paneles-y-despliegue/requirements.md",
+    "specs/paneles-y-despliegue/tasks.md",
+    "specs/paneles-y-despliegue/design.md",
+    "tests/test_paneles_pendientes.py",
+    "tests/test_paneles.py",
+    "tests/test_ordenes_paneles.py",
+    "tests/test_reglas_pagina.py"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "errores",
+      "ubicacion": "Dockerfile:15",
+      "problema": "El arranque de Railway usa el archivo con tilde (Envía_facturas.py); se probó con el entorno vacío en local, pero no en Railway",
+      "correccion": "Tras redesplegar, confirmar que la app arranca; si falla por el nombre, volver al archivo sin tilde"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "app/comun.py:32",
+      "problema": "Los puntos rojos se calculan al cargar la página; no hay refresco automático",
+      "correccion": "Opcional: st.fragment con run_every"
+    }
+  ],
+  "comprobaciones": "git diff revisado; pytest completo: 556 pasan; Streamlit arrancado con entorno vacío y menú y punto rojo vistos en un navegador (captura); Panel 1 sin conteos (prueba); motor no tocado",
+  "rama": "claude/determined-planck-2vrgbo",
+  "commit": "6aa9552d07e688b3342bb580cf87a8f41227b93e",
+  "reemplaza": null
+}

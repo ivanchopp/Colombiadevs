@@ -104,10 +104,11 @@ def entorno(tmp_path, monkeypatch):
     monkeypatch.setenv("FECHA_DEMO", HOY.isoformat())
 
 
-def test_pp8_1_pagina_pide_rol_y_luego_muestra_reglas(entorno):
+def test_pp8_1_pagina_entra_como_persona_y_muestra_reglas(entorno):
     at = AppTest.from_file(str(RAIZ / "app/pages/5_Reglas.py"), default_timeout=30)
     at.run()
-    assert not at.exception and any("Elige un rol" in i.value for i in at.info)
+    assert not at.exception and not any("Elige un rol" in i.value for i in at.info)
+    assert at.session_state["rol"] == "PERSONA"                                # PP3.1
     at = AppTest.from_file(str(RAIZ / "app/pages/5_Reglas.py"), default_timeout=30)
     at.session_state["rol"] = "PERSONA"                                        # rol elegido antes de entrar
     at.run()

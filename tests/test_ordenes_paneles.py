@@ -115,10 +115,10 @@ def abrir(pagina, monkeypatch, almacen, sala, rol="SENIOR"):
     return at
 
 
-def test_pp9_1_la_pagina_pide_rol_y_luego_muestra_las_ordenes(monkeypatch, almacen, sala):
+def test_pp9_1_la_pagina_entra_como_persona_y_muestra_las_ordenes(monkeypatch, almacen, sala):
     sin_rol = abrir("app/pages/6_Ordenes_de_compra.py", monkeypatch, almacen, sala, rol=None)
-    assert not sin_rol.exception and any("Elige un rol" in i.value for i in sin_rol.info)
-    assert len(sin_rol.dataframe) == 0
+    assert not sin_rol.exception and not any("Elige un rol" in i.value for i in sin_rol.info)      # PP3.1
+    assert sin_rol.session_state["rol"] == "PERSONA"
     subir(almacen, sala, "oc_cuadra")
     at = abrir("app/pages/6_Ordenes_de_compra.py", monkeypatch, almacen, sala)
     assert not at.exception and len(at.dataframe) == 1
@@ -140,7 +140,7 @@ def test_pp9_3_el_detalle_del_tablero_muestra_la_orden_citada(monkeypatch, almac
 
 def test_pp9_4_el_panel_1_no_muestra_ordenes(monkeypatch, almacen, sala):
     subir(almacen, sala, "oc_cuadra")
-    at = abrir("app/Panel_1_Proveedor.py", monkeypatch, almacen, sala, rol=None)
+    at = abrir("app/Envía_facturas.py", monkeypatch, almacen, sala, rol=None)
     assert not at.exception
     visible = " ".join(x.value for x in [*at.text, *at.info, *at.caption, *at.markdown, *at.success, *at.warning])
     for prohibido in ("PO-2026", "Orden de compra", "orden de compra", "inexistente", "ya facturada", "autorizad"):

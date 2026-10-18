@@ -41,6 +41,16 @@ def cola_para_rol(facturas: dict[str, Factura], rol: str) -> list[Factura]:
             if f.estado == "PENDIENTE" and RANGO[f.decision["nivel"]] <= RANGO[rol]]
 
 
+def pendientes_por_rol(facturas: dict[str, Factura]) -> dict[str, int]:
+    """Aprobaciones pendientes que le tocan a cada rol según el nivel que exige la decisión (PP3.3).
+    No cuenta las de ficha inválida: solo se pueden rechazar (PP5.7)."""
+    cuenta = {"PERSONA": 0, "SENIOR": 0}
+    for f in facturas.values():
+        if f.estado == "PENDIENTE" and not f.decision.get("ficha_invalida") and f.decision["nivel"] in cuenta:
+            cuenta[f.decision["nivel"]] += 1
+    return cuenta
+
+
 def _nivel_insuficiente(rol, factura):
     return RANGO[rol] < RANGO[factura.decision["nivel"]]
 

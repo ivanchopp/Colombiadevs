@@ -8,10 +8,10 @@ from app.comun import almacen, barra_lateral, encabezado, obtener_sala
 
 PASOS = ["recibida", "datos confirmados", "en revisión", "resuelta"]
 
-st.set_page_config(page_title="Panel 1 · Proveedor", layout="wide")
+st.set_page_config(page_title="Envía facturas", layout="wide")
 sala = obtener_sala()
 barra_lateral(sala)
-encabezado("Panel 1 · Portal del proveedor", sala)
+encabezado("Envía facturas", sala)
 
 estados = EstadoEntrada(almacen())
 facturas = estados.listar(sala)
