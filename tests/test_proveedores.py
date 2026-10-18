@@ -12,10 +12,10 @@ PROVS = yaml.safe_load((Path(__file__).resolve().parent.parent / "data" / "prove
 
 def test_oc1_1_campos_y_cuenta_ficticia():
     p = PROVS["proveedores"]
-    assert PROVS["supuesto"] is True and len(p) == 200
+    assert PROVS["supuesto"] is True and len(p) == 156
     assert all(set(x) == {"id", "nombre", "pais", "id_tributaria", "tipo_id", "cuenta", "marcas"} for x in p)
     assert all(x["cuenta"].startswith("Cuenta demo") for x in p)
-    assert len({x["id"] for x in p}) == 200 and len({x["nombre"] for x in p}) == 200
+    assert len({x["id"] for x in p}) == 156 and len({x["nombre"] for x in p}) == 156
 
 
 def test_oc1_2_sin_datos_de_contacto():
@@ -23,9 +23,10 @@ def test_oc1_2_sin_datos_de_contacto():
     assert "@" not in texto and "+57" not in texto and "+52" not in texto
 
 
-def test_oc1_3_y_oc1_4_marcas_del_listado():
+def test_oc1_3_y_oc1_4_listado_de_validos_sin_marcas():
+    # El listado del 17 oct, 18:42, trae solo proveedores válidos: ninguna identificación repetida ni inválida.
     marcas = Counter(m for x in PROVS["proveedores"] for m in x["marcas"])
-    assert marcas == {"identificacion_repetida": 20, "identificacion_invalida": 30}
+    assert marcas == {}
 
 
 @pytest.mark.parametrize("tipo, pais, valor, esperado", [
@@ -46,3 +47,21 @@ def test_oc1_3_repetida_y_numero_leido_como_texto():
 def test_id_o_nombre_repetido_se_rechaza():
     with pytest.raises(ValueError):
         proveedores_desde_filas([(1, "A", "Perú", "1", "RUC"), (1, "B", "Perú", "2", "RUC")])
+
+
+def test_oc1_6_la_lista_permitida_del_motor_es_el_registro_de_proveedores():
+    from datetime import date
+    from engine.reglas_io import cargar_contexto_base
+    ctx = cargar_contexto_base(date(2026, 10, 17))
+    assert set(ctx.registros) == {x["nombre"] for x in PROVS["proveedores"]}
+    rimac = ctx.registros["Importadora Químicos Rímac S.A.C."]
+    assert (rimac.pais, rimac.cuenta, rimac.acuerdo_moneda) == ("PE", "Cuenta demo ···0017", "PEN")
+
+
+def test_oc1_6_acuerdo_de_un_proveedor_que_no_existe_falla():
+    from engine.reglas_io import ErrorDeReglas, registros_de_proveedores
+    provs = {"proveedores": [{"nombre": "A", "pais": "Perú", "cuenta": "c"}]}
+    with pytest.raises(ErrorDeReglas):
+        registros_de_proveedores(provs, {"B": {"monto": "1", "moneda": "PEN"}}, [])
+    with pytest.raises(ErrorDeReglas):
+        registros_de_proveedores(provs, {}, [{"beneficiario": "B"}])

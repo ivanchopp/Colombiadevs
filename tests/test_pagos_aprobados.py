@@ -79,20 +79,20 @@ def test_as2_2_monto_y_moneda_son_los_de_la_factura(almacen, sala, registros):
 
 def test_as2_4_la_cuenta_sale_del_registro(almacen, sala, registros):
     filas = {x["factura_id"]: x for x in generar(almacen, sala, registros)[0]}
-    assert filas["F-1042"]["cuenta_destino"] == registros["Pixel Norte Ltda."].cuenta
-    otro = {**registros, "Pixel Norte Ltda.": SimpleNamespace(cuenta="Banco Registro ···0001")}
+    assert filas["F-1042"]["cuenta_destino"] == registros["Tecnología Cafetera S.A.S."].cuenta
+    otro = {**registros, "Tecnología Cafetera S.A.S.": SimpleNamespace(cuenta="Banco Registro ···0001")}
     filas = {x["factura_id"]: x for x in generar(almacen, sala, otro)[0]}
     assert filas["F-1042"]["cuenta_destino"] == "Banco Registro ···0001"
 
 
 def test_as2_4_sin_cuenta_registrada_queda_fuera_y_se_avisa(almacen, sala, registros):
-    sin = {k: v for k, v in registros.items() if k != "Pixel Norte Ltda."}
+    sin = {k: v for k, v in registros.items() if k != "Tecnología Cafetera S.A.S."}
     filas, resumen, _ = generar(almacen, sala, sin)
     assert "F-1042" not in {x["factura_id"] for x in filas} and resumen.sin_cuenta == ["F-1042"]
 
 
 def test_as2_5_neutraliza_formulas(almacen, sala, registros):
-    peligroso = {**registros, "Pixel Norte Ltda.": SimpleNamespace(cuenta='=HYPERLINK("http://x","y")')}
+    peligroso = {**registros, "Tecnología Cafetera S.A.S.": SimpleNamespace(cuenta='=HYPERLINK("http://x","y")')}
     filas = {x["factura_id"]: x for x in generar(almacen, sala, peligroso)[0]}
     assert filas["F-1042"]["cuenta_destino"].startswith("'=")
 

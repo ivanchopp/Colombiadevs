@@ -53,10 +53,10 @@ El Panel 1 no tiene botones de ejemplo: el sistema lee el archivo que subes y el
 
 | Archivo | Qué debe pasar |
 |---|---|
-| Imprenta Sol · IS-2210 | Normal: se aprueba para pagar |
-| Taller Azteca · TA-0931 | Repetida: se frena (la sala nueva ya trae esa factura en el acta) |
+| Alimentos del Valle S.A.S. · IS-2210 | Normal: se aprueba para pagar |
+| Papelería Corporativa Anáhuac S.A. de C.V. · TA-0931 | Repetida: se frena (la sala nueva ya trae esa factura en el acta) |
 | Estudio Nube · EN-0077 | Beneficiario nuevo: se escala al senior |
-| Hosting Andes · HA-5531 | Trae una orden escondida en el texto: se escala a una persona |
+| Consultores Energéticos Magdalena S.A.S. · HA-5531 | Trae una orden escondida en el texto: se escala a una persona |
 
 Las fechas dependen de `FECHA_DEMO` (ver AVANCES P18).
 
@@ -76,11 +76,11 @@ La app se despliega con el `Dockerfile` y `railway.toml` de este repositorio. Pa
 5. Déjalo en **una sola réplica** (el acta usa SQLite sobre el volumen).
 6. Comprueba `https://<tu-dominio>/_stcore/health` (debe responder `ok`) y abre la app.
 
-Qué se probó y qué no: el arranque, la comprobación de salud, la persistencia en el volumen, 6 visitantes a la vez y la separación entre salas se probaron localmente con solo las dependencias de producción. **La imagen de Docker y el despliegue real no se han probado** (no hay Docker ni acceso a Railway en el entorno de desarrollo).
+Qué se probó y qué no: el arranque, la comprobación de salud, la persistencia en el volumen, 6 visitantes a la vez y la separación entre salas se probaron localmente con solo las dependencias de producción. El equipo **desplegó la app en Railway el 17 oct** (commit `014409d`) y se probó desde fuera: salud `ok`, Gemini activo y `FECHA_DEMO` definida. Falta comprobar que el acta sobrevive a un reinicio y que el despliegue corre el último `main` (ver `AVANCES.md`, P32).
 
 ## Límites conocidos
 
 - Los valores (montos, tasas, costos, límites) son de **demostración** y están marcados como «supuesto».
 - El acta usa **SQLite**. La inmutabilidad la garantizan triggers y la cadena de huellas; falta PostgreSQL con permisos de base de datos (ver `AVANCES.md`, P13).
-- La lectura con IA real (Gemini y Claude) está sin probar contra las APIs reales hasta contar con una clave (P17). Se probó con clientes falsos y construyendo los clientes de los SDK sin red.
+- La lectura con **Gemini** se probó en Railway con los textos de ejemplo; falta probarla con un PDF o una foto propios (P17). **Claude** no se ha probado contra la API real.
 - No hay inicio de sesión: el Panel 2 usa un selector de rol de demostración.

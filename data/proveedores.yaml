@@ -1,5 +1,5 @@
 # Proveedores de prueba (FICTICIOS, supuesto). Generado con data/importar_compras.py; no editar a mano.
-# Origen: Listado_Proveedores_Prueba_-_copia.xlsx. Sin dirección, teléfono ni correo (spec ordenes-de-compra, OC1.2).
+# Origen: Listado_Proveedores_Prueba_-_copia_-_copia.xlsx. Sin dirección, teléfono ni correo (spec ordenes-de-compra, OC1.2).
 # cuenta: ficticia (OCD3). marcas: identificacion_repetida / identificacion_invalida (OC1.3, OC1.4).
 supuesto: true
 proveedores:
@@ -11,1445 +11,1087 @@ proveedores:
   cuenta: Cuenta demo ···0001
   marcas: []
 - id: 2
-  nombre: Corporación Importadora del Ecuador Corp. Bl. 19
-  pais: Ecuador
-  id_tributaria: '179100019001'
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0002
-  marcas:
-  - identificacion_invalida
-- id: 3
   nombre: Floricultora Cotopaxi S.A.
   pais: Ecuador
   id_tributaria: '1396036696001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0003
+  cuenta: Cuenta demo ···0002
   marcas: []
-- id: 4
+- id: 3
   nombre: Seguridad Privada Tlaxcala S.A. de C.V.
   pais: México
   id_tributaria: SPT9710085B0
   tipo_id: RFC
-  cuenta: Cuenta demo ···0004
+  cuenta: Cuenta demo ···0003
   marcas: []
-- id: 5
+- id: 4
   nombre: Agroindustrias del Huila S.A.S.
   pais: Colombia
   id_tributaria: 999016272-1
   tipo_id: NIT
-  cuenta: Cuenta demo ···0005
+  cuenta: Cuenta demo ···0004
   marcas: []
-- id: 6
-  nombre: Consultores Agroindustrial Sinú S.A.S.
-  pais: Colombia
-  id_tributaria: FALLA-999999-X
-  tipo_id: NIT
-  cuenta: Cuenta demo ···0006
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 7
+- id: 5
   nombre: Tecnología Quiteña S.A.
   pais: Ecuador
   id_tributaria: 0191838424001
   tipo_id: RUC
-  cuenta: Cuenta demo ···0007
+  cuenta: Cuenta demo ···0005
   marcas: []
-- id: 8
+- id: 6
   nombre: Laboratorios Clínicos Cundinamarca S.A.S.
   pais: Colombia
   id_tributaria: 966177115-3
   tipo_id: NIT
-  cuenta: Cuenta demo ···0008
+  cuenta: Cuenta demo ···0006
   marcas: []
-- id: 9
+- id: 7
   nombre: Corporación Alimentarios Orinoquía S.A.S.
   pais: Colombia
   id_tributaria: 980746390-5
   tipo_id: NIT
-  cuenta: Cuenta demo ···0009
+  cuenta: Cuenta demo ···0007
   marcas: []
-- id: 10
-  nombre: Corporación Importadora del Ecuador Corp. Bl. 24
-  pais: Ecuador
-  id_tributaria: '179100024001'
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0010
-  marcas:
-  - identificacion_invalida
-- id: 11
+- id: 8
   nombre: Importadora Agroindustrial Inca S.A.C.
   pais: Perú
   id_tributaria: '20429681104'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0011
+  cuenta: Cuenta demo ···0008
   marcas: []
-- id: 12
+- id: 9
   nombre: Consultores Energéticos Magdalena S.A.S.
   pais: Colombia
   id_tributaria: 929610444-4
   tipo_id: NIT
-  cuenta: Cuenta demo ···0012
+  cuenta: Cuenta demo ···0009
   marcas: []
-- id: 13
+- id: 10
   nombre: Textiles Modernos Pereira S.A.S.
   pais: Colombia
   id_tributaria: 978961183-0
   tipo_id: NIT
-  cuenta: Cuenta demo ···0013
+  cuenta: Cuenta demo ···0010
   marcas: []
-- id: 14
+- id: 11
   nombre: Servicios Hospitalarios Inca S.A.C.
   pais: Perú
   id_tributaria: '20124896356'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0014
+  cuenta: Cuenta demo ···0011
   marcas: []
-- id: 15
-  nombre: Corporación Navieros Amazonas S.A.C.
-  pais: Perú
-  id_tributaria: FALLA-999999-X
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0015
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 16
+- id: 12
   nombre: Comercializadora Maya S.A. de C.V.
   pais: México
   id_tributaria: CMA140124TM3
   tipo_id: RFC
-  cuenta: Cuenta demo ···0016
+  cuenta: Cuenta demo ···0012
   marcas: []
-- id: 17
+- id: 13
   nombre: Corporación Forestales Tenochtitlan S.A. de C.V.
   pais: México
   id_tributaria: CFT100416TB1
   tipo_id: RFC
-  cuenta: Cuenta demo ···0017
+  cuenta: Cuenta demo ···0013
   marcas: []
-- id: 18
+- id: 14
   nombre: Logística Integrales Tungurahua S.A.
   pais: Ecuador
   id_tributaria: '1897076566001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0018
+  cuenta: Cuenta demo ···0014
   marcas: []
-- id: 19
-  nombre: Distribuidora Colombiana de Software SAS
-  pais: Colombia
-  id_tributaria: 900123456-7
-  tipo_id: NIT
-  cuenta: Cuenta demo ···0019
-  marcas: []
-- id: 20
+- id: 15
   nombre: Grupo Hospitalarios Mixteca S.A. de C.V.
   pais: México
   id_tributaria: GHM1910276P0
   tipo_id: RFC
-  cuenta: Cuenta demo ···0020
+  cuenta: Cuenta demo ···0015
   marcas: []
-- id: 21
+- id: 16
   nombre: Muebles y Diseño Guadalajara S.A. de C.V.
   pais: México
   id_tributaria: MDG131202VW6
   tipo_id: RFC
-  cuenta: Cuenta demo ···0021
+  cuenta: Cuenta demo ···0016
   marcas: []
-- id: 22
+- id: 17
   nombre: Importadora Químicos Rímac S.A.C.
   pais: Perú
   id_tributaria: '20714943881'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0022
+  cuenta: Cuenta demo ···0017
   marcas: []
-- id: 23
+- id: 18
   nombre: Soluciones Alimentarios Andino S.A.S.
   pais: Colombia
   id_tributaria: 951552286-8
   tipo_id: NIT
-  cuenta: Cuenta demo ···0023
+  cuenta: Cuenta demo ···0018
   marcas: []
-- id: 24
-  nombre: Soluciones Tecnológicos Huasteca S.A. de C.V.
-  pais: México
-  id_tributaria: FALLA-999999-X
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0024
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 25
+- id: 19
   nombre: Servicios Metalmecánicos Cayambe S.A.
   pais: Ecuador
   id_tributaria: '1797937734001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0025
+  cuenta: Cuenta demo ···0019
   marcas: []
-- id: 26
+- id: 20
   nombre: Industrias Farmacéuticos Cayambe S.A.
   pais: Ecuador
   id_tributaria: '1190701286001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0026
+  cuenta: Cuenta demo ···0020
   marcas: []
-- id: 27
+- id: 21
   nombre: Consultores Hospitalarios Tenochtitlan S.A. de C.V.
   pais: México
   id_tributaria: CHT9711263Z9
   tipo_id: RFC
-  cuenta: Cuenta demo ···0027
+  cuenta: Cuenta demo ···0021
   marcas: []
-- id: 28
-  nombre: Grupo Eléctricos Rímac S.A.C.
-  pais: Perú
-  id_tributaria: FALLA-999999-X
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0028
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 29
+- id: 22
   nombre: Consultora Empresarial Cuenca S.A.
   pais: Ecuador
   id_tributaria: '1395940135001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0029
+  cuenta: Cuenta demo ···0022
   marcas: []
-- id: 30
+- id: 23
   nombre: Transportes Chiclayo S.A.C.
   pais: Perú
   id_tributaria: '20812067975'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0030
+  cuenta: Cuenta demo ···0023
   marcas: []
-- id: 31
+- id: 24
   nombre: Inversiones Incas S.A.C.
   pais: Perú
   id_tributaria: '20269166976'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0031
+  cuenta: Cuenta demo ···0024
   marcas: []
-- id: 32
+- id: 25
   nombre: Industrias Eléctricos Chimborazo S.A.
   pais: Ecuador
   id_tributaria: '1096682383001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0032
+  cuenta: Cuenta demo ···0025
   marcas: []
-- id: 33
-  nombre: Soluciones Eléctricos Huasteca S.A. de C.V.
-  pais: México
-  id_tributaria: FALLA-999999-X
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0033
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 34
+- id: 26
   nombre: Alimentos del Valle S.A.S.
   pais: Colombia
   id_tributaria: 926204505-3
   tipo_id: NIT
-  cuenta: Cuenta demo ···0034
+  cuenta: Cuenta demo ···0026
   marcas: []
-- id: 35
+- id: 27
   nombre: Farmacéutica Nacional Oaxaca S.A. de C.V.
   pais: México
   id_tributaria: FNO151115DP0
   tipo_id: RFC
-  cuenta: Cuenta demo ···0035
+  cuenta: Cuenta demo ···0027
   marcas: []
-- id: 36
+- id: 28
   nombre: Tecnología Cafetera S.A.S.
   pais: Colombia
   id_tributaria: 915098393-1
   tipo_id: NIT
-  cuenta: Cuenta demo ···0036
+  cuenta: Cuenta demo ···0028
   marcas: []
-- id: 37
-  nombre: Distribuidora Energéticos Tenochtitlan S.A. de C.V.
-  pais: México
-  id_tributaria: FALLA-999999-X
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0037
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 38
+- id: 29
   nombre: Papelería Corporativa Anáhuac S.A. de C.V.
   pais: México
   id_tributaria: PCA110818Z59
   tipo_id: RFC
-  cuenta: Cuenta demo ···0038
+  cuenta: Cuenta demo ···0029
   marcas: []
-- id: 39
+- id: 30
   nombre: Alimentos Selectos de Jalisco S.A. de C.V.
   pais: México
   id_tributaria: ASJ0801045Z4
   tipo_id: RFC
-  cuenta: Cuenta demo ···0039
+  cuenta: Cuenta demo ···0030
   marcas: []
-- id: 40
+- id: 31
   nombre: Corporación Alimentarios Austro S.A.
   pais: Ecuador
   id_tributaria: '1199924911001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0040
+  cuenta: Cuenta demo ···0031
   marcas: []
-- id: 41
+- id: 32
   nombre: Comercial Manabí S.A.
   pais: Ecuador
   id_tributaria: '1397190222001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0041
+  cuenta: Cuenta demo ···0032
   marcas: []
-- id: 42
+- id: 33
   nombre: Grupo Hospitalarios Pichincha S.A.
   pais: Ecuador
   id_tributaria: '1392597766001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0042
+  cuenta: Cuenta demo ···0033
   marcas: []
-- id: 43
+- id: 34
   nombre: Soluciones Energéticos Costa Verde S.A.C.
   pais: Perú
   id_tributaria: '20434905975'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0043
+  cuenta: Cuenta demo ···0034
   marcas: []
-- id: 44
+- id: 35
   nombre: Transportes Unidos del Golfo S.A. de C.V.
   pais: México
   id_tributaria: TUG971120HC7
   tipo_id: RFC
-  cuenta: Cuenta demo ···0044
+  cuenta: Cuenta demo ···0035
   marcas: []
-- id: 45
-  nombre: Corporación Importadora del Ecuador Corp. Bl. 9
-  pais: Ecuador
-  id_tributaria: '179100009001'
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0045
-  marcas:
-  - identificacion_invalida
-- id: 46
+- id: 36
   nombre: Importadora Alimentarios Tenochtitlan S.A. de C.V.
   pais: México
   id_tributaria: IAT971125DT0
   tipo_id: RFC
-  cuenta: Cuenta demo ···0046
+  cuenta: Cuenta demo ···0036
   marcas: []
-- id: 47
-  nombre: Consultores Farmacéuticos Pacífico Norte S.A. de C.V.
-  pais: México
-  id_tributaria: FALLA-999999-X
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0047
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 48
+- id: 37
   nombre: Grupo Metalmecánicos Chimborazo S.A.
   pais: Ecuador
   id_tributaria: '1091830414001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0048
+  cuenta: Cuenta demo ···0037
   marcas: []
-- id: 49
+- id: 38
   nombre: Servicios Médicos Trujillo S.A.C.
   pais: Perú
   id_tributaria: '20373467066'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0049
+  cuenta: Cuenta demo ···0038
   marcas: []
-- id: 50
+- id: 39
   nombre: Pesquera Chimbote S.A.C.
   pais: Perú
   id_tributaria: '20579868725'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0050
+  cuenta: Cuenta demo ···0039
   marcas: []
-- id: 51
+- id: 40
   nombre: Soluciones Logísticas Callao S.A.C.
   pais: Perú
   id_tributaria: '20807154517'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0051
+  cuenta: Cuenta demo ···0040
   marcas: []
-- id: 52
+- id: 41
   nombre: Energía y Gas Tacna S.A.C.
   pais: Perú
   id_tributaria: '20858842477'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0052
+  cuenta: Cuenta demo ···0041
   marcas: []
-- id: 53
-  nombre: Soluciones Químicos Bajío S.A. de C.V.
-  pais: México
-  id_tributaria: FALLA-999999-X
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0053
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 54
+- id: 42
   nombre: Soluciones Hospitalarios Llanos S.A.S.
   pais: Colombia
   id_tributaria: 972575665-1
   tipo_id: NIT
-  cuenta: Cuenta demo ···0054
+  cuenta: Cuenta demo ···0042
   marcas: []
-- id: 55
+- id: 43
   nombre: Importaciones Piura S.A.C.
   pais: Perú
   id_tributaria: '20727875582'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0055
+  cuenta: Cuenta demo ···0043
   marcas: []
-- id: 56
+- id: 44
   nombre: Seguridad Integral Huancayo S.A.C.
   pais: Perú
   id_tributaria: '20585064310'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0056
+  cuenta: Cuenta demo ···0044
   marcas: []
-- id: 57
+- id: 45
   nombre: Redes y Telecomunicaciones Monterrey S.A. de C.V.
   pais: México
   id_tributaria: RTM120109H78
   tipo_id: RFC
-  cuenta: Cuenta demo ···0057
+  cuenta: Cuenta demo ···0045
   marcas: []
-- id: 58
-  nombre: Distribuidora Colombiana de Software SAS Bl. 7
-  pais: Colombia
-  id_tributaria: 800100007-9
-  tipo_id: NIT
-  cuenta: Cuenta demo ···0058
-  marcas: []
-- id: 59
+- id: 46
   nombre: Soluciones Digitales del Norte S.A. de C.V.
   pais: México
   id_tributaria: SDN961218T59
   tipo_id: RFC
-  cuenta: Cuenta demo ···0059
+  cuenta: Cuenta demo ···0046
   marcas: []
-- id: 60
+- id: 47
   nombre: Logística Integral Bajío S.A. de C.V.
   pais: México
   id_tributaria: LIB181016S81
   tipo_id: RFC
-  cuenta: Cuenta demo ···0060
+  cuenta: Cuenta demo ···0047
   marcas: []
-- id: 61
-  nombre: Servicios Logísticos del Perú S.A.C. Bl. 23
-  pais: Perú
-  id_tributaria: '2010000023'
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0061
-  marcas:
-  - identificacion_invalida
-- id: 62
+- id: 48
   nombre: Distribuidora Ambientales Huasteca S.A. de C.V.
   pais: México
   id_tributaria: DAH101202EW6
   tipo_id: RFC
-  cuenta: Cuenta demo ···0062
+  cuenta: Cuenta demo ···0048
   marcas: []
-- id: 63
+- id: 49
   nombre: Exportadora Bananera del Litoral S.A.
   pais: Ecuador
   id_tributaria: 0196513337001
   tipo_id: RUC
-  cuenta: Cuenta demo ···0063
+  cuenta: Cuenta demo ···0049
   marcas: []
-- id: 64
+- id: 50
   nombre: Importadora Andina S.A.
   pais: Ecuador
   id_tributaria: '1798350303001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0064
+  cuenta: Cuenta demo ···0050
   marcas: []
-- id: 65
+- id: 51
   nombre: Servicios Químicos Guayas S.A.
   pais: Ecuador
   id_tributaria: '1096264204001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0065
+  cuenta: Cuenta demo ···0051
   marcas: []
-- id: 66
+- id: 52
   nombre: Logística Mineros Cayambe S.A.
   pais: Ecuador
   id_tributaria: 0190317080001
   tipo_id: RUC
-  cuenta: Cuenta demo ···0066
+  cuenta: Cuenta demo ···0052
   marcas: []
-- id: 67
-  nombre: Consultores Químicos Litoral S.A.
-  pais: Ecuador
-  id_tributaria: FALLA-999999-X
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0067
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 68
+- id: 53
   nombre: Inversiones Metalmecánicos Cauca S.A.S.
   pais: Colombia
   id_tributaria: 971928690-9
   tipo_id: NIT
-  cuenta: Cuenta demo ···0068
+  cuenta: Cuenta demo ···0053
   marcas: []
-- id: 69
-  nombre: Soluciones Tecnológicos Caribe S.A.S.
-  pais: Colombia
-  id_tributaria: FALLA-999999-X
-  tipo_id: NIT
-  cuenta: Cuenta demo ···0069
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 70
+- id: 54
   nombre: Inversiones Eléctricos Mantaro S.A.C.
   pais: Perú
   id_tributaria: '20295948541'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0070
+  cuenta: Cuenta demo ···0054
   marcas: []
-- id: 71
+- id: 55
   nombre: Constructora Austral S.A.
   pais: Ecuador
   id_tributaria: '1893136785001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0071
+  cuenta: Cuenta demo ···0055
   marcas: []
-- id: 72
+- id: 56
   nombre: Industrias Eléctricos Magdalena S.A.S.
   pais: Colombia
   id_tributaria: 935742512-5
   tipo_id: NIT
-  cuenta: Cuenta demo ···0072
+  cuenta: Cuenta demo ···0056
   marcas: []
-- id: 73
+- id: 57
   nombre: Industrias Ambientales Tequendama S.A.S.
   pais: Colombia
   id_tributaria: 903951386-3
   tipo_id: NIT
-  cuenta: Cuenta demo ···0073
+  cuenta: Cuenta demo ···0057
   marcas: []
-- id: 74
+- id: 58
   nombre: Impresos y Publicidad Cali S.A.S.
   pais: Colombia
   id_tributaria: 905766270-2
   tipo_id: NIT
-  cuenta: Cuenta demo ···0074
+  cuenta: Cuenta demo ···0058
   marcas: []
-- id: 75
+- id: 59
   nombre: Importadora Energéticos Tequendama S.A.S.
   pais: Colombia
   id_tributaria: 926624565-7
   tipo_id: NIT
-  cuenta: Cuenta demo ···0075
+  cuenta: Cuenta demo ···0059
   marcas: []
-- id: 76
-  nombre: Servicios Logísticos del Perú S.A.C. Bl. 13
-  pais: Perú
-  id_tributaria: '2010000013'
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0076
-  marcas:
-  - identificacion_invalida
-- id: 77
+- id: 60
   nombre: Suministros Industriales Antioquia S.A.S.
   pais: Colombia
   id_tributaria: 984124118-3
   tipo_id: NIT
-  cuenta: Cuenta demo ···0077
+  cuenta: Cuenta demo ···0060
   marcas: []
-- id: 78
+- id: 61
   nombre: Consultores Energéticos Rímac S.A.C.
   pais: Perú
   id_tributaria: '20427342787'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0078
+  cuenta: Cuenta demo ···0061
   marcas: []
-- id: 79
+- id: 62
   nombre: Consultoría Integral Bogotá S.A.S.
   pais: Colombia
   id_tributaria: 964005242-6
   tipo_id: NIT
-  cuenta: Cuenta demo ···0079
+  cuenta: Cuenta demo ···0062
   marcas: []
-- id: 80
-  nombre: Falla Provisiones Internacionales Bl. 25
-  pais: México
-  id_tributaria: FALLA-999999-X
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0080
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 81
+- id: 63
   nombre: Transportes Santanderanos S.A.S.
   pais: Colombia
   id_tributaria: 988356159-5
   tipo_id: NIT
-  cuenta: Cuenta demo ···0081
+  cuenta: Cuenta demo ···0063
   marcas: []
-- id: 82
+- id: 64
   nombre: Consultores Mineros Sinú S.A.S.
   pais: Colombia
   id_tributaria: 943899214-9
   tipo_id: NIT
-  cuenta: Cuenta demo ···0082
+  cuenta: Cuenta demo ···0064
   marcas: []
-- id: 83
+- id: 65
   nombre: Inversiones Forestales Cumbres S.A. de C.V.
   pais: México
   id_tributaria: IFC040310C99
   tipo_id: RFC
-  cuenta: Cuenta demo ···0083
+  cuenta: Cuenta demo ···0065
   marcas: []
-- id: 84
-  nombre: Distribuidora Colombiana de Software SAS Bl. 22
-  pais: Colombia
-  id_tributaria: 800100022-9
-  tipo_id: NIT
-  cuenta: Cuenta demo ···0084
-  marcas: []
-- id: 85
+- id: 66
   nombre: Logística Agroindustrial Tungurahua S.A.
   pais: Ecuador
   id_tributaria: '1790371204001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0085
+  cuenta: Cuenta demo ···0066
   marcas: []
-- id: 86
+- id: 67
   nombre: Camaronera del Pacífico S.A.
   pais: Ecuador
   id_tributaria: 0194345585001
   tipo_id: RUC
-  cuenta: Cuenta demo ···0086
+  cuenta: Cuenta demo ···0067
   marcas: []
-- id: 87
-  nombre: Distribuidora Integrales Nevado S.A.S.
-  pais: Colombia
-  id_tributaria: FALLA-999999-X
-  tipo_id: NIT
-  cuenta: Cuenta demo ···0087
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 88
+- id: 68
   nombre: Grupo Farmacéuticos Galápagos S.A.
   pais: Ecuador
   id_tributaria: 0196224882001
   tipo_id: RUC
-  cuenta: Cuenta demo ···0088
+  cuenta: Cuenta demo ···0068
   marcas: []
-- id: 89
+- id: 69
   nombre: Servicios Ambientales Boyacá S.A.S.
   pais: Colombia
   id_tributaria: 970805310-3
   tipo_id: NIT
-  cuenta: Cuenta demo ···0089
+  cuenta: Cuenta demo ···0069
   marcas: []
-- id: 90
+- id: 70
   nombre: Servicios Alimentarios Tenochtitlan S.A. de C.V.
   pais: México
   id_tributaria: SAT190128VMA
   tipo_id: RFC
-  cuenta: Cuenta demo ···0090
+  cuenta: Cuenta demo ···0070
   marcas: []
-- id: 91
+- id: 71
   nombre: Inversiones Tecnológicos Llanos S.A.S.
   pais: Colombia
   id_tributaria: 902555582-9
   tipo_id: NIT
-  cuenta: Cuenta demo ···0091
+  cuenta: Cuenta demo ···0071
   marcas: []
-- id: 92
+- id: 72
   nombre: Alimentos Amazónicos S.A.C.
   pais: Perú
   id_tributaria: '20296717569'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0092
+  cuenta: Cuenta demo ···0072
   marcas: []
-- id: 93
+- id: 73
   nombre: Energía Solar Chihuahua S.A. de C.V.
   pais: México
   id_tributaria: ESC9508151G3
   tipo_id: RFC
-  cuenta: Cuenta demo ···0093
+  cuenta: Cuenta demo ···0073
   marcas: []
-- id: 94
-  nombre: Distribuidora Colombiana de Software SAS Bl. 27
-  pais: Colombia
-  id_tributaria: 800100027-9
-  tipo_id: NIT
-  cuenta: Cuenta demo ···0094
-  marcas: []
-- id: 95
+- id: 74
   nombre: Agroexportadora Ica S.A.C.
   pais: Perú
   id_tributaria: '20248963833'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0095
+  cuenta: Cuenta demo ···0074
   marcas: []
-- id: 96
-  nombre: Corporación Automotrices Guayas S.A.
-  pais: Ecuador
-  id_tributaria: FALLA-999999-X
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0096
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 97
+- id: 75
   nombre: Minera Andina del Sur S.A.C.
   pais: Perú
   id_tributaria: '20080132671'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0097
+  cuenta: Cuenta demo ···0075
   marcas: []
-- id: 98
+- id: 76
   nombre: Distribuciones Eje Cafetero S.A.S.
   pais: Colombia
   id_tributaria: 936183242-6
   tipo_id: NIT
-  cuenta: Cuenta demo ···0098
+  cuenta: Cuenta demo ···0076
   marcas: []
-- id: 99
+- id: 77
   nombre: Agroindustrial Santo Domingo S.A.
   pais: Ecuador
   id_tributaria: '2398692619001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0099
+  cuenta: Cuenta demo ···0077
   marcas: []
-- id: 100
+- id: 78
   nombre: Ingeniería y Servicios Puebla S.A. de C.V.
   pais: México
   id_tributaria: ISP160302FM4
   tipo_id: RFC
-  cuenta: Cuenta demo ···0100
+  cuenta: Cuenta demo ···0078
   marcas: []
-- id: 101
+- id: 79
   nombre: Soluciones Informáticas Loja S.A.
   pais: Ecuador
   id_tributaria: '1399222199001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0101
+  cuenta: Cuenta demo ···0079
   marcas: []
-- id: 102
+- id: 80
   nombre: Tecnologías Pacífico S.A.C.
   pais: Perú
   id_tributaria: '20468723434'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0102
+  cuenta: Cuenta demo ···0080
   marcas: []
-- id: 103
-  nombre: Tecnología Avanzada S.A. de C.V.
-  pais: México
-  id_tributaria: TAV120405H87
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0103
-  marcas: []
-- id: 104
+- id: 81
   nombre: Logística del Caribe S.A.S.
   pais: Colombia
   id_tributaria: 916998543-3
   tipo_id: NIT
-  cuenta: Cuenta demo ···0104
+  cuenta: Cuenta demo ···0081
   marcas: []
-- id: 105
+- id: 82
   nombre: Equipos Médicos Sonora S.A. de C.V.
   pais: México
   id_tributaria: EMS981012VV1
   tipo_id: RFC
-  cuenta: Cuenta demo ···0105
+  cuenta: Cuenta demo ···0082
   marcas: []
-- id: 106
+- id: 83
   nombre: Consultores Asociados Lima S.A.C.
   pais: Perú
   id_tributaria: '20452991242'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0106
+  cuenta: Cuenta demo ···0083
   marcas: []
-- id: 107
+- id: 84
   nombre: Grupo Mineros Anáhuac S.A. de C.V.
   pais: México
   id_tributaria: GMA16080315A
   tipo_id: RFC
-  cuenta: Cuenta demo ···0107
+  cuenta: Cuenta demo ···0084
   marcas: []
-- id: 108
+- id: 85
   nombre: Logística Agroindustrial Orinoquía S.A.S.
   pais: Colombia
   id_tributaria: 971667464-1
   tipo_id: NIT
-  cuenta: Cuenta demo ···0108
+  cuenta: Cuenta demo ···0085
   marcas: []
-- id: 109
-  nombre: Corporación Importadora del Ecuador Corp. Bl. 29
-  pais: Ecuador
-  id_tributaria: '179100029001'
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0109
-  marcas:
-  - identificacion_invalida
-- id: 110
+- id: 86
   nombre: Soluciones Integrales Occidente S.A. de C.V.
   pais: México
   id_tributaria: SIO971126975
   tipo_id: RFC
-  cuenta: Cuenta demo ···0110
+  cuenta: Cuenta demo ···0086
   marcas: []
-- id: 111
-  nombre: Corporación Importadora del Ecuador Corp.
-  pais: Ecuador
-  id_tributaria: '1791234567001'
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0111
-  marcas: []
-- id: 112
+- id: 87
   nombre: Textiles Finos de Yucatán S.A. de C.V.
   pais: México
   id_tributaria: TFY140522LE4
   tipo_id: RFC
-  cuenta: Cuenta demo ···0112
+  cuenta: Cuenta demo ···0087
   marcas: []
-- id: 113
+- id: 88
   nombre: Transportes Imbabura S.A.
   pais: Ecuador
   id_tributaria: '2391611729001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0113
+  cuenta: Cuenta demo ···0088
   marcas: []
-- id: 114
+- id: 89
   nombre: Corporación Integrales Nazca S.A.C.
   pais: Perú
   id_tributaria: '20031426864'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0114
+  cuenta: Cuenta demo ···0089
   marcas: []
-- id: 115
+- id: 90
   nombre: Soluciones Hospitalarios Tungurahua S.A.
   pais: Ecuador
   id_tributaria: '1392615837001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0115
+  cuenta: Cuenta demo ···0090
   marcas: []
-- id: 116
+- id: 91
   nombre: Inversiones Energéticos Llanos S.A.S.
   pais: Colombia
   id_tributaria: 944492917-3
   tipo_id: NIT
-  cuenta: Cuenta demo ···0116
+  cuenta: Cuenta demo ···0091
   marcas: []
-- id: 117
-  nombre: Consultores Químicos Altiplano S.A. de C.V.
-  pais: México
-  id_tributaria: FALLA-999999-X
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0117
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 118
+- id: 92
   nombre: Comercializadora Tecnológicos Huasteca S.A. de C.V.
   pais: México
   id_tributaria: CTH191215225
   tipo_id: RFC
-  cuenta: Cuenta demo ···0118
+  cuenta: Cuenta demo ···0092
   marcas: []
-- id: 119
+- id: 93
   nombre: Industrias Metalmecánicos Austro S.A.
   pais: Ecuador
   id_tributaria: '1897663119001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0119
+  cuenta: Cuenta demo ···0093
   marcas: []
-- id: 120
+- id: 94
   nombre: Inversiones Andinas S.A.S.
   pais: Colombia
   id_tributaria: 909570154-8
   tipo_id: NIT
-  cuenta: Cuenta demo ···0120
+  cuenta: Cuenta demo ···0094
   marcas: []
-- id: 121
-  nombre: Falla Provisiones Internacionales Bl. 15
-  pais: México
-  id_tributaria: FALLA-999999-X
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0121
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 122
+- id: 95
   nombre: Logística Navieros Galápagos S.A.
   pais: Ecuador
   id_tributaria: '1195081588001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0122
+  cuenta: Cuenta demo ···0095
   marcas: []
-- id: 123
+- id: 96
   nombre: Importadora Químicos Caribe S.A.S.
   pais: Colombia
   id_tributaria: 948653304-5
   tipo_id: NIT
-  cuenta: Cuenta demo ···0123
+  cuenta: Cuenta demo ···0096
   marcas: []
-- id: 124
+- id: 97
   nombre: Energías Renovables La Guajira S.A.S.
   pais: Colombia
   id_tributaria: 953394210-8
   tipo_id: NIT
-  cuenta: Cuenta demo ···0124
+  cuenta: Cuenta demo ···0097
   marcas: []
-- id: 125
-  nombre: Falla Provisiones Internacionales
-  pais: México
-  id_tributaria: FALLA-999999-X
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0125
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 126
+- id: 98
   nombre: Distribuidora Integrales Pichincha S.A.
   pais: Ecuador
   id_tributaria: 0194995148001
   tipo_id: RUC
-  cuenta: Cuenta demo ···0126
+  cuenta: Cuenta demo ···0098
   marcas: []
-- id: 127
+- id: 99
   nombre: Distribuidora Guayaquil S.A.
   pais: Ecuador
   id_tributaria: 0992016329001
   tipo_id: RUC
-  cuenta: Cuenta demo ···0127
+  cuenta: Cuenta demo ···0099
   marcas: []
-- id: 128
+- id: 100
   nombre: Grupo Forestales Titicaca S.A.C.
   pais: Perú
   id_tributaria: '20079865878'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0128
+  cuenta: Cuenta demo ···0100
   marcas: []
-- id: 129
+- id: 101
   nombre: Papelera Limeña S.A.C.
   pais: Perú
   id_tributaria: '20931839331'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0129
+  cuenta: Cuenta demo ···0101
   marcas: []
-- id: 130
+- id: 102
   nombre: Inversiones Eléctricos Occidente S.A. de C.V.
   pais: México
   id_tributaria: IEO120204BZ6
   tipo_id: RFC
-  cuenta: Cuenta demo ···0130
+  cuenta: Cuenta demo ···0102
   marcas: []
-- id: 131
-  nombre: Tecnología Avanzada S.A. de C.V. Bl. 21
-  pais: México
-  id_tributaria: ABC100021XYZ
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0131
-  marcas: []
-- id: 132
+- id: 103
   nombre: Comercializadora Forestales Caribe S.A.S.
   pais: Colombia
   id_tributaria: 934584516-2
   tipo_id: NIT
-  cuenta: Cuenta demo ···0132
+  cuenta: Cuenta demo ···0103
   marcas: []
-- id: 133
+- id: 104
   nombre: Logística Portuaria Manta S.A.
   pais: Ecuador
   id_tributaria: '1397749645001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0133
+  cuenta: Cuenta demo ···0104
   marcas: []
-- id: 134
-  nombre: Tecnología Avanzada S.A. de C.V. Bl. 16
-  pais: México
-  id_tributaria: ABC100016XYZ
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0134
-  marcas: []
-- id: 135
+- id: 105
   nombre: Distribuidora Farmacéuticos Mixteca S.A. de C.V.
   pais: México
   id_tributaria: DFM180827MX5
   tipo_id: RFC
-  cuenta: Cuenta demo ···0135
+  cuenta: Cuenta demo ···0105
   marcas: []
-- id: 136
+- id: 106
   nombre: Corporación Gráficos Pichincha S.A.
   pais: Ecuador
   id_tributaria: '2399286592001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0136
+  cuenta: Cuenta demo ···0106
   marcas: []
-- id: 137
-  nombre: Distribuidora Colombiana de Software SAS Bl. 17
-  pais: Colombia
-  id_tributaria: 800100017-9
-  tipo_id: NIT
-  cuenta: Cuenta demo ···0137
-  marcas: []
-- id: 138
+- id: 107
   nombre: Grupo Industrial Azteca S.A. de C.V.
   pais: México
   id_tributaria: GIA1205151L4
   tipo_id: RFC
-  cuenta: Cuenta demo ···0138
+  cuenta: Cuenta demo ···0107
   marcas: []
-- id: 139
+- id: 108
   nombre: Comercializadora Eléctricos Pichincha S.A.
   pais: Ecuador
   id_tributaria: 0998820227001
   tipo_id: RUC
-  cuenta: Cuenta demo ···0139
+  cuenta: Cuenta demo ···0108
   marcas: []
-- id: 140
+- id: 109
   nombre: Software y Datos Medellín S.A.S.
   pais: Colombia
   id_tributaria: 936629946-9
   tipo_id: NIT
-  cuenta: Cuenta demo ···0140
+  cuenta: Cuenta demo ···0109
   marcas: []
-- id: 141
+- id: 110
   nombre: Alimentos Tungurahua S.A.
   pais: Ecuador
   id_tributaria: '1394596155001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0141
+  cuenta: Cuenta demo ···0110
   marcas: []
-- id: 142
+- id: 111
   nombre: Logística Hospitalarios Pacífico Norte S.A. de C.V.
   pais: México
   id_tributaria: LHP130526PV0
   tipo_id: RFC
-  cuenta: Cuenta demo ···0142
+  cuenta: Cuenta demo ···0111
   marcas: []
-- id: 143
+- id: 112
   nombre: Servicios Petroleros Amazonía S.A.
   pais: Ecuador
   id_tributaria: 0198427101001
   tipo_id: RUC
-  cuenta: Cuenta demo ···0143
+  cuenta: Cuenta demo ···0112
   marcas: []
-- id: 144
-  nombre: Servicios Logísticos del Perú S.A.C. Bl. 28
-  pais: Perú
-  id_tributaria: '2010000028'
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0144
-  marcas:
-  - identificacion_invalida
-- id: 145
+- id: 113
   nombre: Industrias Eléctricos Tungurahua S.A.
   pais: Ecuador
   id_tributaria: '1394597054001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0145
+  cuenta: Cuenta demo ···0113
   marcas: []
-- id: 146
+- id: 114
   nombre: Importadora Alimentarios Amazonas S.A.C.
   pais: Perú
   id_tributaria: '20630820180'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0146
+  cuenta: Cuenta demo ···0114
   marcas: []
-- id: 147
+- id: 115
   nombre: Telecomunicaciones Llaneras S.A.S.
   pais: Colombia
   id_tributaria: 952711116-0
   tipo_id: NIT
-  cuenta: Cuenta demo ···0147
+  cuenta: Cuenta demo ···0115
   marcas: []
-- id: 148
-  nombre: Tecnología Avanzada S.A. de C.V. Bl. 11
-  pais: México
-  id_tributaria: ABC100011XYZ
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0148
-  marcas: []
-- id: 149
+- id: 116
   nombre: Consultores Químicos Nevado S.A.S.
   pais: Colombia
   id_tributaria: 972303478-4
   tipo_id: NIT
-  cuenta: Cuenta demo ···0149
+  cuenta: Cuenta demo ···0116
   marcas: []
-- id: 150
+- id: 117
   nombre: Industrias Navieros Tequendama S.A.S.
   pais: Colombia
   id_tributaria: 966139584-2
   tipo_id: NIT
-  cuenta: Cuenta demo ···0150
+  cuenta: Cuenta demo ···0117
   marcas: []
-- id: 151
+- id: 118
   nombre: Grupo Metalmecánicos Orinoquía S.A.S.
   pais: Colombia
   id_tributaria: 905080176-2
   tipo_id: NIT
-  cuenta: Cuenta demo ···0151
+  cuenta: Cuenta demo ···0118
   marcas: []
-- id: 152
+- id: 119
   nombre: Importadora Agroindustrial Altiplano S.A. de C.V.
   pais: México
   id_tributaria: IAA180110U3A
   tipo_id: RFC
-  cuenta: Cuenta demo ···0152
+  cuenta: Cuenta demo ···0119
   marcas: []
-- id: 153
+- id: 120
   nombre: Grupo Alimentarios Amazonas S.A.C.
   pais: Perú
   id_tributaria: '20483172738'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0153
+  cuenta: Cuenta demo ···0120
   marcas: []
-- id: 154
-  nombre: Distribuidora Colombiana de Software SAS Bl. 12
-  pais: Colombia
-  id_tributaria: 800100012-9
-  tipo_id: NIT
-  cuenta: Cuenta demo ···0154
-  marcas: []
-- id: 155
+- id: 121
   nombre: Importadora Tecnológicos Litoral S.A.
   pais: Ecuador
   id_tributaria: '1891221696001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0155
+  cuenta: Cuenta demo ···0121
   marcas: []
-- id: 156
+- id: 122
   nombre: Soluciones Forestales Cumbres S.A. de C.V.
   pais: México
   id_tributaria: SFC060714A34
   tipo_id: RFC
-  cuenta: Cuenta demo ···0156
+  cuenta: Cuenta demo ···0122
   marcas: []
-- id: 157
+- id: 123
   nombre: Distribuidora Agrícola Sinaloa S.A. de C.V.
   pais: México
   id_tributaria: DAS031128BJ1
   tipo_id: RFC
-  cuenta: Cuenta demo ···0157
+  cuenta: Cuenta demo ···0123
   marcas: []
-- id: 158
-  nombre: Tecnología Avanzada S.A. de C.V. Bl. 26
-  pais: México
-  id_tributaria: ABC100026XYZ
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0158
-  marcas: []
-- id: 159
+- id: 124
   nombre: Industrias Farmacéuticos Cauca S.A.S.
   pais: Colombia
   id_tributaria: 936236112-6
   tipo_id: NIT
-  cuenta: Cuenta demo ···0159
+  cuenta: Cuenta demo ···0124
   marcas: []
-- id: 160
-  nombre: Falla Provisiones Internacionales Bl. 10
-  pais: México
-  id_tributaria: FALLA-999999-X
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0160
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 161
+- id: 125
   nombre: Constructora Cusco S.A.C.
   pais: Perú
   id_tributaria: '20036541459'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0161
+  cuenta: Cuenta demo ···0125
   marcas: []
-- id: 162
+- id: 126
   nombre: Distribuidora Químicos Mantaro S.A.C.
   pais: Perú
   id_tributaria: '20052947236'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0162
+  cuenta: Cuenta demo ···0126
   marcas: []
-- id: 163
+- id: 127
   nombre: Logística Mineros Costa Verde S.A.C.
   pais: Perú
   id_tributaria: '20403919421'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0163
+  cuenta: Cuenta demo ···0127
   marcas: []
-- id: 164
+- id: 128
   nombre: Comercializadora Energéticos Altiplano S.A.C.
   pais: Perú
   id_tributaria: '20632939834'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0164
+  cuenta: Cuenta demo ···0128
   marcas: []
-- id: 165
+- id: 129
   nombre: Corporación Gráficos Nevado S.A.S.
   pais: Colombia
   id_tributaria: 904945336-4
   tipo_id: NIT
-  cuenta: Cuenta demo ···0165
+  cuenta: Cuenta demo ···0129
   marcas: []
-- id: 166
+- id: 130
   nombre: Exportadora Metalmecánicos Mantaro S.A.C.
   pais: Perú
   id_tributaria: '20316207988'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0166
+  cuenta: Cuenta demo ···0130
   marcas: []
-- id: 167
-  nombre: Falla Provisiones Internacionales Bl. 30
-  pais: México
-  id_tributaria: FALLA-999999-X
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0167
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 168
+- id: 131
   nombre: Textil Gamarra S.A.C.
   pais: Perú
   id_tributaria: '20572628494'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0168
+  cuenta: Cuenta demo ···0131
   marcas: []
-- id: 169
-  nombre: Servicios Logísticos del Perú S.A.C.
-  pais: Perú
-  id_tributaria: '20554433221'
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0169
-  marcas: []
-- id: 170
+- id: 132
   nombre: Servicios Hospitalarios Chimborazo S.A.
   pais: Ecuador
   id_tributaria: '1794729340001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0170
+  cuenta: Cuenta demo ···0132
   marcas: []
-- id: 171
+- id: 133
   nombre: Distribuidora Arequipeña S.A.C.
   pais: Perú
   id_tributaria: '20602563422'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0171
+  cuenta: Cuenta demo ···0133
   marcas: []
-- id: 172
+- id: 134
   nombre: Equipos de Oficina Barranquilla S.A.S.
   pais: Colombia
   id_tributaria: 959317461-3
   tipo_id: NIT
-  cuenta: Cuenta demo ···0172
+  cuenta: Cuenta demo ···0134
   marcas: []
-- id: 173
+- id: 135
   nombre: Corporación Mineros Sinú S.A.S.
   pais: Colombia
   id_tributaria: 920541110-0
   tipo_id: NIT
-  cuenta: Cuenta demo ···0173
+  cuenta: Cuenta demo ···0135
   marcas: []
-- id: 174
+- id: 136
   nombre: Logística Metalmecánicos Altiplano S.A.C.
   pais: Perú
   id_tributaria: '20239615148'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0174
+  cuenta: Cuenta demo ···0136
   marcas: []
-- id: 175
+- id: 137
   nombre: Soluciones Farmacéuticos Cumbres S.A. de C.V.
   pais: México
   id_tributaria: SFC191223BJ2
   tipo_id: RFC
-  cuenta: Cuenta demo ···0175
+  cuenta: Cuenta demo ···0137
   marcas: []
-- id: 176
-  nombre: Servicios Logísticos del Perú S.A.C. Bl. 8
-  pais: Perú
-  id_tributaria: '2010000008'
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0176
-  marcas:
-  - identificacion_invalida
-- id: 177
+- id: 138
   nombre: Textiles Otavalo S.A.
   pais: Ecuador
   id_tributaria: '1890861314001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0177
+  cuenta: Cuenta demo ···0138
   marcas: []
-- id: 178
+- id: 139
   nombre: Grupo Energéticos Bajío S.A. de C.V.
   pais: México
   id_tributaria: GEB230806N96
   tipo_id: RFC
-  cuenta: Cuenta demo ···0178
+  cuenta: Cuenta demo ···0139
   marcas: []
-- id: 179
+- id: 140
   nombre: Comercializadora Energéticos Occidente S.A. de C.V.
   pais: México
   id_tributaria: CEO120802HA7
   tipo_id: RFC
-  cuenta: Cuenta demo ···0179
+  cuenta: Cuenta demo ···0140
   marcas: []
-- id: 180
-  nombre: Servicios Logísticos del Perú S.A.C. Bl. 18
-  pais: Perú
-  id_tributaria: '2010000018'
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0180
-  marcas:
-  - identificacion_invalida
-- id: 181
+- id: 141
   nombre: Distribuidora Metalmecánicos Napo S.A.
   pais: Ecuador
   id_tributaria: 0198817945001
   tipo_id: RUC
-  cuenta: Cuenta demo ···0181
+  cuenta: Cuenta demo ···0141
   marcas: []
-- id: 182
+- id: 142
   nombre: Importadora Farmacéuticos Nazca S.A.C.
   pais: Perú
   id_tributaria: '20525238491'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0182
+  cuenta: Cuenta demo ···0142
   marcas: []
-- id: 183
-  nombre: Tecnología Avanzada S.A. de C.V. Bl. 6
-  pais: México
-  id_tributaria: ABC100006XYZ
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0183
-  marcas: []
-- id: 184
+- id: 143
   nombre: Importadora Automotrices Inca S.A.C.
   pais: Perú
   id_tributaria: '20132210536'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0184
+  cuenta: Cuenta demo ···0143
   marcas: []
-- id: 185
+- id: 144
   nombre: Importadora Navieros Altiplano S.A.C.
   pais: Perú
   id_tributaria: '20679385471'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0185
+  cuenta: Cuenta demo ···0144
   marcas: []
-- id: 186
+- id: 145
   nombre: Exportadora Metalmecánicos Tequendama S.A.S.
   pais: Colombia
   id_tributaria: 920801127-1
   tipo_id: NIT
-  cuenta: Cuenta demo ···0186
+  cuenta: Cuenta demo ···0145
   marcas: []
-- id: 187
-  nombre: Corporación Importadora del Ecuador Corp. Bl. 14
-  pais: Ecuador
-  id_tributaria: '179100014001'
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0187
-  marcas:
-  - identificacion_invalida
-- id: 188
+- id: 146
   nombre: Farmacéutica Pichincha S.A.
   pais: Ecuador
   id_tributaria: '1398263983001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0188
+  cuenta: Cuenta demo ···0146
   marcas: []
-- id: 189
+- id: 147
   nombre: Construcciones Sierra Madre S.A. de C.V.
   pais: México
   id_tributaria: CSM991206NP4
   tipo_id: RFC
-  cuenta: Cuenta demo ···0189
+  cuenta: Cuenta demo ···0147
   marcas: []
-- id: 190
+- id: 148
   nombre: Servicios Agroindustrial Amazonas S.A.C.
   pais: Perú
   id_tributaria: '20626007539'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0190
+  cuenta: Cuenta demo ···0148
   marcas: []
-- id: 191
+- id: 149
   nombre: Construcciones Pacífico S.A.S.
   pais: Colombia
   id_tributaria: 973799650-7
   tipo_id: NIT
-  cuenta: Cuenta demo ···0191
+  cuenta: Cuenta demo ···0149
   marcas: []
-- id: 192
-  nombre: Soluciones Farmacéuticos Costa Verde S.A.C.
-  pais: Perú
-  id_tributaria: FALLA-999999-X
-  tipo_id: RUC
-  cuenta: Cuenta demo ···0192
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 193
+- id: 150
   nombre: Consultores Eléctricos Inca S.A.C.
   pais: Perú
   id_tributaria: '20052272735'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0193
+  cuenta: Cuenta demo ···0150
   marcas: []
-- id: 194
+- id: 151
   nombre: Soluciones Automotrices Pichincha S.A.
   pais: Ecuador
   id_tributaria: '1795625786001'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0194
+  cuenta: Cuenta demo ···0151
   marcas: []
-- id: 195
+- id: 152
   nombre: Consultores Empresariales Querétaro S.A. de C.V.
   pais: México
   id_tributaria: CEQ051103VY7
   tipo_id: RFC
-  cuenta: Cuenta demo ···0195
+  cuenta: Cuenta demo ···0152
   marcas: []
-- id: 196
+- id: 153
   nombre: Logística Ambientales Pacífico Norte S.A. de C.V.
   pais: México
   id_tributaria: LAP210517ZH8
   tipo_id: RFC
-  cuenta: Cuenta demo ···0196
+  cuenta: Cuenta demo ···0153
   marcas: []
-- id: 197
+- id: 154
   nombre: Corporación Forestales Mantaro S.A.C.
   pais: Perú
   id_tributaria: '20679479416'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0197
+  cuenta: Cuenta demo ···0154
   marcas: []
-- id: 198
+- id: 155
   nombre: Comercializadora Mineros Cauca S.A.S.
   pais: Colombia
   id_tributaria: 920447830-3
   tipo_id: NIT
-  cuenta: Cuenta demo ···0198
+  cuenta: Cuenta demo ···0155
   marcas: []
-- id: 199
-  nombre: Falla Provisiones Internacionales Bl. 20
-  pais: México
-  id_tributaria: FALLA-999999-X
-  tipo_id: RFC
-  cuenta: Cuenta demo ···0199
-  marcas:
-  - identificacion_repetida
-  - identificacion_invalida
-- id: 200
+- id: 156
   nombre: Inversiones Navieros Nazca S.A.C.
   pais: Perú
   id_tributaria: '20840765041'
   tipo_id: RUC
-  cuenta: Cuenta demo ···0200
+  cuenta: Cuenta demo ···0156
   marcas: []

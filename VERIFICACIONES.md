@@ -4,8 +4,12 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
-| VER-0022 | 2026-10-17 18:28 | APROBADO | R4: moneda base USD y configurable (R5.6-R5.8): datos a USD con escala uniforme 1 USD = 4000 COP, sin COP fijo en motor ni pantallas, regla R5.7; spec, pruebas y AVANCES | 0 | 1 | 3990ea3 | — |
-| VER-0021 | 2026-10-17 18:21 | APROBADO | R1: archivo de salida pagos_aprobados.csv (AS1-AS4): solo facturas PAGADA, cuenta del registro, cadena verificada, boton en la pagina Acta; spec, 17 pruebas, README y AVANCES | 0 | 1 | 3990ea3 | — |
+| VER-0026 | 2026-10-17 19:10 | APROBADO | Fusion de main (PR 15, 16, 17) en la rama de R1 y R4: datos de base escalados a USD sobre los 156 proveedores, pruebas ajustadas, VER renumerados a 0024 y 0025, AVANCES reconciliado | 0 | 0 | bfef4f4 | — |
+| VER-0025 | 2026-10-17 18:28 | APROBADO | R4: moneda base USD y configurable (R5.6-R5.8): datos a USD con escala uniforme 1 USD = 4000 COP, sin COP fijo en motor ni pantallas, regla R5.7; spec, pruebas y AVANCES | 0 | 1 | 3990ea3 | — |
+| VER-0024 | 2026-10-17 18:21 | APROBADO | R1: archivo de salida pagos_aprobados.csv (AS1-AS4): solo facturas PAGADA, cuenta del registro, cadena verificada, boton en la pagina Acta; spec, 17 pruebas, README y AVANCES | 0 | 1 | 3990ea3 | — |
+| VER-0023 | 2026-10-17 19:01 | APROBADO | Revisión total de la documentación tras el PR #16: AVANCES, README, specs/README, tareas (ET3, ET7, ET8, PT7, PT10), trazabilidad del motor, OCD3 aplicada y P32 nuevo; sin código | 0 | 1 | 4a08313 | — |
+| VER-0022 | 2026-10-17 18:54 | APROBADO | El motor usa los 156 proveedores válidos (OCD4, OT2 parcial, OC1.6): lista permitida desde proveedores.yaml y migración de casos, calendario, muestras, semilla de la demo, README y pruebas | 0 | 1 | f65ca8f | — |
+| VER-0021 | 2026-10-17 18:44 | APROBADO | Listado de proveedores válidos: data/proveedores.yaml pasa de 200 a 156 proveedores (sin marcas); OCD5 y OCD11 resueltas, OCD13 nueva; AVANCES y specs al día | 0 | 1 | 3990ea3 | — |
 | VER-0020 | 2026-10-17 18:14 | APROBADO | AVANCES y spec del archivo de salida: se quitan las notas de Gemini y el nombre del CEO; el agente de reglas en lenguaje natural pasa a la fase 1 del roadmap (R7) y contratos queda R8 | 0 | 1 | 65fcb0f | — |
 | VER-0019 | 2026-10-17 18:10 | APROBADO | Documentacion al dia con la reunion con el CEO de Blinka: enfoque cliente de Blinka, roadmap R1-R14 por fases, pendientes P29-P31 y spec nueva archivo-de-salida (AS1-AS4); sin codigo | 0 | 1 | 07b4849 | — |
 | VER-0018 | 2026-10-17 17:08 | APROBADO | Panel 1 sin botones de ejemplo: solo se sube archivo, 4 archivos de muestra descargables con rotulos neutros (PP2.4, PP2.5, EA8.4); spec, pruebas, README y AVANCES | 0 | 1 | bb0f497 | — |
@@ -27,17 +31,38 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
 
-## VER-0022 — APROBADO
+## VER-0026 — APROBADO
+
+- **NOTA** (errores) `data/calendario.csv`: Con los 156 proveedores, la obligacion O4 (2.850.350 COP) no es multiplo exacto de la tasa 1/4000 y se redondeo a 712,59 USD; el emparejamiento por tolerancia no cambia → Ninguna
+
+## VER-0025 — APROBADO
 
 - **ADVERTENCIA** (alcance) `data/reglas.yaml`: Los limites en USD son un supuesto (equivalen a los de pesos con 1 USD = 4000 COP); no se sabe en que moneda fija Blinka los limites de cada cliente (AVANCES P31) → Preguntarle a Blinka
 - **NOTA** (errores) `data/tasas.yaml`: Con la base en USD el redondeo es a centavos de USD: una diferencia de 1 COP en el limite del 10 por ciento ya no se distingue; la prueba de zona gris usa 400 COP de margen → Documentado en el diseno del motor
 - **NOTA** (seguridad) `engine/revisiones/montos.py`: R5.7 escala al senior si la tabla de cambio no da 1 para la base; ninguna regla se afloja y las 20 decisiones de prueba no cambian → Ninguna
 
-## VER-0021 — APROBADO
+## VER-0024 — APROBADO
 
 - **ADVERTENCIA** (alcance) `acta/exportar_pagos.py`: Las columnas del archivo son un supuesto: no se conoce el formato que espera Blinka (AS-D1, AVANCES P30). id_tributaria y orden_compra salen vacias hasta que entren las ordenes de compra (R3) → Confirmar el formato con Blinka
 - **NOTA** (seguridad) `acta/exportar_pagos.py`: Una aprobada manualmente cuyo beneficiario no esta en el registro (por ejemplo un beneficiario nuevo aprobado por el senior) no entra al archivo y se avisa; es la decision AS-D2 por omision → Decidir si se actualiza el registro de proveedores al aprobar
 - **NOTA** (errores) `app/pages/4_Acta.py`: El archivo se genera en cada recarga de la pagina y el lote_id lleva la hora; dos descargas seguidas tienen lotes distintos y nada impide enviar dos veces la misma factura (R14, AS-D3) → Constancia en el acta en una segunda etapa
+
+## VER-0023 — APROBADO
+
+- **ADVERTENCIA** (errores) `specs/motor-de-reglas/tasks.md`: Los 'Listo cuando' de T4 a T8 siguen nombrando archivos de prueba que no existen (test_entrada.py, test_decision.py...); la tabla de trazabilidad ya apunta a tests/test_motor.py y lo aclara → Dejarlo así (registro histórico) o reescribir esas líneas si se retoma la spec
+- **NOTA** (alcance) `docs/Ruta-de-una-factura.pdf`: Las maquetas del PDF siguen con los beneficiarios anteriores (P6); no se pueden regenerar desde aquí → Regenerar desde la página en línea del equipo
+- **NOTA** (errores) `AVANCES.md`: No se pudo comprobar qué commit corre Railway: la red de la sesión no alcanza el dominio (403 del proxy) → Revisar ?diagnostico=1 (P32)
+
+## VER-0022 — APROBADO
+
+- **ADVERTENCIA** (alcance) `docs/Ruta-de-una-factura.pdf`: Las maquetas del PDF muestran los beneficiarios de ejemplo anteriores → Regenerar el PDF (P6)
+- **NOTA** (alcance) `data/demo_semilla.py`: Brasil y Alemania no están en el listado de válidos: sus papeles pasaron a Perú (montos convertidos de BRL a PEN) y Ecuador (USD); el canal sugerido cambia de Pix y SEPA a transferencia en Perú y SWIFT → Ninguna
+- **NOTA** (seguridad) `engine/reglas_io.py:registros_de_proveedores`: Un acuerdo o un movimiento de un proveedor que no está en el registro hace fallar la carga en vez de quedar como beneficiario permitido → Ninguna
+
+## VER-0021 — APROBADO
+
+- **ADVERTENCIA** (alcance) `specs/ordenes-de-compra/requirements.md:OCD13`: Ninguno de los 30 proveedores de las órdenes de compra está en el listado de válidos; sus órdenes no se pueden cargar sin escalar todas → Pedir un archivo de órdenes con proveedores válidos
+- **NOTA** (alcance) `data/registros.yaml`: No se tocan los 9 beneficiarios con los que decide el motor: eliminarlos rompería los 20 casos, el calendario y la demo; reemplazarlos es OCD4 y OT2 → Decidir OCD4
 
 ## VER-0020 — APROBADO
 
