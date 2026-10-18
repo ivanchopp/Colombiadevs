@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from acta.escribir import LARGO_MAX_MOTIVO, escribir_evento
 from acta.estado import Factura, facturas_por_estado
+from engine.compras import normalizar_oc, proveedor_por_id
 from engine.guardarrail import AprobacionRechazada, validar_aprobacion
 from engine.revisiones.calendario import estado_obligaciones
 from engine.reglas_io import (EDITABLES, ErrorDeReglas, cambios_que_aflojan, cargar_contexto_base,
@@ -88,6 +89,43 @@ def estados_calendario(ctx, reglas):
 def inesperadas(facturas: dict[str, Factura]) -> list[Factura]:
     return [f for f in facturas.values()
             if any(r["regla"] == "R6.2" for r in f.decision.get("revisiones", []))]
+
+
+ESTADO_FACTURA = {"PAGADA": "pagada", "PENDIENTE": "escalada", "FRENADA": "frenada", "RECHAZADA": "rechazada"}
+ADVERTENCIA_OC = {"no_coincide_con_proveedor": "la identificación de la orden no coincide con la del proveedor"}
+
+
+def ordenes_con_estado(ctx, facturas: dict[str, Factura]) -> list[dict]:
+    """Una fila por orden de compra para la página de órdenes (PP9.1). El estado lo calcula el motor (OC5)."""
+    filas = []
+    for clave, oc in sorted(ctx.ordenes.items(), key=lambda kv: kv[1].numero):
+        prov = proveedor_por_id(ctx, oc.proveedor_id)
+        usada = ctx.oc_facturadas.get(clave)
+        f = facturas.get(usada) if usada else None
+        filas.append({
+            "numero": oc.numero, "proveedor": prov.nombre if prov else "(proveedor no encontrado)",
+            "articulo": oc.articulo, "total": formato_monto(oc.total, oc.moneda),
+            "estado": "facturada" if usada else "abierta", "factura": usada or "—",
+            "estado_factura": ESTADO_FACTURA.get(f.estado, f.estado) if f else "—",
+            "advertencia": "; ".join(ADVERTENCIA_OC.get(m, m) for m in oc.marcas) or "—"})
+    return filas
+
+
+def oc_de_factura(factura: Factura, ctx) -> dict | None:
+    """La orden que cita una factura y el resultado de la revisión OC4, para el detalle (PP9.3)."""
+    numero = (factura.decision.get("ficha") or {}).get("orden_compra")
+    if not numero:
+        return None
+    revision = [r for r in factura.decision.get("revisiones", []) if r["regla"].startswith("OC")]
+    resultado = " · ".join(f"{r['resultado']}: {r['mensaje']}" for r in revision) or "sin revisión registrada"
+    oc = ctx.ordenes.get(normalizar_oc(numero))
+    if oc is None:
+        return {"numero": numero, "existe": False, "resultado": resultado}
+    prov = proveedor_por_id(ctx, oc.proveedor_id)
+    usada = ctx.oc_facturadas.get(normalizar_oc(oc.numero))
+    return {"numero": oc.numero, "existe": True, "proveedor": prov.nombre if prov else "(proveedor no encontrado)",
+            "total": formato_monto(oc.total, oc.moneda), "estado": "facturada" if usada else "abierta",
+            "resultado": resultado}
 
 
 def cambiar_reglas(almacen, sala_id, actuales, valores: dict, rol: str, motivo: str):

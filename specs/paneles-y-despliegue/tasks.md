@@ -15,5 +15,6 @@ Estado: **borrador**. Requisitos: `requirements.md` · Diseño: `design.md`. Due
 | PT9 | Conectar con el motor (`registrar_decision`) y el agente de entrada | PP5, PP2 | Hecho |
 | PT10 | Despliegue en Railway: `Dockerfile`, `railway.toml`, volumen, variables, `README.md` | PD1 | **Hecho:** desplegado en Railway y probado desde fuera el 17 oct (salud, Gemini, `FECHA_DEMO`). Falta comprobar que el acta sobrevive a un reinicio y que corre el último `main` (P32). PostgreSQL pendiente |
 | PT11 | Página de reglas: ver, editar con formulario, vista previa, afloja/restringe y `CAMBIO_REGLA` en el acta | PP8, R9.4 a R9.6 | Hecho |
+| PT13 | Página «Órdenes de compra», orden citada en el detalle de la factura y prueba de que el Panel 1 no muestra órdenes | PP9, OC6 | Hecho |
 | PT12 | Página de resumen de conciliación (capa 3) | AC8 | Pendiente |
 | PT13 | Panel 1: quitar los botones de ejemplo y ofrecer cuatro archivos de muestra descargables | PP2.4, PP2.5, EA8.4 | Hecho |

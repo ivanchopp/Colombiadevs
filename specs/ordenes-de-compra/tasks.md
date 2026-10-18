@@ -11,7 +11,7 @@ Antes de seguir con las órdenes reales, el equipo confirma **OCD1, OCD12 y OCD1
 | OT4 | Estado de la OC desde el acta y `orden_compra` en el payload de `DECISION` y en `facturas.csv` | OC5 | 0,75 h | **Parcial:** el estado «facturada» sale del acta (`contexto_desde_acta`); falta la columna en `facturas.csv` (el payload ya la lleva dentro de `ficha`) |
 | OT5 | Agente de entrada: leer y comparar número de OC e identificación tributaria; modo demo con las facturas nuevas | OC3 | 1 h | **Hecho** (EA2.5 y EA3.9; 3 muestras con OC en el Panel 1 y una obligación nueva en el calendario; ver «OT5» en `design.md`) |
 | OT6 | Casos de OC7.1 en `casos.yaml`, estrategia de Hypothesis y `tests/test_ordenes_compra.py` | OC7, OC8 | 1 h | **Hecho** con órdenes sintéticas |
-| OT7 | Página «Órdenes de compra», OC en el detalle de la factura y 3 facturas de ejemplo con OC en el Panel 1 | OC6 | 1 h | Pendiente |
+| OT7 | Página «Órdenes de compra», OC en el detalle de la factura y 3 facturas de ejemplo con OC en el Panel 1 | OC6 | 1 h | **Hecho** (PP9 y PT13 en `paneles-y-despliegue`; las 3 muestras salieron con OT5) |
 
 **Total estimado:** unas 7 horas. **Versión mínima** si falta tiempo: OT1, OT2, OT3 y OT6 (el motor decide con OC y está probado). Sin OT5, la OC solo entra por las fichas de prueba y el modo demo; sin OT7, no se ve en pantalla.
 

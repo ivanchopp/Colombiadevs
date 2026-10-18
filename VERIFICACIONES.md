@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0034 | 2026-10-17 20:23 | APROBADO | OT7: página Órdenes de compra en el Panel 2, orden citada en el detalle de la factura, funciones de apoyo y 12 pruebas; spec PP9 y PT13 | 0 | 0 | 865bed0 | — |
 | VER-0033 | 2026-10-17 20:10 | APROBADO | OT5: el agente de entrada lee el número de orden de compra y el NIT (IA, patrones y segunda lectura), 3 muestras con OC, obligación O9 en el calendario y arreglo del monto absurdo (1E100) en el motor | 0 | 1 | 60dbd11 | — |
 | VER-0032 | 2026-10-17 20:01 | APROBADO | Fusión de main (PR #18, documentación) en la rama de R2 y R3 antes de abrir el PR: conserva VER-0027 de main y renumera las verificaciones de la rama a VER-0028 a VER-0031 | 0 | 0 | 6ec6a2a | — |
 | VER-0031 | 2026-10-17 19:22 | APROBADO | Fusión de main (R1 archivo de salida y R4 moneda base USD, PR #14) en la rama de R2 y R3: calendario de los casos de OC en USD, sin moneda por defecto en OrdenCompra y renumeración de verificaciones a VER-0027 a VER-0029 | 0 | 0 | 1764f22 | — |
@@ -37,6 +38,11 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0034 — APROBADO
+
+- **NOTA** (convenciones) `app/pages/6_Ordenes_de_compra.py:1`: El menú lateral de Streamlit muestra «Ordenes de compra» sin tilde (sale del nombre del archivo), igual que P12 → Opcional: st.navigation
+- **NOTA** (alcance) `data/ordenes_compra.yaml:1`: La página muestra las órdenes sintéticas (OCD13) y lo dice en pantalla («de ejemplo, supuesto»); falta la columna orden_compra en facturas.csv → Hacerlo cuando lleguen las órdenes reales
 
 ## VER-0033 — APROBADO
 

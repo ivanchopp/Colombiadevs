@@ -68,3 +68,10 @@ flowchart LR
 - **Vista previa:** `engine.simular.simular(filas, ctx, antes, después)` vuelve a evaluar la ficha guardada de cada decisión con las dos versiones y devuelve las que cambian. No escribe nada.
 - **Confirmar:** `app.apoyo.cambiar_reglas` valida rol, motivo y coherencia, y escribe el evento. Si un rol `PERSONA` intenta aflojar, se registra `INTENTO_RECHAZADO`.
 - shortcut: el cambio se aplica sobre la versión base vigente hoy; si `reglas.yaml` cambia de versión, la sala conserva sus parámetros cambiados. Basta para la demo.
+
+## Página de órdenes de compra (PP9)
+
+- `app/pages/6_Ordenes_de_compra.py` (el menú lo muestra sin tilde, como P12). Lee `ctx.ordenes` y `ctx.oc_facturadas` que ya arma el motor desde el acta; no calcula nada propio.
+- `app/apoyo.py`: `ordenes_con_estado(ctx, facturas)` devuelve una fila por orden (número, proveedor, artículo, total formateado, estado, factura que la usó y su estado, advertencia) y `oc_de_factura(factura, ctx)` devuelve lo que muestra el detalle (o `None` si la factura no cita OC).
+- El detalle del tablero agrega una línea bajo la ficha con la orden citada y el resultado de OC4 (la revisión ya figura en la lista de revisiones).
+- El Panel 1 no cambia: sigue sin mostrar órdenes (PP9.4).

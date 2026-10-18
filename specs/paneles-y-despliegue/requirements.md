@@ -78,6 +78,13 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 - **PP8.6** PARA confirmar, EL SISTEMA DEBERÁ exigir un motivo y registrar un evento `CAMBIO_REGLA` con los valores antes y después, si afloja, quién lo pidió, quién lo firmó y la versión nueva (AC3.3).
 - **PP8.7** UN cambio confirmado DEBERÁ aplicarse solo a las facturas que se decidan después, y solo en esa sala. Las decisiones ya registradas no cambian.
 
+### PP9. Órdenes de compra (OC6)
+- **PP9.1** (OC6.1) EL PANEL 2 DEBERÁ tener una página «Órdenes de compra» con cada orden: número, proveedor, artículo, total en la moneda de la orden, estado («abierta» o «facturada») y, si está facturada, la factura que la usó con su estado. Las cifras de arriba (abiertas y facturadas) salen del mismo cálculo que el motor (OC5), no de la pantalla.
+- **PP9.2** LA página DEBERÁ decir que las órdenes son de ejemplo («supuesto») y mostrar una orden marcada «no coincide con el proveedor» con esa advertencia.
+- **PP9.3** (OC6.2) EL detalle de una factura DEBERÁ mostrar, si cita una orden, su número, proveedor, total y estado, y el resultado de la revisión de la orden (OC4). SI cita una orden que no existe, ENTONCES DEBERÁ decir «orden inexistente»; NUNCA inventar datos.
+- **PP9.4** (OC6.3) EL PANEL 1 NO DEBERÁ mostrar órdenes, montos autorizados ni si una orden existe.
+- **PP9.5** LAS funciones de apoyo (`app/apoyo.py`) DEBERÁN armar estas vistas sin lógica de decisión (PP7.1) y el texto de proveedores y artículos se muestra como texto plano (PP7.3).
+
 ## Decisiones abiertas
 
 | # | Pregunta | Propuesta por defecto |
