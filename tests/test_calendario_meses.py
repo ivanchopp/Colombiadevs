@@ -50,18 +50,35 @@ def test_pp6_4_abre_en_el_mes_de_las_obligaciones_y_las_muestra(monkeypatch, alm
     assert any("Tecnología Cafetera" in t.value for t in at.text)               # las obligaciones del mes están
 
 
-def test_pp6_4_siguiente_muestra_meses_futuros_y_avisa_si_no_hay_datos(monkeypatch, almacen, sala):
+def test_pp6_4_noviembre_y_diciembre_traen_obligaciones_de_ejemplo_pendientes(monkeypatch, almacen, sala):
     at = abrir(monkeypatch, almacen, sala)
     boton(at, "Siguiente").click().run()
     assert not at.exception and at.session_state["mes_calendario"] == (2026, 11)
     assert any("Noviembre 2026" in s.value for s in at.subheader)
+    assert not any("No hay obligaciones esperadas" in i.value for i in at.info)
+    texto = " ".join(t.value for t in at.text)
+    assert "Tecnología Cafetera" in texto and "… pendiente" in texto and "! atrasada" not in texto   # hoy es 17 oct
+    boton(at, "Siguiente").click().run()
+    assert at.session_state["mes_calendario"] == (2026, 12) and any("Diciembre 2026" in s.value for s in at.subheader)
+    assert "Tecnología Cafetera" in " ".join(t.value for t in at.text)
+
+
+def test_pp6_4_un_mes_sin_datos_lo_dice_y_no_inventa_obligaciones(monkeypatch, almacen, sala):
+    at = abrir(monkeypatch, almacen, sala)
+    at.selectbox(key="mes_calendario").set_value((2027, 1)).run()
+    assert not at.exception and any("Enero 2027" in s.value for s in at.subheader)
     assert any("No hay obligaciones esperadas este mes" in i.value for i in at.info)
-    assert not any("Tecnología Cafetera" in t.value for t in at.text)           # no se inventan obligaciones
-    boton(at, "Siguiente").click().run()
-    boton(at, "Siguiente").click().run()
-    assert at.session_state["mes_calendario"] == (2027, 1) and any("Enero 2027" in s.value for s in at.subheader)
+    assert not any("Tecnología Cafetera" in t.value for t in at.text)
     boton(at, "Anterior").click().run()
     assert at.session_state["mes_calendario"] == (2026, 12)
+
+
+def test_pp6_4_las_obligaciones_de_ejemplo_son_dias_habiles_y_de_proveedores_validos():
+    from engine.reglas_io import cargar_contexto_base
+    ctx = cargar_contexto_base(date(2026, 10, 17))
+    assert all(o.fecha.weekday() < 5 for o in ctx.calendario)                    # el calendario solo dibuja lunes a viernes
+    assert {(o.fecha.year, o.fecha.month) for o in ctx.calendario} == {(2026, 10), (2026, 11), (2026, 12)}
+    assert len({o.id for o in ctx.calendario}) == len(ctx.calendario)
 
 
 def test_pp6_4_no_se_sale_del_rango(monkeypatch, almacen, sala):

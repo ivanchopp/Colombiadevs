@@ -1,0 +1,26 @@
+{
+  "id": "VER-0060",
+  "fecha": "2026-10-18T08:29:16-05:00",
+  "cambio": "Obligaciones de ejemplo para noviembre y diciembre de 2026 en data/calendario.csv (O10 a O27) y pruebas ajustadas (PP6.4)",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "data/calendario.csv",
+    "specs/paneles-y-despliegue/requirements.md",
+    "tests/test_calendario_meses.py",
+    "tests/test_paneles.py"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "tests/test_paneles.py:76",
+      "problema": "La prueba de estados del calendario indexaba por proveedor y día del mes, y chocaba al haber varios meses; ahora indexa por fecha completa",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "git diff revisado; pytest completo: 568 pasaron y 1 falló por la clave de la prueba, corregida y repetida en tests/test_paneles.py y tests/test_calendario_meses.py (34 pasan); eval.py 29/29 con 0 pagos indebidos; datos ficticios marcados supuesto; motor no tocado",
+  "rama": "claude/determined-planck-2vrgbo",
+  "commit": "3e19df226e40ea71c80859eff5aea6d734ef3ea9",
+  "reemplaza": null
+}
