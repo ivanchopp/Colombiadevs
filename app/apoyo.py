@@ -41,6 +41,26 @@ def cola_para_rol(facturas: dict[str, Factura], rol: str) -> list[Factura]:
             if f.estado == "PENDIENTE" and RANGO[f.decision["nivel"]] <= RANGO[rol]]
 
 
+def meses_del_calendario(eventos, hoy, adelante: int = 12) -> list[tuple[int, int]]:
+    """(año, mes) navegables: desde el mes de la primera obligación (o el actual, si es anterior) y `adelante` meses más (PP6.4)."""
+    primero = min([e["fecha"] for e in eventos] + [hoy])
+    base = primero.year * 12 + primero.month - 1
+    return [((base + k) // 12, (base + k) % 12 + 1) for k in range(adelante + 1)]
+
+
+def semanas_del_mes(anio: int, mes: int) -> list[list]:
+    """Semanas de lunes a viernes que tocan el mes; los días de otros meses se devuelven igual (PP6.4)."""
+    from datetime import date, timedelta
+    primero = date(anio, mes, 1)
+    ultimo = date(anio + (mes == 12), mes % 12 + 1, 1) - timedelta(days=1)
+    lunes = primero - timedelta(days=primero.weekday())
+    semanas = []
+    while lunes <= ultimo:
+        semanas.append([lunes + timedelta(days=i) for i in range(5)])
+        lunes += timedelta(days=7)
+    return semanas
+
+
 def pendientes_por_rol(facturas: dict[str, Factura]) -> dict[str, int]:
     """Aprobaciones pendientes que le tocan a cada rol según el nivel que exige la decisión (PP3.3).
     No cuenta las de ficha inválida: solo se pueden rechazar (PP5.7)."""

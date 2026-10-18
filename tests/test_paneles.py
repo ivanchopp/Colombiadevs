@@ -73,11 +73,12 @@ def test_formato_monto():
 def test_pp6_2_estados_del_calendario(almacen, sala):
     hoy = date(2026, 10, 17)
     ctx = contexto_desde_acta(cargar_contexto_base(hoy), almacen.filas(sala))
-    est = {(e["proveedor"], e["fecha"].day): e["estado"]
+    est = {(e["proveedor"], e["fecha"]): e["estado"]
            for e in apoyo.estados_calendario(ctx, cargar_reglas(hoy)[0])}
-    assert est[("Alimentos del Valle S.A.S.", 14)] == "atrasada"
-    assert est[("Consultores Energéticos Magdalena S.A.S.", 21)] == "pendiente"
-    assert est[("Tecnología Cafetera S.A.S.", 2)] == "llegó"
+    assert est[("Alimentos del Valle S.A.S.", date(2026, 10, 14))] == "atrasada"
+    assert est[("Consultores Energéticos Magdalena S.A.S.", date(2026, 10, 21))] == "pendiente"
+    assert est[("Tecnología Cafetera S.A.S.", date(2026, 12, 2))] == "pendiente"             # meses futuros: aún no vencen
+    assert est[("Tecnología Cafetera S.A.S.", date(2026, 10, 2))] == "llegó"
 
 
 @pytest.fixture
