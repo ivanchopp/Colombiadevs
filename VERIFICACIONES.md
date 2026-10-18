@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0052 | 2026-10-18 06:31 | APROBADO | Verificación de lo nuevo en main (77a8763..52e1387, PR #3 a #26) fusionado en la rama de trabajo | 0 | 2 | e6138f3 | — |
 | VER-0051 | 2026-10-17 22:30 | APROBADO | Revisión del estado tras el PR #25: guion de la demo, índice de specs, ET3/ET7, PT13 duplicado y AVANCES al día; sin código | 0 | 1 | 057715c | — |
 | VER-0050 | 2026-10-17 21:43 | APROBADO | EA12/ET14: XML de otros países de LATAM (SRI, CFE, NF-e, DTE, Costa Rica, SIFEN) sin IA desde una tabla de rutas, fusionado con el CFDI del PR #24 (EA11); decimal estricto en las dos lecturas (también CFDI y UBL); ISO-8859-1; RUC de SUNAT; XML desconocido se lee como texto y se escala; arreglo del choque sobre SRI vs CFDI; spec, pruebas, README, Panel 1 y AVANCES | 0 | 2 | ae659cc | — |
 | VER-0049 | 2026-10-17 21:33 | APROBADO | Fusion de main (R6, PR 21 y 23) en la rama del CFDI: VER del CFDI pasa a 0048, tarea del CFDI pasa a ET13 porque ET12 la uso R6, AVANCES reconciliado; sin codigo nuevo | 0 | 0 | 0b90e4f | — |
@@ -55,6 +56,13 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0052 — APROBADO
+
+- **ADVERTENCIA** (errores) `AVANCES.md:20`: La lectura con IA real no se ha comprobado en producción: Gemini falla y el sistema se degrada a patrones (hallazgo de R6, P17) → Resolver P17 antes de decir en la demo que la IA lee cualquier factura; probar con python3 -m agents.probar
+- **ADVERTENCIA** (errores) `AVANCES.md:6`: La última actualización de AVANCES.md es del 17 oct 22:30 y habla de PR #25; main ya trae el PR #26 y Railway no se ha confirmado en el último commit → Actualizar AVANCES.md y confirmar el commit desplegado en ?diagnostico=1
+- **NOTA** (seguridad) `engine/revisiones/frenar.py:21`: OC4.1: una orden de compra válida sustituye al acuerdo registrado (R3.5). Es una relajación acotada, cubierta por pruebas y por la revisión OC4 → Ninguna; vigilar que las órdenes reales (OCD13) mantengan las mismas revisiones
+- **NOTA** (seguridad) `tests/`: Tres cadenas con aspecto de clave (AIzaSECRETO...) son datos falsos de pruebas, no credenciales → Ninguna
 
 ## VER-0051 — APROBADO
 

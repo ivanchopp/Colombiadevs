@@ -1,0 +1,47 @@
+{
+  "id": "VER-0052",
+  "fecha": "2026-10-18T06:31:29-05:00",
+  "cambio": "Verificación de lo nuevo en main (77a8763..52e1387, PR #3 a #26) fusionado en la rama de trabajo",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "engine/guardarrail.py",
+    "engine/evaluar.py",
+    "engine/revisiones/orden_compra.py",
+    "engine/revisiones/frenar.py",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "errores",
+      "ubicacion": "AVANCES.md:20",
+      "problema": "La lectura con IA real no se ha comprobado en producción: Gemini falla y el sistema se degrada a patrones (hallazgo de R6, P17)",
+      "correccion": "Resolver P17 antes de decir en la demo que la IA lee cualquier factura; probar con python3 -m agents.probar"
+    },
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "errores",
+      "ubicacion": "AVANCES.md:6",
+      "problema": "La última actualización de AVANCES.md es del 17 oct 22:30 y habla de PR #25; main ya trae el PR #26 y Railway no se ha confirmado en el último commit",
+      "correccion": "Actualizar AVANCES.md y confirmar el commit desplegado en ?diagnostico=1"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "engine/revisiones/frenar.py:21",
+      "problema": "OC4.1: una orden de compra válida sustituye al acuerdo registrado (R3.5). Es una relajación acotada, cubierta por pruebas y por la revisión OC4",
+      "correccion": "Ninguna; vigilar que las órdenes reales (OCD13) mantengan las mismas revisiones"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "tests/",
+      "problema": "Tres cadenas con aspecto de clave (AIzaSECRETO...) son datos falsos de pruebas, no credenciales",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "git fetch y fusión de origin/main (52e1387) sin conflictos; python3 -m pytest -q: 473 passed (venv con requirements.txt); python3 eval.py: 29/29, 0 pagos indebidos, 29/29 explicadas; revisado el diff de engine/guardarrail.py y engine/evaluar.py: el guardarraíl se refuerza (ficha inválida escala, no se puede aprobar una ficha inválida, PAGAR propuesto contra el motor se rechaza); escaneo de secretos en el diff y en git ls-files sin credenciales reales; no se probó Railway ni la IA real",
+  "rama": "claude/funny-goodall-s310jc",
+  "commit": "e6138f31cfaf9c4a975330629534910f871afc6c",
+  "reemplaza": null
+}
