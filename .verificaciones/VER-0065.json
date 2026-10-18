@@ -1,0 +1,23 @@
+{
+  "id": "VER-0065",
+  "fecha": "2026-10-18T09:36:25-05:00",
+  "cambio": "Contratos (leer, extraer información y establecer reglas del negocio) agregados al roadmap R8 y al README",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "README.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "AVANCES.md",
+      "problema": "R8 amplía el alcance y todavía no tiene spec; la regla del proyecto pide escribirla antes del código",
+      "correccion": "Escribir specs/contratos/ antes de programar nada"
+    }
+  ],
+  "comprobaciones": "git diff revisado; sin cambios de código; el principio de la IA que solo propone se mantiene en el texto",
+  "rama": "claude/determined-planck-2vrgbo",
+  "commit": "5fdfeca5f18eb4ed8b645193b8ca7ef34fa2b8f2",
+  "reemplaza": null
+}

@@ -1,0 +1,23 @@
+{
+  "id": "VER-0064",
+  "fecha": "2026-10-18T09:32:42-05:00",
+  "cambio": "Se retira docs/descripcion-del-proyecto.md de la rama por petición del equipo (nunca llegó a main) y se corrige AVANCES.md",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "docs/descripcion-del-proyecto.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "VER-0063",
+      "problema": "El registro VER-0063 sigue describiendo la descripción que se retiró; no se edita porque el historial es solo de añadir",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "git diff revisado; el archivo no existe en origin/main; sin código",
+  "rama": "claude/determined-planck-2vrgbo",
+  "commit": "81e95ea088f2f9b95dd14e967a1a1e897ab44925",
+  "reemplaza": null
+}
