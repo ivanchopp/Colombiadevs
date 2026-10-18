@@ -38,7 +38,38 @@ def es_xml(texto: str | None) -> bool:
     return bool(texto) and texto.lstrip("\ufeff \t\r\n").startswith("<")
 
 
+RE_CFDI = re.compile(rf"<{_P}Comprobante\b(?P<a>[^>]*)>", re.I)
+RE_CFDI_EMISOR = re.compile(rf"<{_P}Emisor\b(?P<a>[^>]*?)/?>", re.I)
+RE_ATRIBUTO = re.compile(r"\b(?P<k>[A-Za-z]+)\s*=\s*(?:\"(?P<v>[^\"]*)\"|'(?P<w>[^']*)')")
+
+
+def _atributos(cadena: str) -> dict:
+    return {m.group("k"): (m.group("v") if m.group("v") is not None else m.group("w")) for m in RE_ATRIBUTO.finditer(cadena)}
+
+
+def leer_cfdi(texto: str) -> dict:
+    """Segunda lectura de un CFDI (EA11.8): patrones sobre los atributos, no el analizador."""
+    r = {"beneficiario": None, "numero": None, "monto": None, "moneda": None, "vence": None}
+    c = RE_CFDI.search(texto)
+    a = _atributos(c.group("a")) if c else {}
+    if a.get("Total") and parsear_monto(a["Total"]) is not None:
+        r["monto"] = parsear_monto(a["Total"])
+    m = (a.get("Moneda") or "").upper()
+    r["moneda"] = m if len(m) == 3 and m.isalpha() and m != "XXX" else None
+    serie, folio = (a.get("Serie") or "").strip(), (a.get("Folio") or "").strip()
+    r["numero"] = ((f"{serie}-{folio}" if serie and folio else folio) or None)
+    e = RE_CFDI_EMISOR.search(texto)
+    ae = _atributos(e.group("a")) if e else {}
+    r["beneficiario"] = (ae.get("Nombre") or "").strip() or None
+    r["id_tributaria"] = (ae.get("Rfc") or "").strip().upper() or None
+    if r["numero"]:
+        r["numero"] = r["numero"].upper()
+    return r
+
+
 def leer_xml(texto: str) -> dict:
+    if RE_CFDI.search(texto):
+        return leer_cfdi(texto)
     r = {"beneficiario": None, "numero": None, "monto": None, "moneda": None, "vence": None}
     m = RE_XML_MONTO.search(texto)
     if m and parsear_monto(m.group("m")) is not None:

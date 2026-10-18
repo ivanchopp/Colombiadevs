@@ -15,3 +15,4 @@ Dueño sugerido: **B** (agentes). Requisitos: `requirements.md` · Diseño: `des
 | ET9 | Línea de diagnóstico del proveedor (`?diagnostico=1`) | EA2b.6 a EA2b.8 | Hecho |
 | ET10 | Patrones de respaldo para facturas electrónicas colombianas (TOTAL, Razón social, Nro. Doc., moneda del total en letras) | EA3.4 a EA3.8 | Hecho |
 | ET11 | Factura electrónica en XML (UBL/DIAN) sin IA, segunda lectura por patrones y dígito de verificación del NIT en local | EA10 | Hecho |
+| ET12 | Factura electrónica de México (CFDI 3.3 y 4.0) sin IA, segunda lectura por patrones y RFC con su dígito verificador en local | EA11 | Hecho |

@@ -32,3 +32,30 @@ def primer_nit(texto: str | None):
         return None
     base = re.sub(r"\D", "", m.group("n"))
     return base, m.group("d"), dv_correcto(base, m.group("d"))
+
+
+# ---------------------------------------------------------------- RFC de México (EA11.6)
+RE_RFC = re.compile(r"^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$")
+GENERICOS = {"XAXX010101000", "XEXX010101000"}
+_TABLA_RFC = {c: i for i, c in enumerate("0123456789ABCDEFGHIJKLMN&OPQRSTUVWXYZ Ñ")}
+
+
+def digito_rfc(base: str) -> str:
+    """Dígito verificador de un RFC (módulo 11): `base` son los 11 o 12 caracteres anteriores al último."""
+    r = base.upper()
+    if len(r) == 11:                                     # persona moral: se antepone un espacio
+        r = " " + r
+    suma = sum(_TABLA_RFC[c] * (13 - i) for i, c in enumerate(r[:12]))
+    d = 11 - suma % 11
+    return "0" if d == 11 else "A" if d == 10 else str(d)
+
+
+def rfc_valido(rfc: str | None) -> bool:
+    """Formato, dígito verificador y que no sea un RFC genérico. No consulta al SAT (EA11.9)."""
+    r = (rfc or "").strip().upper()
+    if r in GENERICOS or not RE_RFC.match(r):
+        return False
+    try:
+        return digito_rfc(r[:-1]) == r[-1]
+    except KeyError:
+        return False

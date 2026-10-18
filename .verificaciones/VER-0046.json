@@ -1,0 +1,36 @@
+{
+  "id": "VER-0046",
+  "fecha": "2026-10-17T21:13:19-05:00",
+  "cambio": "R5 parte 2: factura electronica de Mexico CFDI 3.3 y 4.0 sin IA (EA11, ET12): solo tipo ingreso, RFC con digito verificador en local, UUID del timbre, segunda lectura por atributos; spec, 41 pruebas, README y AVANCES",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "agents/xml_factura.py",
+    "agents/id_tributaria.py",
+    "agents/segunda_lectura.py",
+    "agents/archivo.py",
+    "tests/test_cfdi.py",
+    "specs/extraccion-y-agente-de-entrada",
+    "README.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "agents/xml_factura.py",
+      "problema": "Las pruebas usan CFDI ficticios armados a mano; los 4 XML reales del equipo no estan en el repositorio y no se probaron. Un CFDI no trae cuenta de pago ni vencimiento: ninguno llega solo a PAGAR, queda en revision",
+      "correccion": "Probar con los 4 archivos del equipo"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "agents/id_tributaria.py",
+      "problema": "El algoritmo del digito del RFC se comprobo contra tres RFC conocidos (SAT970701NN3, EKU9003173C9, GODE561231GR8); un RFC generico se trata como dudoso. No consulta al SAT",
+      "correccion": ""
+    }
+  ],
+  "comprobaciones": "pytest: 436 passed (41 nuevas); python3 eval.py: 29/29 y 0 pagos indebidos; 5 mutaciones detectadas (sin chequeo de tipo, genericos aceptados, sin digito verificador, sin chequeo de UUID, numero inventado); guardas DOCTYPE y ENTITY tambien para CFDI; sin secretos ni datos reales",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "233e90a75d23b834b8e8e4afab20ac7f2b0f7f89",
+  "reemplaza": null
+}

@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0046 | 2026-10-17 21:13 | APROBADO | R5 parte 2: factura electronica de Mexico CFDI 3.3 y 4.0 sin IA (EA11, ET12): solo tipo ingreso, RFC con digito verificador en local, UUID del timbre, segunda lectura por atributos; spec, 41 pruebas, README y AVANCES | 0 | 1 | 233e90a | — |
 | VER-0045 | 2026-10-17 21:04 | APROBADO | Rama de OT7: hashes reales en dos filas del registro de AVANCES y fila nueva; ultima verificacion VER-0045; solo documentacion, para que el PR 21 vuelva a leer la rama | 0 | 0 | bc7547d | — |
 | VER-0044 | 2026-10-17 20:56 | APROBADO | Fusión de main (PR #22: R5 XML y R7 reglas en lenguaje natural) en la rama de OT7: conserva ambos cambios de app/apoyo.py y renumera las verificaciones de la rama a VER-0042 y VER-0043 | 0 | 0 | bda2db1 | — |
 | VER-0043 | 2026-10-17 20:27 | APROBADO | Fusión de main (06e1178, quita menciones a un cargo de Blinka) en la rama de OT7 antes del PR; la verificación de OT7 pasa de VER-0034 a VER-0035 | 0 | 0 | 95178c6 | — |
@@ -49,6 +50,11 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0046 — APROBADO
+
+- **ADVERTENCIA** (alcance) `agents/xml_factura.py`: Las pruebas usan CFDI ficticios armados a mano; los 4 XML reales del equipo no estan en el repositorio y no se probaron. Un CFDI no trae cuenta de pago ni vencimiento: ninguno llega solo a PAGAR, queda en revision → Probar con los 4 archivos del equipo
+- **NOTA** (seguridad) `agents/id_tributaria.py`: El algoritmo del digito del RFC se comprobo contra tres RFC conocidos (SAT970701NN3, EKU9003173C9, GODE561231GR8); un RFC generico se trata como dudoso. No consulta al SAT
 
 ## VER-0044 — APROBADO
 
