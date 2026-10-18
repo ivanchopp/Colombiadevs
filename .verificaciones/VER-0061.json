@@ -1,0 +1,30 @@
+{
+  "id": "VER-0061",
+  "fecha": "2026-10-18T08:59:11-05:00",
+  "cambio": "README reescrito para un público de 12 años con costos (IA, servidor y persona) y enlaces; registro de la prueba del agente de reglas con la IA real (P29)",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "README.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "errores",
+      "ubicacion": "README.md:6.1",
+      "problema": "Los tokens por factura, el uso del servidor y el 30 % de escalamiento son supuestos sin medir; las cifras de costo dependen de ellos",
+      "correccion": "Medir los tokens reales en la consola de Gemini y el uso en Railway y ajustar la tabla"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "README.md",
+      "problema": "El enlace a Blinka es un perfil de terceros porque no se encontró su sitio oficial",
+      "correccion": "Cambiarlo cuando el equipo tenga el enlace oficial"
+    }
+  ],
+  "comprobaciones": "git diff revisado; precios de Gemini y Railway leídos de sus páginas oficiales el 18 oct; salarios y carga prestacional de fuentes citadas; cuentas recalculadas a mano; sin claves ni datos reales; sin cambios de código",
+  "rama": "claude/determined-planck-2vrgbo",
+  "commit": "2a30eebdb961ab91942de91009dae80aa080602d",
+  "reemplaza": null
+}

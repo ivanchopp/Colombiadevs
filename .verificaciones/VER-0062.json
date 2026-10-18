@@ -1,0 +1,23 @@
+{
+  "id": "VER-0062",
+  "fecha": "2026-10-18T09:29:58-05:00",
+  "cambio": "README ajustado para que lo entienda alguien de 15 años (lenguaje menos infantil, términos con su definición: inyección de instrucciones, huella del acta)",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "README.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "convenciones",
+      "ubicacion": "README.md",
+      "problema": "Solo cambia el lenguaje de las secciones 1 y 2; los datos de costos y la guía técnica no cambian",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "git diff revisado; sin cambios de código; cifras y enlaces sin cambios respecto a VER-0061",
+  "rama": "claude/determined-planck-2vrgbo",
+  "commit": "f7017ff9d21647ca5438bcca3d1c5ec8ae245341",
+  "reemplaza": null
+}
