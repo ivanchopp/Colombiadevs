@@ -35,6 +35,7 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 - **PP2.3** EL PANEL 1 DEBERÁ indicar que los datos son ficticios y cuántas facturas se han usado de `facturas_max_por_sala`. EL aviso NO DEBERÁ llamar «demo» a los datos ficticios, para no confundirse con el modo demo de la IA (EA8.3): dice «Datos ficticios, solo para práctica».
 - **PP2.4** EL PANEL 1 NO DEBERÁ ofrecer botones que registren una factura sin que el sistema la lea: la única entrada es subir un archivo. El sistema DEBERÁ leer el archivo y dejar que el motor de reglas decida si es normal, repetida, de beneficiario nuevo o con una orden escondida; nada en la pantalla elige ese resultado.
 - **PP2.5** EL PANEL 1 DEBERÁ ofrecer cuatro archivos de muestra ficticios para descargar y volver a subir, con un nombre neutro (el proveedor y el número de factura), sin decir qué caso es cada uno ni qué regla activa (PP2.1). La guía de qué caso muestra cada archivo queda en el `README.md`.
+- **PP2.6** CUANDO el proveedor envíe una factura, EL PANEL 1 DEBERÁ vaciar el selector de archivos (el archivo enviado no queda cargado ni se puede reenviar por error) y mostrar el chat de **esa** factura, sin texto escrito de otra. EL cuadro de respuesta DEBERÁ aparecer solo mientras la factura espera aclaraciones.
 
 ### PP3. Roles (Panel 2)
 - **PP3.1** EL PANEL 2 DEBERÁ pedir elegir un rol (`PERSONA` o `SENIOR`) antes de mostrar datos. Es un selector de demostración, no un inicio de sesión.
