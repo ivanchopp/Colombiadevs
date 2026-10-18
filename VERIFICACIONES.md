@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0050 | 2026-10-17 21:43 | APROBADO | EA12/ET14: XML de otros países de LATAM (SRI, CFE, NF-e, DTE, Costa Rica, SIFEN) sin IA desde una tabla de rutas, fusionado con el CFDI del PR #24 (EA11); decimal estricto en las dos lecturas (también CFDI y UBL); ISO-8859-1; RUC de SUNAT; XML desconocido se lee como texto y se escala; arreglo del choque sobre SRI vs CFDI; spec, pruebas, README, Panel 1 y AVANCES | 0 | 2 | ae659cc | — |
 | VER-0049 | 2026-10-17 21:33 | APROBADO | Fusion de main (R6, PR 21 y 23) en la rama del CFDI: VER del CFDI pasa a 0048, tarea del CFDI pasa a ET13 porque ET12 la uso R6, AVANCES reconciliado; sin codigo nuevo | 0 | 0 | 0b90e4f | — |
 | VER-0048 | 2026-10-17 21:13 | APROBADO | R5 parte 2: factura electronica de Mexico CFDI 3.3 y 4.0 sin IA (EA11, ET12): solo tipo ingreso, RFC con digito verificador en local, UUID del timbre, segunda lectura por atributos; spec, 41 pruebas, README y AVANCES | 0 | 1 | 233e90a | — |
 | VER-0047 | 2026-10-17 21:10 | APROBADO | Fusión de main (PR #21: OT7 y registro al día) en la rama de R6; la verificación de R6 pasa de VER-0045 a VER-0046 | 0 | 0 | c2ec3cf | — |
@@ -53,6 +54,13 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0050 — APROBADO
+
+- **ADVERTENCIA** (alcance) `agents/xml_factura.py`: Las rutas de SRI, CFE, NF-e, DTE, Costa Rica y SIFEN se escribieron con conocimiento general de esos esquemas y se probaron con XML mínimos ficticios, no con facturas reales de cada país → Probar con un XML representativo de cada país antes de presentarlo como soportado
+- **ADVERTENCIA** (alcance) `AVANCES.md`: Las 4 facturas CFDI del equipo no traen TipoDeComprobante y EA11.2 (PR #24) las rechaza; DE6 (moneda vs país) sigue abierta → Pedir los XML con TipoDeComprobante=I; spec propia para DE6
+- **NOTA** (errores) `agents/segunda_lectura.py`: Choque de la fusión: la detección del CFDI no distinguía mayúsculas y tomaba el sobre <comprobante> del SRI como CFDI; ahora decide por la raíz; mutación detectada → Ninguna
+- **NOTA** (convenciones) `specs/extraccion-y-agente-de-entrada/requirements.md`: EA11, ET13 y VER-0048 ya estaban usados por el PR #24: esta parte es EA12, ET14, DE5 y DE6 sin saltos → Ninguna
 
 ## VER-0049 — APROBADO
 
