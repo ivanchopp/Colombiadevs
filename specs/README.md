@@ -29,6 +29,7 @@ Cada criterio tiene un número (por ejemplo R3.1) y debe tener al menos una prue
 | `paneles-y-despliegue` | Borrador para revisión (paneles, página de reglas y despliegue en Railway hechos; falta la página de conciliación, PT12) |
 | `ordenes-de-compra` | Borrador para revisión (alcance nuevo del 17 oct; listado de 156 proveedores válidos cargado y usado por el motor como lista permitida; las órdenes no se cargan (OCD13); 13 decisiones, 9 abiertas) |
 | `archivo-de-salida` | Borrador para revisión (alcance nuevo de la reunión con Blinka del 17 oct; implementado con columnas supuestas; 4 decisiones abiertas) |
+| `agente-de-reglas` | Borrador para revisión (alcance nuevo de la reunión con Blinka, R7; sin programar; 6 decisiones abiertas) |
 
 ## Reglas de trabajo
 

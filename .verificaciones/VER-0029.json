@@ -1,0 +1,31 @@
+{
+  "id": "VER-0029",
+  "fecha": "2026-10-17T20:02:40-05:00",
+  "cambio": "Spec del agente de reglas en lenguaje natural (R7): requisitos AR1-AR8, diseño, tareas ART1-ART6; AVANCES y specs/README; sin codigo",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "specs/agente-de-reglas",
+    "specs/README.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "specs/agente-de-reglas/requirements.md",
+      "problema": "Seis decisiones abiertas (AR-D1 a AR-D6) con propuesta por defecto; el agente no esta programado y se calcula en unas 7 horas (4,5 h la version minima sin IA)",
+      "correccion": "El equipo confirma las decisiones antes de programar"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "specs/agente-de-reglas/design.md",
+      "problema": "El agente no tiene camino propio hacia las reglas: solo rellena el formulario existente, asi que validar_cambio, el techo duro, la firma del senior y el motivo se cumplen por construccion; la IA no recibe valores vigentes ni datos de la empresa",
+      "correccion": ""
+    }
+  ],
+  "comprobaciones": "git diff revisado; solo documentacion y una spec nueva, sin codigo; pytest 269 passed sin cambios; funciones citadas (validar_cambio, cambios_que_aflojan, simular, cambiar_reglas, crear_cliente, proveedor_activo, sin_secretos) existen en el repo; referencias R9.x, PP8.x, EA2.x y R5.1 revisadas; respeta que la IA nunca decide y que el techo duro no se edita",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "5632263242b947ba9dd89f9c910a5b98340c6ac9",
+  "reemplaza": null
+}

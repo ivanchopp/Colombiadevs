@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0029 | 2026-10-17 20:02 | APROBADO | Spec del agente de reglas en lenguaje natural (R7): requisitos AR1-AR8, diseño, tareas ART1-ART6; AVANCES y specs/README; sin codigo | 0 | 1 | 5632263 | — |
 | VER-0028 | 2026-10-17 19:20 | APROBADO | R5: factura electronica en XML (UBL/DIAN) leida sin IA, segunda lectura por patrones, digito de verificacion del NIT en local y CUFE; spec EA10, 29 pruebas, README y AVANCES | 0 | 1 | 446684f | — |
 | VER-0027 | 2026-10-17 19:11 | APROBADO | AVANCES.md al dia tras fusionar el PR 14: cabecera main 8510675, hash de R4, no probado (R1 y R4 en navegador y Railway), proximas tareas y fila de registro; sin codigo | 0 | 0 | 8510675 | — |
 | VER-0026 | 2026-10-17 19:10 | APROBADO | Fusion de main (PR 15, 16, 17) en la rama de R1 y R4: datos de base escalados a USD sobre los 156 proveedores, pruebas ajustadas, VER renumerados a 0024 y 0025, AVANCES reconciliado | 0 | 0 | bfef4f4 | — |
@@ -32,6 +33,11 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0029 — APROBADO
+
+- **ADVERTENCIA** (alcance) `specs/agente-de-reglas/requirements.md`: Seis decisiones abiertas (AR-D1 a AR-D6) con propuesta por defecto; el agente no esta programado y se calcula en unas 7 horas (4,5 h la version minima sin IA) → El equipo confirma las decisiones antes de programar
+- **NOTA** (seguridad) `specs/agente-de-reglas/design.md`: El agente no tiene camino propio hacia las reglas: solo rellena el formulario existente, asi que validar_cambio, el techo duro, la firma del senior y el motivo se cumplen por construccion; la IA no recibe valores vigentes ni datos de la empresa
 
 ## VER-0028 — APROBADO
 
