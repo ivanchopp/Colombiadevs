@@ -51,9 +51,9 @@ def intentar(accion, *args, **kw):
 izq, der = st.columns(2)
 with izq:
     st.subheader("Envía una factura")
-    archivo = st.file_uploader("Arrastra aquí un PDF, una foto o un correo",
-                               type=["pdf", "jpg", "jpeg", "png", "eml", "txt"])
-    st.caption("PDF, JPG, PNG o EML · máx. 5 MB")
+    archivo = st.file_uploader("Arrastra aquí un PDF, una foto, un correo o un XML",
+                               type=["pdf", "jpg", "jpeg", "png", "eml", "txt", "xml"])
+    st.caption("PDF, JPG, PNG, EML o XML de factura electrónica · máx. 5 MB")
     if archivo is not None and st.button("Enviar esta factura", type="primary"):
         intentar(flujo.recibir, almacen(), sala, archivo.name, archivo.getvalue())
     with st.expander("Archivos de muestra (ficticios)"):
