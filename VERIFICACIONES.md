@@ -4,6 +4,10 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0045 | 2026-10-17 21:04 | APROBADO | Rama de OT7: hashes reales en dos filas del registro de AVANCES y fila nueva; ultima verificacion VER-0045; solo documentacion, para que el PR 21 vuelva a leer la rama | 0 | 0 | bc7547d | — |
+| VER-0044 | 2026-10-17 20:56 | APROBADO | Fusión de main (PR #22: R5 XML y R7 reglas en lenguaje natural) en la rama de OT7: conserva ambos cambios de app/apoyo.py y renumera las verificaciones de la rama a VER-0042 y VER-0043 | 0 | 0 | bda2db1 | — |
+| VER-0043 | 2026-10-17 20:27 | APROBADO | Fusión de main (06e1178, quita menciones a un cargo de Blinka) en la rama de OT7 antes del PR; la verificación de OT7 pasa de VER-0034 a VER-0035 | 0 | 0 | 95178c6 | — |
+| VER-0042 | 2026-10-17 20:23 | APROBADO | OT7: página Órdenes de compra en el Panel 2, orden citada en el detalle de la factura, funciones de apoyo y 12 pruebas; spec PP9 y PT13 | 0 | 0 | 865bed0 | — |
 | VER-0041 | 2026-10-17 20:53 | APROBADO | Se quita el nombre de una persona de AVANCES y de la guía en PDF | 0 | 0 | 9698a63 | — |
 | VER-0040 | 2026-10-17 20:33 | APROBADO | Fusion de main (R2, R3, OT5, PR 18 y 20) en la rama de R5 y R7: segunda lectura del XML ahora tambien compara orden de compra y NIT, XML lee OrderReference, VER renumerados 0035-0039, AVANCES reconciliado | 0 | 1 | cb5d2cb | — |
 | VER-0039 | 2026-10-17 20:25 | APROBADO | R7 version minima sin IA: agente de reglas en lenguaje natural (ART1-ART4): agents/reglas_texto.py, caja de texto en la pagina Reglas que solo rellena el formulario, comprobacion de coherencia, origen y pedido en CAMBIO_REGLA; 55 pruebas | 0 | 1 | a1e21e7 | — |
@@ -45,6 +49,19 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0044 — APROBADO
+
+- **NOTA** (convenciones) `.verificaciones/VER-0042.json:2`: Los IDs VER-0035 y VER-0036 los ocuparon verificaciones de R5 y R7 en main; se conservaron los de main y las de OT7 pasaron a VER-0042 y VER-0043 → Ninguna
+
+## VER-0043 — APROBADO
+
+- **NOTA** (convenciones) `.verificaciones/VER-0035.json:2`: El ID VER-0034 lo ocupó otra sesión en main; se conservó el de main y la verificación de OT7 se renumeró a VER-0035 → Ninguna
+
+## VER-0042 — APROBADO
+
+- **NOTA** (convenciones) `app/pages/6_Ordenes_de_compra.py:1`: El menú lateral de Streamlit muestra «Ordenes de compra» sin tilde (sale del nombre del archivo), igual que P12 → Opcional: st.navigation
+- **NOTA** (alcance) `data/ordenes_compra.yaml:1`: La página muestra las órdenes sintéticas (OCD13) y lo dice en pantalla («de ejemplo, supuesto»); falta la columna orden_compra en facturas.csv → Hacerlo cuando lleguen las órdenes reales
 
 ## VER-0040 — APROBADO
 

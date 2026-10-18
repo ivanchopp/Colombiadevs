@@ -5,7 +5,7 @@ import streamlit as st
 from acta.estado import facturas_por_estado
 from acta.exportar_csv import exportar_eventos, exportar_facturas
 from acta.tablero import cifras, comprobar_consistencia
-from app.apoyo import DECISIONES, estados_calendario, formato_monto, monto_legible, quien_aprueba
+from app.apoyo import DECISIONES, estados_calendario, formato_monto, monto_legible, oc_de_factura, quien_aprueba
 from app.comun import (SEGUNDOS_REFRESCO, almacen, barra_lateral, contexto_y_reglas, encabezado,
                        exigir_rol, obtener_sala)
 
@@ -60,6 +60,13 @@ def tablero():
     elegida = st.selectbox("Factura", list(facturas), label_visibility="collapsed", key="detalle")
     if elegida:
         f = facturas[elegida]
+        oc = oc_de_factura(f, ctx)
+        if oc:                                                                       # PP9.3
+            if oc["existe"]:
+                st.text(f"Orden de compra {oc['numero']} · {oc['proveedor']} · total {oc['total']} · {oc['estado']}")
+            else:
+                st.text(f"Orden de compra {oc['numero']} · orden inexistente")
+            st.text(f"Revisión de la orden: {oc['resultado']}")
         izq, der = st.columns(2)
         with izq:
             st.caption("Ficha")

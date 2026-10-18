@@ -1,0 +1,25 @@
+{
+  "id": "VER-0044",
+  "fecha": "2026-10-17T20:56:40-05:00",
+  "cambio": "Fusión de main (PR #22: R5 XML y R7 reglas en lenguaje natural) en la rama de OT7: conserva ambos cambios de app/apoyo.py y renumera las verificaciones de la rama a VER-0042 y VER-0043",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "app/apoyo.py",
+    "AVANCES.md",
+    "VERIFICACIONES.md",
+    ".verificaciones"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "convenciones",
+      "ubicacion": ".verificaciones/VER-0042.json:2",
+      "problema": "Los IDs VER-0035 y VER-0036 los ocuparon verificaciones de R5 y R7 en main; se conservaron los de main y las de OT7 pasaron a VER-0042 y VER-0043",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "python3 -m pytest -q: 395 pasan (incluye 383 de main con R5 y R7 y las 12 de OT7); python3 eval.py: 29/29, 0 pagos indebidos; un solo conflicto de código (app/apoyo.py), resuelto conservando cambiar_reglas con pedido por texto y las funciones de órdenes; sin marcas de conflicto",
+  "rama": "claude/friendly-cerf-aygx2r",
+  "commit": "bda2db17c60cedf3bc3df33703b19094bf309a08",
+  "reemplaza": null
+}
