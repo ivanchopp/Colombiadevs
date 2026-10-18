@@ -1,14 +1,27 @@
 """Recepción del archivo: tipo real, tamaño y texto extraíble (EA1, EA3.1)."""
 import email
 import io
+import re
 from email import policy
+
+from .xml_factura import FORMATOS
 
 TAMANO_MAX = 5 * 1024 * 1024
 EXTENSIONES = {"pdf": "pdf", "jpg": "imagen", "jpeg": "imagen", "png": "imagen", "eml": "eml", "txt": "txt", "xml": "xml"}
 
 
+RAICES_XML = {"invoice", "attacheddocument", "autorizacion", "comprobante"} | {r.lower() for f in FORMATOS for r in f["raices"]}
+RE_RAIZ = re.compile(r"<(?:[\w.-]+:)?([\w.-]+)[\s>/]")
+RE_CODIFICACION = re.compile(rb"""^\s*(?:\xef\xbb\xbf)?<\?xml[^>]*?encoding=["']([\w.-]+)["']""")
+
+
 class ArchivoRechazado(Exception):
     pass
+
+
+def _parece_xml(datos: bytes) -> bool:
+    return datos.lstrip(b"\xef\xbb\xbf \t\r\n").startswith(b"<")
+
 
 
 def detectar_tipo(datos: bytes) -> str | None:
@@ -20,12 +33,12 @@ def detectar_tipo(datos: bytes) -> str | None:
     try:
         texto = datos.decode("utf-8")
     except UnicodeDecodeError:
-        return None
+        return "xml" if RE_CODIFICACION.match(datos) else None              # EA12.8: p. ej. ISO-8859-1 (Chile)
     if "\x00" in texto:
         return None
     primeras = texto.lstrip("\ufeff \t\r\n")[:2000].lower()
-    if primeras.startswith("<?xml") or primeras.startswith("<invoice") or primeras.startswith("<attacheddocument") \
-            or primeras.startswith("<cfdi:comprobante") or primeras.startswith("<comprobante"):
+    raiz = RE_RAIZ.match(primeras)
+    if primeras.startswith("<?xml") or (raiz and raiz.group(1) in RAICES_XML):
         return "xml"
     return "eml" if ("\nsubject:" in "\n" + primeras and "\nfrom:" in "\n" + primeras) else "txt"
 
@@ -43,6 +56,8 @@ def validar(nombre: str, datos: bytes) -> str:
     if real is None:
         raise ArchivoRechazado("No reconozco el contenido del archivo.")
     esperado = EXTENSIONES[ext]
+    if esperado == "xml" and real == "txt" and _parece_xml(datos):
+        real = "xml"                                   # EA12.7: XML sin declaración de un formato no reconocido
     if real != esperado and not (esperado == "txt" and real == "eml") and not (esperado == "eml" and real == "txt"):
         raise ArchivoRechazado("El contenido del archivo no coincide con su extensión.")
     return real
@@ -59,7 +74,11 @@ def extraer_texto(tipo: str, datos: bytes) -> str | None:
             return "\n".join((p.extract_text() or "") for p in lector.pages[:10]) or None
         except Exception:
             return None
-    texto = datos.decode("utf-8", errors="replace")
+    codificacion = RE_CODIFICACION.match(datos) if tipo == "xml" else None
+    try:
+        texto = datos.decode(codificacion.group(1).decode() if codificacion else "utf-8", errors="replace")
+    except LookupError:
+        texto = datos.decode("utf-8", errors="replace")
     if tipo == "eml":
         try:
             msg = email.message_from_string(texto, policy=policy.default)

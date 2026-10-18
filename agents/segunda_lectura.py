@@ -3,6 +3,8 @@ import re
 from datetime import date
 from decimal import Decimal, InvalidOperation
 
+from . import xml_factura
+
 MONEDAS = "COP|USD|EUR|BRL|MXN|ARS|CLP|PEN|BOB|CRC|ZAR"
 NUM = r"\d[\d.,]*"
 RE_MONTO = [
@@ -29,6 +31,13 @@ RE_XML_EMISOR = re.compile(rf"<{_P}AccountingSupplierParty\b.*?</{_P}AccountingS
 RE_XML_NOMBRE = re.compile(rf"<{_P}RegistrationName\b[^>]*>\s*(?:<!\[CDATA\[)?\s*(?P<b>[^<\]]+?)\s*(?:\]\]>)?\s*<", re.I)
 RE_XML_VENCE = re.compile(rf"<{_P}(?:DueDate|PaymentDueDate)\b[^>]*>\s*(?P<f>\d{{4}}-\d{{2}}-\d{{2}})\s*<", re.I)
 RE_XML_NIT = re.compile(rf"<{_P}CompanyID\b(?P<a>[^>]*)>\s*(?P<n>[\d.\- ]+?)\s*<", re.I)
+RE_XML_PARTY_ID = re.compile(rf"<{_P}PartyIdentification\b.*?<{_P}ID\b[^>]*>\s*(?P<n>[\w.\-]+?)\s*<", re.I | re.S)  # SUNAT
+RE_XML_RAIZ = re.compile(r"<(?![?!])(?:[\w.-]+:)?(?P<r>[\w.-]+)")
+RE_XML_RAIZ_CDATA = re.compile(r"<!\[CDATA\[\s*(?:<\?xml[^>]*\?>\s*)?<(?:[\w.-]+:)?(?P<r>[\w.-]+)")
+RE_CDATA = re.compile(r"^\s*<!\[CDATA\[(.*?)\]\]>\s*$", re.S)
+RE_XML_DV = re.compile(r"schemeID=[\"'](?P<d>\d)[\"']", re.I)
+RE_XML_OC = re.compile(rf"<{_P}OrderReference\b.*?<{_P}ID\b[^>]*>\s*(?P<oc>[^<\s]+)\s*<", re.I | re.S)
+RE_XML_ID = re.compile(rf"<{_P}Invoice\b.*?<{_P}ID\b[^>]*>\s*(?P<n>[^<\s]+)\s*<", re.I | re.S)
 RE_XML_DV = re.compile(r"schemeID=[\"'](?P<d>\d)[\"']", re.I)
 RE_XML_OC = re.compile(rf"<{_P}OrderReference\b.*?<{_P}ID\b[^>]*>\s*(?P<oc>[^<\s]+)\s*<", re.I | re.S)
 RE_XML_ID = re.compile(rf"<{_P}Invoice\b.*?<{_P}ID\b[^>]*>\s*(?P<n>[^<\s]+)\s*<", re.I | re.S)
@@ -52,8 +61,7 @@ def leer_cfdi(texto: str) -> dict:
     r = {"beneficiario": None, "numero": None, "monto": None, "moneda": None, "vence": None}
     c = RE_CFDI.search(texto)
     a = _atributos(c.group("a")) if c else {}
-    if a.get("Total") and parsear_monto(a["Total"]) is not None:
-        r["monto"] = parsear_monto(a["Total"])
+    r["monto"] = xml_factura.decimal_xml(a.get("Total"))             # EA12.3: decimal con punto
     m = (a.get("Moneda") or "").upper()
     r["moneda"] = m if len(m) == 3 and m.isalpha() and m != "XXX" else None
     serie, folio = (a.get("Serie") or "").strip(), (a.get("Folio") or "").strip()
@@ -67,13 +75,52 @@ def leer_cfdi(texto: str) -> dict:
     return r
 
 
+def _raiz_xml(texto: str) -> str | None:
+    """Nombre local de la raíz; dentro del sobre (AttachedDocument, autorizacion), el de la factura."""
+    m = RE_XML_RAIZ.search(texto)
+    if m and m.group("r") in ("AttachedDocument", "autorizacion"):
+        m = RE_XML_RAIZ_CDATA.search(texto) or m
+    return m.group("r") if m else None
+
+
+def _rx_ruta(texto: str, ruta: str) -> str | None:
+    """EA12.6: la misma ruta de la tabla, resuelta con patrones de texto y no con el analizador."""
+    partes = []
+    for trozo in ruta.split("+"):
+        alcance = texto
+        for paso in trozo.split("/"):
+            nombre = re.escape(paso)
+            m = re.search(rf"<{_P}{nombre}(?:\s[^>]*?)?(?:/>|>(?P<c>.*?)</{_P}{nombre}\s*>)", alcance, re.S)
+            alcance = (m.group("c") or "") if m else None
+            if alcance is None:
+                break
+        c = RE_CDATA.match(alcance or "")
+        valor = c.group(1) if c else alcance
+        if valor and "<" not in valor and valor.strip():
+            partes.append(valor.strip())
+    return "-".join(partes) or None
+
+
+def _leer_xml_tabla(texto: str, formato: dict) -> dict:
+    uno = lambda campo: xml_factura.primera_ruta(texto, formato[campo], _rx_ruta)
+    vence = uno("vence")
+    return {"beneficiario": uno("beneficiario"), "numero": (uno("numero") or "").upper() or None,
+            "monto": xml_factura.decimal_xml(uno("monto")), "moneda": xml_factura.moneda_xml(uno("moneda"), formato),
+            "vence": parsear_fecha(vence) if vence and re.fullmatch(r"\d{4}-\d{2}-\d{2}", vence) else None,
+            "id_tributaria": uno("id")}
+
+
 def leer_xml(texto: str) -> dict:
-    if RE_CFDI.search(texto):
+    raiz = _raiz_xml(texto)
+    if raiz == "Comprobante":                    # por la raíz: el sobre <comprobante> del SRI no es un CFDI
         return leer_cfdi(texto)
+    formato = xml_factura.formato_de(raiz) if raiz else None
+    if formato:                                                          # EA12.6
+        return _leer_xml_tabla(texto, formato)
     r = {"beneficiario": None, "numero": None, "monto": None, "moneda": None, "vence": None}
     m = RE_XML_MONTO.search(texto)
-    if m and parsear_monto(m.group("m")) is not None:
-        r["monto"], r["moneda"] = parsear_monto(m.group("m")), m.group("c").upper()
+    if m and xml_factura.decimal_xml(m.group("m")) is not None:          # EA12.3: decimal con punto
+        r["monto"], r["moneda"] = xml_factura.decimal_xml(m.group("m")), m.group("c").upper()
     emisor = RE_XML_EMISOR.search(texto)
     b = RE_XML_NOMBRE.search(emisor.group(0)) if emisor else None
     if b:
@@ -82,6 +129,9 @@ def leer_xml(texto: str) -> dict:
     if f:
         r["vence"] = parsear_fecha(f.group("f"))
     nit = RE_XML_NIT.search(emisor.group(0)) if emisor else None
+    pid = RE_XML_PARTY_ID.search(emisor.group(0)) if emisor and not nit else None
+    if pid:
+        r["id_tributaria"] = re.sub(r"\D", "", pid.group("n")) or None
     if nit:
         base = re.sub(r"\D", "", nit.group("n"))
         dv = RE_XML_DV.search(nit.group("a"))
