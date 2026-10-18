@@ -33,7 +33,7 @@ La lectura de facturas funciona con **Gemini** o con **Claude**, con el mismo es
 
 | Variable | Para qué |
 |---|---|
-| `GEMINI_API_KEY` (o `GOOGLE_API_KEY`) | Usar Gemini. Modelo por defecto `gemini-2.5-flash` (cámbialo con `MODELO_GEMINI`) |
+| `GEMINI_API_KEY` (o `GOOGLE_API_KEY`) | Usar Gemini. Modelo por defecto `gemini-3.5-flash` (cámbialo con `MODELO_GEMINI`; `gemini-2.5-flash` ya fue retirado) |
 | `ANTHROPIC_API_KEY` | Usar Claude. Modelo por defecto `claude-sonnet-5-5` (cámbialo con `MODELO_ENTRADA`) |
 | `PROVEEDOR_IA` | `gemini` o `claude`. Si lo dejas vacío: Claude si hay clave de Claude; si no, Gemini |
 

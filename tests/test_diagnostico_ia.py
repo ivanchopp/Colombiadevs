@@ -129,3 +129,38 @@ def test_ea2b_11_al_pulsar_el_boton_se_ve_el_resultado_sin_la_clave(tmp_path, mo
     t = textos(at)
     assert not at.exception and "FALLA · gemini (gemini-2.5-flash)" in t and "404 NOT_FOUND" in t
     assert "Modelos disponibles: gemini-3-flash, gemini-3-pro" in t and CLAVE not in t
+
+
+# EA2b.12: pista de la falla, solo con patrones sobre el mensaje
+@pytest.mark.parametrize("mensaje,fragmento", [
+    ("404 NOT_FOUND. models/gemini-2.5-flash is no longer available to new users", "retirado"),
+    ("Error 404: model not found", "retirado"),
+    ("429 RESOURCE_EXHAUSTED: quota exceeded", "cuota"),
+    ("403 PERMISSION_DENIED: API key not valid", "clave"),
+    ("401 invalid x-api-key", "clave"),
+])
+def test_ea2b_12_la_pista_dice_que_suele_significar_el_error(mensaje, fragmento):
+    assert fragmento in lectura_ia.pista_de_falla(mensaje)
+
+
+@pytest.mark.parametrize("mensaje", ["", None, "Gemini no devolvió texto (respuesta vacía)", "sin red", "usó 4040 tokens"])
+def test_ea2b_12_sin_patron_conocido_no_hay_pista(mensaje):
+    assert lectura_ia.pista_de_falla(mensaje) is None
+
+
+def test_ea2b_12_la_pista_no_incluye_ninguna_clave():
+    assert CLAVE not in (lectura_ia.pista_de_falla(f"403 PERMISSION_DENIED {CLAVE}") or "")
+
+
+def test_ea2b_12_el_diagnostico_muestra_la_pista_de_la_ultima_falla(tmp_path, monkeypatch):
+    lectura_ia.registrar_falla(RuntimeError("404 NOT_FOUND: el modelo ya no está disponible"))
+    at = abrir(tmp_path, monkeypatch)
+    assert any("retirado" in w.value for w in at.warning)
+
+
+def test_ea2b_12_al_probar_la_conexion_con_404_sale_la_pista(tmp_path, monkeypatch):
+    monkeypatch.setattr(lectura_ia, "probar_conexion", lambda *a, **k: {
+        "ok": False, "proveedor": "gemini", "modelo": "x", "detalle": "404 NOT_FOUND", "modelos": []})
+    at = abrir(tmp_path, monkeypatch)
+    next(b for b in at.button if b.label == "Probar la conexión con la IA ahora").click().run()
+    assert any("retirado" in w.value for w in at.warning)

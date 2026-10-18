@@ -37,10 +37,14 @@ if st.query_params.get("diagnostico"):
         f = flujo.lectura_ia.ULTIMA_FALLA
         st.text("Última falla de lectura con IA: "
                 + (f"{f['cuando']} · {f['proveedor']} · {f['mensaje']}" if f["cuando"] else "ninguna desde el último arranque"))
+        if f["cuando"] and (pista := flujo.lectura_ia.pista_de_falla(f["mensaje"])):
+            st.warning(pista)                                           # EA2b.12
         if not flujo.modo_demo() and st.button("Probar la conexión con la IA ahora"):    # EA2b.11: una llamada
             r = flujo.lectura_ia.probar_conexion()
             st.text(f"{'OK' if r['ok'] else 'FALLA'} · {r['proveedor']} ({r['modelo']})\n{r['detalle']}"
                     + (("\nModelos disponibles: " + ", ".join(r["modelos"])) if r["modelos"] else ""))
+            if not r["ok"] and (pista := flujo.lectura_ia.pista_de_falla(r["detalle"])):
+                st.warning(pista)                                       # EA2b.12
 
 if aviso := st.session_state.pop("aviso_panel1", None):
     st.error(aviso)

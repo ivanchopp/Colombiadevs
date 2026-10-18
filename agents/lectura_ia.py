@@ -6,7 +6,7 @@ import re
 from decimal import Decimal, InvalidOperation
 
 MODELO_CLAUDE_DEFECTO = "claude-sonnet-5-5"
-MODELO_GEMINI_DEFECTO = "gemini-2.5-flash"      # sin verificar: cambiar con MODELO_GEMINI si ya no existe
+MODELO_GEMINI_DEFECTO = "gemini-3.5-flash"      # gemini-2.5-flash lo retiró Google (cierre anunciado el 16 oct 2026); cambia con MODELO_GEMINI
 
 
 def modelo_claude() -> str:
@@ -142,6 +142,25 @@ def probar_conexion(cliente=None, proveedor: str | None = None) -> dict:
             "modelos": modelos_disponibles(cliente, proveedor)}
 
 
+PISTAS = [
+    (r"\b404\b|NOT_FOUND|no longer available|not found|is not supported for generateContent",
+     "El modelo parece retirado o no existe. Pon en Railway MODELO_GEMINI (o MODELO_ENTRADA, si usas Claude) con uno de "
+     "la lista de modelos disponibles y redespliega."),
+    (r"\b429\b|RESOURCE_EXHAUSTED|quota|rate limit",
+     "Se agotó la cuota o el límite de uso de la clave. Revisa el plan en Google AI Studio o espera un momento."),
+    (r"\b40[13]\b|PERMISSION_DENIED|UNAUTHENTICATED|API key not valid|invalid x-api-key|authentication",
+     "La clave no es válida o no tiene permiso. Revisa que sea la correcta, que esté activa y que no tenga espacios."),
+]
+
+
+def pista_de_falla(mensaje: str | None) -> str | None:
+    """Qué suele significar un error de la API (EA2b.12). Solo patrones sobre el texto, nunca la IA."""
+    for patron, pista in PISTAS:
+        if re.search(patron, mensaje or "", re.I):
+            return pista
+    return None
+
+
 def diagnostico(env=None) -> dict:
     """Por qué la app usa (o no) un proveedor de IA. Solo estados y nombres: nunca el valor de una clave (EA2b.6)."""
     env = os.environ if env is None else env
@@ -244,11 +263,15 @@ def _bruto_gemini(cliente, tipo, datos, texto) -> dict:
                      types.Part.from_text(text=MARCO)]
     else:
         contenido = f"{MARCO}\n<factura>\n{(texto or '')[:20000]}\n</factura>"
+    modelo = modelo_gemini()
+    extra = {}
+    if modelo.lower().startswith(("gemini-3", "gemini-4")):          # EA2b.13: extraer no necesita razonar
+        extra["thinking_config"] = types.ThinkingConfig(thinking_level=types.ThinkingLevel.MINIMAL)
     r = cliente.models.generate_content(
-        model=modelo_gemini(), contents=contenido,
+        model=modelo, contents=contenido,
         config=types.GenerateContentConfig(
             system_instruction=SISTEMA, response_mime_type="application/json",
-            response_json_schema=ESQUEMA, temperature=0, max_output_tokens=4096))
+            response_json_schema=ESQUEMA, temperature=0, max_output_tokens=8192, **extra))
     texto_json = getattr(r, "text", None)
     if not texto_json:                                     # vacía o bloqueada por filtros (EA2b.5)
         raise LecturaFallida("Gemini no devolvió texto (respuesta vacía o bloqueada).")

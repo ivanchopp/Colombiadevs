@@ -666,3 +666,25 @@ def test_sin_secretos_quita_las_claves_de_un_texto():
     from agents.lectura_ia import sin_secretos
     env = {"GEMINI_API_KEY": "AIzaCLAVE-LARGA-123", "ANTHROPIC_API_KEY": "corta"}
     assert sin_secretos("error con AIzaCLAVE-LARGA-123 y corta", env) == "error con *** y corta"   # <8: no se toca
+
+
+# EA2b.12 y EA2b.13: modelo vigente y razonamiento mínimo
+def test_ea2b_12_el_modelo_de_gemini_por_defecto_es_vigente():
+    from agents import lectura_ia
+    assert lectura_ia.modelo_gemini() == "gemini-3.5-flash"
+
+
+def test_ea2b_13_con_gemini_3_el_razonamiento_va_al_minimo_y_hay_espacio_de_salida(monkeypatch):
+    monkeypatch.delenv("MODELO_GEMINI", raising=False)
+    g = GeminiFalso(LEIDO)
+    leer_con_ia("txt", b"", "Total: 1 COP", g)
+    cfg = g.llamadas[0]["config"]
+    assert g.llamadas[0]["model"] == "gemini-3.5-flash"
+    assert str(cfg.thinking_config.thinking_level).endswith("MINIMAL") and cfg.max_output_tokens >= 8192
+
+
+def test_ea2b_13_con_un_modelo_anterior_no_se_envia_el_razonamiento(monkeypatch):
+    monkeypatch.setenv("MODELO_GEMINI", "gemini-2.5-flash")
+    g = GeminiFalso(LEIDO)
+    leer_con_ia("txt", b"", "Total: 1 COP", g)
+    assert g.llamadas[0]["config"].thinking_config is None

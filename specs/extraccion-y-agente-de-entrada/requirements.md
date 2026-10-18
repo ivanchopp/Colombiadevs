@@ -23,7 +23,7 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 | `turnos_max` | 2 |
 | `largo_max_mensaje` | 500 caracteres |
 | Modelo de lectura (Claude) | `claude-sonnet-5-5` (cambia con `MODELO_ENTRADA`) |
-| Modelo de lectura (Gemini) | `gemini-2.5-flash` (cambia con `MODELO_GEMINI`; **sin verificar**) |
+| Modelo de lectura (Gemini) | `gemini-3.5-flash` desde el 18 oct (cambia con `MODELO_GEMINI`). `gemini-2.5-flash` ya no sirve: Google lo retiró (cierre anunciado el 16 oct 2026) |
 
 ## Requisitos
 
@@ -53,6 +53,8 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 - **EA2b.9** CUANDO la lectura con IA falle y el sistema degrade a la lectura por patrones (EA8.1), EL SISTEMA DEBERÁ dejar el error en el registro del servidor (los Logs de Railway), sin ningún valor de clave, para que quien administre la demo vea que la IA no está respondiendo aunque la pantalla diga que está activa.
 - **EA2b.10** (R6) EL diagnóstico (`?diagnostico=1`) DEBERÁ mostrar la **última falla de lectura con IA** (hora, proveedor y mensaje, sin ningún valor de clave), para ver la causa sin abrir los Logs. Una falla degrada en silencio la factura a patrones (EA8.1), y por eso una app con la IA «activa» puede no estar leyendo con IA.
 - **EA2b.11** (R6) EL diagnóstico DEBERÁ ofrecer un botón «Probar la conexión con la IA ahora» que haga **una** lectura mínima con el proveedor activo y muestre el resultado o el error (sin claves) y, para Gemini, los nombres de los modelos disponibles para elegir `MODELO_GEMINI`. NO DEBERÁ aparecer sin el parámetro.
+- **EA2b.12** EL modelo de Gemini por defecto DEBERÁ ser uno vigente. SI la lectura falla con un modelo retirado (error 404 «no longer available» o «not found»), ENTONCES el diagnóstico DEBERÁ decirlo con una pista en español («el modelo parece retirado: pon `MODELO_GEMINI` con uno de la lista») y lo mismo para cuota (429) y clave (401 o 403). La pista DEBERÁ salir de patrones sobre el mensaje de error, nunca de la IA, y NO DEBERÁ incluir el valor de ninguna clave.
+- **EA2b.13** CON un modelo de la familia Gemini 3 o posterior, LA lectura DEBERÁ fijar el nivel de razonamiento al mínimo (`thinking_level`), porque extraer datos no lo necesita y así no gasta salida ni tiempo; con modelos anteriores NO DEBERÁ enviarlo, porque lo rechazan. El tope de salida DEBERÁ dejar espacio para la respuesta.
 
 ### EA3. Segunda lectura (sin IA)
 - **EA3.1** EL SISTEMA DEBERÁ extraer el texto (PDF, EML, TXT) y buscar con patrones de texto el beneficiario, el monto, la moneda y el vencimiento.
@@ -128,5 +130,5 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 |---|---|---|
 | DE1 | ¿La confirmación por chat puede devolver `coincide`? | No (EA5.4): lo dicho por chat no verifica |
 | DE2 | ¿El agente pregunta por la cuenta bancaria? | No en esta versión: la cuenta se compara solo con los registros |
-| DE3 | ¿Modelo de lectura? | `claude-sonnet-5-5` o `gemini-2.5-flash`; verificar los nombres vigentes antes de la entrega (P4) |
+| DE3 | ¿Modelo de lectura? | `claude-sonnet-5-5` o `gemini-3.5-flash`; verificar los nombres vigentes antes de la entrega (P4) |
 | DE4 | ¿Datos enviados a Gemini? | Solo facturas ficticias. Los planes gratuitos de Gemini pueden usar lo enviado para mejorar el producto: no subir datos reales |
