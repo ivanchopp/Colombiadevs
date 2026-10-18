@@ -4,8 +4,12 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
-| VER-0022 | 2026-10-17 18:29 | APROBADO | R3: órdenes de compra en el motor (versión mínima): modelos, carga, revisión OC4, 10 casos, 25 pruebas y documentación | 0 | 1 | ea0e355 | — |
-| VER-0021 | 2026-10-17 18:22 | APROBADO | R2: guion de la demo y el pitch (docs/guion-demo.md) y registro en AVANCES.md | 0 | 0 | 3990ea3 | — |
+| VER-0026 | 2026-10-17 19:15 | APROBADO | Fusión de main (PR #15 a #17: 156 proveedores válidos y revisión de la documentación) en la rama de R2 y R3; reasigna las órdenes sintéticas, casos y pruebas a proveedores válidos y renumera VER-0021/0022 a VER-0024/0025 | 0 | 1 | 9202506 | — |
+| VER-0025 | 2026-10-17 18:29 | APROBADO | R3: órdenes de compra en el motor (versión mínima): modelos, carga, revisión OC4, 10 casos, 25 pruebas y documentación | 0 | 1 | ea0e355 | — |
+| VER-0024 | 2026-10-17 18:22 | APROBADO | R2: guion de la demo y el pitch (docs/guion-demo.md) y registro en AVANCES.md | 0 | 0 | 3990ea3 | — |
+| VER-0023 | 2026-10-17 19:01 | APROBADO | Revisión total de la documentación tras el PR #16: AVANCES, README, specs/README, tareas (ET3, ET7, ET8, PT7, PT10), trazabilidad del motor, OCD3 aplicada y P32 nuevo; sin código | 0 | 1 | 4a08313 | — |
+| VER-0022 | 2026-10-17 18:54 | APROBADO | El motor usa los 156 proveedores válidos (OCD4, OT2 parcial, OC1.6): lista permitida desde proveedores.yaml y migración de casos, calendario, muestras, semilla de la demo, README y pruebas | 0 | 1 | f65ca8f | — |
+| VER-0021 | 2026-10-17 18:44 | APROBADO | Listado de proveedores válidos: data/proveedores.yaml pasa de 200 a 156 proveedores (sin marcas); OCD5 y OCD11 resueltas, OCD13 nueva; AVANCES y specs al día | 0 | 1 | 3990ea3 | — |
 | VER-0020 | 2026-10-17 18:14 | APROBADO | AVANCES y spec del archivo de salida: se quitan las notas de Gemini y el nombre del CEO; el agente de reglas en lenguaje natural pasa a la fase 1 del roadmap (R7) y contratos queda R8 | 0 | 1 | 65fcb0f | — |
 | VER-0019 | 2026-10-17 18:10 | APROBADO | Documentacion al dia con la reunion con el CEO de Blinka: enfoque cliente de Blinka, roadmap R1-R14 por fases, pendientes P29-P31 y spec nueva archivo-de-salida (AS1-AS4); sin codigo | 0 | 1 | 07b4849 | — |
 | VER-0018 | 2026-10-17 17:08 | APROBADO | Panel 1 sin botones de ejemplo: solo se sube archivo, 4 archivos de muestra descargables con rotulos neutros (PP2.4, PP2.5, EA8.4); spec, pruebas, README y AVANCES | 0 | 1 | bb0f497 | — |
@@ -27,15 +31,38 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
 
-## VER-0022 — APROBADO
+## VER-0026 — APROBADO
+
+- **ADVERTENCIA** (alcance) `data/ordenes_compra.yaml:1`: Las órdenes siguen siendo sintéticas: el archivo real no tiene proveedores del listado de válidos (OCD13) y no está cargado → Conseguir un archivo de órdenes con proveedores válidos e importarlo (OT1)
+- **NOTA** (errores) `tests/test_ordenes_compra.py:1`: El listado de válidos no trae proveedores marcados: OC4.4 se prueba marcando uno a mano, no con un dato real → Ninguna mientras el listado no traiga marcas
+- **NOTA** (convenciones) `.verificaciones/VER-0024.json:2`: Los IDs VER-0021 y VER-0022 de esta rama chocaron con los de main y se renumeraron a VER-0024 y VER-0025; el contenido y la fecha originales se conservan → Ninguna
+
+## VER-0025 — APROBADO
 
 - **ADVERTENCIA** (alcance) `data/ordenes_compra.yaml:1`: Las órdenes son sintéticas: el archivo real del equipo no está en el repositorio. La spec y AVANCES lo declaran; los resultados con las órdenes reales pueden diferir → Importar el .xlsx real (OT1) y volver a correr eval.py
 - **NOTA** (alcance) `engine/revisiones/orden_compra.py:1`: El agente de entrada aún no lee el número de OC (OT5): una factura subida al Panel 1 no cita OC, por lo que la revisión nueva solo actúa con fichas de prueba → Hacer OT5
 - **NOTA** (seguridad) `engine/reglas_io.py:50`: Los 200 proveedores pasan a la lista permitida sin acuerdo: sin OC ni acuerdo siguen escalando a PERSONA (R3.5) y los marcados van al senior; ningún camino nuevo paga sin todas las revisiones OK (R1.2) → Ninguna
 
-## VER-0021 — APROBADO
+## VER-0024 — APROBADO
 
 - **NOTA** (alcance) `docs/guion-demo.md:36`: Los resultados de cada archivo de muestra no se verificaron uno por uno en producción; el guion lo declara y pide confirmarlos en el ensayo → Ensayar el guion en la app desplegada
+
+## VER-0023 — APROBADO
+
+- **ADVERTENCIA** (errores) `specs/motor-de-reglas/tasks.md`: Los 'Listo cuando' de T4 a T8 siguen nombrando archivos de prueba que no existen (test_entrada.py, test_decision.py...); la tabla de trazabilidad ya apunta a tests/test_motor.py y lo aclara → Dejarlo así (registro histórico) o reescribir esas líneas si se retoma la spec
+- **NOTA** (alcance) `docs/Ruta-de-una-factura.pdf`: Las maquetas del PDF siguen con los beneficiarios anteriores (P6); no se pueden regenerar desde aquí → Regenerar desde la página en línea del equipo
+- **NOTA** (errores) `AVANCES.md`: No se pudo comprobar qué commit corre Railway: la red de la sesión no alcanza el dominio (403 del proxy) → Revisar ?diagnostico=1 (P32)
+
+## VER-0022 — APROBADO
+
+- **ADVERTENCIA** (alcance) `docs/Ruta-de-una-factura.pdf`: Las maquetas del PDF muestran los beneficiarios de ejemplo anteriores → Regenerar el PDF (P6)
+- **NOTA** (alcance) `data/demo_semilla.py`: Brasil y Alemania no están en el listado de válidos: sus papeles pasaron a Perú (montos convertidos de BRL a PEN) y Ecuador (USD); el canal sugerido cambia de Pix y SEPA a transferencia en Perú y SWIFT → Ninguna
+- **NOTA** (seguridad) `engine/reglas_io.py:registros_de_proveedores`: Un acuerdo o un movimiento de un proveedor que no está en el registro hace fallar la carga en vez de quedar como beneficiario permitido → Ninguna
+
+## VER-0021 — APROBADO
+
+- **ADVERTENCIA** (alcance) `specs/ordenes-de-compra/requirements.md:OCD13`: Ninguno de los 30 proveedores de las órdenes de compra está en el listado de válidos; sus órdenes no se pueden cargar sin escalar todas → Pedir un archivo de órdenes con proveedores válidos
+- **NOTA** (alcance) `data/registros.yaml`: No se tocan los 9 beneficiarios con los que decide el motor: eliminarlos rompería los 20 casos, el calendario y la demo; reemplazarlos es OCD4 y OT2 → Decidir OCD4
 
 ## VER-0020 — APROBADO
 

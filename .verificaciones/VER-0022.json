@@ -1,53 +1,48 @@
 {
   "id": "VER-0022",
-  "fecha": "2026-10-17T18:29:58-05:00",
-  "cambio": "R3: órdenes de compra en el motor (versión mínima): modelos, carga, revisión OC4, 10 casos, 25 pruebas y documentación",
+  "fecha": "2026-10-17T18:54:31-05:00",
+  "cambio": "El motor usa los 156 proveedores válidos (OCD4, OT2 parcial, OC1.6): lista permitida desde proveedores.yaml y migración de casos, calendario, muestras, semilla de la demo, README y pruebas",
   "veredicto": "APROBADO",
   "archivos": [
-    "engine/compras.py",
-    "engine/revisiones/orden_compra.py",
-    "engine/modelos.py",
-    "engine/evaluar.py",
-    "engine/contexto.py",
     "engine/reglas_io.py",
-    "engine/revisiones/frenar.py",
-    "data/ordenes_compra.yaml",
+    "data/registros.yaml",
     "data/casos.yaml",
-    "eval.py",
-    "tests/test_ordenes_compra.py",
-    "tests/test_casos.py",
-    "specs/ordenes-de-compra/design.md",
-    "specs/ordenes-de-compra/requirements.md",
-    "specs/ordenes-de-compra/tasks.md",
-    "specs/README.md",
+    "data/calendario.csv",
+    "data/demo_semilla.py",
+    "data/facturas_ejemplo",
+    "agents/ejemplos.py",
     "README.md",
+    "tests",
+    "specs/ordenes-de-compra",
+    "specs/motor-de-reglas/design.md",
+    "specs/archivo-de-salida/design.md",
     "AVANCES.md"
   ],
   "hallazgos": [
     {
       "severidad": "ADVERTENCIA",
       "categoria": "alcance",
-      "ubicacion": "data/ordenes_compra.yaml:1",
-      "problema": "Las órdenes son sintéticas: el archivo real del equipo no está en el repositorio. La spec y AVANCES lo declaran; los resultados con las órdenes reales pueden diferir",
-      "correccion": "Importar el .xlsx real (OT1) y volver a correr eval.py"
+      "ubicacion": "docs/Ruta-de-una-factura.pdf",
+      "problema": "Las maquetas del PDF muestran los beneficiarios de ejemplo anteriores",
+      "correccion": "Regenerar el PDF (P6)"
     },
     {
       "severidad": "NOTA",
       "categoria": "alcance",
-      "ubicacion": "engine/revisiones/orden_compra.py:1",
-      "problema": "El agente de entrada aún no lee el número de OC (OT5): una factura subida al Panel 1 no cita OC, por lo que la revisión nueva solo actúa con fichas de prueba",
-      "correccion": "Hacer OT5"
+      "ubicacion": "data/demo_semilla.py",
+      "problema": "Brasil y Alemania no están en el listado de válidos: sus papeles pasaron a Perú (montos convertidos de BRL a PEN) y Ecuador (USD); el canal sugerido cambia de Pix y SEPA a transferencia en Perú y SWIFT",
+      "correccion": "Ninguna"
     },
     {
       "severidad": "NOTA",
       "categoria": "seguridad",
-      "ubicacion": "engine/reglas_io.py:50",
-      "problema": "Los 200 proveedores pasan a la lista permitida sin acuerdo: sin OC ni acuerdo siguen escalando a PERSONA (R3.5) y los marcados van al senior; ningún camino nuevo paga sin todas las revisiones OK (R1.2)",
+      "ubicacion": "engine/reglas_io.py:registros_de_proveedores",
+      "problema": "Un acuerdo o un movimiento de un proveedor que no está en el registro hace fallar la carga en vez de quedar como beneficiario permitido",
       "correccion": "Ninguna"
     }
   ],
-  "comprobaciones": "python3 -m pytest -q: 241 pasan; python3 eval.py: 30/30, 0 pagos indebidos; 4 mutaciones de la revisión OC4 (no frenar facturada, ignorar identificación distinta, ignorar marcas, no frenar +10%) detectadas por las pruebas; spec escrita antes del código; sin claves ni datos reales en el diff",
-  "rama": "claude/friendly-cerf-aygx2r",
-  "commit": "ea0e355ed8b8d856a34fea437f9cf075106e2309",
+  "comprobaciones": "Spec primero (OC1.6, OCD4, tabla de migración en design.md); búsqueda de nombres y cuentas anteriores en todo el código y los datos (solo quedan en la tabla de migración y el PDF); pytest 218 passed; eval.py 20/20, 0 pagos indebidos, 20/20 explicadas; semilla de la demo y las 4 facturas de muestra dan las mismas decisiones y niveles que antes (comprobado en una sala nueva); lista permitida = 156 nombres de proveedores.yaml",
+  "rama": "main",
+  "commit": "f65ca8f222a35adb6f40a3bdebf49313c5645617",
   "reemplaza": null
 }

@@ -15,18 +15,18 @@ def _ficha(fid, benef, numero, monto, moneda, vence, recibida, cuenta, **extra):
 
 
 FICHAS = [
-    _ficha("F-1042", "Pixel Norte Ltda.", "PN-1042", "2400000", "COP", "2026-10-22", "2026-10-02",
-           "Bancolombia ···1180"),
-    _ficha("F-1046", "Cloudwerk GmbH", "CW-1046", "540", "USD", "2026-10-28", "2026-10-15",
-           "Deutsche ···7712"),
-    _ficha("F-1044", "Taller Azteca", "TA-0931", "12500", "MXN", "2026-09-25", "2026-10-06",
-           "BBVA ···3304"),
-    _ficha("F-1043", "Estúdio Verde", "EV-1043", "3800", "BRL", "2026-10-27", "2026-10-14",
-           "Itaú ···5521"),
+    _ficha("F-1042", "Tecnología Cafetera S.A.S.", "PN-1042", "2400000", "COP", "2026-10-22", "2026-10-02",
+           "Cuenta demo ···0028"),
+    _ficha("F-1046", "Tecnología Quiteña S.A.", "CW-1046", "540", "USD", "2026-10-28", "2026-10-15",
+           "Cuenta demo ···0005"),
+    _ficha("F-1044", "Papelería Corporativa Anáhuac S.A. de C.V.", "TA-0931", "12500", "MXN", "2026-09-25", "2026-10-06",
+           "Cuenta demo ···0029"),
+    _ficha("F-1043", "Importadora Químicos Rímac S.A.C.", "EV-1043", "2615", "PEN", "2026-10-27", "2026-10-14",
+           "Cuenta demo ···0017"),
     _ficha("F-1045", "Nuevo Proveedor SAS", "NP-1045", "9600000", "COP", "2026-10-30", "2026-10-16",
            "Banco Andino ···9034", cuenta_aclarada="Banco Lago ···4821"),
-    _ficha("F-1047", "Diseños Alba", "DA-1047", "4100000", "COP", "2026-10-29", "2026-10-16",
-           "Davivienda ···6403", orden_en_texto=True),
+    _ficha("F-1047", "Textiles Modernos Pereira S.A.S.", "DA-1047", "4100000", "COP", "2026-10-29", "2026-10-16",
+           "Cuenta demo ···0010", orden_en_texto=True),
 ]
 
 

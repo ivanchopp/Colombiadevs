@@ -8,7 +8,7 @@ from pathlib import Path
 import yaml
 from pydantic import ValidationError
 
-from .compras import cargar_compras, registros_de_proveedores
+from .compras import cargar_compras
 from .modelos import CanalDef, Contexto, Movimiento, Obligacion, Registro, Reglas
 
 from zoneinfo import ZoneInfo
@@ -44,6 +44,23 @@ def cargar_reglas(hoy: date, carpeta=None, anterior: Reglas | None = None):
         return anterior, f"reglas.yaml inválido; se conserva {anterior.version}: {e}"
 
 
+PAIS_ISO = {"Colombia": "CO", "México": "MX", "Perú": "PE", "Ecuador": "EC"}
+
+
+def registros_de_proveedores(proveedores: dict, acuerdos: dict, historial: list) -> dict[str, Registro]:
+    """Lista permitida (R4.1) y cuenta (R4.2) desde proveedores.yaml, con el acuerdo de registros.yaml (OC1.6).
+    Un acuerdo o un movimiento de un proveedor que no está en el registro es un error de datos: falla."""
+    registros = {p["nombre"]: Registro(pais=PAIS_ISO.get(p["pais"], p["pais"]), cuenta=p["cuenta"])
+                 for p in proveedores["proveedores"]}
+    sobran = sorted({*acuerdos} - {*registros} | {m["beneficiario"] for m in historial} - {*registros})
+    if sobran:
+        raise ErrorDeReglas(f"registros.yaml nombra proveedores que no están en proveedores.yaml: {sobran}")
+    for nombre, a in acuerdos.items():
+        registros[nombre] = registros[nombre].model_copy(update={
+            "acuerdo_monto": Decimal(str(a["monto"])), "acuerdo_moneda": a["moneda"]})
+    return registros
+
+
 def cargar_contexto_base(hoy: date, carpeta=None) -> Contexto:
     reg = _yaml("registros.yaml", carpeta)
     tasas = _yaml("tasas.yaml", carpeta)["tasas"]
@@ -53,12 +70,11 @@ def cargar_contexto_base(hoy: date, carpeta=None) -> Contexto:
         calendario = [Obligacion(id=r["id"], beneficiario=r["beneficiario"],
                                  fecha=date.fromisoformat(r["fecha"]), monto_base=Decimal(r["monto_base"]))
                       for r in csv.DictReader(f)]
-    registros = {k: Registro.model_validate(v) for k, v in reg["beneficiarios"].items()}
     proveedores, ordenes = cargar_compras(carpeta)
-    registros.update(registros_de_proveedores(proveedores, registros))       # OCD4: se suman a los actuales
     return Contexto(
         hoy=hoy,
-        registros=registros,
+        registros=registros_de_proveedores(_yaml("proveedores.yaml", carpeta), reg.get("acuerdos", {}),
+                                           reg.get("historial", [])),
         proveedores=proveedores,
         ordenes=ordenes,
         tasas={k: Decimal(str(v)) for k, v in tasas.items()},

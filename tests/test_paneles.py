@@ -75,9 +75,9 @@ def test_pp6_2_estados_del_calendario(almacen, sala):
     ctx = contexto_desde_acta(cargar_contexto_base(hoy), almacen.filas(sala))
     est = {(e["proveedor"], e["fecha"].day): e["estado"]
            for e in apoyo.estados_calendario(ctx, cargar_reglas(hoy)[0])}
-    assert est[("Imprenta Sol", 14)] == "atrasada"
-    assert est[("Hosting Andes", 21)] == "pendiente"
-    assert est[("Pixel Norte Ltda.", 2)] == "llegó"
+    assert est[("Alimentos del Valle S.A.S.", 14)] == "atrasada"
+    assert est[("Consultores Energéticos Magdalena S.A.S.", 21)] == "pendiente"
+    assert est[("Tecnología Cafetera S.A.S.", 2)] == "llegó"
 
 
 @pytest.fixture

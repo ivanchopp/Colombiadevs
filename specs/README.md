@@ -23,11 +23,11 @@ Cada criterio tiene un número (por ejemplo R3.1) y debe tener al menos una prue
 
 | Spec | Estado |
 |---|---|
-| `motor-de-reglas` | Borrador para revisión (implementado, falta T11 y T12 completo) |
-| `extraccion-y-agente-de-entrada` | Borrador para revisión (implementado en modo demo; falta probar con la API real) |
-| `acta-y-csv` | Borrador para revisión |
-| `paneles-y-despliegue` | Borrador para revisión (paneles y página de reglas programados; despliegue pendiente) |
-| `ordenes-de-compra` | Versión mínima construida el 17 oct (R3): proveedores y revisión OC4 en el motor, con órdenes sintéticas; faltan OT5, OT7 y el importador de las órdenes reales |
+| `motor-de-reglas` | Borrador para revisión (implementado; T11 hecho, falta la parte de conflictos por especificidad de T12) |
+| `extraccion-y-agente-de-entrada` | Borrador para revisión (implementado; Gemini probado en Railway con los textos de ejemplo; falta un PDF o foto propios y probar Claude) |
+| `acta-y-csv` | Borrador para revisión (versión mínima en SQLite implementada; faltan PostgreSQL, purga de salas y conciliación) |
+| `paneles-y-despliegue` | Borrador para revisión (paneles, página de reglas y despliegue en Railway hechos; falta la página de conciliación, PT12) |
+| `ordenes-de-compra` | Versión mínima en el motor (R3, 17 oct): revisión OC4 con **órdenes sintéticas** y los 156 proveedores válidos como lista permitida; faltan OT5, OT7 y las órdenes reales (OCD13); 13 decisiones, 9 abiertas |
 | `archivo-de-salida` | Borrador para revisión (alcance nuevo de la reunión con Blinka del 17 oct, 17:02; sin programar; 4 decisiones abiertas) |
 
 ## Reglas de trabajo

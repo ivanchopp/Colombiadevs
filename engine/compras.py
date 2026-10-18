@@ -7,10 +7,9 @@ from pathlib import Path
 import yaml
 from pydantic import ValidationError
 
-from .modelos import OrdenCompra, Proveedor, Registro
+from .modelos import OrdenCompra, Proveedor
 
 DATA = Path(__file__).resolve().parent.parent / "data"
-PAIS_ISO = {"Colombia": "CO", "México": "MX", "Perú": "PE", "Ecuador": "EC"}
 log = logging.getLogger(__name__)
 
 
@@ -67,12 +66,6 @@ def cargar_compras(carpeta=None) -> tuple[list[Proveedor], dict[str, OrdenCompra
         return proveedores, {}
 
 
-def registros_de_proveedores(proveedores: list[Proveedor], existentes) -> dict[str, Registro]:
-    """Los proveedores se suman a los beneficiarios actuales (OCD4), sin acuerdo registrado."""
-    return {p.nombre: Registro(pais=PAIS_ISO.get(p.pais, p.pais), cuenta=p.cuenta)
-            for p in proveedores if p.nombre not in existentes}
-
-
 def proveedor_por_nombre(ctx, nombre: str):
     return next((p for p in ctx.proveedores if p.nombre == nombre), None)
 
@@ -91,5 +84,5 @@ def ocs_facturadas(facturas) -> dict[str, str]:
     return usadas
 
 
-__all__ = ["normalizar_oc", "cargar_compras", "registros_de_proveedores", "proveedor_por_nombre",
+__all__ = ["normalizar_oc", "cargar_compras", "proveedor_por_nombre",
            "proveedor_por_id", "ocs_facturadas", "ErrorDeCompras", "Decimal"]
