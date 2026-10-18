@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0065 | 2026-10-18 09:36 | APROBADO | Contratos (leer, extraer información y establecer reglas del negocio) agregados al roadmap R8 y al README | 0 | 1 | 5fdfeca | — |
 | VER-0064 | 2026-10-18 09:32 | APROBADO | Se retira docs/descripcion-del-proyecto.md de la rama por petición del equipo (nunca llegó a main) y se corrige AVANCES.md | 0 | 0 | 81e95ea | — |
 | VER-0063 | 2026-10-18 09:32 | APROBADO | Descripción del proyecto en docs/descripcion-del-proyecto.md y su registro en AVANCES.md | 0 | 0 | e4c6d78 | — |
 | VER-0062 | 2026-10-18 09:29 | APROBADO | README ajustado para que lo entienda alguien de 15 años (lenguaje menos infantil, términos con su definición: inyección de instrucciones, huella del acta) | 0 | 0 | f7017ff | — |
@@ -68,6 +69,10 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0065 — APROBADO
+
+- **ADVERTENCIA** (alcance) `AVANCES.md`: R8 amplía el alcance y todavía no tiene spec; la regla del proyecto pide escribirla antes del código → Escribir specs/contratos/ antes de programar nada
 
 ## VER-0064 — APROBADO
 

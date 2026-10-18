@@ -287,7 +287,20 @@ El comando de arranque es `python -m streamlit run app/Envía_facturas.py` (est�
 - Se acepta el **XML de la factura electrónica**, sin IA: UBL 2.1 (Colombia y Perú), CFDI de México (solo de tipo ingreso), SRI de Ecuador, CFE de Uruguay, NF-e de Brasil, DTE de Chile, Costa Rica y SIFEN de Paraguay. Se revisa en local solo el dígito del NIT colombiano y del RFC mexicano. Un XML de otro formato se lee como texto y siempre se escala. **No consulta a ninguna autoridad tributaria** (DIAN: https://www.dian.gov.co/ · SUNAT: https://www.sunat.gob.pe/).
 - Las **órdenes de compra** y el calendario de noviembre y diciembre son de ejemplo. El formato del archivo de pagos de Blinka es un supuesto hasta confirmarlo con ellos.
 - No hay inicio de sesión: el Panel 2 usa un selector de rol de demostración.
-- Lo que falta (contratos, Sarlaft, centros de costos, conexión con ERP, servidor MCP) está en el roadmap de `AVANCES.md`, sección 8b.
+- Lo que falta (contratos, Sarlaft, centros de costos, conexión con ERP, servidor MCP) está en el roadmap de `AVANCES.md`, sección 8b y en «Hacia dónde va el proyecto», más abajo.
+
+### Hacia dónde va el proyecto
+
+**Lo más importante que viene: que el agente entienda contratos.** Hoy el sistema lee facturas. A futuro podrá **leer, entender y extraer información de documentos como los contratos**: quiénes son las partes, cuánto hay que pagar, en cuántas cuotas, en qué fechas, qué condiciones y qué penalizaciones hay. Con eso propondrá las **reglas del negocio de ese contrato**: por ejemplo, agendar solo el calendario de pagos y fijar los límites que aplican a las facturas de ese proveedor.
+
+Esto sigue la misma idea de siempre: **la IA propone, una persona confirma y el código aplica.** Un contrato no podrá usarse para saltarse los límites de la empresa ni la firma del senior. (Todavía no existe: es el punto R8 del roadmap y su especificación está por escribir.)
+
+Otras ideas para después:
+- Usar datos reales de Blinka (formato del archivo de pagos, órdenes de compra reales).
+- Consultar a la DIAN y a la SUNAT, y revisar el cumplimiento tipo Sarlaft.
+- Presupuesto y análisis por centro de costos y por proveedor.
+- Conectarse con sistemas de contabilidad (como QuickBooks) y ofrecer un servidor MCP de solo consulta y propuesta.
+- PostgreSQL con permisos y conciliación automática del acta.
 
 ## 9. Enlaces útiles
 
