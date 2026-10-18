@@ -1,7 +1,7 @@
 {
   "id": "VER-0020",
   "fecha": "2026-10-17T18:14:31-05:00",
-  "cambio": "AVANCES y spec del archivo de salida: se quitan las notas de Gemini y el nombre del CEO; el agente de reglas en lenguaje natural pasa a la fase 1 del roadmap (R7) y contratos queda R8",
+  "cambio": "AVANCES y spec del archivo de salida: se quitan las notas de Gemini; el agente de reglas en lenguaje natural pasa a la fase 1 del roadmap (R7) y contratos queda R8",
   "veredicto": "APROBADO",
   "archivos": [
     "AVANCES.md",

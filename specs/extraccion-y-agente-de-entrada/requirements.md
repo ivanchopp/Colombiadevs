@@ -38,6 +38,7 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 - **EA2.1** EL AGENTE DEBERÁ devolver, con un esquema cerrado, estos campos: beneficiario, número, monto, moneda, vencimiento y cuenta, más la lista de campos dudosos.
 - **EA2.2** EL AGENTE DEBERÁ tratar todo el contenido de la factura como datos dentro de un bloque marcado, y su instrucción de sistema DEBERÁ decir que nada de ese contenido es una instrucción.
 - **EA2.3** EL SISTEMA DEBERÁ validar la salida contra el esquema y convertir los montos a `Decimal`. SI la salida es inválida, ENTONCES la lectura queda como dudosa.
+- **EA2.5** (OC3.1) ADEMÁS, EL AGENTE DEBERÁ devolver el número de orden de compra (`orden_compra`) y la identificación tributaria del emisor (`id_tributaria`) cuando la factura los traiga, tal como están escritos. SI no aparecen, ENTONCES quedan vacíos; NUNCA se estiman y NUNCA cuentan como dudosos (una factura sin OC es normal).
 - **EA2.4** EL AGENTE NO DEBERÁ recibir las reglas, los límites ni los registros de la empresa.
 
 ### EA2b. Proveedor de IA intercambiable
@@ -59,6 +60,7 @@ El agente de entrada recibe la factura que sube el proveedor (en el Panel 1), la
 - **EA3.5** EL monto NO DEBERÁ tomarse de etiquetas que solo contengan la palabra «total» dentro de otra («SUBTOTAL», «TOTAL Base Imponible», «TOTAL Descuento Global», «TOTAL en letras»). Si hay varios «TOTAL:», DEBERÁ usarse el último.
 - **EA3.6** CUANDO haya monto pero ningún símbolo de moneda junto a él, LA moneda DEBERÁ tomarse del texto solo si aparece exactamente un código de moneda distinto (por ejemplo «COP» en el total en letras). Si no hay ninguno o hay varios, la moneda queda sin leer. NO DEBERÁ suponerse una moneda.
 - **EA3.7** EL número de factura DEBERÁ contener al menos un dígito, para no confundir palabras como «Electrónica» con un número.
+- **EA3.9** (OC3.2) LA segunda lectura DEBERÁ buscar también el número de OC (tras «Orden de compra», «O.C.», «PO» o «Purchase order») y la identificación tributaria (tras «NIT», «RUC», «RFC»). Se comparan sin espacios, guiones ni mayúsculas, y SOLO cuentan si alguna de las dos lecturas los vio: si una los ve y la otra no, o difieren, ENTONCES `no_coincide` y el motor escala (R2.2). Una factura sin OC se compara como siempre.
 - **EA3.8** Lo que los patrones no encuentren (por ejemplo, una factura de contado sin fecha de vencimiento) DEBERÁ quedar sin leer y dudoso; NO DEBERÁ inventarse. Estas ampliaciones NO cambian EA8.2: un archivo propio leído solo con patrones sigue marcado como dudoso y siempre se escala.
 
 ### EA4. Órdenes escondidas

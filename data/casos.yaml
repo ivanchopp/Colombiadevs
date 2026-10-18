@@ -479,3 +479,209 @@ casos:
     vence: '2026-11-05'
     recibida: '2026-10-21'
     cuenta_original: Cuenta demo ···0009
+- id: C21
+  nombre: OC que cuadra, monto bajo
+  criterios: [OC4.1, OC4.9]
+  esperado: {decision: PAGAR, nivel: NINGUNO}
+  calendario_extra:
+  - {id: OC-C21, beneficiario: "Agroindustrias del Huila S.A.S.", fecha: '2026-10-15', monto_base: '290'}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C21
+    beneficiario: "Agroindustrias del Huila S.A.S."
+    numero: N-21
+    monto: '1160000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0004
+    orden_compra: PO-2026-001
+    id_tributaria: '999016272-1'
+- id: C22
+  nombre: OC con identificación tributaria incorrecta
+  criterios: [OC4.3]
+  esperado: {decision: ESCALAR, nivel: SENIOR}
+  calendario_extra:
+  - {id: OC-C22, beneficiario: "Consultores Energéticos Magdalena S.A.S.", fecha: '2026-10-15', monto_base: '290'}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C22
+    beneficiario: "Consultores Energéticos Magdalena S.A.S."
+    numero: N-22
+    monto: '1160000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0009
+    orden_compra: PO-2026-005
+    id_tributaria: '929610444-9'
+- id: C23
+  nombre: OC alterada +15 % (PO-010)
+  criterios: [OC4.5]
+  esperado: {decision: FRENAR, nivel: NINGUNO}
+  calendario_extra:
+  - {id: OC-C23, beneficiario: "Textiles Modernos Pereira S.A.S.", fecha: '2026-10-15', monto_base: '333.5'}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C23
+    beneficiario: "Textiles Modernos Pereira S.A.S."
+    numero: N-23
+    monto: '1334000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0010
+    orden_compra: PO-2026-010
+    id_tributaria: '978961183-0'
+- id: C24
+  nombre: OC alterada +15 % (PO-015)
+  criterios: [OC4.5]
+  esperado: {decision: FRENAR, nivel: NINGUNO}
+  calendario_extra:
+  - {id: OC-C24, beneficiario: "Industrias Eléctricos Magdalena S.A.S.", fecha: '2026-10-15', monto_base: '333.5'}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C24
+    beneficiario: "Industrias Eléctricos Magdalena S.A.S."
+    numero: N-24
+    monto: '1334000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0056
+    orden_compra: PO-2026-015
+    id_tributaria: '935742512-5'
+- id: C25
+  nombre: OC alterada +8 %
+  criterios: [OC4.5]
+  esperado: {decision: ESCALAR, nivel: PERSONA}
+  calendario_extra:
+  - {id: OC-C25, beneficiario: "Agroindustrias del Huila S.A.S.", fecha: '2026-10-15', monto_base: '313.2'}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C25
+    beneficiario: "Agroindustrias del Huila S.A.S."
+    numero: N-25
+    monto: '1252800'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0004
+    orden_compra: PO-2026-001
+    id_tributaria: '999016272-1'
+- id: C26
+  nombre: OC inexistente
+  criterios: [OC4.2]
+  esperado: {decision: ESCALAR, nivel: SENIOR}
+  calendario_extra:
+  - {id: OC-C26, beneficiario: "Agroindustrias del Huila S.A.S.", fecha: '2026-10-15', monto_base: '290'}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C26
+    beneficiario: "Agroindustrias del Huila S.A.S."
+    numero: N-26
+    monto: '1160000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0004
+    orden_compra: PO-2026-999
+    id_tributaria: '999016272-1'
+- id: C27
+  nombre: OC ya facturada por otra factura
+  criterios: [OC4.6, OC5.2]
+  esperado: {decision: FRENAR, nivel: NINGUNO}
+  calendario_extra:
+  - {id: OC-C27, beneficiario: "Laboratorios Clínicos Cundinamarca S.A.S.", fecha: '2026-10-15', monto_base: '290'}
+  oc_facturadas: {PO2026002: F-OTRA}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C27
+    beneficiario: "Laboratorios Clínicos Cundinamarca S.A.S."
+    numero: N-27
+    monto: '1160000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0006
+    orden_compra: PO-2026-002
+    id_tributaria: '966177115-3'
+- id: C28
+  nombre: OC de otro proveedor
+  criterios: [OC4.3]
+  esperado: {decision: ESCALAR, nivel: SENIOR}
+  calendario_extra:
+  - {id: OC-C28, beneficiario: "Laboratorios Clínicos Cundinamarca S.A.S.", fecha: '2026-10-15', monto_base: '290'}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C28
+    beneficiario: "Laboratorios Clínicos Cundinamarca S.A.S."
+    numero: N-28
+    monto: '1160000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0006
+    orden_compra: PO-2026-004
+    id_tributaria: '966177115-3'
+- id: C29
+  nombre: OC que cuadra pero fuera del calendario
+  criterios: [OC4.9, R6.2]
+  esperado: {decision: ESCALAR, nivel: PERSONA}
+  ficha:
+    lectura_ia: ok
+    segunda_lectura: coincide
+    orden_en_texto: false
+    preparador: proveedor-demo
+    valores_aclarados: {}
+    cuenta_aclarada: null
+    factura_id: C29
+    beneficiario: "Corporación Alimentarios Orinoquía S.A.S."
+    numero: N-29
+    monto: '1160000'
+    moneda: COP
+    vence: '2026-10-30'
+    recibida: '2026-10-15'
+    cuenta_original: Cuenta demo ···0007
+    orden_compra: PO-2026-004
+    id_tributaria: '980746390-5'

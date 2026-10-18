@@ -1,7 +1,7 @@
 {
   "id": "VER-0027",
-  "fecha": "2026-10-17T19:11:58-05:00",
-  "cambio": "AVANCES.md al dia tras fusionar el PR 14: cabecera main 8510675, hash de R4, no probado (R1 y R4 en navegador y Railway), proximas tareas y fila de registro; sin codigo",
+  "fecha": "2026-10-17T19:54:17-05:00",
+  "cambio": "AVANCES al día tras el PR #14 (cabecera, mapa del archivo de salida, commit de R4) y P33 con el análisis de 4 facturas XML de ejemplo; sin código",
   "veredicto": "APROBADO",
   "archivos": [
     "AVANCES.md"
@@ -9,14 +9,14 @@
   "hallazgos": [
     {
       "severidad": "NOTA",
-      "categoria": "convenciones",
+      "categoria": "alcance",
       "ubicacion": "AVANCES.md",
-      "problema": "La hora de la ultima actualizacion sale del reloj de la sesion (19:15 Bogota); las horas de filas anteriores del registro fueron aproximadas",
+      "problema": "Las 4 facturas XML no se suben: el repositorio es público y vienen de fuera; P33 solo describe lo encontrado",
       "correccion": "Ninguna"
     }
   ],
-  "comprobaciones": "git diff revisado; solo AVANCES.md; pytest 240 passed y eval 20/20 sobre 8510675; hashes y numeros de VER contrastados con git log y .verificaciones; sin codigo",
-  "rama": "claude/focused-dirac-iurhyp",
+  "comprobaciones": "git diff revisado; python3 -m pytest -q: 240 passed; python3 eval.py: 20/20, 0 pagos indebidos; conversiones de P33 calculadas con data/tasas.yaml; emisores contrastados con data/proveedores.yaml",
+  "rama": "docs-pr14-xml",
   "commit": "8510675a965f53db6086429d5f4b5246f0cffe97",
   "reemplaza": null
 }

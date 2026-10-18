@@ -59,8 +59,9 @@ def _leer(tipo, datos, texto, clave_ejemplo, cliente):
     # Sin IA: solo patrones de texto, y la lectura queda dudosa (EA8.2).
     p = segunda_lectura.leer(texto)
     campos = {"beneficiario": p["beneficiario"], "numero": p["numero"], "monto": p["monto"],
-              "moneda": p["moneda"], "vence": p["vence"].isoformat() if p["vence"] else None, "cuenta": None}
-    campos["dudosos"] = sorted(k for k, v in campos.items() if v is None and k != "cuenta")
+              "moneda": p["moneda"], "vence": p["vence"].isoformat() if p["vence"] else None, "cuenta": None,
+              "orden_compra": p["orden_compra"], "id_tributaria": p["id_tributaria"]}
+    campos["dudosos"] = sorted(k for k, v in campos.items() if v is None and k not in ("cuenta", *lectura_ia.OPCIONALES))
     return campos, "regex"
 
 
@@ -83,7 +84,8 @@ def recibir(almacen, sala_id, nombre, datos, cliente=None, clave_ejemplo=None) -
     if modo != "xml":                                    # EA10.7: el primer NIT con dígito del texto
         nit = id_tributaria.primer_nit(texto)
         if nit:
-            campos["id_tributaria"] = f"{nit[0]}-{nit[1]}"
+            if not campos.get("id_tributaria"):          # lo que ya leyó la IA o los patrones (OC3.2) manda
+                campos["id_tributaria"] = f"{nit[0]}-{nit[1]}"
             campos["nit_dv"] = "correcto" if nit[2] else "incorrecto"
     if campos.get("nit_dv") == "incorrecto" or campos.get("cufe") == "falta":
         log.warning("Factura con identificación dudosa (NIT %s, CUFE %s): la lectura queda dudosa y se escala.",
@@ -157,6 +159,7 @@ def construir_ficha(e: dict, sala_id: str, factura_id: str, hoy) -> dict:
         factura_id=factura_id, beneficiario=valores["beneficiario"], numero=valores["numero"],
         monto=valores["monto"], moneda=valores["moneda"], vence=valores["vence"],
         recibida=hoy.isoformat(), cuenta_original=L.get("cuenta"), cuenta_aclarada=None,
+        orden_compra=L.get("orden_compra"), id_tributaria=L.get("id_tributaria"),       # OC3.1: solo si la factura los trae
         valores_aclarados={k: v for k, v in aclarados.items()}, origen_campos=origen,
         lectura_ia="dudosa" if ia_dudosa or e["pendientes"] else "ok",
         segunda_lectura=e["segunda"],                  # el chat no puede cambiarla (EA5.4)

@@ -1,0 +1,9 @@
+FACTURA N°: CE-0932
+Proveedor: Consultores Energéticos Magdalena S.A.S.
+NIT: 929610444-9
+Emitida: 2026-10-14
+Vence: 2026-10-31
+Orden de compra: PO-2026-005
+Concepto: Consultoría energética
+Total: 1.160.000 COP
+Cuenta: Cuenta demo ···0009

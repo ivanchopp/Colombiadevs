@@ -1,31 +1,53 @@
 {
   "id": "VER-0029",
-  "fecha": "2026-10-17T20:02:40-05:00",
-  "cambio": "Spec del agente de reglas en lenguaje natural (R7): requisitos AR1-AR8, diseño, tareas ART1-ART6; AVANCES y specs/README; sin codigo",
+  "fecha": "2026-10-17T18:29:58-05:00",
+  "cambio": "R3: órdenes de compra en el motor (versión mínima): modelos, carga, revisión OC4, 10 casos, 25 pruebas y documentación",
   "veredicto": "APROBADO",
   "archivos": [
-    "specs/agente-de-reglas",
+    "engine/compras.py",
+    "engine/revisiones/orden_compra.py",
+    "engine/modelos.py",
+    "engine/evaluar.py",
+    "engine/contexto.py",
+    "engine/reglas_io.py",
+    "engine/revisiones/frenar.py",
+    "data/ordenes_compra.yaml",
+    "data/casos.yaml",
+    "eval.py",
+    "tests/test_ordenes_compra.py",
+    "tests/test_casos.py",
+    "specs/ordenes-de-compra/design.md",
+    "specs/ordenes-de-compra/requirements.md",
+    "specs/ordenes-de-compra/tasks.md",
     "specs/README.md",
+    "README.md",
     "AVANCES.md"
   ],
   "hallazgos": [
     {
       "severidad": "ADVERTENCIA",
       "categoria": "alcance",
-      "ubicacion": "specs/agente-de-reglas/requirements.md",
-      "problema": "Seis decisiones abiertas (AR-D1 a AR-D6) con propuesta por defecto; el agente no esta programado y se calcula en unas 7 horas (4,5 h la version minima sin IA)",
-      "correccion": "El equipo confirma las decisiones antes de programar"
+      "ubicacion": "data/ordenes_compra.yaml:1",
+      "problema": "Las órdenes son sintéticas: el archivo real del equipo no está en el repositorio. La spec y AVANCES lo declaran; los resultados con las órdenes reales pueden diferir",
+      "correccion": "Importar el .xlsx real (OT1) y volver a correr eval.py"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "engine/revisiones/orden_compra.py:1",
+      "problema": "El agente de entrada aún no lee el número de OC (OT5): una factura subida al Panel 1 no cita OC, por lo que la revisión nueva solo actúa con fichas de prueba",
+      "correccion": "Hacer OT5"
     },
     {
       "severidad": "NOTA",
       "categoria": "seguridad",
-      "ubicacion": "specs/agente-de-reglas/design.md",
-      "problema": "El agente no tiene camino propio hacia las reglas: solo rellena el formulario existente, asi que validar_cambio, el techo duro, la firma del senior y el motivo se cumplen por construccion; la IA no recibe valores vigentes ni datos de la empresa",
-      "correccion": ""
+      "ubicacion": "engine/reglas_io.py:50",
+      "problema": "Los 200 proveedores pasan a la lista permitida sin acuerdo: sin OC ni acuerdo siguen escalando a PERSONA (R3.5) y los marcados van al senior; ningún camino nuevo paga sin todas las revisiones OK (R1.2)",
+      "correccion": "Ninguna"
     }
   ],
-  "comprobaciones": "git diff revisado; solo documentacion y una spec nueva, sin codigo; pytest 269 passed sin cambios; funciones citadas (validar_cambio, cambios_que_aflojan, simular, cambiar_reglas, crear_cliente, proveedor_activo, sin_secretos) existen en el repo; referencias R9.x, PP8.x, EA2.x y R5.1 revisadas; respeta que la IA nunca decide y que el techo duro no se edita",
-  "rama": "claude/focused-dirac-iurhyp",
-  "commit": "5632263242b947ba9dd89f9c910a5b98340c6ac9",
+  "comprobaciones": "python3 -m pytest -q: 241 pasan; python3 eval.py: 30/30, 0 pagos indebidos; 4 mutaciones de la revisión OC4 (no frenar facturada, ignorar identificación distinta, ignorar marcas, no frenar +10%) detectadas por las pruebas; spec escrita antes del código; sin claves ni datos reales en el diff",
+  "rama": "claude/friendly-cerf-aygx2r",
+  "commit": "ea0e355ed8b8d856a34fea437f9cf075106e2309",
   "reemplaza": null
 }

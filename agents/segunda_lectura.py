@@ -28,6 +28,9 @@ RE_XML_MONTO_INV = re.compile(rf"<{_P}PayableAmount\b[^>]*>\s*(?P<m>[\d.,]+)\s*<
 RE_XML_EMISOR = re.compile(rf"<{_P}AccountingSupplierParty\b.*?</{_P}AccountingSupplierParty>", re.I | re.S)
 RE_XML_NOMBRE = re.compile(rf"<{_P}RegistrationName\b[^>]*>\s*(?:<!\[CDATA\[)?\s*(?P<b>[^<\]]+?)\s*(?:\]\]>)?\s*<", re.I)
 RE_XML_VENCE = re.compile(rf"<{_P}(?:DueDate|PaymentDueDate)\b[^>]*>\s*(?P<f>\d{{4}}-\d{{2}}-\d{{2}})\s*<", re.I)
+RE_XML_NIT = re.compile(rf"<{_P}CompanyID\b(?P<a>[^>]*)>\s*(?P<n>[\d.\- ]+?)\s*<", re.I)
+RE_XML_DV = re.compile(r"schemeID=[\"'](?P<d>\d)[\"']", re.I)
+RE_XML_OC = re.compile(rf"<{_P}OrderReference\b.*?<{_P}ID\b[^>]*>\s*(?P<oc>[^<\s]+)\s*<", re.I | re.S)
 RE_XML_ID = re.compile(rf"<{_P}Invoice\b.*?<{_P}ID\b[^>]*>\s*(?P<n>[^<\s]+)\s*<", re.I | re.S)
 
 
@@ -47,10 +50,24 @@ def leer_xml(texto: str) -> dict:
     f = RE_XML_VENCE.search(texto)
     if f:
         r["vence"] = parsear_fecha(f.group("f"))
+    nit = RE_XML_NIT.search(emisor.group(0)) if emisor else None
+    if nit:
+        base = re.sub(r"\D", "", nit.group("n"))
+        dv = RE_XML_DV.search(nit.group("a"))
+        r["id_tributaria"] = f"{base}-{dv.group('d')}" if dv else base
+    oc = RE_XML_OC.search(texto)
+    if oc:
+        r["orden_compra"] = oc.group("oc").upper()
     n = RE_XML_ID.search(texto)
     if n:
         r["numero"] = n.group("n").upper()
     return r
+
+
+# Orden de compra e identificación tributaria del emisor (OC3.2): solo si la factura los trae.
+RE_OC = re.compile(r"(?:[oó]rden\s+de\s+compra|purchase\s+order|\bO\.?C\.?|\bPO)\s*(?:n[°ºo.]*|no\.?|#|num(?:ero)?)?\s*[:\-]?\s*"
+                   r"(?P<oc>[A-Z][A-Z0-9]{0,3}[\- ]?\d[A-Z0-9\- ]{2,20}\d|\d{5,15})", re.I)
+RE_ID_TRIB = re.compile(r"\b(?:NIT|RUC|RFC|identificaci[oó]n\s+tributaria)\s*[:\-]?\s*(?P<id>(?=[A-Z0-9\-]*\d)[A-Z0-9][A-Z0-9\-]{7,15})", re.I)
 
 
 def parsear_monto(texto: str) -> Decimal | None:
@@ -83,17 +100,29 @@ def parsear_fecha(texto: str) -> date | None:
         return None
 
 
+def _alfanum(t) -> str:
+    return re.sub(r"[^A-Z0-9]", "", str(t).upper())
+
+
 def normalizar(t: str) -> str:
     return " ".join(t.upper().split())
 
 
 def leer(texto: str | None) -> dict:
     """Campos que los patrones encuentran. Lo que no encuentra queda en None."""
-    r = {"beneficiario": None, "numero": None, "monto": None, "moneda": None, "vence": None}
+    r = {"beneficiario": None, "numero": None, "monto": None, "moneda": None, "vence": None,
+         "orden_compra": None, "id_tributaria": None}
     if not texto:
         return r
-    if es_xml(texto):
-        return leer_xml(texto)
+    if es_xml(texto):                                  # EA10.4: otro método que el analizador
+        r.update(leer_xml(texto))
+        return r
+    oc = RE_OC.search(texto)
+    if oc:
+        r["orden_compra"] = oc.group("oc").strip().upper()
+    ident = RE_ID_TRIB.search(texto)
+    if ident:
+        r["id_tributaria"] = ident.group("id").upper()
     for patron in RE_MONTO:
         m = patron.search(texto)
         if m and parsear_monto(m.group("m")) is not None:
@@ -143,5 +172,9 @@ def comparar(ia: dict, texto: str | None) -> tuple[str, list[str]]:
         elif campo == "moneda" and str(a).upper() != b:
             difieren.append(campo)
         elif campo == "vence" and str(a) != str(b):
+            difieren.append(campo)
+    for campo in ("orden_compra", "id_tributaria"):                      # OC3.2: solo cuentan si alguien los vio
+        a, b = ia.get(campo), patrones[campo]
+        if (a is not None or b is not None) and (a is None or b is None or _alfanum(a) != _alfanum(b)):
             difieren.append(campo)
     return ("coincide" if not difieren else "no_coincide"), difieren

@@ -13,7 +13,7 @@ DV = str(id_tributaria.digito_verificacion(NIT))
 
 def ubl(nombre="Alimentos del Valle S.A.S.", numero="FE1001", monto="1800000.00", moneda="COP", vence="2026-10-30",
         nit=NIT, dv=DV, cufe="a" * 96, perfil="DIAN 2.1: Factura Electrónica de Venta", nota="",
-        cuenta="Cuenta demo ···0026"):
+        cuenta="Cuenta demo ···0026", orden=""):
     uuid = f'<cbc:UUID schemeName="CUFE-SHA384">{cufe}</cbc:UUID>' if cufe else ""
     due = f"<cbc:DueDate>{vence}</cbc:DueDate>" if vence else ""
     return f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -27,6 +27,7 @@ def ubl(nombre="Alimentos del Valle S.A.S.", numero="FE1001", monto="1800000.00"
   <cbc:IssueDate>2026-10-14</cbc:IssueDate>
   {due}
   <cbc:Note>{nota}</cbc:Note>
+  {f"<cac:OrderReference><cbc:ID>{orden}</cbc:ID></cac:OrderReference>" if orden else ""}
   <cbc:DocumentCurrencyCode>{moneda}</cbc:DocumentCurrencyCode>
   <cac:AccountingSupplierParty><cac:Party>
     <cac:PartyTaxScheme><cbc:RegistrationName>{nombre}</cbc:RegistrationName>
@@ -66,6 +67,13 @@ def test_ea10_2_lee_los_campos_sin_ia():
     assert (r["beneficiario"], r["numero"], r["moneda"], r["vence"]) == ("Alimentos del Valle S.A.S.", "FE1001", "COP", "2026-10-30")
     assert r["monto"] == Decimal("1800000.00") and r["dudosos"] == []
     assert r["id_tributaria"] == f"{NIT}-{DV}" and r["nit_dv"] == "correcto" and r["cufe"] == "presente"
+
+
+def test_ea10_2_lee_la_orden_de_compra_y_la_segunda_lectura_coincide():
+    datos = ubl(orden="OC-12345")
+    r = xml_factura.leer(datos)
+    assert r["orden_compra"] == "OC-12345" and r["id_tributaria"] == f"{NIT}-{DV}"
+    assert segunda_lectura.comparar(r, datos.decode()) == ("coincide", [])           # OC y NIT también se comparan (OC3.2)
 
 
 def test_ea10_2_sin_vencimiento_queda_dudoso_y_no_se_inventa():

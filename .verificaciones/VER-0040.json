@@ -1,0 +1,33 @@
+{
+  "id": "VER-0040",
+  "fecha": "2026-10-17T20:33:18-05:00",
+  "cambio": "Fusion de main (R2, R3, OT5, PR 18 y 20) en la rama de R5 y R7: segunda lectura del XML ahora tambien compara orden de compra y NIT, XML lee OrderReference, VER renumerados 0035-0039, AVANCES reconciliado",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "VERIFICACIONES.md",
+    "agents",
+    "tests",
+    ".verificaciones"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "alcance",
+      "ubicacion": "agents/xml_factura.py",
+      "problema": "El lector de XML solo entiende UBL (DIAN y otros paises); los 4 XML de ejemplo del equipo son CFDI 4.0 de Mexico y se rechazan con No es una factura UBL (AVANCES P33)",
+      "correccion": "Decidir si se agrega el CFDI"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "agents/segunda_lectura.py",
+      "problema": "Main agrego que la orden de compra y el NIT cuenten en la segunda lectura; el XML ahora los lee con ambos metodos para que coincidan, y flujo.py no pisa el NIT que ya leyo la IA o los patrones",
+      "correccion": ""
+    }
+  ],
+  "comprobaciones": "pytest: 383 passed; python3 eval.py: 29/29 y 0 pagos indebidos; conflictos resueltos en AVANCES, VERIFICACIONES, segunda_lectura y 5 VER; los VER 0027 a 0034 de main se conservaron y los de esta rama pasaron a 0035-0039; sin secretos",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "cb5d2cb7af915edc28370ca272b470f12d5d8f58",
+  "reemplaza": null
+}

@@ -82,10 +82,11 @@ def leer(datos: bytes) -> dict:
     cufe = _texto(_hijo(f, "UUID"))
 
     cuenta = _texto(_hijo(f, "PaymentMeans", "PayeeFinancialAccount", "ID"))
+    orden = _texto(_hijo(f, "OrderReference", "ID"))
     campos = {"beneficiario": nombre, "numero": _texto(_hijo(f, "ID")), "monto": monto,
               "moneda": moneda.upper() if moneda and len(moneda) == 3 and moneda.isalpha() else None,
               "vence": vence if vence and re.fullmatch(r"\d{4}-\d{2}-\d{2}", vence) else None,
-              "cuenta": cuenta}
+              "cuenta": cuenta, "orden_compra": orden}
     campos["dudosos"] = sorted(k for k in ("beneficiario", "numero", "monto", "moneda", "vence") if campos[k] is None)
 
     # Señales locales (EA10.5, EA10.6): no son una consulta a la DIAN.

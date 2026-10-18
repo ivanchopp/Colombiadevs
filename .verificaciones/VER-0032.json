@@ -1,0 +1,24 @@
+{
+  "id": "VER-0032",
+  "fecha": "2026-10-17T20:01:01-05:00",
+  "cambio": "Fusión de main (PR #18, documentación) en la rama de R2 y R3 antes de abrir el PR: conserva VER-0027 de main y renumera las verificaciones de la rama a VER-0028 a VER-0031",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "VERIFICACIONES.md",
+    ".verificaciones"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "convenciones",
+      "ubicacion": "AVANCES.md:17",
+      "problema": "Las cifras de 266 pruebas y 29 casos valen en la rama; en main son 240 y 20 hasta que se fusione el PR",
+      "correccion": "Actualizar al fusionar"
+    }
+  ],
+  "comprobaciones": "python3 -m pytest -q: 266 pasan; python3 eval.py: 29/29, 0 pagos indebidos; sin marcas de conflicto; solo documentación y registros cambiaron respecto a la verificación anterior (VER-0031)",
+  "rama": "claude/friendly-cerf-aygx2r",
+  "commit": "6ec6a2a09130f35022eea8b03ff71a2e15f5aa40",
+  "reemplaza": null
+}

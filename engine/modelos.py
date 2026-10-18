@@ -25,8 +25,10 @@ class Ficha(Cerrado):
     cuenta_original: str | None = None
     cuenta_aclarada: str | None = None
     valores_aclarados: dict[str, Any] = {}
-    origen_campos: dict[Literal["beneficiario", "numero", "monto", "moneda", "vence"],
+    origen_campos: dict[Literal["beneficiario", "numero", "monto", "moneda", "vence", "orden_compra"],
                         Literal["factura", "aclarado"]] = {}
+    orden_compra: str | None = None
+    id_tributaria: str | None = None
     lectura_ia: Literal["ok", "dudosa"]
     segunda_lectura: Literal["coincide", "no_coincide", "no_disponible"]
     orden_en_texto: bool = False
@@ -45,6 +47,30 @@ class Registro(Cerrado):
     cuenta: str
     acuerdo_monto: Decimal | None = None
     acuerdo_moneda: str | None = None
+
+
+class Proveedor(Cerrado):
+    id: int
+    nombre: str
+    pais: str
+    id_tributaria: str
+    tipo_id: Literal["NIT", "RFC", "RUC"]
+    cuenta: str                              # ficticia (OCD3)
+    marcas: list[Literal["identificacion_repetida", "identificacion_invalida"]] = []
+
+
+class OrdenCompra(Cerrado):
+    numero: str
+    proveedor_id: int
+    id_tributaria: str
+    articulo: str
+    cantidad: int = Field(gt=0)
+    precio_unitario: Decimal
+    subtotal: Decimal
+    iva: Decimal
+    total: Decimal
+    moneda: str = Field(pattern=r"^[A-Z]{3}$")               # la moneda de la orden va siempre en el dato (R5.6)
+    marcas: list[Literal["no_coincide_con_proveedor"]] = []
 
 
 class Obligacion(Cerrado):
@@ -84,6 +110,9 @@ class Contexto(Cerrado):
     historial: list[Movimiento] = []
     calendario: list[Obligacion] = []
     canales: list[CanalDef] = []
+    proveedores: list[Proveedor] = []
+    ordenes: dict[str, OrdenCompra] = {}       # por número normalizado (engine.compras.normalizar_oc)
+    oc_facturadas: dict[str, str] = {}         # número normalizado -> factura que la usó (OC5)
 
     @property
     def periodo(self) -> str:
