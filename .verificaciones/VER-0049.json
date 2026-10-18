@@ -1,0 +1,25 @@
+{
+  "id": "VER-0049",
+  "fecha": "2026-10-17T21:33:47-05:00",
+  "cambio": "Fusion de main (R6, PR 21 y 23) en la rama del CFDI: VER del CFDI pasa a 0048, tarea del CFDI pasa a ET13 porque ET12 la uso R6, AVANCES reconciliado; sin codigo nuevo",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "VERIFICACIONES.md",
+    "specs/extraccion-y-agente-de-entrada",
+    ".verificaciones"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "convenciones",
+      "ubicacion": "specs/extraccion-y-agente-de-entrada/tasks.md",
+      "problema": "La tarea del CFDI se llamaba ET12 igual que la de R6; pasa a ET13 en la spec y en AVANCES",
+      "correccion": ""
+    }
+  ],
+  "comprobaciones": "pytest: 448 passed; python3 eval.py: 29/29 y 0 pagos indebidos; los VER 0046 y 0047 de main se conservaron y el del CFDI pasa a 0048; sin codigo nuevo",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "0b90e4f72b804a43a4eef2db9e3112c648e56d68",
+  "reemplaza": null
+}

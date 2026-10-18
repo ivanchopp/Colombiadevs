@@ -54,6 +54,7 @@ def _leer(tipo, datos, texto, clave_ejemplo, cliente):
             # Queda en los Logs del servidor (EA2b.9), sin ningún valor de clave.
             log.warning("La lectura con IA falló (%s): %s", lectura_ia.proveedor_activo(),
                         lectura_ia.sin_secretos(str(e))[:300])
+            lectura_ia.registrar_falla(e)                          # EA2b.10: se ve en ?diagnostico=1
     if clave_ejemplo in ejemplos.LECTURAS_GUARDADAS:
         return lectura_ia._limpiar(ejemplos.LECTURAS_GUARDADAS[clave_ejemplo]), "guardada"
     # Sin IA: solo patrones de texto, y la lectura queda dudosa (EA8.2).
