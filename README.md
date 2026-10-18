@@ -37,6 +37,8 @@ La lectura de facturas funciona con **Gemini** o con **Claude**, con el mismo es
 | `ANTHROPIC_API_KEY` | Usar Claude. Modelo por defecto `claude-sonnet-5-5` (cámbialo con `MODELO_ENTRADA`) |
 | `PROVEEDOR_IA` | `gemini` o `claude`. Si lo dejas vacío: Claude si hay clave de Claude; si no, Gemini |
 
+**Si la IA «está activa» pero no lee:** abre la app con `?diagnostico=1`. Ahí se ve la **última falla de lectura** y el botón **«Probar la conexión con la IA ahora»**, que muestra el error y, para Gemini, los modelos disponibles; si el modelo ya no existe, cambia `MODELO_GEMINI`. Una falla de la IA no se avisa en pantalla: la factura se lee con patrones y pasa a revisión de una persona.
+
 **Para pasar de Gemini a Claude:** agrega `ANTHROPIC_API_KEY` y borra `GEMINI_API_KEY` (o pon `PROVEEDOR_IA=claude`). No hay que tocar el código.
 
 Verifica que la clave funciona (hace unas pocas llamadas reales):

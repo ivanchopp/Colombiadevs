@@ -98,6 +98,50 @@ def sin_secretos(texto: str, env=None) -> str:
     return texto
 
 
+ULTIMA_FALLA: dict = {"cuando": None, "proveedor": None, "mensaje": None}      # EA2b.10: solo en memoria del servidor
+
+
+def registrar_falla(error, proveedor: str | None = None) -> None:
+    """Guarda la última falla de lectura para el diagnóstico. Nunca guarda el valor de una clave."""
+    from datetime import datetime, timezone
+    ULTIMA_FALLA.update(cuando=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
+                        proveedor=proveedor or proveedor_activo() or "ninguno",
+                        mensaje=sin_secretos(f"{type(error).__name__}: {error}")[:500])
+
+
+def modelos_disponibles(cliente=None, proveedor: str | None = None) -> list[str]:
+    """Nombres de los modelos de Gemini que generan texto (para elegir MODELO_GEMINI). Vacío si falla."""
+    try:
+        proveedor = proveedor or (_proveedor_del_cliente(cliente) if cliente is not None else proveedor_activo())
+        if proveedor != "gemini":
+            return []
+        cliente = cliente or crear_cliente("gemini")
+        nombres = [str(m.name).removeprefix("models/") for m in cliente.models.list()
+                   if "generateContent" in (getattr(m, "supported_actions", None) or ["generateContent"])]
+        return sorted(n for n in nombres if n.startswith("gemini"))[:40]
+    except Exception:
+        return []
+
+
+def probar_conexion(cliente=None, proveedor: str | None = None) -> dict:
+    """Una lectura mínima con el proveedor activo (EA2b.11). Devuelve {ok, proveedor, modelo, detalle, modelos}."""
+    proveedor = proveedor or (_proveedor_del_cliente(cliente) if cliente is not None else proveedor_activo())
+    if proveedor is None:
+        return {"ok": False, "proveedor": None, "modelo": None, "detalle": "No hay proveedor de IA configurado.",
+                "modelos": []}
+    modelo = modelo_gemini() if proveedor == "gemini" else modelo_claude()
+    texto = "FACTURA N° T-1\nProveedor: Prueba SAS\nVence: 2026-10-30\nTotal: 100 COP"
+    try:
+        r = leer_con_ia("txt", texto.encode(), texto, cliente, proveedor)
+        ok = str(r.get("monto")) == "100" and (r.get("moneda") or "").upper() == "COP"
+        detalle = ("La IA respondió y leyó bien la factura de prueba." if ok else
+                   f"La IA respondió, pero leyó otra cosa: monto {r.get('monto')}, moneda {r.get('moneda')}.")
+    except LecturaFallida as e:
+        ok, detalle = False, sin_secretos(str(e))[:500]
+    return {"ok": ok, "proveedor": proveedor, "modelo": modelo, "detalle": detalle,
+            "modelos": modelos_disponibles(cliente, proveedor)}
+
+
 def diagnostico(env=None) -> dict:
     """Por qué la app usa (o no) un proveedor de IA. Solo estados y nombres: nunca el valor de una clave (EA2b.6)."""
     env = os.environ if env is None else env
