@@ -1,6 +1,6 @@
-"""Lectura estructural de la factura electrónica en XML de varios países, sin IA (EA10, EA11).
+"""Lectura estructural de la factura electrónica en XML de varios países, sin IA (EA10, EA11, EA12).
 
-UBL 2.1 (Colombia, Perú) tiene su lectura propia; los demás formatos salen de la tabla FORMATOS.
+UBL 2.1 (Colombia, Perú) y CFDI (México) tienen su lectura propia; los demás formatos salen de la tabla FORMATOS.
 La segunda lectura del XML es otro método, por patrones de texto (`segunda_lectura.leer_xml`)."""
 import re
 import xml.etree.ElementTree as ET
@@ -16,14 +16,11 @@ class XmlInvalido(Exception):
 
 
 class FormatoDesconocido(XmlInvalido):
-    """XML bien formado de un formato que no está en la tabla: se lee como texto y se escala (EA11.7)."""
+    """XML bien formado de un formato que no está en la tabla: se lee como texto y se escala (EA12.7)."""
 
 
-# EA11.1: por campo, rutas alternativas. «+» une partes con «-»; «@» es un atributo; «@X» solo, de la raíz.
+# EA12.1 (EA11 es el CFDI de México, con su lectura propia): por campo, rutas alternativas. «+» une partes con «-».
 FORMATOS = [
-    {"nombre": "CFDI (México)", "raices": ("Comprobante",), "beneficiario": ["Emisor/@Nombre"],
-     "numero": ["@Serie+@Folio", "TimbreFiscalDigital/@UUID"], "monto": ["@Total"], "moneda": ["@Moneda"],
-     "vence": [], "id": ["Emisor/@Rfc"]},
     {"nombre": "SRI (Ecuador)", "raices": ("factura",), "beneficiario": ["infoTributaria/razonSocial"],
      "numero": ["infoTributaria/estab+infoTributaria/ptoEmi+infoTributaria/secuencial"],
      "monto": ["infoFactura/importeTotal"], "moneda": ["infoFactura/moneda"], "vence": [], "id": ["infoTributaria/ruc"]},
@@ -43,7 +40,7 @@ FORMATOS = [
      "numero": ["gTimb/dEst+gTimb/dPunExp+gTimb/dNumDoc"], "monto": ["gTotSub/dTotGralOpe"], "moneda": ["gOpeCom/cMoneOpe"],
      "vence": ["gCuotas/dVencCuo"], "id": ["gEmis/dRucEm+gEmis/dDVEmi"]},
 ]
-MONEDAS_NOMBRE = {"DOLAR": "USD"}                                   # EA11.4: SRI de Ecuador
+MONEDAS_NOMBRE = {"DOLAR": "USD"}                                   # EA12.4: SRI de Ecuador
 
 
 def formato_de(raiz_nombre: str) -> dict | None:
@@ -51,14 +48,14 @@ def formato_de(raiz_nombre: str) -> dict | None:
 
 
 def decimal_xml(texto: str | None) -> Decimal | None:
-    """EA11.3: en XML el decimal siempre es con punto; nada de separadores de miles."""
+    """EA12.3: en XML el decimal siempre es con punto; nada de separadores de miles."""
     if not texto or not re.fullmatch(r"\d+(\.\d+)?", texto.strip()):
         return None
     return Decimal(texto.strip())
 
 
 def moneda_xml(valor: str | None, formato: dict) -> str | None:
-    """EA11.4: el campo manda; solo si falta, la que fija el esquema."""
+    """EA12.4: el campo manda; solo si falta, la que fija el esquema."""
     if valor:
         v = MONEDAS_NOMBRE.get(valor.strip().upper(), valor.strip().upper())
         return v if len(v) == 3 and v.isalpha() else None
@@ -95,7 +92,7 @@ def _desenvolver(texto_interno: str | None, que: str):
 
 
 def analizar(datos: bytes):
-    """Raíz de la factura, desenvolviendo el AttachedDocument de la DIAN y la autorizacion del SRI (EA10.1, EA11.8)."""
+    """Raíz de la factura, desenvolviendo el AttachedDocument de la DIAN y la autorizacion del SRI (EA10.1, EA12.8)."""
     if PELIGROSO.search(datos):
         raise XmlInvalido("El XML declara entidades o DOCTYPE: no se acepta.")
     try:
@@ -106,7 +103,7 @@ def analizar(datos: bytes):
         raiz = _desenvolver(_texto(_hijo(raiz, "Attachment", "ExternalReference", "Description")), "El documento adjunto")
     elif _nombre(raiz) == "autorizacion":
         raiz = _desenvolver(_texto(_hijo(raiz, "comprobante")), "La autorización")
-    if _nombre(raiz) != "Invoice" and formato_de(_nombre(raiz)) is None:
+    if _nombre(raiz) not in ("Invoice", "Comprobante") and formato_de(_nombre(raiz)) is None:
         raise FormatoDesconocido("No es un formato de factura electrónica reconocido.")
     return raiz
 
@@ -116,18 +113,16 @@ def _descendiente(el, nombre):
 
 
 def _ruta(raiz, ruta: str) -> str | None:
-    """Valor de una ruta de la tabla: «A/B/@c», «A/B» o «@c» (atributo de la raíz). «+» une con «-»."""
+    """Texto de una ruta de la tabla («A/B»: primer descendiente A y, dentro, el primer B). «+» une con «-»."""
     partes = []
     for trozo in ruta.split("+"):
-        el, pasos = raiz, trozo.split("/")
-        attr = pasos.pop()[1:] if pasos[-1].startswith("@") else None
-        for paso in pasos:
+        el = raiz
+        for paso in trozo.split("/"):
             el = _descendiente(el, paso)
             if el is None:
                 break
-        valor = (el.get(attr) if attr else _texto(el)) if el is not None else None
-        if valor and valor.strip():
-            partes.append(valor.strip())
+        if _texto(el):
+            partes.append(_texto(el))
     return "-".join(partes) or None
 
 
@@ -136,7 +131,7 @@ def primera_ruta(raiz, rutas, resolver=_ruta) -> str | None:
 
 
 def _leer_tabla(raiz, formato) -> dict:
-    """EA11.2: los campos de un formato de la tabla, con el analizador."""
+    """EA12.2: los campos de un formato de la tabla, con el analizador."""
     vence = primera_ruta(raiz, formato["vence"])
     campos = {"beneficiario": primera_ruta(raiz, formato["beneficiario"]),
               "numero": primera_ruta(raiz, formato["numero"]),
@@ -150,9 +145,35 @@ def _leer_tabla(raiz, formato) -> dict:
     return campos
 
 
+def _leer_cfdi(c) -> dict:
+    """CFDI 3.3 y 4.0 de México (EA11). Todo sale de atributos; no hay vencimiento (EA11.4)."""
+    tipo = c.get("TipoDeComprobante")
+    if tipo != "I":
+        raise XmlInvalido(f"El comprobante es de tipo «{tipo or 'sin tipo'}», no una factura de ingreso: "
+                          "una nota de crédito, un pago o una nómina no se pagan como factura.")
+    emisor = _hijo(c, "Emisor")
+    serie, folio = (c.get("Serie") or "").strip(), (c.get("Folio") or "").strip()
+    monto = decimal_xml(c.get("Total"))                          # EA12.3
+    moneda = (c.get("Moneda") or "").strip().upper()
+    rfc = ((emisor.get("Rfc") if emisor is not None else None) or "").strip().upper() or None
+    timbre = next((e for e in c.iter() if _nombre(e) == "TimbreFiscalDigital"), None)
+    campos = {"beneficiario": ((emisor.get("Nombre") or "").strip() or None) if emisor is not None else None,
+              "numero": (f"{serie}-{folio}" if serie and folio else folio) or None,
+              "monto": monto, "moneda": moneda if len(moneda) == 3 and moneda.isalpha() and moneda != "XXX" else None,
+              "vence": None, "cuenta": None, "orden_compra": None}
+    campos["dudosos"] = sorted(k for k in ("beneficiario", "numero", "monto", "moneda", "vence") if campos[k] is None)
+    campos["id_tributaria"] = rfc
+    campos["nit_dv"] = ("correcto" if id_tributaria.rfc_valido(rfc) else "incorrecto") if rfc else "incorrecto"
+    campos["cufe"] = "presente" if timbre is not None and (timbre.get("UUID") or "").strip() else "falta"   # EA11.7
+    campos["formato"] = "CFDI (México)"
+    return campos
+
+
 def leer(datos: bytes) -> dict:
     """Los campos de la ficha más la identificación del emisor y las señales de validez local."""
     f = analizar(datos)
+    if _nombre(f) == "Comprobante":
+        return _leer_cfdi(f)
     if _nombre(f) != "Invoice":
         return _leer_tabla(f, formato_de(_nombre(f)))
     parte = _hijo(f, "AccountingSupplierParty", "Party")
@@ -171,7 +192,7 @@ def leer(datos: bytes) -> dict:
     es_nit = id_el is not None and (id_el.get("schemeName") == "31" or dv is not None) and base != ""
 
     total = _hijo(f, "LegalMonetaryTotal", "PayableAmount")
-    monto = decimal_xml(_texto(total))                           # EA11.3
+    monto = decimal_xml(_texto(total))                           # EA12.3
     moneda = (total.get("currencyID") if total is not None else None) or _texto(_hijo(f, "DocumentCurrencyCode"))
     vence = (_texto(_hijo(f, "DueDate")) or _texto(_hijo(f, "PaymentMeans", "PaymentDueDate"))
              or _texto(_hijo(f, "PaymentTerms", "PaymentDueDate")))

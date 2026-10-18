@@ -38,10 +38,41 @@ RE_CDATA = re.compile(r"^\s*<!\[CDATA\[(.*?)\]\]>\s*$", re.S)
 RE_XML_DV = re.compile(r"schemeID=[\"'](?P<d>\d)[\"']", re.I)
 RE_XML_OC = re.compile(rf"<{_P}OrderReference\b.*?<{_P}ID\b[^>]*>\s*(?P<oc>[^<\s]+)\s*<", re.I | re.S)
 RE_XML_ID = re.compile(rf"<{_P}Invoice\b.*?<{_P}ID\b[^>]*>\s*(?P<n>[^<\s]+)\s*<", re.I | re.S)
+RE_XML_DV = re.compile(r"schemeID=[\"'](?P<d>\d)[\"']", re.I)
+RE_XML_OC = re.compile(rf"<{_P}OrderReference\b.*?<{_P}ID\b[^>]*>\s*(?P<oc>[^<\s]+)\s*<", re.I | re.S)
+RE_XML_ID = re.compile(rf"<{_P}Invoice\b.*?<{_P}ID\b[^>]*>\s*(?P<n>[^<\s]+)\s*<", re.I | re.S)
 
 
 def es_xml(texto: str | None) -> bool:
     return bool(texto) and texto.lstrip("\ufeff \t\r\n").startswith("<")
+
+
+RE_CFDI = re.compile(rf"<{_P}Comprobante\b(?P<a>[^>]*)>", re.I)
+RE_CFDI_EMISOR = re.compile(rf"<{_P}Emisor\b(?P<a>[^>]*?)/?>", re.I)
+RE_ATRIBUTO = re.compile(r"\b(?P<k>[A-Za-z]+)\s*=\s*(?:\"(?P<v>[^\"]*)\"|'(?P<w>[^']*)')")
+
+
+def _atributos(cadena: str) -> dict:
+    return {m.group("k"): (m.group("v") if m.group("v") is not None else m.group("w")) for m in RE_ATRIBUTO.finditer(cadena)}
+
+
+def leer_cfdi(texto: str) -> dict:
+    """Segunda lectura de un CFDI (EA11.8): patrones sobre los atributos, no el analizador."""
+    r = {"beneficiario": None, "numero": None, "monto": None, "moneda": None, "vence": None}
+    c = RE_CFDI.search(texto)
+    a = _atributos(c.group("a")) if c else {}
+    r["monto"] = xml_factura.decimal_xml(a.get("Total"))             # EA12.3: decimal con punto
+    m = (a.get("Moneda") or "").upper()
+    r["moneda"] = m if len(m) == 3 and m.isalpha() and m != "XXX" else None
+    serie, folio = (a.get("Serie") or "").strip(), (a.get("Folio") or "").strip()
+    r["numero"] = ((f"{serie}-{folio}" if serie and folio else folio) or None)
+    e = RE_CFDI_EMISOR.search(texto)
+    ae = _atributos(e.group("a")) if e else {}
+    r["beneficiario"] = (ae.get("Nombre") or "").strip() or None
+    r["id_tributaria"] = (ae.get("Rfc") or "").strip().upper() or None
+    if r["numero"]:
+        r["numero"] = r["numero"].upper()
+    return r
 
 
 def _raiz_xml(texto: str) -> str | None:
@@ -52,34 +83,26 @@ def _raiz_xml(texto: str) -> str | None:
     return m.group("r") if m else None
 
 
-def _rx_ruta(texto: str, ruta: str, raiz: str) -> str | None:
-    """EA11.6: la misma ruta de la tabla, resuelta con patrones de texto y no con el analizador."""
+def _rx_ruta(texto: str, ruta: str) -> str | None:
+    """EA12.6: la misma ruta de la tabla, resuelta con patrones de texto y no con el analizador."""
     partes = []
     for trozo in ruta.split("+"):
-        pasos = trozo.split("/")
-        attr = pasos.pop()[1:] if pasos[-1].startswith("@") else None
-        alcance, m = texto, None
-        for paso in pasos or [raiz]:
+        alcance = texto
+        for paso in trozo.split("/"):
             nombre = re.escape(paso)
-            m = re.search(rf"<{_P}{nombre}(?P<a>\s[^>]*?)?(?:/>|>(?P<c>.*?)</{_P}{nombre}\s*>)", alcance, re.S)
-            if not m:
+            m = re.search(rf"<{_P}{nombre}(?:\s[^>]*?)?(?:/>|>(?P<c>.*?)</{_P}{nombre}\s*>)", alcance, re.S)
+            alcance = (m.group("c") or "") if m else None
+            if alcance is None:
                 break
-            alcance = m.group("c") or ""
-        if not m:
-            continue
-        if attr:
-            a = re.search(rf"(?<![\w:.-]){re.escape(attr)}\s*=\s*[\"'](?P<v>[^\"']*)[\"']", m.group("a") or "")
-            valor = a.group("v") if a else None
-        else:
-            c = RE_CDATA.match(alcance)
-            valor = (c.group(1) if c else alcance) if "<" not in (c.group(1) if c else alcance) else None
-        if valor and valor.strip():
+        c = RE_CDATA.match(alcance or "")
+        valor = c.group(1) if c else alcance
+        if valor and "<" not in valor and valor.strip():
             partes.append(valor.strip())
     return "-".join(partes) or None
 
 
-def _leer_xml_tabla(texto: str, formato: dict, raiz: str) -> dict:
-    uno = lambda campo: xml_factura.primera_ruta(texto, formato[campo], lambda t, ru: _rx_ruta(t, ru, raiz))
+def _leer_xml_tabla(texto: str, formato: dict) -> dict:
+    uno = lambda campo: xml_factura.primera_ruta(texto, formato[campo], _rx_ruta)
     vence = uno("vence")
     return {"beneficiario": uno("beneficiario"), "numero": (uno("numero") or "").upper() or None,
             "monto": xml_factura.decimal_xml(uno("monto")), "moneda": xml_factura.moneda_xml(uno("moneda"), formato),
@@ -89,12 +112,14 @@ def _leer_xml_tabla(texto: str, formato: dict, raiz: str) -> dict:
 
 def leer_xml(texto: str) -> dict:
     raiz = _raiz_xml(texto)
+    if raiz == "Comprobante":                    # por la raíz: el sobre <comprobante> del SRI no es un CFDI
+        return leer_cfdi(texto)
     formato = xml_factura.formato_de(raiz) if raiz else None
-    if formato:                                                          # EA11.6
-        return _leer_xml_tabla(texto, formato, raiz)
+    if formato:                                                          # EA12.6
+        return _leer_xml_tabla(texto, formato)
     r = {"beneficiario": None, "numero": None, "monto": None, "moneda": None, "vence": None}
     m = RE_XML_MONTO.search(texto)
-    if m and xml_factura.decimal_xml(m.group("m")) is not None:          # EA11.3: decimal con punto
+    if m and xml_factura.decimal_xml(m.group("m")) is not None:          # EA12.3: decimal con punto
         r["monto"], r["moneda"] = xml_factura.decimal_xml(m.group("m")), m.group("c").upper()
     emisor = RE_XML_EMISOR.search(texto)
     b = RE_XML_NOMBRE.search(emisor.group(0)) if emisor else None

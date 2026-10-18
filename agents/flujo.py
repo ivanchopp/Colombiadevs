@@ -42,11 +42,11 @@ def _agregar(chat, rol, texto):
 
 def _leer(tipo, datos, texto, clave_ejemplo, cliente):
     """(campos, modo). modo: xml | ia | guardada | regex. Ante cualquier falla, regex y dudosa (EA8)."""
-    if tipo == "xml":                                    # lectura estructural, sin IA (EA10.2, EA11.2)
+    if tipo == "xml":                                    # lectura estructural, sin IA (EA10.2, EA11, EA12.2)
         try:
             return xml_factura.leer(datos), "xml"
         except xml_factura.FormatoDesconocido:
-            tipo = "txt"                                 # EA11.7: se lee como texto y se escala
+            tipo = "txt"                                 # EA12.7: se lee como texto y se escala
         except xml_factura.XmlInvalido as e:
             raise EntradaRechazada(str(e)) from e
     if cliente is not None or lectura_ia.hay_clave():
@@ -96,7 +96,7 @@ def recibir(almacen, sala_id, nombre, datos, cliente=None, clave_ejemplo=None) -
 
     if tipo == "xml" and modo != "xml":
         campos["formato"] = "XML no reconocido"
-        segunda, difieren = "no_disponible", []                     # EA11.7: sin lectura estructural, se escala
+        segunda, difieren = "no_disponible", []                     # EA12.7: sin lectura estructural, se escala
     elif texto is None:
         segunda, difieren = "no_disponible", []                     # EA3.3
     else:

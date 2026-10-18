@@ -40,12 +40,12 @@ flowchart LR
 
 **Segunda lectura.** Montos: se aceptan `2.400.000`, `2,400,000.00` y `2400000`; si hay punto y coma, el último separador es el decimal; con un solo separador y tres dígitos después, es de miles. Moneda: código de tres letras junto al monto. Fecha: `AAAA-MM-DD` o `DD/MM/AAAA`. Beneficiario: línea `Proveedor:` o `De:`.
 
-**XML de varios países (EA10, EA11).** `xml_factura.py` reconoce el formato por el nombre local de la raíz. UBL 2.1 (Colombia, Perú) conserva su lectura propia (EA10). Los demás formatos se leen con la tabla `FORMATOS`: por cada campo, una lista de rutas alternativas (`Emisor/RznSoc`), donde `+` une partes con «-» (`IdDoc/Serie+IdDoc/Nro`) y `@` lee un atributo (`Emisor/@Rfc`; `@Total` es un atributo de la raíz). Cada paso de la ruta busca el primer descendiente con ese nombre, así que los envoltorios (`nfeProc`, `EnvioDTE`, `rDE`) no estorban. La segunda lectura (`segunda_lectura.leer_xml`) resuelve las mismas rutas con expresiones regulares sobre el texto, sin el analizador. El sobre `autorizacion` del SRI trae la factura en un CDATA: se desenvuelve como el `AttachedDocument` de la DIAN. Un XML bien formado de raíz desconocida lanza `FormatoDesconocido` y el flujo lo lee como texto; su segunda lectura no encuentra los campos, así que queda `no_disponible` y el motor escala (R2.2).
+**XML de varios países (EA10, EA11, EA12).** `xml_factura.py` reconoce el formato por el nombre local de la raíz. UBL 2.1 (Colombia, Perú, EA10) y CFDI (México, EA11) tienen su lectura propia. Los demás formatos se leen con la tabla `FORMATOS`: por cada campo, una lista de rutas alternativas (`Emisor/RznSoc`), donde `+` une partes con «-» (`IdDoc/Serie+IdDoc/Nro`). Cada paso de la ruta busca el primer descendiente con ese nombre, así que los envoltorios (`nfeProc`, `EnvioDTE`, `rDE`) no estorban. La segunda lectura (`segunda_lectura.leer_xml`) resuelve las mismas rutas con expresiones regulares sobre el texto, sin el analizador. El sobre `autorizacion` del SRI trae la factura en un CDATA: se desenvuelve como el `AttachedDocument` de la DIAN. Un XML bien formado de raíz desconocida lanza `FormatoDesconocido` y el flujo lo lee como texto; su segunda lectura no encuentra los campos, así que queda `no_disponible` y el motor escala (R2.2).
 
 | Formato | País | Raíz | Moneda | Vencimiento |
 |---|---|---|---|---|
 | UBL 2.1 | Colombia (DIAN), Perú (SUNAT) | `Invoice` | `currencyID` | `DueDate` / `PaymentDueDate` |
-| CFDI 4.0 | México | `Comprobante` | `@Moneda` | No trae |
+| CFDI 3.3 y 4.0 (lectura propia, EA11) | México | `Comprobante` | `@Moneda` | No trae |
 | Comprobante SRI | Ecuador | `factura` | `moneda` («DOLAR» → USD) | No trae |
 | CFE | Uruguay | `CFE` | `TpoMoneda` | `FchVenc` |
 | NF-e | Brasil | `nfeProc`, `NFe` | BRL por esquema | `dup/dVenc` |

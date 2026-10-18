@@ -1,4 +1,4 @@
-"""EA11: facturas electrónicas XML de otros países de Latinoamérica. Sin red, sin clave, datos ficticios."""
+"""EA12: facturas electrónicas XML de otros países de Latinoamérica (el CFDI de México es EA11, en test_cfdi.py). Sin red, sin clave, datos ficticios."""
 from datetime import date
 from decimal import Decimal
 
@@ -9,7 +9,7 @@ from agents import archivo, flujo, segunda_lectura, xml_factura
 
 # Un ejemplo mínimo y ficticio por formato, con su lectura esperada.
 CFDI = b"""<?xml version="1.0" encoding="UTF-8"?>
-<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/4" Version="4.0" Serie="FACT" Folio="2026001"
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/4" Version="4.0" TipoDeComprobante="I" Serie="FACT" Folio="2026001"
   SubTotal="9600" Total="11136.0" Moneda="MXN">
   <cfdi:Emisor Rfc="TAV120405H87" Nombre="Tecnolog\xc3\xada Avanzada S.A. de C.V." RegimenFiscal="601"/>
   <cfdi:Receptor Rfc="EMP990101AAA" Nombre="CLIENTE DE PRUEBA"/>
@@ -81,7 +81,6 @@ SUNAT = b"""<?xml version="1.0" encoding="UTF-8"?>
 </Invoice>"""
 
 ESPERADO = [
-    (CFDI, "CFDI (México)", "Tecnología Avanzada S.A. de C.V.", "FACT-2026001", "11136.0", "MXN", None, "TAV120405H87"),
     (SRI, "SRI (Ecuador)", "Tecnología Quiteña S.A.", "001-001-000000123", "540.00", "USD", None, "1790012345001"),
     (CFE, "CFE (Uruguay)", "Servicios del Plata S.A.", "A-1234", "12200.00", "UYU", "2026-10-30", "210000000013"),
     (NFE, "NF-e (Brasil)", "Comercio Paulista Ltda.", "1-4567", "3150.75", "BRL", "2026-11-13", "00000000000191"),
@@ -94,16 +93,16 @@ ESPERADO = [
 
 
 @pytest.mark.parametrize("datos,formato,benef,numero,monto,moneda,vence,ident", ESPERADO, ids=[e[1] for e in ESPERADO])
-def test_ea11_2_lectura_estructural_de_cada_formato(datos, formato, benef, numero, monto, moneda, vence, ident):
+def test_ea12_2_lectura_estructural_de_cada_formato(datos, formato, benef, numero, monto, moneda, vence, ident):
     r = xml_factura.leer(datos)
     assert (r["formato"], r["beneficiario"], r["numero"], r["monto"], r["moneda"], r["vence"], r["id_tributaria"]) == \
         (formato, benef, numero, Decimal(monto), moneda, vence, ident)
-    assert r["dudosos"] == ([] if vence else ["vence"])                 # EA11.5
-    assert "nit_dv" not in r or r["nit_dv"] is None                     # EA11.9: solo el NIT colombiano
+    assert r["dudosos"] == ([] if vence else ["vence"])                 # EA12.5
+    assert "nit_dv" not in r or r["nit_dv"] is None                     # EA12.9: solo el NIT colombiano
 
 
 @pytest.mark.parametrize("datos", [e[0] for e in ESPERADO], ids=[e[1] for e in ESPERADO])
-def test_ea11_6_la_segunda_lectura_por_patrones_lee_lo_mismo(datos):
+def test_ea12_6_la_segunda_lectura_por_patrones_lee_lo_mismo(datos):
     tipo = archivo.validar("f.xml", datos)
     texto = archivo.extraer_texto(tipo, datos)
     lectura = xml_factura.leer(datos)
@@ -115,32 +114,35 @@ def test_ea11_6_la_segunda_lectura_por_patrones_lee_lo_mismo(datos):
     assert difieren == (["vence"] if lectura["vence"] is None else []) and estado == ("no_coincide" if difieren else "coincide")
 
 
-def test_ea11_6_si_el_texto_dice_otro_monto_no_coincide():
+def test_ea12_6_si_el_texto_dice_otro_monto_no_coincide():
     lectura = xml_factura.leer(CFE)
     lectura["monto"] = Decimal("99999.00")
     assert segunda_lectura.comparar(lectura, CFE.decode())[1] == ["monto"]
 
 
-def test_ea11_3_decimales_estrictos_en_las_dos_lecturas():
-    datos = CFDI.replace(b'Total="11136.0"', b'Total="640.125"')
+@pytest.mark.parametrize("datos,viejo", [(CFE, b"<ns0:MntPagar>12200.00"), (CFDI, b'Total="11136.0'), (SUNAT, b'"PEN">2360.00')],
+                         ids=["CFE", "CFDI", "UBL"])
+def test_ea12_3_decimales_estrictos_en_las_dos_lecturas(datos, viejo):
+    nuevo = viejo.replace(viejo.split(b">")[-1] if b">" in viejo else viejo.split(b'"')[-1], b"640.125")
+    datos = datos.replace(viejo, nuevo)
     assert xml_factura.leer(datos)["monto"] == Decimal("640.125")
-    assert segunda_lectura.leer(datos.decode())["monto"] == Decimal("640.125")       # no 640125
-    assert xml_factura.leer(CFDI.replace(b'Total="11136.0"', b'Total="11.136,00"'))["monto"] is None
+    assert segunda_lectura.leer(datos.decode("utf-8"))["monto"] == Decimal("640.125")    # no 640125
+    assert xml_factura.leer(datos.replace(b"640.125", b"11.136,00"))["monto"] is None
 
 
-def test_ea11_3_el_atributo_subtotal_no_se_confunde_con_total():
+def test_ea12_3_el_atributo_subtotal_no_se_confunde_con_total():
     datos = CFDI.replace(b'Total="11136.0"', b"")
     assert xml_factura.leer(datos)["monto"] is None and segunda_lectura.leer(datos.decode())["monto"] is None
 
 
-def test_ea11_4_moneda_invalida_queda_sin_leer():
+def test_ea12_4_moneda_invalida_queda_sin_leer():
     r = xml_factura.leer(SRI.replace(b"DOLAR", b"PESOS FUERTES"))
     assert r["moneda"] is None and "moneda" in r["dudosos"]
     assert xml_factura.leer(COSTA_RICA.replace(b"<ResumenFactura>", b"<ResumenFactura><CodigoTipoMoneda>"
                                                b"<CodigoMoneda>USD</CodigoMoneda></CodigoTipoMoneda>"))["moneda"] == "USD"
 
 
-def test_ea11_1_autorizacion_del_sri_se_desenvuelve():
+def test_ea12_1_autorizacion_del_sri_se_desenvuelve():
     interno = SRI.decode().replace('<?xml version="1.0" encoding="UTF-8"?>', "")
     envuelto = (f"<autorizacion><estado>AUTORIZADO</estado><comprobante><![CDATA[{interno}]]></comprobante>"
                 "</autorizacion>").encode()
@@ -148,13 +150,13 @@ def test_ea11_1_autorizacion_del_sri_se_desenvuelve():
     assert segunda_lectura.leer(envuelto.decode())["monto"] == Decimal("540.00")
 
 
-def test_ea11_8_doctype_dentro_de_la_autorizacion_se_rechaza():
+def test_ea12_8_doctype_dentro_de_la_autorizacion_se_rechaza():
     peligro = b'<autorizacion><comprobante><![CDATA[<!DOCTYPE x [<!ENTITY a "b">]><factura/>]]></comprobante></autorizacion>'
     with pytest.raises(xml_factura.XmlInvalido, match="entidades"):
         xml_factura.leer(peligro)
 
 
-def test_ea11_8_iso_8859_1_y_xml_sin_declaracion_se_aceptan():
+def test_ea12_8_iso_8859_1_y_xml_sin_declaracion_se_aceptan():
     assert archivo.validar("dte.xml", DTE) == "xml"
     assert "Distribuidora Andina" in archivo.extraer_texto("xml", DTE)
     sin_declaracion = CFDI.split(b"?>", 1)[1].lstrip()
@@ -173,7 +175,7 @@ def decision(almacen, sala, fid):
     return facturas_por_estado(almacen.filas(sala))[fid].decision
 
 
-def test_ea11_7_xml_de_formato_desconocido_se_lee_como_texto_y_se_escala(almacen, sala):
+def test_ea12_7_xml_de_formato_desconocido_se_lee_como_texto_y_se_escala(almacen, sala):
     ar = (b'<?xml version="1.0" encoding="UTF-8"?><comprobanteAR><cuit>30000000007</cuit>'
           b"<razonSocial>Servicios Porte\xc3\xb1os S.A.</razonSocial><ptoVta>00001</ptoVta><nro>00000123</nro>"
           b"<impTotal>1210.00</impTotal><moneda>PES</moneda><cae>70000000000000</cae></comprobanteAR>")
@@ -186,11 +188,11 @@ def test_ea11_7_xml_de_formato_desconocido_se_lee_como_texto_y_se_escala(almacen
     assert decision(almacen, sala, e["factura_id"]) != "PAGAR"
 
 
-def test_ea11_cfdi_no_llama_a_la_ia_y_sin_vencimiento_nunca_se_paga_solo(almacen, sala):
+def test_ea12_sri_no_llama_a_la_ia_y_sin_vencimiento_nunca_se_paga_solo(almacen, sala):
     class Bomba:
         def __getattr__(self, _):
             raise AssertionError("un XML reconocido no debe usar la IA")
-    e = flujo.recibir(almacen, sala, "cfdi.xml", CFDI, cliente=Bomba())
-    assert e["modo"] == "xml" and e["pendientes"] == ["vence"]          # EA11.5: se le pregunta al proveedor
+    e = flujo.recibir(almacen, sala, "sri.xml", SRI, cliente=Bomba())
+    assert e["modo"] == "xml" and e["pendientes"] == ["vence"]          # EA12.5: se le pregunta al proveedor
     e = flujo.responder(almacen, sala, e["factura_id"], "2026-10-30")
     assert decision(almacen, sala, e["factura_id"]) != "PAGAR"
