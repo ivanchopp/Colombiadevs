@@ -27,7 +27,7 @@ Cada criterio tiene un número (por ejemplo R3.1) y debe tener al menos una prue
 | `extraccion-y-agente-de-entrada` | Borrador para revisión (implementado; Gemini probado en Railway con los textos de ejemplo; falta un PDF o foto propios y probar Claude) |
 | `acta-y-csv` | Borrador para revisión (versión mínima en SQLite implementada; faltan PostgreSQL, purga de salas y conciliación) |
 | `paneles-y-despliegue` | Borrador para revisión (paneles, página de reglas y despliegue en Railway hechos; falta la página de conciliación, PT12) |
-| `ordenes-de-compra` | Borrador para revisión (alcance nuevo del 17 oct; listado de 156 proveedores válidos cargado y usado por el motor como lista permitida; las órdenes no se cargan (OCD13); 13 decisiones, 9 abiertas) |
+| `ordenes-de-compra` | Versión mínima en el motor (R3, 17 oct): revisión OC4 con **órdenes sintéticas** y los 156 proveedores válidos como lista permitida; faltan OT5, OT7 y las órdenes reales (OCD13); 13 decisiones, 9 abiertas |
 | `archivo-de-salida` | Borrador para revisión (alcance nuevo de la reunión con Blinka del 17 oct; implementado con columnas supuestas; 4 decisiones abiertas) |
 
 ## Reglas de trabajo

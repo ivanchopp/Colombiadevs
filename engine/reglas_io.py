@@ -8,6 +8,7 @@ from pathlib import Path
 import yaml
 from pydantic import ValidationError
 
+from .compras import cargar_compras
 from .modelos import CanalDef, Contexto, Movimiento, Obligacion, Registro, Reglas
 
 from zoneinfo import ZoneInfo
@@ -69,10 +70,13 @@ def cargar_contexto_base(hoy: date, carpeta=None) -> Contexto:
         calendario = [Obligacion(id=r["id"], beneficiario=r["beneficiario"],
                                  fecha=date.fromisoformat(r["fecha"]), monto_base=Decimal(r["monto_base"]))
                       for r in csv.DictReader(f)]
+    proveedores, ordenes = cargar_compras(carpeta)
     return Contexto(
         hoy=hoy,
         registros=registros_de_proveedores(_yaml("proveedores.yaml", carpeta), reg.get("acuerdos", {}),
                                            reg.get("historial", [])),
+        proveedores=proveedores,
+        ordenes=ordenes,
         tasas={k: Decimal(str(v)) for k, v in tasas.items()},
         historial=[Movimiento.model_validate(m) for m in reg.get("historial", [])],
         calendario=calendario,

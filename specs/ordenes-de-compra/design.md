@@ -114,3 +114,13 @@ Cada beneficiario de ejemplo pasó a un proveedor válido con el mismo papel en 
 - **Lo que no cambia:** los proveedores ficticios fuera de la lista («Nuevo Proveedor SAS», «Estudio Nube SAS», «Otros SAS») siguen fuera, a propósito, para los casos de beneficiario nuevo.
 - **Datos de salas ya creadas:** el acta es de solo añadir. Las salas que ya existían en la demo desplegada conservan sus decisiones con los nombres anteriores; las salas nuevas usan los proveedores válidos.
 - **Pendiente:** las maquetas del PDF `docs/Ruta-de-una-factura.pdf` muestran los nombres anteriores y se regeneran a mano (P6).
+
+## Ajustes al construir (versión mínima, 17 oct)
+
+- **La lista permitida ya sale de `proveedores.yaml`** (migración de abajo, OC1.6). Sin OC ni acuerdo, la factura de un proveedor sigue escalando a `PERSONA` (R3.5).
+- **Las marcas escalan aunque la factura no cite OC.** Un proveedor con «identificación repetida» o «inválida» va al senior siempre (OC4.4), no solo cuando hay OC: si no, citar o no una OC cambiaría la decisión. El listado de válidos no trae ninguno marcado; la regla queda para cuando entre otro listado y se prueba con un proveedor marcado a mano.
+- **Revisión sin OC:** si la factura no cita OC, la revisión OC4 da `OK` y no cambia nada más (OC4.8, `oc_obligatoria` queda fuera de esta versión).
+- **La OC hace las veces de acuerdo (OC4.1) solo en R3.5:** si el proveedor tiene acuerdo registrado, R3.2 sigue como siempre. **No reemplaza el calendario:** una factura con OC que no estaba en el calendario sigue dando `AVISO` de R6.2 y escala a `PERSONA`. Para pagar sola, la OC debe cuadrar **y** la obligación estar en el calendario (OC4.9).
+- **Estado «facturada»:** `contexto_desde_acta` lo calcula con las facturas en estado `PAGADA` o `PENDIENTE` cuyo `ficha.orden_compra` coincide (OC5.2). No hay estado guardado aparte.
+- **Datos:** `data/ordenes_compra.yaml` es **sintético**, usa proveedores del listado de **válidos** (por eso OCD13 no le afecta) y está marcado como tal. Se valida al cargar (OC2.2): número repetido, proveedor inexistente o cuentas que no cuadran lo rechazan. Si el archivo falla, el registro queda vacío y toda OC citada da «inexistente» (senior): falla seguro (OC1.5).
+- **Fuera de esta versión:** lectura de la OC por el agente de entrada (OT5), página de órdenes (OT7), columna en `facturas.csv` y el importador del `.xlsx`.

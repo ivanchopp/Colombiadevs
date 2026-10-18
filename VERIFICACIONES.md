@@ -4,6 +4,11 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0032 | 2026-10-17 20:01 | APROBADO | Fusión de main (PR #18, documentación) en la rama de R2 y R3 antes de abrir el PR: conserva VER-0027 de main y renumera las verificaciones de la rama a VER-0028 a VER-0031 | 0 | 0 | 6ec6a2a | — |
+| VER-0031 | 2026-10-17 19:22 | APROBADO | Fusión de main (R1 archivo de salida y R4 moneda base USD, PR #14) en la rama de R2 y R3: calendario de los casos de OC en USD, sin moneda por defecto en OrdenCompra y renumeración de verificaciones a VER-0027 a VER-0029 | 0 | 0 | 1764f22 | — |
+| VER-0030 | 2026-10-17 19:15 | APROBADO | Fusión de main (PR #15 a #17: 156 proveedores válidos y revisión de la documentación) en la rama de R2 y R3; reasigna las órdenes sintéticas, casos y pruebas a proveedores válidos y renumera VER-0021/0022 a VER-0024/0025 | 0 | 1 | 9202506 | — |
+| VER-0029 | 2026-10-17 18:29 | APROBADO | R3: órdenes de compra en el motor (versión mínima): modelos, carga, revisión OC4, 10 casos, 25 pruebas y documentación | 0 | 1 | ea0e355 | — |
+| VER-0028 | 2026-10-17 18:22 | APROBADO | R2: guion de la demo y el pitch (docs/guion-demo.md) y registro en AVANCES.md | 0 | 0 | 3990ea3 | — |
 | VER-0027 | 2026-10-17 19:54 | APROBADO | AVANCES al día tras el PR #14 (cabecera, mapa del archivo de salida, commit de R4) y P33 con el análisis de 4 facturas XML de ejemplo; sin código | 0 | 0 | 8510675 | — |
 | VER-0026 | 2026-10-17 19:10 | APROBADO | Fusion de main (PR 15, 16, 17) en la rama de R1 y R4: datos de base escalados a USD sobre los 156 proveedores, pruebas ajustadas, VER renumerados a 0024 y 0025, AVANCES reconciliado | 0 | 0 | bfef4f4 | — |
 | VER-0025 | 2026-10-17 18:28 | APROBADO | R4: moneda base USD y configurable (R5.6-R5.8): datos a USD con escala uniforme 1 USD = 4000 COP, sin COP fijo en motor ni pantallas, regla R5.7; spec, pruebas y AVANCES | 0 | 1 | 3990ea3 | — |
@@ -31,6 +36,31 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0032 — APROBADO
+
+- **NOTA** (convenciones) `AVANCES.md:17`: Las cifras de 266 pruebas y 29 casos valen en la rama; en main son 240 y 20 hasta que se fusione el PR → Actualizar al fusionar
+
+## VER-0031 — APROBADO
+
+- **NOTA** (convenciones) `AVANCES.md:5`: En main siguen 240 pruebas y 20 casos; las cifras de 266 y 29 valen solo en la rama hasta que se fusione (AVANCES lo dice) → Actualizar al fusionar el PR
+- **NOTA** (errores) `data/casos.yaml:1`: Los casos de OC usan calendario_extra en USD (COP × 0,00025); si cambia la tasa del peso en tasas.yaml hay que recalcularlos → Ninguna ahora
+
+## VER-0030 — APROBADO
+
+- **ADVERTENCIA** (alcance) `data/ordenes_compra.yaml:1`: Las órdenes siguen siendo sintéticas: el archivo real no tiene proveedores del listado de válidos (OCD13) y no está cargado → Conseguir un archivo de órdenes con proveedores válidos e importarlo (OT1)
+- **NOTA** (errores) `tests/test_ordenes_compra.py:1`: El listado de válidos no trae proveedores marcados: OC4.4 se prueba marcando uno a mano, no con un dato real → Ninguna mientras el listado no traiga marcas
+- **NOTA** (convenciones) `.verificaciones/VER-0024.json:2`: Los IDs VER-0021 y VER-0022 de esta rama chocaron con los de main y se renumeraron a VER-0024 y VER-0025; el contenido y la fecha originales se conservan → Ninguna
+
+## VER-0029 — APROBADO
+
+- **ADVERTENCIA** (alcance) `data/ordenes_compra.yaml:1`: Las órdenes son sintéticas: el archivo real del equipo no está en el repositorio. La spec y AVANCES lo declaran; los resultados con las órdenes reales pueden diferir → Importar el .xlsx real (OT1) y volver a correr eval.py
+- **NOTA** (alcance) `engine/revisiones/orden_compra.py:1`: El agente de entrada aún no lee el número de OC (OT5): una factura subida al Panel 1 no cita OC, por lo que la revisión nueva solo actúa con fichas de prueba → Hacer OT5
+- **NOTA** (seguridad) `engine/reglas_io.py:50`: Los 200 proveedores pasan a la lista permitida sin acuerdo: sin OC ni acuerdo siguen escalando a PERSONA (R3.5) y los marcados van al senior; ningún camino nuevo paga sin todas las revisiones OK (R1.2) → Ninguna
+
+## VER-0028 — APROBADO
+
+- **NOTA** (alcance) `docs/guion-demo.md:36`: Los resultados de cada archivo de muestra no se verificaron uno por uno en producción; el guion lo declara y pide confirmarlos en el ensayo → Ensayar el guion en la app desplegada
 
 ## VER-0027 — APROBADO
 
