@@ -1,35 +1,13 @@
 {
   "id": "VER-0045",
-  "fecha": "2026-10-17T21:08:05-05:00",
-  "cambio": "R6: diagnóstico ampliado de la IA (última falla de lectura y botón Probar la conexión con los modelos disponibles) tras comprobar en Railway que la IA real no lee; spec EA2b.10, EA2b.11, ET12",
+  "fecha": "2026-10-17T21:04:23-05:00",
+  "cambio": "Rama de OT7: hashes reales en dos filas del registro de AVANCES y fila nueva; ultima verificacion VER-0045; solo documentacion, para que el PR 21 vuelva a leer la rama",
   "veredicto": "APROBADO",
   "archivos": [
-    "agents/lectura_ia.py",
-    "agents/flujo.py",
-    "app/Panel_1_Proveedor.py",
-    "tests/test_diagnostico_ia.py",
-    "specs/extraccion-y-agente-de-entrada/requirements.md",
-    "specs/extraccion-y-agente-de-entrada/tasks.md",
-    "README.md",
     "AVANCES.md"
   ],
-  "hallazgos": [
-    {
-      "severidad": "ADVERTENCIA",
-      "categoria": "alcance",
-      "ubicacion": "app/Panel_1_Proveedor.py:25",
-      "problema": "El botón de prueba lo puede pulsar quien tenga el enlace con ?diagnostico=1 y gasta una llamada a la IA cada vez (una lectura mínima y un listado de modelos); es una demo con datos ficticios y el parámetro no está enlazado desde ningún lado",
-      "correccion": "Si preocupa el gasto, limitar la cuota en Google AI Studio (P27)"
-    },
-    {
-      "severidad": "NOTA",
-      "categoria": "errores",
-      "ubicacion": "AVANCES.md:19",
-      "problema": "Se corrige una afirmación anterior: las lecturas «con IA real» de los botones de muestra eran lecturas guardadas (LECTURAS_GUARDADAS); la IA real nunca se había probado en producción hasta R6",
-      "correccion": "Ninguna"
-    }
-  ],
-  "comprobaciones": "python3 -m pytest -q: 407 pasan; python3 eval.py: 29/29, 0 pagos indebidos; 2 mutaciones detectadas (no registrar la falla, no quitar la clave del mensaje); la prueba comprueba que ningún valor de clave aparece en pantalla ni en la falla guardada; prueba real previa en Railway (commit 827ce80) con un PDF y una foto ficticios: la IA no leyó",
+  "hallazgos": [],
+  "comprobaciones": "git diff revisado; solo AVANCES.md; hashes bc7547d y cb5d2cb contrastados con git log; la rama ya contiene origin/main y la simulacion de fusion no da conflictos; pytest 395 passed y eval 29/29 en esta rama; sin codigo",
   "rama": "claude/friendly-cerf-aygx2r",
   "commit": "bc7547dd22ff88aaf583bd17d1500216710cb2f4",
   "reemplaza": null

@@ -4,7 +4,9 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
-| VER-0045 | 2026-10-17 21:08 | APROBADO | R6: diagnóstico ampliado de la IA (última falla de lectura y botón Probar la conexión con los modelos disponibles) tras comprobar en Railway que la IA real no lee; spec EA2b.10, EA2b.11, ET12 | 0 | 1 | bc7547d | — |
+| VER-0047 | 2026-10-17 21:10 | APROBADO | Fusión de main (PR #21: OT7 y registro al día) en la rama de R6; la verificación de R6 pasa de VER-0045 a VER-0046 | 0 | 0 | c2ec3cf | — |
+| VER-0046 | 2026-10-17 21:08 | APROBADO | R6: diagnóstico ampliado de la IA (última falla de lectura y botón Probar la conexión con los modelos disponibles) tras comprobar en Railway que la IA real no lee; spec EA2b.10, EA2b.11, ET12 | 0 | 1 | bc7547d | — |
+| VER-0045 | 2026-10-17 21:04 | APROBADO | Rama de OT7: hashes reales en dos filas del registro de AVANCES y fila nueva; ultima verificacion VER-0045; solo documentacion, para que el PR 21 vuelva a leer la rama | 0 | 0 | bc7547d | — |
 | VER-0044 | 2026-10-17 20:56 | APROBADO | Fusión de main (PR #22: R5 XML y R7 reglas en lenguaje natural) en la rama de OT7: conserva ambos cambios de app/apoyo.py y renumera las verificaciones de la rama a VER-0042 y VER-0043 | 0 | 0 | bda2db1 | — |
 | VER-0043 | 2026-10-17 20:27 | APROBADO | Fusión de main (06e1178, quita menciones a un cargo de Blinka) en la rama de OT7 antes del PR; la verificación de OT7 pasa de VER-0034 a VER-0035 | 0 | 0 | 95178c6 | — |
 | VER-0042 | 2026-10-17 20:23 | APROBADO | OT7: página Órdenes de compra en el Panel 2, orden citada en el detalle de la factura, funciones de apoyo y 12 pruebas; spec PP9 y PT13 | 0 | 0 | 865bed0 | — |
@@ -50,7 +52,11 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
 
-## VER-0045 — APROBADO
+## VER-0047 — APROBADO
+
+- **NOTA** (convenciones) `.verificaciones/VER-0046.json:2`: El ID VER-0045 lo ocupó la verificación del registro al día de la otra sesión; se conservó el de main y la de R6 pasó a VER-0046 → Ninguna
+
+## VER-0046 — APROBADO
 
 - **ADVERTENCIA** (alcance) `app/Panel_1_Proveedor.py:25`: El botón de prueba lo puede pulsar quien tenga el enlace con ?diagnostico=1 y gasta una llamada a la IA cada vez (una lectura mínima y un listado de modelos); es una demo con datos ficticios y el parámetro no está enlazado desde ningún lado → Si preocupa el gasto, limitar la cuota en Google AI Studio (P27)
 - **NOTA** (errores) `AVANCES.md:19`: Se corrige una afirmación anterior: las lecturas «con IA real» de los botones de muestra eran lecturas guardadas (LECTURAS_GUARDADAS); la IA real nunca se había probado en producción hasta R6 → Ninguna
