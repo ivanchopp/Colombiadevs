@@ -31,7 +31,7 @@ texto ──▶ lector (IA o patrones) ──▶ Propuesta cerrada ──▶ res
 ## Qué recibe y qué devuelve la IA
 
 - **Recibe:** el pedido (hasta 500 caracteres) dentro de un bloque marcado como datos y el catálogo de parámetros (nombre, unidad, si es monto, porcentaje o días). **No recibe** valores vigentes, facturas, proveedores ni la tabla de cambio.
-- **Devuelve:** un objeto con `estado` (`propuesta`, `aclaracion` o `no_entendido`), `cambios` (la lista cerrada de AR2.1) y `pregunta` (texto corto). El texto de `pregunta` se muestra tal cual **solo** como pregunta, nunca como dato (AR3.2).
+- **Devuelve:** un objeto con `estado` (`propuesta`, `aclaracion`, `no_entendido` o `fuera_de_alcance`), `cambios` (la lista cerrada de AR2.1) y `pregunta` (texto corto). El texto de `pregunta` se muestra tal cual **solo** como pregunta, nunca como dato (AR3.2).
 - **Operaciones:** `fijar` (valor absoluto), `subir_monto` / `bajar_monto` (suma o resta una cantidad), `subir_porcentaje` / `bajar_porcentaje` (multiplica por `1 ± valor/100`). La IA solo identifica la operación y el número; **las cuentas las hace el código**.
 
 ## Quién interpreta y quién comprueba

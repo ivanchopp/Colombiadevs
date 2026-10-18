@@ -90,10 +90,12 @@ def inesperadas(facturas: dict[str, Factura]) -> list[Factura]:
             if any(r["regla"] == "R6.2" for r in f.decision.get("revisiones", []))]
 
 
-def cambiar_reglas(almacen, sala_id, actuales, valores: dict, rol: str, motivo: str):
+def cambiar_reglas(almacen, sala_id, actuales, valores: dict, rol: str, motivo: str,
+                   origen: str = "formulario", pedido: str | None = None):
     """Confirma un cambio de reglas en la sala (PP8.4 a PP8.6). Lanza ErrorDeReglas si no procede.
 
-    Solo el senior firma lo que afloja; si lo intenta la persona, queda un INTENTO_RECHAZADO."""
+    Solo el senior firma lo que afloja; si lo intenta la persona, queda un INTENTO_RECHAZADO.
+    `origen="texto"` guarda el pedido original como dato (AR4); nunca se obedece ni se reenvía a la IA."""
     nuevas = validar_cambio(actuales, valores)
     aflojan = cambios_que_aflojan(actuales, nuevas)
     if not any(getattr(nuevas, k) != getattr(actuales, k) for k in EDITABLES):
@@ -111,5 +113,8 @@ def cambiar_reglas(almacen, sala_id, actuales, valores: dict, rol: str, motivo: 
                "despues": {k: str(getattr(nuevas, k)) for k in EDITABLES},
                "version_anterior": actuales.version, "afloja": bool(aflojan), "aflojan": aflojan,
                "pedido_por": ROLES[rol], "firmado_por": ROLES[rol] if aflojan else None,
-               "vigente_desde": hoy_bogota().isoformat(), "motivo": motivo.strip()}
+               "vigente_desde": hoy_bogota().isoformat(), "motivo": motivo.strip(),
+               "origen": "texto" if origen == "texto" else "formulario"}
+    if origen == "texto":
+        payload["pedido"] = (pedido or "")[:500]
     return escribir_evento(almacen, sala_id, "CAMBIO_REGLA", None, payload, ROLES[rol])

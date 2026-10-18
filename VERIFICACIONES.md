@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0031 | 2026-10-17 20:25 | APROBADO | R7 version minima sin IA: agente de reglas en lenguaje natural (ART1-ART4): agents/reglas_texto.py, caja de texto en la pagina Reglas que solo rellena el formulario, comprobacion de coherencia, origen y pedido en CAMBIO_REGLA; 55 pruebas | 0 | 1 | a1e21e7 | — |
 | VER-0030 | 2026-10-17 20:13 | APROBADO | Spec del agente de reglas: la IA decide la ambiguedad y el codigo solo valida (AR2.4, AR2.7), comprobacion de coherencia por codigo de la propuesta contra el pedido (AR2.8, AR3.5, AR8.5); diseno, tareas y AVANCES; sin codigo | 0 | 1 | f06d5c0 | — |
 | VER-0029 | 2026-10-17 20:02 | APROBADO | Spec del agente de reglas en lenguaje natural (R7): requisitos AR1-AR8, diseño, tareas ART1-ART6; AVANCES y specs/README; sin codigo | 0 | 1 | 5632263 | — |
 | VER-0028 | 2026-10-17 19:20 | APROBADO | R5: factura electronica en XML (UBL/DIAN) leida sin IA, segunda lectura por patrones, digito de verificacion del NIT en local y CUFE; spec EA10, 29 pruebas, README y AVANCES | 0 | 1 | 446684f | — |
@@ -34,6 +35,11 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0031 — APROBADO
+
+- **ADVERTENCIA** (alcance) `agents/reglas_texto.py`: Solo el lector por patrones: entiende frases simples y todo lo demas es no entendido. La IA (ART5), el tope por sala, la degradacion y el cliente falso de IA no estan; el vocabulario fijo de la comprobacion de coherencia puede dar falsas alarmas → Hacer ART5 y calibrar con pedidos reales
+- **NOTA** (seguridad) `app/pages/5_Reglas.py`: El texto no tiene camino propio hacia las reglas: solo rellena el formulario, y validar_cambio, el techo duro, la firma del senior, el motivo y el acta son los de siempre; una propuesta dudosa exige la marca de revision; si la persona edita la cifra despues, el origen vuelve a formulario
 
 ## VER-0030 — APROBADO
 

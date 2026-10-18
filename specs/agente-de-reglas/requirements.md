@@ -69,7 +69,7 @@ El CEO de Blinka contó que su plataforma ya programa pagos con un solo comando 
 - **AR5.5** CADA sala DEBERÁ tener un máximo de pedidos con IA (`PEDIDOS_REGLAS_MAX`, por defecto 10, entre 1 y 100) para controlar el gasto. Es un freno de uso, no un tope de dinero.
 
 ### AR6. Sin IA
-- **AR6.1** SIN clave de IA (o con `ENTRADA_MODO=demo`), EL SISTEMA DEBERÁ entender, con patrones de texto, pedidos simples como «fija el pago automático en 1.000», «sube el presupuesto un 20 %» o «baja la tolerancia a 3 %».
+- **AR6.1** SIN clave de IA (o con `ENTRADA_MODO=demo`), EL SISTEMA DEBERÁ entender, con patrones de texto, pedidos simples como «fija el pago automático en 1.000», «sube el presupuesto un 20 %» o «baja la tolerancia normal a 3 %». «Tolerancia» a secas es ambigua (hay dos) y se responde «no entendí».
 - **AR6.2** LO que el lector de respaldo no entienda DEBERÁ responderse con «no entendí» y el ejemplo de cómo escribirlo. NO DEBERÁ adivinar.
 - **AR6.3** LA pantalla DEBERÁ decir cuál lector respondió («con IA» o «por patrones»).
 
