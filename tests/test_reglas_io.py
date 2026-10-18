@@ -36,6 +36,6 @@ def test_r9_2_se_aplica_la_version_vigente(tmp_path):
 
 def test_r9_5_el_techo_duro_manda(tmp_path):
     shutil.copy(DATA / "techos.yaml", tmp_path / "techos.yaml")
-    texto = (DATA / "reglas.yaml").read_text().replace('techo_duro_pago: "50000000"', 'techo_duro_pago: "90000000"')
+    texto = (DATA / "reglas.yaml").read_text().replace('techo_duro_pago: "12500"', 'techo_duro_pago: "22500"')
     (tmp_path / "reglas.yaml").write_text(texto)
-    assert cargar_reglas(HOY, tmp_path)[0].techo_duro_pago == Decimal("50000000")
+    assert cargar_reglas(HOY, tmp_path)[0].techo_duro_pago == Decimal("12500")

@@ -51,12 +51,12 @@ def test_ficha_cualquiera_nunca_rompe_ni_paga_sin_cumplir(cambios, _):
 
 
 @settings(max_examples=200, deadline=None)
-@given(st.integers(0, 10**8), st.sampled_from(["PAGADA", "PENDIENTE", "FRENADA", "RECHAZADA"]))
+@given(st.integers(0, 30_000), st.sampled_from(["PAGADA", "PENDIENTE", "FRENADA", "RECHAZADA"]))
 def test_pagar_nunca_supera_el_autopago_ni_el_presupuesto(previo, estado):
-    mov = Movimiento(factura_id="H", beneficiario="Tecnología Cafetera S.A.S.", numero="H", monto=previo, moneda="COP",
+    mov = Movimiento(factura_id="H", beneficiario="Tecnología Cafetera S.A.S.", numero="H", monto=previo, moneda="USD",
                      vence=date(2026, 10, 1), monto_base=previo, estado=estado, periodo="2026-10")
     ctx = CTX.model_copy(update={"historial": CTX.historial + [mov]})
     r = evaluar(ficha(), ctx, REGLAS)
     if r.decision == "PAGAR":
         acumulado = previo if estado in ("PAGADA", "PENDIENTE") else 0
-        assert acumulado + 2400000 <= REGLAS.autopago_max
+        assert acumulado + 600 <= REGLAS.autopago_max         # 2.400.000 COP = 600 USD
