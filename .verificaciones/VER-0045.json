@@ -1,0 +1,14 @@
+{
+  "id": "VER-0045",
+  "fecha": "2026-10-17T21:04:23-05:00",
+  "cambio": "Rama de OT7: hashes reales en dos filas del registro de AVANCES y fila nueva; ultima verificacion VER-0045; solo documentacion, para que el PR 21 vuelva a leer la rama",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md"
+  ],
+  "hallazgos": [],
+  "comprobaciones": "git diff revisado; solo AVANCES.md; hashes bc7547d y cb5d2cb contrastados con git log; la rama ya contiene origin/main y la simulacion de fusion no da conflictos; pytest 395 passed y eval 29/29 en esta rama; sin codigo",
+  "rama": "claude/friendly-cerf-aygx2r",
+  "commit": "bc7547dd22ff88aaf583bd17d1500216710cb2f4",
+  "reemplaza": null
+}

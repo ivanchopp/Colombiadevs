@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0045 | 2026-10-17 21:04 | APROBADO | Rama de OT7: hashes reales en dos filas del registro de AVANCES y fila nueva; ultima verificacion VER-0045; solo documentacion, para que el PR 21 vuelva a leer la rama | 0 | 0 | bc7547d | — |
 | VER-0044 | 2026-10-17 20:56 | APROBADO | Fusión de main (PR #22: R5 XML y R7 reglas en lenguaje natural) en la rama de OT7: conserva ambos cambios de app/apoyo.py y renumera las verificaciones de la rama a VER-0042 y VER-0043 | 0 | 0 | bda2db1 | — |
 | VER-0043 | 2026-10-17 20:27 | APROBADO | Fusión de main (06e1178, quita menciones a un cargo de Blinka) en la rama de OT7 antes del PR; la verificación de OT7 pasa de VER-0034 a VER-0035 | 0 | 0 | 95178c6 | — |
 | VER-0042 | 2026-10-17 20:23 | APROBADO | OT7: página Órdenes de compra en el Panel 2, orden citada en el detalle de la factura, funciones de apoyo y 12 pruebas; spec PP9 y PT13 | 0 | 0 | 865bed0 | — |
