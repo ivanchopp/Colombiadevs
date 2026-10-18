@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0067 | 2026-10-18 10:49 | APROBADO | README reorganizado con «Empieza aquí» (enlace, pasos y 7 facturas de prueba con resultados verificados); .coverage fuera del repositorio | 0 | 0 | 622b090 | — |
 | VER-0066 | 2026-10-18 09:58 | APROBADO | Pruebas de funciones (archivo y aclaraciones, con propiedades) y de extremo a extremo con navegador real (tests/e2e), con cobertura medida; README y AVANCES al día (PT18) | 0 | 1 | 27d0379 | — |
 | VER-0065 | 2026-10-18 09:36 | APROBADO | Contratos (leer, extraer información y establecer reglas del negocio) agregados al roadmap R8 y al README | 0 | 1 | 5fdfeca | — |
 | VER-0064 | 2026-10-18 09:32 | APROBADO | Se retira docs/descripcion-del-proyecto.md de la rama por petición del equipo (nunca llegó a main) y se corrige AVANCES.md | 0 | 0 | 81e95ea | — |
@@ -70,6 +71,10 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0067 — APROBADO
+
+- **NOTA** (alcance) `README.md`: Las 5 facturas reales pedidas por el equipo no se subieron (datos personales de una persona natural, repositorio público; el entorno bloqueó la copia); el README no las menciona todavía → Subirlas solo con permiso explícito del entorno y de la persona dueña de los datos
 
 ## VER-0066 — APROBADO
 

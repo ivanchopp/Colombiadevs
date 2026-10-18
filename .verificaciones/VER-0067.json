@@ -1,0 +1,25 @@
+{
+  "id": "VER-0067",
+  "fecha": "2026-10-18T10:49:08-05:00",
+  "cambio": "README reorganizado con «Empieza aquí» (enlace, pasos y 7 facturas de prueba con resultados verificados); .coverage fuera del repositorio",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "README.md",
+    "AVANCES.md",
+    ".gitignore",
+    ".coverage"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "README.md",
+      "problema": "Las 5 facturas reales pedidas por el equipo no se subieron (datos personales de una persona natural, repositorio público; el entorno bloqueó la copia); el README no las menciona todavía",
+      "correccion": "Subirlas solo con permiso explícito del entorno y de la persona dueña de los datos"
+    }
+  ],
+  "comprobaciones": "git diff revisado; los resultados de las 7 facturas se comprobaron el 18 oct en Railway con la IA real; sin código ni claves; .coverage era un archivo binario de medición",
+  "rama": "claude/determined-planck-2vrgbo",
+  "commit": "622b090e5fad74af0e3d1d1cdc7ad8f5d8bfdb18",
+  "reemplaza": null
+}
