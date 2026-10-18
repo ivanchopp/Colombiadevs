@@ -4,7 +4,10 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
-| VER-0048 | 2026-10-17 21:33 | APROBADO | R6 cerrado: modelo por defecto de Gemini pasa a gemini-3.8-flash (el anterior ya no está disponible), README, .env.example, specs y AVANCES; pendientes P34 y P35 | 0 | 0 | 1204539 | — |
+| VER-0051 | 2026-10-17 21:44 | APROBADO | P34: el nombre del beneficiario se asocia al del registro sin mayúsculas, tildes ni puntuación (R4.4 a R4.6, T17), Ficha.beneficiario_leido; fusión de main (PR #24, CFDI) y renumeración de VER-0048 a VER-0050 | 0 | 0 | c6e649f | — |
+| VER-0050 | 2026-10-17 21:33 | APROBADO | R6 cerrado: modelo por defecto de Gemini pasa a gemini-3.8-flash (el anterior ya no está disponible), README, .env.example, specs y AVANCES; pendientes P34 y P35 | 0 | 0 | 1204539 | — |
+| VER-0049 | 2026-10-17 21:33 | APROBADO | Fusion de main (R6, PR 21 y 23) en la rama del CFDI: VER del CFDI pasa a 0048, tarea del CFDI pasa a ET13 porque ET12 la uso R6, AVANCES reconciliado; sin codigo nuevo | 0 | 0 | 0b90e4f | — |
+| VER-0048 | 2026-10-17 21:13 | APROBADO | R5 parte 2: factura electronica de Mexico CFDI 3.3 y 4.0 sin IA (EA11, ET12): solo tipo ingreso, RFC con digito verificador en local, UUID del timbre, segunda lectura por atributos; spec, 41 pruebas, README y AVANCES | 0 | 1 | 233e90a | — |
 | VER-0047 | 2026-10-17 21:10 | APROBADO | Fusión de main (PR #21: OT7 y registro al día) en la rama de R6; la verificación de R6 pasa de VER-0045 a VER-0046 | 0 | 0 | c2ec3cf | — |
 | VER-0046 | 2026-10-17 21:08 | APROBADO | R6: diagnóstico ampliado de la IA (última falla de lectura y botón Probar la conexión con los modelos disponibles) tras comprobar en Railway que la IA real no lee; spec EA2b.10, EA2b.11, ET12 | 0 | 1 | bc7547d | — |
 | VER-0045 | 2026-10-17 21:04 | APROBADO | Rama de OT7: hashes reales en dos filas del registro de AVANCES y fila nueva; ultima verificacion VER-0045; solo documentacion, para que el PR 21 vuelva a leer la rama | 0 | 0 | bc7547d | — |
@@ -53,10 +56,24 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
 
-## VER-0048 — APROBADO
+## VER-0051 — APROBADO
+
+- **NOTA** (seguridad) `engine/revisiones/comun.py:20`: La asociación por nombre normalizado no abre una puerta nueva: el nombre exacto ya era falsificable por el proveedor y la cuenta se sigue comparando con la registrada (R4.2); si dos proveedores normalizan igual no se asocia ninguno y escala. Una prueba de propiedades garantiza que una variante nunca decide distinto que el nombre exacto → Ninguna
+- **NOTA** (alcance) `AVANCES.md:232`: Asociar por NIT queda fuera (R4.6) como mejora; las decisiones ya guardadas en actas anteriores conservan el nombre leído y, si una persona las aprueba, no entran al archivo de pagos por falta de cuenta registrada (falla segura) → Ninguna
+
+## VER-0050 — APROBADO
 
 - **NOTA** (errores) `AVANCES.md:224`: El nombre de un proveedor en mayúsculas (como en la foto de prueba) no coincide con la lista permitida y escala al senior: falla segura pero baja la autonomía; queda como P34 con propuesta, sin tocar el motor → El equipo decide; requiere spec primero
 - **NOTA** (alcance) `agents/lectura_ia.py:9`: Los nombres de modelo de Google cambian: la variable MODELO_GEMINI y el botón del diagnóstico quedan como salida si vuelve a fallar → Ninguna
+
+## VER-0049 — APROBADO
+
+- **NOTA** (convenciones) `specs/extraccion-y-agente-de-entrada/tasks.md`: La tarea del CFDI se llamaba ET12 igual que la de R6; pasa a ET13 en la spec y en AVANCES
+
+## VER-0048 — APROBADO
+
+- **ADVERTENCIA** (alcance) `agents/xml_factura.py`: Las pruebas usan CFDI ficticios armados a mano; los 4 XML reales del equipo no estan en el repositorio y no se probaron. Un CFDI no trae cuenta de pago ni vencimiento: ninguno llega solo a PAGAR, queda en revision → Probar con los 4 archivos del equipo
+- **NOTA** (seguridad) `agents/id_tributaria.py`: El algoritmo del digito del RFC se comprobo contra tres RFC conocidos (SAT970701NN3, EKU9003173C9, GODE561231GR8); un RFC generico se trata como dudoso. No consulta al SAT
 
 ## VER-0047 — APROBADO
 

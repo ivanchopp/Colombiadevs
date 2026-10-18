@@ -1,0 +1,40 @@
+{
+  "id": "VER-0051",
+  "fecha": "2026-10-17T21:44:41-05:00",
+  "cambio": "P34: el nombre del beneficiario se asocia al del registro sin mayúsculas, tildes ni puntuación (R4.4 a R4.6, T17), Ficha.beneficiario_leido; fusión de main (PR #24, CFDI) y renumeración de VER-0048 a VER-0050",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "engine/revisiones/comun.py",
+    "engine/evaluar.py",
+    "engine/guardarrail.py",
+    "engine/modelos.py",
+    "engine/revisiones/beneficiario.py",
+    "tests/test_nombre_beneficiario.py",
+    "specs/motor-de-reglas/requirements.md",
+    "specs/motor-de-reglas/design.md",
+    "specs/motor-de-reglas/tasks.md",
+    "AVANCES.md",
+    "VERIFICACIONES.md",
+    ".verificaciones"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "engine/revisiones/comun.py:20",
+      "problema": "La asociación por nombre normalizado no abre una puerta nueva: el nombre exacto ya era falsificable por el proveedor y la cuenta se sigue comparando con la registrada (R4.2); si dos proveedores normalizan igual no se asocia ninguno y escala. Una prueba de propiedades garantiza que una variante nunca decide distinto que el nombre exacto",
+      "correccion": "Ninguna"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "AVANCES.md:232",
+      "problema": "Asociar por NIT queda fuera (R4.6) como mejora; las decisiones ya guardadas en actas anteriores conservan el nombre leído y, si una persona las aprueba, no entran al archivo de pagos por falta de cuenta registrada (falla segura)",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "python3 -m pytest -q: 472 pasan (448 de main con R5 CFDI y las 24 de P34); python3 eval.py: 29/29, 0 pagos indebidos; 4 mutaciones detectadas (no asociar al evaluar, no asociar al guardar, aceptar ambiguos, no quitar tildes); spec escrita antes del código; sin conflictos de código en la fusión, solo AVANCES y registros",
+  "rama": "claude/friendly-cerf-aygx2r",
+  "commit": "c6e649f43de8d289734c7182faa82bd7ff18217c",
+  "reemplaza": null
+}

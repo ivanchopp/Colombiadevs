@@ -50,14 +50,42 @@ def analizar(datos: bytes):
             raiz = ET.fromstring(crudo)
         except ET.ParseError as e:
             raise XmlInvalido("La factura dentro del documento adjunto no es un XML válido.") from e
-    if _nombre(raiz) != "Invoice":
-        raise XmlInvalido("No es una factura UBL (Invoice).")
+    if _nombre(raiz) not in ("Invoice", "Comprobante"):
+        raise XmlInvalido("No es una factura electrónica (UBL Invoice o CFDI Comprobante).")
     return raiz
+
+
+def _leer_cfdi(c) -> dict:
+    """CFDI 3.3 y 4.0 de México (EA11). Todo sale de atributos; no hay vencimiento (EA11.4)."""
+    tipo = c.get("TipoDeComprobante")
+    if tipo != "I":
+        raise XmlInvalido(f"El comprobante es de tipo «{tipo or 'sin tipo'}», no una factura de ingreso: "
+                          "una nota de crédito, un pago o una nómina no se pagan como factura.")
+    emisor = _hijo(c, "Emisor")
+    serie, folio = (c.get("Serie") or "").strip(), (c.get("Folio") or "").strip()
+    try:
+        monto = Decimal(c.get("Total")) if c.get("Total") else None
+    except InvalidOperation:
+        monto = None
+    moneda = (c.get("Moneda") or "").strip().upper()
+    rfc = ((emisor.get("Rfc") if emisor is not None else None) or "").strip().upper() or None
+    timbre = next((e for e in c.iter() if _nombre(e) == "TimbreFiscalDigital"), None)
+    campos = {"beneficiario": ((emisor.get("Nombre") or "").strip() or None) if emisor is not None else None,
+              "numero": (f"{serie}-{folio}" if serie and folio else folio) or None,
+              "monto": monto, "moneda": moneda if len(moneda) == 3 and moneda.isalpha() and moneda != "XXX" else None,
+              "vence": None, "cuenta": None, "orden_compra": None}
+    campos["dudosos"] = sorted(k for k in ("beneficiario", "numero", "monto", "moneda", "vence") if campos[k] is None)
+    campos["id_tributaria"] = rfc
+    campos["nit_dv"] = ("correcto" if id_tributaria.rfc_valido(rfc) else "incorrecto") if rfc else "incorrecto"
+    campos["cufe"] = "presente" if timbre is not None and (timbre.get("UUID") or "").strip() else "falta"   # EA11.7
+    return campos
 
 
 def leer(datos: bytes) -> dict:
     """Los campos de la ficha más la identificación del emisor y las señales de validez local."""
     f = analizar(datos)
+    if _nombre(f) == "Comprobante":
+        return _leer_cfdi(f)
     parte = _hijo(f, "AccountingSupplierParty", "Party")
     nombre = (_texto(_hijo(parte, "PartyLegalEntity", "RegistrationName")) if parte is not None else None) \
         or (_texto(_hijo(parte, "PartyTaxScheme", "RegistrationName")) if parte is not None else None)

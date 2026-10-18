@@ -1,0 +1,34 @@
+{
+  "id": "VER-0050",
+  "fecha": "2026-10-17T21:33:29-05:00",
+  "cambio": "R6 cerrado: modelo por defecto de Gemini pasa a gemini-3.8-flash (el anterior ya no está disponible), README, .env.example, specs y AVANCES; pendientes P34 y P35",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "agents/lectura_ia.py",
+    "README.md",
+    ".env.example",
+    "specs/extraccion-y-agente-de-entrada/requirements.md",
+    "specs/extraccion-y-agente-de-entrada/tasks.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "AVANCES.md:224",
+      "problema": "El nombre de un proveedor en mayúsculas (como en la foto de prueba) no coincide con la lista permitida y escala al senior: falla segura pero baja la autonomía; queda como P34 con propuesta, sin tocar el motor",
+      "correccion": "El equipo decide; requiere spec primero"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "agents/lectura_ia.py:9",
+      "problema": "Los nombres de modelo de Google cambian: la variable MODELO_GEMINI y el botón del diagnóstico quedan como salida si vuelve a fallar",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "python3 -m pytest -q: 407 pasan; python3 eval.py: 29/29, 0 pagos indebidos; prueba real en Railway (commit 1204539) con MODELO_GEMINI=gemini-3.8-flash: el botón del diagnóstico dijo OK y un PDF y una foto ficticios se leyeron con la IA (PDF con lectura ok, cuenta y NIT; foto con beneficiario, número, monto, vencimiento y NIT); sin claves ni datos reales",
+  "rama": "claude/friendly-cerf-aygx2r",
+  "commit": "1204539d85b5d0716c0220d1901cded474d2a91f",
+  "reemplaza": null
+}

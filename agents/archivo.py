@@ -24,7 +24,8 @@ def detectar_tipo(datos: bytes) -> str | None:
     if "\x00" in texto:
         return None
     primeras = texto.lstrip("\ufeff \t\r\n")[:2000].lower()
-    if primeras.startswith("<?xml") or primeras.startswith("<invoice") or primeras.startswith("<attacheddocument"):
+    if primeras.startswith("<?xml") or primeras.startswith("<invoice") or primeras.startswith("<attacheddocument") \
+            or primeras.startswith("<cfdi:comprobante") or primeras.startswith("<comprobante"):
         return "xml"
     return "eml" if ("\nsubject:" in "\n" + primeras and "\nfrom:" in "\n" + primeras) else "txt"
 
