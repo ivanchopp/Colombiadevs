@@ -1,13 +1,14 @@
 # Parámetros de DEMOSTRACIÓN (supuesto). Editables sin tocar el código.
+# Los montos están en la moneda base (USD). Equivalen a los valores en pesos anteriores con 1 USD = 4.000 COP (supuesto).
 conjuntos:
   - version: v12
     vigente_desde: 2026-10-01
-    moneda_base: COP
-    autopago_max: "3000000"
-    persona_max: "10000000"
-    techo_duro_pago: "50000000"
-    limite_periodo_beneficiario: "15000000"
-    presupuesto_periodo: "100000000"
+    moneda_base: USD
+    autopago_max: "750"
+    persona_max: "2500"
+    techo_duro_pago: "12500"
+    limite_periodo_beneficiario: "3750"
+    presupuesto_periodo: "25000"
     tolerancia_ok: "0.05"
     tolerancia_frenar: "0.10"
     ventana_dias: 5

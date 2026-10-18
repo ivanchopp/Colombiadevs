@@ -46,7 +46,7 @@ La demo tiene dos pantallas que comparten una *sala*: el **Panel 1** (proveedor,
 - **PP4.3** EL TABLERO DEBERÁ refrescarse cada `segundos_refresco` y mostrar la hora de la última actualización (AC6.5).
 - **PP4.4** SI el tablero, el CSV y el acta no coinciden (AC6.3), ENTONCES EL TABLERO DEBERÁ mostrar un aviso visible.
 - **PP4.5** EL TABLERO DEBERÁ ofrecer la descarga de `facturas.csv` y `eventos.csv` (AC5).
-- **PP4.6** EL TABLERO DEBERÁ marcar como «supuesto» las tasas, canales y costos de ejemplo, y decir que la moneda base es COP.
+- **PP4.6** EL TABLERO DEBERÁ marcar como «supuesto» las tasas, canales y costos de ejemplo, y decir cuál es la moneda base (la configurada en `reglas.yaml`, hoy USD) sin suponerla (R5.6).
 
 ### PP5. Cola de aprobación
 - **PP5.1** CADA rol DEBERÁ ver solo los casos de su nivel: `PERSONA` los de nivel persona; `SENIOR` los de nivel senior (y puede ver los de persona).

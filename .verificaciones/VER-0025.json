@@ -1,53 +1,43 @@
 {
   "id": "VER-0025",
-  "fecha": "2026-10-17T18:29:58-05:00",
-  "cambio": "R3: órdenes de compra en el motor (versión mínima): modelos, carga, revisión OC4, 10 casos, 25 pruebas y documentación",
+  "fecha": "2026-10-17T18:28:40-05:00",
+  "cambio": "R4: moneda base USD y configurable (R5.6-R5.8): datos a USD con escala uniforme 1 USD = 4000 COP, sin COP fijo en motor ni pantallas, regla R5.7; spec, pruebas y AVANCES",
   "veredicto": "APROBADO",
   "archivos": [
-    "engine/compras.py",
-    "engine/revisiones/orden_compra.py",
-    "engine/modelos.py",
-    "engine/evaluar.py",
-    "engine/contexto.py",
-    "engine/reglas_io.py",
-    "engine/revisiones/frenar.py",
-    "data/ordenes_compra.yaml",
-    "data/casos.yaml",
-    "eval.py",
-    "tests/test_ordenes_compra.py",
-    "tests/test_casos.py",
-    "specs/ordenes-de-compra/design.md",
-    "specs/ordenes-de-compra/requirements.md",
-    "specs/ordenes-de-compra/tasks.md",
-    "specs/README.md",
-    "README.md",
+    "data",
+    "engine",
+    "acta/tablero.py",
+    "app/pages",
+    "tests",
+    "specs/motor-de-reglas",
+    "specs/paneles-y-despliegue",
     "AVANCES.md"
   ],
   "hallazgos": [
     {
       "severidad": "ADVERTENCIA",
       "categoria": "alcance",
-      "ubicacion": "data/ordenes_compra.yaml:1",
-      "problema": "Las órdenes son sintéticas: el archivo real del equipo no está en el repositorio. La spec y AVANCES lo declaran; los resultados con las órdenes reales pueden diferir",
-      "correccion": "Importar el .xlsx real (OT1) y volver a correr eval.py"
+      "ubicacion": "data/reglas.yaml",
+      "problema": "Los limites en USD son un supuesto (equivalen a los de pesos con 1 USD = 4000 COP); no se sabe en que moneda fija Blinka los limites de cada cliente (AVANCES P31)",
+      "correccion": "Preguntarle a Blinka"
     },
     {
       "severidad": "NOTA",
-      "categoria": "alcance",
-      "ubicacion": "engine/revisiones/orden_compra.py:1",
-      "problema": "El agente de entrada aún no lee el número de OC (OT5): una factura subida al Panel 1 no cita OC, por lo que la revisión nueva solo actúa con fichas de prueba",
-      "correccion": "Hacer OT5"
+      "categoria": "errores",
+      "ubicacion": "data/tasas.yaml",
+      "problema": "Con la base en USD el redondeo es a centavos de USD: una diferencia de 1 COP en el limite del 10 por ciento ya no se distingue; la prueba de zona gris usa 400 COP de margen",
+      "correccion": "Documentado en el diseno del motor"
     },
     {
       "severidad": "NOTA",
       "categoria": "seguridad",
-      "ubicacion": "engine/reglas_io.py:50",
-      "problema": "Los 200 proveedores pasan a la lista permitida sin acuerdo: sin OC ni acuerdo siguen escalando a PERSONA (R3.5) y los marcados van al senior; ningún camino nuevo paga sin todas las revisiones OK (R1.2)",
+      "ubicacion": "engine/revisiones/montos.py",
+      "problema": "R5.7 escala al senior si la tabla de cambio no da 1 para la base; ninguna regla se afloja y las 20 decisiones de prueba no cambian",
       "correccion": "Ninguna"
     }
   ],
-  "comprobaciones": "python3 -m pytest -q: 241 pasan; python3 eval.py: 30/30, 0 pagos indebidos; 4 mutaciones de la revisión OC4 (no frenar facturada, ignorar identificación distinta, ignorar marcas, no frenar +10%) detectadas por las pruebas; spec escrita antes del código; sin claves ni datos reales en el diff",
-  "rama": "claude/friendly-cerf-aygx2r",
-  "commit": "ea0e355ed8b8d856a34fea437f9cf075106e2309",
+  "comprobaciones": "pytest: 238 passed (5 nuevas, ajustadas las que tenian montos en pesos); python3 eval.py: 20/20 y 0 pagos indebidos; 2 mutaciones detectadas (sin R5.7, COP fijo en en_base); una prueba revisa que ni engine, app ni acta escriban COP o USD como base; las paginas se probaron con AppTest, no en navegador; escala 1/4000 exacta en todos los datos de base",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "3990ea38a99901027753231e7eba7bd51b9b10c2",
   "reemplaza": null
 }

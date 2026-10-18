@@ -1,49 +1,27 @@
 {
   "id": "VER-0026",
-  "fecha": "2026-10-17T19:15:48-05:00",
-  "cambio": "Fusión de main (PR #15 a #17: 156 proveedores válidos y revisión de la documentación) en la rama de R2 y R3; reasigna las órdenes sintéticas, casos y pruebas a proveedores válidos y renumera VER-0021/0022 a VER-0024/0025",
+  "fecha": "2026-10-17T19:10:40-05:00",
+  "cambio": "Fusion de main (PR 15, 16, 17) en la rama de R1 y R4: datos de base escalados a USD sobre los 156 proveedores, pruebas ajustadas, VER renumerados a 0024 y 0025, AVANCES reconciliado",
   "veredicto": "APROBADO",
   "archivos": [
-    "engine/reglas_io.py",
-    "engine/compras.py",
-    "data/ordenes_compra.yaml",
-    "data/casos.yaml",
-    "tests/test_ordenes_compra.py",
-    "tests/test_casos.py",
-    "eval.py",
     "AVANCES.md",
-    "specs/README.md",
-    "specs/ordenes-de-compra/design.md",
-    "specs/ordenes-de-compra/tasks.md",
-    "README.md",
     "VERIFICACIONES.md",
+    "data",
+    "tests",
+    "specs/README.md",
     ".verificaciones"
   ],
   "hallazgos": [
     {
-      "severidad": "ADVERTENCIA",
-      "categoria": "alcance",
-      "ubicacion": "data/ordenes_compra.yaml:1",
-      "problema": "Las órdenes siguen siendo sintéticas: el archivo real no tiene proveedores del listado de válidos (OCD13) y no está cargado",
-      "correccion": "Conseguir un archivo de órdenes con proveedores válidos e importarlo (OT1)"
-    },
-    {
       "severidad": "NOTA",
       "categoria": "errores",
-      "ubicacion": "tests/test_ordenes_compra.py:1",
-      "problema": "El listado de válidos no trae proveedores marcados: OC4.4 se prueba marcando uno a mano, no con un dato real",
-      "correccion": "Ninguna mientras el listado no traiga marcas"
-    },
-    {
-      "severidad": "NOTA",
-      "categoria": "convenciones",
-      "ubicacion": ".verificaciones/VER-0024.json:2",
-      "problema": "Los IDs VER-0021 y VER-0022 de esta rama chocaron con los de main y se renumeraron a VER-0024 y VER-0025; el contenido y la fecha originales se conservan",
+      "ubicacion": "data/calendario.csv",
+      "problema": "Con los 156 proveedores, la obligacion O4 (2.850.350 COP) no es multiplo exacto de la tasa 1/4000 y se redondeo a 712,59 USD; el emparejamiento por tolerancia no cambia",
       "correccion": "Ninguna"
     }
   ],
-  "comprobaciones": "main (5341931) probado aparte en un worktree: 218 pruebas y 20/20; rama fusionada: python3 -m pytest -q 244 pasan, python3 eval.py 29/29 con 0 pagos indebidos; sin marcas de conflicto en el árbol; se usó la carga de proveedores de main y se quitó la copia propia; sin claves ni datos reales",
-  "rama": "claude/friendly-cerf-aygx2r",
-  "commit": "9202506e8599646c20b2f38620566efb694cabf2",
+  "comprobaciones": "pytest: 240 passed; python3 eval.py: 20/20 y 0 pagos indebidos; conflictos resueltos en datos, pruebas y documentacion; los VER 0021 a 0023 de main se conservaron y los de R1 y R4 pasaron a 0024 y 0025; sin codigo nuevo",
+  "rama": "claude/focused-dirac-iurhyp",
+  "commit": "bfef4f4851c409b8aba7326fb1da9283622918fe",
   "reemplaza": null
 }

@@ -36,7 +36,7 @@ def ctx():
     """Contexto base más una obligación en el calendario para cada factura de prueba con OC."""
     base = cargar_contexto_base(HOY)
     cal = [Obligacion(id=f"OC-{i}", beneficiario=n, fecha=date(2026, 10, 15), monto_base=Decimal(m))
-           for i, (n, m) in enumerate([(HUILA, "1160000"), (HUILA, "1252800"), (LABS, "1160000")])]
+           for i, (n, m) in enumerate([(HUILA, "290"), (HUILA, "313.2"), (LABS, "290")])]   # COP × 0,00025 = USD, la base (R4)
     return base.model_copy(update={"calendario": base.calendario + cal})
 
 
@@ -222,7 +222,7 @@ VIOLACIONES_OC = {
 def test_oc8_2_ninguna_violacion_de_la_oc_da_pagar(violacion, lectura, orden_escondida):
     base = con_marca(cargar_contexto_base(HOY), ALIMENTOS)          # solo "proveedor_marcado" depende de la marca
     ctx = base.model_copy(update={"calendario": base.calendario + [
-        Obligacion(id="OC-H", beneficiario=HUILA, fecha=date(2026, 10, 15), monto_base=Decimal("1160000"))]})
+        Obligacion(id="OC-H", beneficiario=HUILA, fecha=date(2026, 10, 15), monto_base=Decimal("290"))]})
     r = evaluar(f_oc(lectura_ia=lectura, orden_en_texto=orden_escondida, **VIOLACIONES_OC[violacion]), ctx,
                 cargar_reglas(HOY)[0])
     assert r.decision != "PAGAR", (violacion, r.motivo)

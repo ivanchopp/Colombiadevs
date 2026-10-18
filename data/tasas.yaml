@@ -1,15 +1,16 @@
-# Tipos de cambio de ejemplo a COP: SUPUESTO y aproximados, solo para la demo. Verificar antes de usar.
+# Tipos de cambio de ejemplo a la moneda base (USD): SUPUESTO y aproximados, solo para la demo. Verificar antes de usar.
+# Equivalen a los anteriores en pesos con 1 USD = 4.000 COP. La moneda base debe tener tasa 1 (R5.7).
 # Una moneda sin tasa se escala (R5.1).
 supuesto: true
 tasas:
-  COP: "1"
-  USD: "4085"
-  EUR: "4700"
-  BRL: "750"
-  MXN: "230"
-  ARS: "3"
-  CLP: "4.3"
-  PEN: "1090"
-  BOB: "590"
-  CRC: "8"
-  ZAR: "230"
+  COP: "0.00025"
+  USD: "1"
+  EUR: "1.175"
+  BRL: "0.1875"
+  MXN: "0.0575"
+  ARS: "0.00075"
+  CLP: "0.001075"
+  PEN: "0.2725"
+  BOB: "0.1475"
+  CRC: "0.002"
+  ZAR: "0.0575"

@@ -1,2 +1,2 @@
-# Techos duros: no los edita el agente de reglas ni se cambian por chat (R9.5). Supuesto.
-techo_duro_pago: "50000000"
+# Techos duros: no los edita el agente de reglas ni se cambian por chat (R9.5). Supuesto. En la moneda base (USD).
+techo_duro_pago: "12500"

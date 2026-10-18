@@ -1,6 +1,6 @@
 # Requisitos: archivo de salida de pagos aprobados
 
-Estado: **borrador para revisión del equipo**. Alcance nuevo de la reunión con Blinka del 17 oct, 17:02.
+Estado: **implementado el 17 oct** (borrador para revisión del equipo; columnas supuestas). Alcance nuevo de la reunión con Blinka del 17 oct, 17:02.
 Diseño: `design.md` · Tareas: `tasks.md`.
 
 ## Resumen
@@ -39,7 +39,7 @@ Hoy solo exportamos `facturas.csv` y `eventos.csv` (spec `acta-y-csv`). Son de *
 - **AS1.4** SI una factura tuvo un `INTENTO_RECHAZADO`, ENTONCES el intento NO DEBERÁ cambiar si la factura entra o no: solo cuenta su estado final en el acta.
 
 ### AS2. Qué trae cada fila
-- **AS2.1** LAS columnas DEBERÁN ser (supuesto, AS-D1): `lote_id`, `factura_id`, `numero_factura`, `beneficiario`, `id_tributaria`, `cuenta_destino`, `monto`, `moneda`, `canal`, `orden_compra`, `tipo_aprobacion`, `aprobado_por`, `aprobado_utc`, `fila_acta`, `huella_corta`, `supuesto`.
+- **AS2.1** LAS columnas DEBERÁN ser (supuesto, AS-D1): `lote_id`, `factura_id`, `numero_factura`, `beneficiario`, `id_tributaria`, `cuenta_destino`, `monto`, `moneda`, `monto_base`, `canal`, `orden_compra`, `tipo_aprobacion`, `aprobado_por`, `rol_aprobador`, `aprobado_utc`, `fila_acta`, `huella_corta`, `supuesto`.
 - **AS2.2** `monto` y `moneda` DEBERÁN ser los de la factura (lo que Blinka paga), no el monto convertido a la moneda base. El monto base va en una columna aparte para conciliar.
 - **AS2.3** `canal` DEBERÁ ser el canal elegido por la persona; si la aprobación fue automática, el canal sugerido por el motor. SI no hay canal, ENTONCES la celda queda vacía; NO DEBERÁ inventarse.
 - **AS2.4** `cuenta_destino` DEBERÁ ser la cuenta **registrada** del beneficiario en el registro de proveedores. NUNCA DEBERÁ tomarse de un texto que el proveedor escribió en el chat ni de una instrucción dentro de la factura. SI no hay cuenta registrada, ENTONCES la factura NO DEBERÁ entrar al archivo y DEBERÁ aparecer en el resumen como «sin cuenta registrada» (ante la duda, fuera: R2).

@@ -1,23 +1,42 @@
 {
   "id": "VER-0024",
-  "fecha": "2026-10-17T18:22:10-05:00",
-  "cambio": "R2: guion de la demo y el pitch (docs/guion-demo.md) y registro en AVANCES.md",
+  "fecha": "2026-10-17T18:21:26-05:00",
+  "cambio": "R1: archivo de salida pagos_aprobados.csv (AS1-AS4): solo facturas PAGADA, cuenta del registro, cadena verificada, boton en la pagina Acta; spec, 17 pruebas, README y AVANCES",
   "veredicto": "APROBADO",
   "archivos": [
-    "docs/guion-demo.md",
+    "acta/exportar_pagos.py",
+    "app/pages/4_Acta.py",
+    "tests/test_pagos_aprobados.py",
+    "specs/archivo-de-salida",
+    "specs/README.md",
+    "README.md",
     "AVANCES.md"
   ],
   "hallazgos": [
     {
-      "severidad": "NOTA",
+      "severidad": "ADVERTENCIA",
       "categoria": "alcance",
-      "ubicacion": "docs/guion-demo.md:36",
-      "problema": "Los resultados de cada archivo de muestra no se verificaron uno por uno en producción; el guion lo declara y pide confirmarlos en el ensayo",
-      "correccion": "Ensayar el guion en la app desplegada"
+      "ubicacion": "acta/exportar_pagos.py",
+      "problema": "Las columnas del archivo son un supuesto: no se conoce el formato que espera Blinka (AS-D1, AVANCES P30). id_tributaria y orden_compra salen vacias hasta que entren las ordenes de compra (R3)",
+      "correccion": "Confirmar el formato con Blinka"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "seguridad",
+      "ubicacion": "acta/exportar_pagos.py",
+      "problema": "Una aprobada manualmente cuyo beneficiario no esta en el registro (por ejemplo un beneficiario nuevo aprobado por el senior) no entra al archivo y se avisa; es la decision AS-D2 por omision",
+      "correccion": "Decidir si se actualiza el registro de proveedores al aprobar"
+    },
+    {
+      "severidad": "NOTA",
+      "categoria": "errores",
+      "ubicacion": "app/pages/4_Acta.py",
+      "problema": "El archivo se genera en cada recarga de la pagina y el lote_id lleva la hora; dos descargas seguidas tienen lotes distintos y nada impide enviar dos veces la misma factura (R14, AS-D3)",
+      "correccion": "Constancia en el acta en una segunda etapa"
     }
   ],
-  "comprobaciones": "git diff revisado; solo documentación, sin código; el guion no afirma el archivo de salida, la conexión con Blinka, DIAN ni lenguaje natural como hechos; sin claves ni datos reales; cifras (20/20, 0 pagos indebidos, límite de 5 facturas por sala) contrastadas con AVANCES y eval.py",
-  "rama": "claude/friendly-cerf-aygx2r",
+  "comprobaciones": "pytest: 233 passed (17 nuevas); python3 eval.py: 20/20 y 0 pagos indebidos; 6 mutaciones detectadas (sin filtro PAGADA, cuenta de la ficha, sin cuenta igual entra, sin guarda de ficha invalida, todo automatico, filtro que deja pasar todo); la pagina Acta se probo con AppTest (aviso y resumen), no en navegador; cuenta nunca sale de la factura ni del chat; no cambia ninguna decision del motor; sin secretos ni datos reales",
+  "rama": "claude/focused-dirac-iurhyp",
   "commit": "3990ea38a99901027753231e7eba7bd51b9b10c2",
   "reemplaza": null
 }

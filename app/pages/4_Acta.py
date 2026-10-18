@@ -2,9 +2,11 @@
 import pandas as pd
 import streamlit as st
 
+from acta import exportar_pagos
 from acta.verificar import verificar_cadena
-from app.apoyo import DECISIONES
+from app.apoyo import DECISIONES, formato_monto
 from app.comun import almacen, barra_lateral, encabezado, exigir_rol, obtener_sala
+from engine.reglas_io import cargar_contexto_base, hoy_bogota
 
 st.set_page_config(page_title="Panel 2 · Acta", layout="wide")
 sala = obtener_sala()
@@ -39,3 +41,23 @@ if v.correcta:
     st.success(f"Cadena verificada: {v.filas} de {v.filas} filas con la huella correcta.")
 else:
     st.error(f"La cadena se rompe en la fila #{v.primera_fila_mala}.")
+
+st.divider()
+st.subheader("Archivo de salida para Blinka")
+st.caption("Las facturas aprobadas (por las reglas o por una persona) que Blinka debe pagar. "
+           "**Este sistema no mueve dinero: el archivo lo ejecuta Blinka.** Los datos son ficticios.")
+try:
+    datos_pagos, pagos, nombre_pagos = exportar_pagos.generar(
+        almacen(), sala, cargar_contexto_base(hoy_bogota()).registros)
+except exportar_pagos.CadenaRota as e:
+    st.error(str(e))
+else:
+    if pagos.sin_cuenta:
+        st.warning("Aprobadas pero sin cuenta registrada del beneficiario, por eso no están en el archivo: "
+                   + ", ".join(pagos.sin_cuenta) + ".")
+    if not pagos.instrucciones:
+        st.info("Todavía no hay facturas aprobadas para pagar.")
+    else:
+        totales = " · ".join(formato_monto(m, c) for c, m in sorted(pagos.totales.items()))
+        st.write(f"**{pagos.instrucciones}** instrucciones de pago · {totales}")
+        st.download_button("Descargar pagos_aprobados.csv", datos_pagos, file_name=nombre_pagos, mime="text/csv")

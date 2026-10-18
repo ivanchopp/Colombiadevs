@@ -34,23 +34,23 @@ Regla de oro: **ante la duda, el resultado es escalar, nunca pagar.** Pagar exig
 | Revisión | Resultado de una regla sobre una ficha: `OK`, `FALLA` o `AVISO`. |
 | `AVISO` | No bloquea, pero impide pagar sin una persona. |
 | Nivel | Quién debe aprobar: `NINGUNO` (pago automático), `PERSONA` o `SENIOR`. |
-| Moneda base | Moneda en la que se comparan todos los montos (por defecto COP). |
+| Moneda base | Moneda en la que se comparan todos los montos. **USD** desde el 17 oct (los clientes de Blinka operan en dólares); se cambia en `reglas.yaml`. |
 | Periodo | Mes calendario en la zona horaria `America/Bogota`. |
 | Techo duro | Límite que no se puede cambiar por chat ni aprobar desde el sistema. |
 | Obligación esperada | Fila del calendario del mes: una factura que se espera recibir. |
 
 ## Parámetros por defecto
 
-Son **valores de demostración**, editables en `reglas.yaml`. Ninguno es un dato real.
+Son **valores de demostración**, editables en `reglas.yaml`. Ninguno es un dato real. Los montos están en la moneda base (USD); equivalen a los valores en pesos anteriores con un cambio supuesto de **1 USD = 4.000 COP**, de modo que cada decisión de las 20 facturas de prueba no cambia.
 
 | Parámetro | Valor | Uso |
 |---|---|---|
-| `moneda_base` | COP | Comparar montos |
-| `autopago_max` | 3.000.000 | Hasta aquí se puede pagar solo, si todo está OK |
-| `persona_max` | 10.000.000 | Hasta aquí aprueba la persona de finanzas; más, el senior |
-| `techo_duro_pago` | 50.000.000 | Por encima no se paga desde el sistema |
-| `limite_periodo_beneficiario` | 15.000.000 | Suma máxima por beneficiario y periodo sin senior |
-| `presupuesto_periodo` | 100.000.000 | Gasto máximo del periodo |
+| `moneda_base` | USD | Comparar montos |
+| `autopago_max` | 750 | Hasta aquí se puede pagar solo, si todo está OK |
+| `persona_max` | 2.500 | Hasta aquí aprueba la persona de finanzas; más, el senior |
+| `techo_duro_pago` | 12.500 | Por encima no se paga desde el sistema |
+| `limite_periodo_beneficiario` | 3.750 | Suma máxima por beneficiario y periodo sin senior |
+| `presupuesto_periodo` | 25.000 | Gasto máximo del periodo |
 | `tolerancia_ok` | 5 % | Diferencia con lo acordado que se acepta |
 | `tolerancia_frenar` | 10 % | Por encima de esto, la factura se frena |
 | `ventana_dias` | ±5 | Margen de fecha para emparejar con el calendario |
@@ -106,6 +106,9 @@ Notación EARS en español: «CUANDO <evento>, EL MOTOR DE REGLAS DEBERÁ <respu
 - **R5.3** EL MOTOR DE REGLAS DEBERÁ asignar nivel `NINGUNO` si `monto_para_nivel` es menor o igual a `autopago_max`, `PERSONA` si es menor o igual a `persona_max`, y `SENIOR` si lo supera.
 - **R5.4** CUANDO la suma del periodo para un beneficiario supere `limite_periodo_beneficiario`, EL MOTOR DE REGLAS DEBERÁ devolver `ESCALAR` con nivel `SENIOR`.
 - **R5.5** CUANDO varias revisiones exijan niveles distintos, EL MOTOR DE REGLAS DEBERÁ exigir el más alto.
+- **R5.6** LA moneda base DEBERÁ ser configurable en `reglas.yaml` (`moneda_base`) y NINGÚN mensaje, pantalla ni archivo DEBERÁ suponer una moneda base fija: todos DEBERÁN usar la configurada.
+- **R5.7** LA tabla de tipos de cambio DEBERÁ expresarse en la moneda base y DEBERÁ dar 1 para ella. SI la moneda base no tiene tasa 1, ENTONCES EL MOTOR DE REGLAS DEBERÁ devolver `ESCALAR` con nivel `SENIOR` y el motivo «la tabla de cambio no coincide con la moneda base», NUNCA `PAGAR`.
+- **R5.8** SI las reglas de la sala se editan, ENTONCES EL límite DEBERÁ mostrarse en la moneda base y NO DEBERÁ aceptarse un valor que no esté expresado en ella.
 
 ### R6. Calendario del mes
 **Historia:** como persona de finanzas, quiero saber qué debería llegar y detectar lo inesperado.

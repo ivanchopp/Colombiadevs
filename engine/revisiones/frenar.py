@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from ..modelos import Revision
 from . import NoEvaluable, orden_compra
-from .comun import a_base, huella_factura, moneda_texto, monto_base, porcentaje
+from .comun import a_base, en_base, huella_factura, monto_base, porcentaje
 
 
 def duplicado(ficha, ctx, reglas):
@@ -53,19 +53,19 @@ def presupuesto_y_techo(ficha, ctx, reglas):
     total = gasto_periodo(ctx) + base
     if total > reglas.presupuesto_periodo:                               # R3.6
         rs.append(Revision(regla="R3.6", resultado="FALLA", efecto="FRENAR",
-                           observado=moneda_texto(total), umbral=moneda_texto(reglas.presupuesto_periodo),
+                           observado=en_base(total, reglas), umbral=en_base(reglas.presupuesto_periodo, reglas),
                            mensaje="Sin presupuesto: el gasto del periodo superaría el límite."))
     else:
-        rs.append(Revision(regla="R3.6", resultado="OK", observado=moneda_texto(total),
-                           umbral=moneda_texto(reglas.presupuesto_periodo),
+        rs.append(Revision(regla="R3.6", resultado="OK", observado=en_base(total, reglas),
+                           umbral=en_base(reglas.presupuesto_periodo, reglas),
                            mensaje="Cabe en el presupuesto del mes."))
     if base > reglas.techo_duro_pago:                                    # R3.7
-        rs.append(Revision(regla="R3.7", resultado="FALLA", efecto="FRENAR", observado=moneda_texto(base),
-                           umbral=moneda_texto(reglas.techo_duro_pago),
+        rs.append(Revision(regla="R3.7", resultado="FALLA", efecto="FRENAR", observado=en_base(base, reglas),
+                           umbral=en_base(reglas.techo_duro_pago, reglas),
                            mensaje="Supera el techo duro de pago."))
     else:
-        rs.append(Revision(regla="R3.7", resultado="OK", observado=moneda_texto(base),
-                           umbral=moneda_texto(reglas.techo_duro_pago),
+        rs.append(Revision(regla="R3.7", resultado="OK", observado=en_base(base, reglas),
+                           umbral=en_base(reglas.techo_duro_pago, reglas),
                            mensaje="No supera el techo duro."))
     return rs
 

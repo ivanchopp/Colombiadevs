@@ -1,0 +1,23 @@
+{
+  "id": "VER-0027",
+  "fecha": "2026-10-17T18:22:10-05:00",
+  "cambio": "R2: guion de la demo y el pitch (docs/guion-demo.md) y registro en AVANCES.md",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "docs/guion-demo.md",
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "docs/guion-demo.md:36",
+      "problema": "Los resultados de cada archivo de muestra no se verificaron uno por uno en producción; el guion lo declara y pide confirmarlos en el ensayo",
+      "correccion": "Ensayar el guion en la app desplegada"
+    }
+  ],
+  "comprobaciones": "git diff revisado; solo documentación, sin código; el guion no afirma el archivo de salida, la conexión con Blinka, DIAN ni lenguaje natural como hechos; sin claves ni datos reales; cifras (20/20, 0 pagos indebidos, límite de 5 facturas por sala) contrastadas con AVANCES y eval.py",
+  "rama": "claude/friendly-cerf-aygx2r",
+  "commit": "3990ea38a99901027753231e7eba7bd51b9b10c2",
+  "reemplaza": null
+}

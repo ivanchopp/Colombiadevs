@@ -369,7 +369,7 @@ casos:
     monto: '50000000'
     moneda: COP
     vence: '2026-10-01'
-    monto_base: '50000000.00'
+    monto_base: '12500.00'
     estado: PAGADA
     periodo: 2026-10
   - factura_id: H2
@@ -378,7 +378,7 @@ casos:
     monto: '49000000'
     moneda: COP
     vence: '2026-10-01'
-    monto_base: '49000000.00'
+    monto_base: '12250.00'
     estado: PAGADA
     periodo: 2026-10
 - id: C17
@@ -432,7 +432,7 @@ casos:
     monto: '13000000'
     moneda: COP
     vence: '2026-10-01'
-    monto_base: '13000000.00'
+    monto_base: '3250.00'
     estado: PAGADA
     periodo: 2026-10
 - id: C19
@@ -484,7 +484,7 @@ casos:
   criterios: [OC4.1, OC4.9]
   esperado: {decision: PAGAR, nivel: NINGUNO}
   calendario_extra:
-  - {id: OC-C21, beneficiario: "Agroindustrias del Huila S.A.S.", fecha: '2026-10-15', monto_base: '1160000'}
+  - {id: OC-C21, beneficiario: "Agroindustrias del Huila S.A.S.", fecha: '2026-10-15', monto_base: '290'}
   ficha:
     lectura_ia: ok
     segunda_lectura: coincide
@@ -507,7 +507,7 @@ casos:
   criterios: [OC4.3]
   esperado: {decision: ESCALAR, nivel: SENIOR}
   calendario_extra:
-  - {id: OC-C22, beneficiario: "Consultores Energéticos Magdalena S.A.S.", fecha: '2026-10-15', monto_base: '1160000'}
+  - {id: OC-C22, beneficiario: "Consultores Energéticos Magdalena S.A.S.", fecha: '2026-10-15', monto_base: '290'}
   ficha:
     lectura_ia: ok
     segunda_lectura: coincide
@@ -530,7 +530,7 @@ casos:
   criterios: [OC4.5]
   esperado: {decision: FRENAR, nivel: NINGUNO}
   calendario_extra:
-  - {id: OC-C23, beneficiario: "Textiles Modernos Pereira S.A.S.", fecha: '2026-10-15', monto_base: '1334000'}
+  - {id: OC-C23, beneficiario: "Textiles Modernos Pereira S.A.S.", fecha: '2026-10-15', monto_base: '333.5'}
   ficha:
     lectura_ia: ok
     segunda_lectura: coincide
@@ -553,7 +553,7 @@ casos:
   criterios: [OC4.5]
   esperado: {decision: FRENAR, nivel: NINGUNO}
   calendario_extra:
-  - {id: OC-C24, beneficiario: "Industrias Eléctricos Magdalena S.A.S.", fecha: '2026-10-15', monto_base: '1334000'}
+  - {id: OC-C24, beneficiario: "Industrias Eléctricos Magdalena S.A.S.", fecha: '2026-10-15', monto_base: '333.5'}
   ficha:
     lectura_ia: ok
     segunda_lectura: coincide
@@ -576,7 +576,7 @@ casos:
   criterios: [OC4.5]
   esperado: {decision: ESCALAR, nivel: PERSONA}
   calendario_extra:
-  - {id: OC-C25, beneficiario: "Agroindustrias del Huila S.A.S.", fecha: '2026-10-15', monto_base: '1252800'}
+  - {id: OC-C25, beneficiario: "Agroindustrias del Huila S.A.S.", fecha: '2026-10-15', monto_base: '313.2'}
   ficha:
     lectura_ia: ok
     segunda_lectura: coincide
@@ -599,7 +599,7 @@ casos:
   criterios: [OC4.2]
   esperado: {decision: ESCALAR, nivel: SENIOR}
   calendario_extra:
-  - {id: OC-C26, beneficiario: "Agroindustrias del Huila S.A.S.", fecha: '2026-10-15', monto_base: '1160000'}
+  - {id: OC-C26, beneficiario: "Agroindustrias del Huila S.A.S.", fecha: '2026-10-15', monto_base: '290'}
   ficha:
     lectura_ia: ok
     segunda_lectura: coincide
@@ -622,7 +622,7 @@ casos:
   criterios: [OC4.6, OC5.2]
   esperado: {decision: FRENAR, nivel: NINGUNO}
   calendario_extra:
-  - {id: OC-C27, beneficiario: "Laboratorios Clínicos Cundinamarca S.A.S.", fecha: '2026-10-15', monto_base: '1160000'}
+  - {id: OC-C27, beneficiario: "Laboratorios Clínicos Cundinamarca S.A.S.", fecha: '2026-10-15', monto_base: '290'}
   oc_facturadas: {PO2026002: F-OTRA}
   ficha:
     lectura_ia: ok
@@ -646,7 +646,7 @@ casos:
   criterios: [OC4.3]
   esperado: {decision: ESCALAR, nivel: SENIOR}
   calendario_extra:
-  - {id: OC-C28, beneficiario: "Laboratorios Clínicos Cundinamarca S.A.S.", fecha: '2026-10-15', monto_base: '1160000'}
+  - {id: OC-C28, beneficiario: "Laboratorios Clínicos Cundinamarca S.A.S.", fecha: '2026-10-15', monto_base: '290'}
   ficha:
     lectura_ia: ok
     segunda_lectura: coincide

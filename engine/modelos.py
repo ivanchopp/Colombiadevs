@@ -69,7 +69,7 @@ class OrdenCompra(Cerrado):
     subtotal: Decimal
     iva: Decimal
     total: Decimal
-    moneda: str = Field(default="COP", pattern=r"^[A-Z]{3}$")
+    moneda: str = Field(pattern=r"^[A-Z]{3}$")               # la moneda de la orden va siempre en el dato (R5.6)
     marcas: list[Literal["no_coincide_con_proveedor"]] = []
 
 
@@ -122,7 +122,7 @@ class Contexto(Cerrado):
 class Reglas(Cerrado):
     version: str
     vigente_desde: date | None = None
-    moneda_base: str = "COP"
+    moneda_base: str = "USD"
     autopago_max: Decimal
     persona_max: Decimal
     techo_duro_pago: Decimal
