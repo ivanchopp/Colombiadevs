@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0023 | 2026-10-17 19:01 | APROBADO | Revisión total de la documentación tras el PR #16: AVANCES, README, specs/README, tareas (ET3, ET7, ET8, PT7, PT10), trazabilidad del motor, OCD3 aplicada y P32 nuevo; sin código | 0 | 1 | 4a08313 | — |
 | VER-0022 | 2026-10-17 18:54 | APROBADO | El motor usa los 156 proveedores válidos (OCD4, OT2 parcial, OC1.6): lista permitida desde proveedores.yaml y migración de casos, calendario, muestras, semilla de la demo, README y pruebas | 0 | 1 | f65ca8f | — |
 | VER-0021 | 2026-10-17 18:44 | APROBADO | Listado de proveedores válidos: data/proveedores.yaml pasa de 200 a 156 proveedores (sin marcas); OCD5 y OCD11 resueltas, OCD13 nueva; AVANCES y specs al día | 0 | 1 | 3990ea3 | — |
 | VER-0020 | 2026-10-17 18:14 | APROBADO | AVANCES y spec del archivo de salida: se quitan las notas de Gemini y el nombre del CEO; el agente de reglas en lenguaje natural pasa a la fase 1 del roadmap (R7) y contratos queda R8 | 0 | 1 | 65fcb0f | — |
@@ -26,6 +27,12 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0023 — APROBADO
+
+- **ADVERTENCIA** (errores) `specs/motor-de-reglas/tasks.md`: Los 'Listo cuando' de T4 a T8 siguen nombrando archivos de prueba que no existen (test_entrada.py, test_decision.py...); la tabla de trazabilidad ya apunta a tests/test_motor.py y lo aclara → Dejarlo así (registro histórico) o reescribir esas líneas si se retoma la spec
+- **NOTA** (alcance) `docs/Ruta-de-una-factura.pdf`: Las maquetas del PDF siguen con los beneficiarios anteriores (P6); no se pueden regenerar desde aquí → Regenerar desde la página en línea del equipo
+- **NOTA** (errores) `AVANCES.md`: No se pudo comprobar qué commit corre Railway: la red de la sesión no alcanza el dominio (403 del proxy) → Revisar ?diagnostico=1 (P32)
 
 ## VER-0022 — APROBADO
 
