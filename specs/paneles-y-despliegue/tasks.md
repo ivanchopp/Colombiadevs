@@ -21,3 +21,4 @@ Estado: **borrador**. Requisitos: `requirements.md` · Diseño: `design.md`. Due
 | PT15 | Panel 1: vaciar el selector de archivos al enviar una factura | PP2.6 | Hecho (`test_pp2_6_...`) |
 | PT16 | Panel 1 «Envía facturas»; Panel 2 entra como persona de finanzas y recuerda el rol; punto rojo con número por rol y aviso en el menú lateral | PP2.7, PP3.1, PP3.3 a PP3.5 | Hecho |
 | PT17 | Calendario: selector de mes y botones anterior/siguiente (12 meses), cuadrícula correcta en cualquier mes, aviso de mes sin obligaciones | PP6.4 | Hecho |
+| PT18 | Pruebas de extremo a extremo con navegador real (`tests/e2e/`, Playwright): recorrido del proveedor, de la persona y del senior, reglas, calendario y acta; contra la app local en modo demo o contra un despliegue (`E2E_URL`, solo lectura) | PP1 a PP9, PD1 | Hecho (13 pruebas; se activan con `E2E=1`) |

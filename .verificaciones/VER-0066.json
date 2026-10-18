@@ -1,0 +1,27 @@
+{
+  "id": "VER-0066",
+  "fecha": "2026-10-18T09:58:32-05:00",
+  "cambio": "Pruebas de funciones (archivo y aclaraciones, con propiedades) y de extremo a extremo con navegador real (tests/e2e), con cobertura medida; README y AVANCES al día (PT18)",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md",
+    "README.md",
+    "specs/paneles-y-despliegue/tasks.md",
+    "tests/e2e/conftest.py",
+    "tests/e2e/test_e2e_navegador.py",
+    "tests/test_archivo_aclaraciones.py"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "ADVERTENCIA",
+      "categoria": "errores",
+      "ubicacion": "tests/e2e/test_e2e_navegador.py",
+      "problema": "Las pruebas de navegador usan esperas y selectores de la interfaz de Streamlit; pueden romperse si cambia la versión de Streamlit (ya hubo un caso con el selector del rol)",
+      "correccion": "Correrlas tras actualizar Streamlit y usar E2E_URL solo con las de solo lectura"
+    }
+  ],
+  "comprobaciones": "suite completa con cobertura: 569 pasan, cobertura 94 %; eval.py 29/29 con 0 pagos indebidos; tests/e2e: 13 pasan en local; 5 de solo lectura pasan contra Railway; 604 pruebas recogidas sin E2E; sin cambios de código de la app",
+  "rama": "claude/determined-planck-2vrgbo",
+  "commit": "27d037982c1d7901e927480e5857bed9a0851744",
+  "reemplaza": null
+}
