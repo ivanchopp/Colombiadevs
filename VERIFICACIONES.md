@@ -4,6 +4,7 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 
 | ID | Fecha | Veredicto | Cambio | Bloqueantes | Advertencias | Commit | Reemplaza |
 |---|---|---|---|---|---|---|---|
+| VER-0051 | 2026-10-17 22:30 | APROBADO | Revisión del estado tras el PR #25: guion de la demo, índice de specs, ET3/ET7, PT13 duplicado y AVANCES al día; sin código | 0 | 1 | 057715c | — |
 | VER-0050 | 2026-10-17 21:43 | APROBADO | EA12/ET14: XML de otros países de LATAM (SRI, CFE, NF-e, DTE, Costa Rica, SIFEN) sin IA desde una tabla de rutas, fusionado con el CFDI del PR #24 (EA11); decimal estricto en las dos lecturas (también CFDI y UBL); ISO-8859-1; RUC de SUNAT; XML desconocido se lee como texto y se escala; arreglo del choque sobre SRI vs CFDI; spec, pruebas, README, Panel 1 y AVANCES | 0 | 2 | ae659cc | — |
 | VER-0049 | 2026-10-17 21:33 | APROBADO | Fusion de main (R6, PR 21 y 23) en la rama del CFDI: VER del CFDI pasa a 0048, tarea del CFDI pasa a ET13 porque ET12 la uso R6, AVANCES reconciliado; sin codigo nuevo | 0 | 0 | 0b90e4f | — |
 | VER-0048 | 2026-10-17 21:13 | APROBADO | R5 parte 2: factura electronica de Mexico CFDI 3.3 y 4.0 sin IA (EA11, ET12): solo tipo ingreso, RFC con digito verificador en local, UUID del timbre, segunda lectura por atributos; spec, 41 pruebas, README y AVANCES | 0 | 1 | 233e90a | — |
@@ -54,6 +55,12 @@ Historial generado por la skill `verificador`. No editar a mano: cada fila viene
 | VER-0003 | 2026-10-17 11:20 | APROBADO | Specs de paneles-y-despliegue (PD1 a PD12, PT1 a PT14), interfaz pública del agente de entrada, y AVANCES/CLAUDE con la skill verificador | 0 | 1 | 24f1039 | — |
 | VER-0002 | 2026-10-17 11:10 | APROBADO | requirements.md D2: aclarar que lo pendiente no cuenta para el presupuesto (R3.6) pero sí para el nivel (R5.2) | 0 | 0 | 0aecd8a | — |
 | VER-0001 | 2026-10-17 11:02 | APROBADO | design.md: alinear monto_para_nivel con R5.2 (incluir pendiente) | 0 | 1 | 3d9b7b3 | — |
+
+## VER-0051 — APROBADO
+
+- **ADVERTENCIA** (errores) `docs/guion-demo.md:22`: La factura normal del guion solo llega a PAGAR si la IA real lee y hoy no lee en producción (P17) → Resolver P17 antes del ensayo; el guion ya avisa y da el plan B
+- **NOTA** (convenciones) `specs/paneles-y-despliegue/tasks.md:20`: PT13 estaba repetido; la tarea de los archivos de muestra pasa a PT14 y PT7 se ajustó → Ninguna
+- **NOTA** (errores) `docs/Ruta-de-una-factura.pdf`: Los PDF no se revisaron ni cambiaron (siguen con beneficiarios anteriores, P6) → Regenerarlos si se muestran
 
 ## VER-0050 — APROBADO
 
