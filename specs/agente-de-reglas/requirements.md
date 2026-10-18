@@ -1,6 +1,6 @@
 # Requisitos: agente de reglas en lenguaje natural
 
-Estado: **borrador para revisión del equipo**. Alcance nuevo de la reunión con Blinka del 17 oct (roadmap R7). Aún sin programar.
+Estado: **borrador para revisión del equipo**. Alcance nuevo de la reunión con Blinka del 17 oct (roadmap R7). Versión sin IA hecha (ART1 a ART4); **ART5 (lector con IA) hecho el 18 oct**, sin probar con la IA real (esa sesión no tuvo clave).
 Diseño: `design.md` · Tareas: `tasks.md`.
 
 ## Resumen
@@ -67,6 +67,9 @@ El CEO de Blinka contó que su plataforma ya programa pagos con un solo comando 
 - **AR5.3** NINGÚN pedido, por más que ordene «ignora el techo», «sin firma» o «aplícalo ya», DEBERÁ producir un cambio que `validar_cambio` o las reglas de firma no permitan (prueba de propiedades).
 - **AR5.4** SI la llamada a la IA falla, ENTONCES EL SISTEMA DEBERÁ degradar al lector de respaldo (AR6) y dejar el error en los Logs, sin ningún valor de clave (como EA2b.9).
 - **AR5.5** CADA sala DEBERÁ tener un máximo de pedidos con IA (`PEDIDOS_REGLAS_MAX`, por defecto 10, entre 1 y 100) para controlar el gasto. Es un freno de uso, no un tope de dinero.
+- **AR5.6** (ART5) EL tope DEBERÁ contar las llamadas a la IA **intentadas** (también las que fallan, que igual se cobran) y guardarse en la base de la sala, no en la sesión del navegador, para que recargar la página no lo reinicie. AGOTADO el tope, EL SISTEMA DEBERÁ responder con el lector por patrones y decirlo en pantalla.
+- **AR5.7** (ART5) LA salida de la IA DEBERÁ validarse con el esquema cerrado (`Propuesta`). SI el estado no es `propuesta`, ENTONCES los cambios que traiga se DEBERÁN descartar (AR2.4); SI el estado es `propuesta` sin cambios, ENTONCES DEBERÁ tratarse como `no_entendido`. Cualquier salida que no cumpla el esquema DEBERÁ degradar a patrones (AR5.4). Los valores se reciben como texto y se convierten a `Decimal` en código; un valor absurdo (mayor que 10^12) se rechaza.
+- **AR5.8** (ART5) LA propuesta de la IA DEBERÁ pasar por la misma comprobación de coherencia (AR2.8) y la misma resolución (AR2.2, AR2.3) que la del lector por patrones.
 
 ### AR6. Sin IA
 - **AR6.1** SIN clave de IA (o con `ENTRADA_MODO=demo`), EL SISTEMA DEBERÁ entender, con patrones de texto, pedidos simples como «fija el pago automático en 1.000», «sube el presupuesto un 20 %» o «baja la tolerancia normal a 3 %». «Tolerancia» a secas es ambigua (hay dos) y se responde «no entendí».

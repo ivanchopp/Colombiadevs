@@ -29,7 +29,7 @@ Cada criterio tiene un número (por ejemplo R3.1) y debe tener al menos una prue
 | `paneles-y-despliegue` | Borrador para revisión (paneles, página de reglas, página de órdenes de compra y despliegue en Railway hechos; falta la página de conciliación, PT12) |
 | `ordenes-de-compra` | Versión mínima en el motor (R3, 17 oct): revisión OC4 con **órdenes sintéticas** y los 156 proveedores válidos como lista permitida; OT5 y OT7 hechas; faltan las órdenes reales (OCD13) y la columna en `facturas.csv` (OT4); 13 decisiones, 9 abiertas |
 | `archivo-de-salida` | Borrador para revisión (alcance nuevo de la reunión con Blinka del 17 oct; implementado con columnas supuestas; 4 decisiones abiertas) |
-| `agente-de-reglas` | Borrador para revisión (alcance nuevo de la reunión con Blinka, R7; versión mínima sin IA hecha, ART1 a ART4; falta la IA, ART5; 6 decisiones abiertas) |
+| `agente-de-reglas` | Borrador para revisión (alcance nuevo de la reunión con Blinka, R7; versión sin IA (ART1 a ART4) y lector con IA (ART5, 18 oct) hechos, este último sin probar con la IA real; 6 decisiones abiertas) |
 
 ## Reglas de trabajo
 

@@ -64,3 +64,25 @@ class EstadoEntrada:
         with self._c() as c:
             c.execute(f"UPDATE entrada SET {sets} WHERE sala_id=? AND factura_id=?",
                       [*campos.values(), sala_id, factura_id])
+
+
+class ContadorPedidosIA:
+    """Pedidos de reglas con IA usados por sala (AR5.5, AR5.6). Vive en la base, no en la sesión del navegador."""
+
+    def __init__(self, almacen):
+        self.ruta = almacen.ruta
+        with self._c() as c:
+            c.execute("CREATE TABLE IF NOT EXISTS pedidos_reglas (sala_id TEXT PRIMARY KEY, usados INTEGER NOT NULL DEFAULT 0)")
+
+    def _c(self):
+        return sqlite3.connect(self.ruta, timeout=10)
+
+    def usados(self, sala_id) -> int:
+        with self._c() as c:
+            r = c.execute("SELECT usados FROM pedidos_reglas WHERE sala_id=?", (sala_id,)).fetchone()
+        return r[0] if r else 0
+
+    def sumar(self, sala_id) -> None:
+        with self._c() as c:
+            c.execute("INSERT INTO pedidos_reglas (sala_id, usados) VALUES (?, 1) "
+                      "ON CONFLICT(sala_id) DO UPDATE SET usados = usados + 1", (sala_id,))
