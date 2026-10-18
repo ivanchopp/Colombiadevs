@@ -1,0 +1,22 @@
+{
+  "id": "VER-0027",
+  "fecha": "2026-10-17T19:54:17-05:00",
+  "cambio": "AVANCES al día tras el PR #14 (cabecera, mapa del archivo de salida, commit de R4) y P33 con el análisis de 4 facturas XML de ejemplo; sin código",
+  "veredicto": "APROBADO",
+  "archivos": [
+    "AVANCES.md"
+  ],
+  "hallazgos": [
+    {
+      "severidad": "NOTA",
+      "categoria": "alcance",
+      "ubicacion": "AVANCES.md",
+      "problema": "Las 4 facturas XML no se suben: el repositorio es público y vienen de fuera; P33 solo describe lo encontrado",
+      "correccion": "Ninguna"
+    }
+  ],
+  "comprobaciones": "git diff revisado; python3 -m pytest -q: 240 passed; python3 eval.py: 20/20, 0 pagos indebidos; conversiones de P33 calculadas con data/tasas.yaml; emisores contrastados con data/proveedores.yaml",
+  "rama": "docs-pr14-xml",
+  "commit": "8510675a965f53db6086429d5f4b5246f0cffe97",
+  "reemplaza": null
+}
